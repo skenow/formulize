@@ -1,5 +1,4 @@
 <?php
-//test comment
 /**
 * All information in order to connect to database are going through here.
 *

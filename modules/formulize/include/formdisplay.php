@@ -106,7 +106,14 @@ class formulize_themeForm extends XoopsThemeForm {
 	
 	function _drawElements($elements, $ret, $hidden) {
 		$class ='even';
+		//error_log(print_r($elements, true));
+
 		foreach ( $elements as $ele ) {
+			/* ob_start();
+					print "<pre>";
+		print_r($ele);
+		print "</pre>";
+		$ret .= ob_get_clean();*/
 			if (!is_object($ele)) {// just plain add stuff if it's a literal string...
 				if(strstr($ele, "<<||>>")) {
 					$ele = explode("<<||>>", $ele);
@@ -128,7 +135,15 @@ class formulize_themeForm extends XoopsThemeForm {
 				if (($desc = $ele->getDescription()) != '') {
 					$ret .= "<div class='xoops-form-element-help'>{$desc}</div>";
 				}
-				$ret .= "</td><td class='$class'>" . $ele->render() . "</td></tr>\n";
+				$ret .= "</td><td class='$class'>" . $ele->render();
+				//if ($ele == $elements[20]){
+					$ret .= '<p><input type="button" class="formButton" name="editx" id="submitx" value="Edit" onclick="javascript:validateAndSubmit();"></p>';
+				//}
+				$ret .= "</td></tr>\n";
+				if ($ele == $elements[20]){
+					error_log(print_r($ret, true));
+					//$ret .= "<p><input type="button" class="formButton" name="editx" id="submitx" value="Edit" onclick="javascript:validateAndSubmit();"></p>";
+				}
 			} else {
 				$hidden .= $ele->render();
 			}

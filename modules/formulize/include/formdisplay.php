@@ -48,6 +48,9 @@ include_once XOOPS_ROOT_PATH . "/include/functions.php";
 
 // NEED TO USE OUR OWN VERSION OF THE CLASS, TO GET ELEMENT NAMES IN THE TR TAGS FOR EACH ROW
 class formulize_themeForm extends XoopsThemeForm {
+
+	var $form_id = "";
+
 	/**
 	 * Insert an empty row in the table to serve as a seperator.
 	 *
@@ -109,11 +112,6 @@ class formulize_themeForm extends XoopsThemeForm {
 		//error_log(print_r($elements, true));
 
 		foreach ( $elements as $ele ) {
-			/* ob_start();
-					print "<pre>";
-		print_r($ele);
-		print "</pre>";
-		$ret .= ob_get_clean();*/
 			if (!is_object($ele)) {// just plain add stuff if it's a literal string...
 				if(strstr($ele, "<<||>>")) {
 					$ele = explode("<<||>>", $ele);
@@ -136,14 +134,20 @@ class formulize_themeForm extends XoopsThemeForm {
 					$ret .= "<div class='xoops-form-element-help'>{$desc}</div>";
 				}
 				$ret .= "</td><td class='$class'>" . $ele->render();
-				//if ($ele == $elements[20]){
-					$ret .= '<p><input type="button" class="formButton" name="editx" id="submitx" value="Edit" onclick="javascript:validateAndSubmit();"></p>';
-				//}
-				$ret .= "</td></tr>\n";
-				if ($ele == $elements[20]){
-					error_log(print_r($ret, true));
-					//$ret .= "<p><input type="button" class="formButton" name="editx" id="submitx" value="Edit" onclick="javascript:validateAndSubmit();"></p>";
+				$element_name = trim($ele->getName());
+				//print "name: ".$element_name.'<br />';
+				switch ($element_name) {
+					case 'control_buttons':
+					case 'proxyuser':
+						// Do nothing
+					break;
+					default:
+						include_once XOOPS_ROOT_PATH."/modules/formulize/include/formdisplay.php";
+						$ret .= formulize_themeForm::addFrontsideEditButton($ele->getName());
+						break;
 				}
+					
+				$ret .= "</td></tr>\n";
 			} else {
 				$hidden .= $ele->render();
 			}
@@ -173,6 +177,23 @@ class formulize_themeForm extends XoopsThemeForm {
 		}
 		
 		return $fullJs;
+	}
+
+	function addFrontsideEditButton ($thisEleName) {
+		global $xoopsUser;
+		$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
+		$uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
+		$mid = getFormulizeModId();
+		$gperm_handler = xoops_gethandler('groupperm');
+		$isAdmin = $gperm_handler->checkRight("edit_form", $this->form_id, $groups, $mid);
+
+		if (!$isAdmin) {
+			return;
+		}
+
+		$editButton = 'edit_' . $thisEleName;
+		$returnButton = '<p><input type="button" class="formulize_adminEditButton" name="editx" id="' . $editButton . '" value="Edit" onclick="javascript:();"></p>';
+		return $returnButton;
 	}
 	
 }
@@ -733,6 +754,7 @@ if(!is_numeric($titleOverride) AND $titleOverride != "" AND $titleOverride != "a
                     // necessary to trigger the proper reloading of the form page, until Done is called and that form does not have this flag.
                     $form->addElement (new XoopsFormHidden ('ventry', $settings['ventry']));
                 }
+                $form->form_id = $this_fid;
                 $form->setExtra("enctype='multipart/form-data'"); // impératif!
 
                 if(is_array($settings)) {
@@ -1153,7 +1175,7 @@ function addSubmitButton($form, $subButtonText, $go_back="", $currentURL, $butto
 		
 		$currentPage = "";
 		$screenid = "";
-    if($screen) {
+   		if($screen) {
 		  $screenid = $screen->getVar('sid');
 			// check for a current page setting
 			if(isset($settings['formulize_currentPage'])) {
@@ -1183,6 +1205,7 @@ function addSubmitButton($form, $subButtonText, $go_back="", $currentURL, $butto
 
 	$trayElements = $buttontray->getElements();
 	if(count($trayElements) > 0 OR $nosubforms) {
+		$buttontray->setName("control_buttons");
 		$form->addElement($buttontray);
 	}
 	return $form;

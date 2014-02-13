@@ -165,6 +165,27 @@ button:focus, input[type='submit']:focus, input[type='button']:focus, input[type
     text-indent: 0px;
 }
 
+.even .formulize_adminEditButton {
+    opacity:0;
+    float:right;
+}
+
+.even:hover .formulize_adminEditButton {
+  opacity:1;
+}
+
+.head .formulize_adminEditButton {
+    opacity:0;
+    float:right;
+}
+
+
+.head:hover .formulize_adminEditButton {
+  opacity:1;
+}
+
+
+}
 /*=== End of Formulize Boutons ===*/
 
 

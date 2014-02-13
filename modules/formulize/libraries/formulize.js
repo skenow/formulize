@@ -1,5 +1,4 @@
 // formulize.js
-// 
 
 if (typeof xoopsGetElementById != 'function') {
     // the 'xoopsGetElementById' function is included with xoops, so when it is missing, Formulize is embedded in another CMS

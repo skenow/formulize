@@ -100,7 +100,6 @@ switch($_GET['page']) {
 $adminPage['logo'] = "/modules/formulize/images/formulize-logo.png";
 
 
-
 // assign the default selected tab, if any:
 if(isset($_GET['tab']) AND (!isset($_POST['tabs_selected']) OR $_POST['tabs_selected'] === "")) {
   foreach($adminPage['tabs'] as $selected=>$tabData) {
@@ -121,7 +120,6 @@ $xoopsTpl->assign('scrollx', intval($_POST['scrollx']));
 $accordion_active = (isset($_POST['accordion_active']) AND $_POST['accordion_active'] !== "" AND $_POST['accordion_active'] !== "false") ? intval($_POST['accordion_active']) : "false";
 $xoopsTpl->assign('accordion_active', $accordion_active);
 $xoopsTpl->display("db:admin/ui.html");
-
 xoops_cp_footer();
 
 

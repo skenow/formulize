@@ -582,6 +582,7 @@ function createDataTypeUI($ele_type, $element,$id_form,$ele_encrypt) {
       $dataTypeTray->addElement($charType);
       $renderedUI .= $dataTypeTray->render();
   }
+
   return $renderedUI;
 }
 

@@ -82,12 +82,31 @@ class formulize_themeForm extends XoopsThemeForm {
 				. "' method='" . $this->getMethod()
 				. "' onsubmit='return xoopsFormValidate_" . $ele_name . "();'" . $this->getExtra() . ">
 			<div class='xo-theme-form'>
+			<head>
+			<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js\"></script>
+			<script type=\"text/javascript\" src=\"slidepanel/js/jquery.slidepanel.js\"></script>
+			<link rel=\"stylesheet\" type=\"text/css\" href=\"slidepanel/css/jquery.slidepanel.css\">
+            </head>
 			<table width='100%' class='outer' cellspacing='1'>
 			<tr><th colspan='2'>" . $this->getTitle() . "</th></tr>
 		";
 		$hidden = '';
 		list($ret, $hidden) = $this->_drawElements($this->getElements(), $ret, $hidden);
 		$ret .= "</table>\n$hidden\n</div>\n</form>\n";
+		$ret .= '
+		<html lang="en">
+		<script type="text/javascript">
+      	$(document).ready(function(){
+          $("[data-slidepanel]").slidepanel({
+              orientation: "right",
+              mode: "push"
+          });
+      	});
+		</script>
+
+        </body>
+        </html>
+		';
 		$ret .= $this->renderValidationJS(true);
 		return $ret;
 	}
@@ -146,7 +165,7 @@ class formulize_themeForm extends XoopsThemeForm {
 						$ret .= formulize_themeForm::addFrontsideEditButton($ele->getName());
 						break;
 				}
-					
+
 				$ret .= "</td></tr>\n";
 			} else {
 				$hidden .= $ele->render();
@@ -192,7 +211,7 @@ class formulize_themeForm extends XoopsThemeForm {
 		}
 
 		$editButton = 'edit_' . $thisEleName;
-		$returnButton = '<p><input type="button" class="formulize_adminEditButton" name="editx" id="' . $editButton . '" value="Edit" onclick="javascript:();"></p>';
+		$returnButton = '<a href="external.html" data-slidepanel="panel"><input type="button" class="formulize_adminEditButton" name="editx" id="' . $editButton . '" value="Edit" onclick="javascript:();"></a>';
 		return $returnButton;
 	}
 	

@@ -24,3 +24,16 @@ jQuery(document).ready(function() {
         formulizechanged = 1;
     });
 });
+
+function adminEdit(thisElement) {
+    var editButtons = document.getElementsByClassName('formulize_adminEditButton');
+    //console.log(editButtons);
+    for (var i = 0; i<editButtons.length; i++) {
+        editButtons[i].hidden = 'true';
+    }
+    //console.log(editButtons);
+
+    
+
+}
+

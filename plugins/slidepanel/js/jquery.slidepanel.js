@@ -140,6 +140,20 @@
 
     Slidepanel.prototype.collapse = function() {
         //hide the close button for this panel
+/*
+        var editButtons = document.getElementsByClassName('formulize_adminEditButton');
+        //console.log(editButtons);
+        for (var i = 0; i<editButtons.length; i++) {
+            editButtons[i].hidden = 'false';
+        }
+*/
+/*
+        var imported = document.createElement('script');
+        imported.src = '/modules/formulize/libraries/formulize.js';
+        document.head.appendChild(imported);
+
+        console.log(imported.src);
+*/
         $('.close', this.$panel).hide();
 
         //set the css properties to animatate

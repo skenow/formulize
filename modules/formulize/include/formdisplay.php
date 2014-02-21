@@ -84,8 +84,8 @@ class formulize_themeForm extends XoopsThemeForm {
 			<div class='xo-theme-form'>
 			<head>
 			<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js\"></script>
-			<script type=\"text/javascript\" src=\"slidepanel/js/jquery.slidepanel.js\"></script>
-			<link rel=\"stylesheet\" type=\"text/css\" href=\"slidepanel/css/jquery.slidepanel.css\">
+			<script type=\"text/javascript\" src=\"../../plugins/slidepanel/js/jquery.slidepanel.js\"></script>
+			<link rel=\"stylesheet\" type=\"text/css\" href=\"../../plugins/slidepanel/css/jquery.slidepanel.css\">
             </head>
 			<table width='100%' class='outer' cellspacing='1'>
 			<tr><th colspan='2'>" . $this->getTitle() . "</th></tr>
@@ -211,7 +211,7 @@ class formulize_themeForm extends XoopsThemeForm {
 		}
 
 		$editButton = 'edit_' . $thisEleName;
-		$returnButton = '<a href="external.html" data-slidepanel="panel"><input type="button" class="formulize_adminEditButton" name="editx" id="' . $editButton . '" value="Edit" onclick="javascript:();"></a>';
+		$returnButton = '<a href="../../plugins/slidepanel/external.html" data-slidepanel="panel"><input type="button" class="formulize_adminEditButton" name="editx" id="' . $editButton . '" value="Edit" onclick="javascript:adminEdit(' . $thisEleName . ');"></a>';
 		return $returnButton;
 	}
 	

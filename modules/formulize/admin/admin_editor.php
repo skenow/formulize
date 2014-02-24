@@ -9,7 +9,6 @@ $_GET['aid'] = 0;
 
 // initialize the ImpressCMS admin page template
 include_once("admin_header.php");
-//xoops_cp_header();
 define('_FORMULIZE_UI_PHP_INCLUDED', 1);
 
 // include necessary Formulize files/functions
@@ -99,6 +98,4 @@ $xoopsTpl->assign('breadcrumbtrail', $breadcrumbtrail);
 $xoopsTpl->assign('scrollx', intval($_POST['scrollx']));
 $accordion_active = (isset($_POST['accordion_active']) AND $_POST['accordion_active'] !== "" AND $_POST['accordion_active'] !== "false") ? intval($_POST['accordion_active']) : "false";
 $xoopsTpl->assign('accordion_active', $accordion_active);
-//$xoopsTpl->display("db:plugins/slidepanel/external.html");
 $xoopsTpl->display("db:admin/ui.html");
-//xoops_cp_footer();

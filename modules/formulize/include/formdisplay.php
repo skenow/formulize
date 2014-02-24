@@ -128,8 +128,6 @@ class formulize_themeForm extends XoopsThemeForm {
 	
 	function _drawElements($elements, $ret, $hidden) {
 		$class ='even';
-		//error_log(print_r($elements, true));
-
 		foreach ( $elements as $ele ) {
 			if (!is_object($ele)) {// just plain add stuff if it's a literal string...
 				if(strstr($ele, "<<||>>")) {
@@ -162,7 +160,7 @@ class formulize_themeForm extends XoopsThemeForm {
 					break;
 					default:
 						include_once XOOPS_ROOT_PATH."/modules/formulize/include/formdisplay.php";
-						$ret .= formulize_themeForm::addFrontsideEditButton($ele->getName());
+						$ret .= formulize_themeForm::addFrontsideEditButton($element_name);
 						break;
 				}
 
@@ -211,7 +209,9 @@ class formulize_themeForm extends XoopsThemeForm {
 		}
 
 		$editButton = 'edit_' . $thisEleName;
-		$returnButton = '<a href="../../plugins/slidepanel/external.html" data-slidepanel="panel"><input type="button" class="formulize_adminEditButton" name="editx" id="' . $editButton . '" value="Edit" onclick="javascript:adminEdit(' . $thisEleName . ');"></a>';
+		//$returnButton = '<a href="../../plugins/slidepanel/external.html" data-slidepanel="panel"><input type="button" class="formulize_adminEditButton" name="editx" id="' . $editButton . '" value="Edit" onclick="javascript:adminEdit(' . $thisEleName . ');"></a>';
+		$returnButton = '<a href="../../modules/formulize/templates/admin/ui.html" data-slidepanel="panel"><input type="button" class="formulize_adminEditButton" name="editx" id="' . $editButton . '" value="Edit" onclick="javascript:adminEdit(' . $thisEleName . ');"></a>';
+
 		return $returnButton;
 	}
 	

@@ -28,12 +28,23 @@ jQuery(document).ready(function() {
 function adminEdit(thisElement) {
     var editButtons = document.getElementsByClassName('formulize_adminEditButton');
     //console.log(editButtons);
+    /*
     for (var i = 0; i<editButtons.length; i++) {
         editButtons[i].hidden = 'true';
     }
+    */
     //console.log(editButtons);
 
-    
+    var url_link = '../formulize/admin/renderhtml.php?ele_name=';
+    url_link = url_link.concat(thisElement.name);
+
+    $.ajax({
+       url: url_link,
+       dataType: 'json',
+       success: function(data){
+            // No need to return anything
+       }
+    });    
 
 }
 

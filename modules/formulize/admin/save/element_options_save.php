@@ -245,13 +245,16 @@ foreach($processedValues['elements'] as $property=>$value) {
   // during the adminSave step, then set the property now.
   // We don't want to set ele_value if it was modified during
   // adminSave, because we might clobber user's changes
+  	
+  
   if($property != 'ele_value' OR $ele_value_before_adminSave === $ele_value_after_adminSave) {
+  
   	$element->setVar($property, $value);
   }
 }
 
 if(!$ele_id = $element_handler->insert($element)) {
-  print "Error: could not save the options for element: ".mysql_error();
+  print "Error: could not save the options for element: ".$xoopsDB->error();
 }
 
 if($_POST['reload_option_page']) {

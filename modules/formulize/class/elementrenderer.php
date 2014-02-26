@@ -151,6 +151,13 @@ class formulizeElementRenderer{
 //        $ele_value[2] = $myts->displayTarea($ele_value[2]); // commented by jwe 12/14/04 so that info displayed for viewing in a form box does not contain HTML formatting
 				
 				$ele_value[2] = getTextboxDefault($ele_value[2], $id_form, $entry);
+				
+				//if placeholder value is set
+				if($ele_value[11]) {
+					$placeholder = $ele_value[2];
+					$ele_value[2] = "";
+				}
+				
 
 				if (!strstr(getCurrentURL(),"printview.php")) { 				// nmc 2007.03.24 - added
 					
@@ -164,12 +171,17 @@ class formulizeElementRenderer{
 				} else {															// nmc 2007.03.24 - added 
 					$form_ele = new XoopsFormLabel ($ele_caption, $ele_value[2]);	// nmc 2007.03.24 - added 
 				}
-
+				
+				//if placeholder value is set
+				if($ele_value[11]) {
+					$form_ele->setExtra("placeholder='".$placeholder."'");
+				}
                 
 				//if numbers-only option is set 
 				if ($ele_value[3]) {
 					$form_ele->setExtra("class='numbers-only-textbox'");
 				}
+	
 				
 				// if required unique option is set, create validation javascript that will ask the database if the value is unique or not
 				if($ele_value[9]) {
@@ -318,7 +330,7 @@ class formulizeElementRenderer{
 						}
 						$pgroupsfilter .= ")";
 					} elseif(count($pgroups) > 0) {
-						$pgroupsfilter = " t2.groupid IN (".mysql_real_escape_string(implode(",",$pgroups)).") AND t2.entry_id=t1.entry_id AND t2.fid=$sourceFid";
+						$pgroupsfilter = " t2.groupid IN (".formulize_escape(implode(",",$pgroups)).") AND t2.entry_id=t1.entry_id AND t2.fid=$sourceFid";
 					} else {
 						$pgroupsfilter = "";
 					}

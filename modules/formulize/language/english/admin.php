@@ -90,6 +90,7 @@ define("_AM_SETTINGS_FORM_TITLE","Form title: ");
 define("_AM_SETTINGS_MENU_ENTRY","Menu entry: ");
 define("_AM_SETTINGS_MENU_LEAVE","Leave the 'menu entry' blank to remove this form from the default menu block");
 define("_AM_SETTINGS_FORM_HANDLE","Form handle");
+define("_AM_EOG_Repair","Repair entry ownership table");
 define("_AM_SETTINGS_FORM_HANDLE_EXPLAIN","Optional. The name will you use to refer to this form in programming code and in the database. Defaults to the form ID number.");
 define("_AM_SETTINGS_FORM_DATABASE","Which database table should this 'form' point to?");
 define("_AM_SETTINGS_FORM_DATABASE_EXPLAIN","Type the exact name, including the prefix, ie: mysite_groups");
@@ -268,6 +269,9 @@ define("_AM_ELE_SEP","Break up line");
 define("_AM_ELE_NOM_SEP","Break up name");
 define("_AM_ELE_UPLOAD","Join a file");
 define("_AM_ELE_CLR","with the color");
+define("_AM_ELE_PLACEHOLDER_DESC","How do you want to use the default value?");
+define("_AM_ELE_NO_PLACEHOLDER","Add it to the text box when the form loads, it will be saved as-is if the user leaves it alone");
+define("_AM_ELE_PLACEHOLDER_OPTION","Show it as an example in the text box, but don't save it if the form is submitted");
 
 // number options for textboxes
 define("_AM_ELE_NUMBER_OPTS","If a number is typed...");
@@ -275,6 +279,7 @@ define("_AM_ELE_NUMBER_OPTS_DESC","You can set these options to control how deci
 define("_AM_ELE_NUMBER_OPTS_DEC","Number of decimal places:");
 define("_AM_ELE_NUMBER_OPTS_PREFIX","Display numbers with this prefix (ie: '$'):");
 define("_AM_ELE_NUMBER_OPTS_DECSEP","Separate decimals with this character (ie: '.'):");
+define("_AM_ELE_NUMBER_OPTS_SUFFIX","Display numbers with this suffix (ie: '%'):");
 define("_AM_ELE_NUMBER_OPTS_SEP","Separate thousands with this character (ie: ','):");
 define("_AM_ELE_DERIVED_NUMBER_OPTS","If this formula produces a number ...");
 

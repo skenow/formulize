@@ -1355,9 +1355,9 @@ function drawSubLinks($subform_id, $sub_entries, $uid, $groups, $frid, $mid, $fi
 		// get the title of this subform
 		// help text removed for F4.0 RC2, this is an experiment
 		$subtitle = q("SELECT desc_form FROM " . $xoopsDB->prefix("formulize_id") . " WHERE id_form = $subform_id");
-		$col_one = "<p class=\"subform-caption\"><b>" . trans($subtitle[0]['desc_form']) . "</b></p>"; // <p style=\"font-weight: normal;\">" . _formulize_ADD_HELP;
+		$col_one = "<p id=\"subform-caption-f$fid-sf$subform_id\" class=\"subform-caption\"><b>" . trans($subtitle[0]['desc_form']) . "</b></p>"; // <p style=\"font-weight: normal;\">" . _formulize_ADD_HELP;
 	} else {
-		$col_one = "<p class=\"subform-caption\"><b>" . trans($customCaption) . "</b></p>"; // <p style=\"font-weight: normal;\">" . _formulize_ADD_HELP;
+		$col_one = "<p id=\"subform-caption-f$fid-sf$subform_id\" class=\"subform-caption\"><b>" . trans($customCaption) . "</b></p>"; // <p style=\"font-weight: normal;\">" . _formulize_ADD_HELP;
 	}
 
 	/*if(intval($sub_entries[$subform_id][0]) != 0 OR $sub_entry_new OR is_array($sub_entry_written)) {
@@ -1525,8 +1525,13 @@ function drawSubLinks($subform_id, $sub_entries, $uid, $groups, $frid, $mid, $fi
 				} else { // display the full form
 					$headerValues = array();
 					foreach($elementsToDraw as $thisele) {
-						$headerValues[] = htmlspecialchars(strip_tags($data_handler->getElementValueInEntry($sub_ent, $thisele)));
-					}					
+						$value = $data_handler->getElementValueInEntry($sub_ent, $thisele);
+						$element_object = _getElementObject($thisele);
+						$value = prepvalues($value, $element_object->getVar("ele_handle"), $sub_ent);
+						if (is_array($value))
+							$value = implode(" - ", $value); // may be an array if the element allows multiple selections (checkboxes, multiselect list boxes, etc)
+						$headerValues[] = $value;
+					}
 					$headerToWrite = implode(" &mdash; ", $headerValues);
 					if(str_replace(" &mdash; ", "", $headerToWrite) == "") {
 						$headerToWrite = _AM_ELE_SUBFORM_NEWENTRY_LABEL;

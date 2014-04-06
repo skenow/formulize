@@ -2414,7 +2414,15 @@ if (typeof jQuery == 'undefined') {
 	script = document.createElement('script');
 	script.id = 'jQuery';
 	script.type = 'text/javascript';
-	script.src = '<?php print XOOPS_URL; ?>/modules/formulize/libraries/jquery/jquery-1.4.2.min.js';
+	script.src = '<?php print XOOPS_URL; ?>/modules/formulize/libraries/jquery/jquery-1.11.0.min.js';
+	head.appendChild(script);
+
+	// jquery migrate plugin
+	var head = document.getElementsByTagName('head')[0];
+	script = document.createElement('script');
+	script.id = 'jQuery';
+	script.type = 'text/javascript';
+	script.src = '<?php print XOOPS_URL; ?>/modules/formulize/libraries/jquery/jquery-migrate-1.2.1.js';
 	head.appendChild(script);
 }
 
@@ -2592,8 +2600,8 @@ foreach($conditionalElements as $handle=>$theseGoverningElements) {
 	}
 }
 
-print "
-<script type='text/javascript'>
+print 
+	"<script type='text/javascript'>
 
 var conditionalHTML = new Array(); // needs to be global!
 

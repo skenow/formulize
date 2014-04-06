@@ -1802,7 +1802,15 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 				script = document.createElement('script');
 				script.id = 'jQuery';
 				script.type = 'text/javascript';
-				script.src = '".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-1.4.2.min.js';
+				script.src = '".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-1.11.0.min.js';
+				head.appendChild(script);
+
+				//jquery migration plugin
+				var head = document.getElementsByTagName('head')[0];
+				script = document.createElement('script');
+				script.id = 'jQuery';
+				script.type = 'text/javascript';
+				script.src = '".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-migrate-1.2.1.js';
 				head.appendChild(script);
 		}
 		$().click(function() {
@@ -2955,7 +2963,7 @@ if (typeof jQuery == 'undefined') {
 	script = document.createElement('script');
 	script.id = 'jQuery';
 	script.type = 'text/javascript';
-	script.src = '<?php print XOOPS_URL; ?>/modules/formulize/libraries/jquery/jquery-1.4.2.min.js';
+	script.src = '<?php print XOOPS_URL; ?>/modules/formulize/libraries/jquery/jquery-1.11.0.min.js';
 	head.appendChild(script);
 }
 
@@ -2964,7 +2972,7 @@ if($useXhr) {
 	print " initialize_formulize_xhr();\n";
 	drawXhrJavascript();
 	print "</script>";
-	print "<script type=\"text/javascript\" src=\"".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-1.4.2.min.js\"></script>\n";
+	print "<script type=\"text/javascript\" src=\"".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-1.11.0.min.js\"></script>\n";
 	print "<script type='text/javascript'>";
 	print "var elementStates = new Array();";
 	print "var savingNow = \"\";";

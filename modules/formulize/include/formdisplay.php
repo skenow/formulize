@@ -1573,11 +1573,11 @@ function drawSubLinks($subform_id, $sub_entries, $uid, $groups, $frid, $mid, $fi
 	} else {
 		$col_two .= "</div>"; // close of the subform-accordion-container
 		static $jqueryUILoaded = false;
-		if(!$jqueryUILoaded) {
+		/*if(!$jqueryUILoaded) {
 			$col_two .= "<script type=\"text/javascript\" src=\"".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-ui-1.8.2.custom.min.js\"></script>\n";
 			$col_two .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"".XOOPS_URL."/modules/formulize/libraries/jquery/css/start/jquery-ui-1.8.2.custom.css\">\n";
 			$jqueryUILoaded = true;
-		}
+		}*/
 		$col_two .= "\n
 <script type=\"text/javascript\">
 	jQuery(document).ready(function() {
@@ -2409,7 +2409,7 @@ window.onbeforeunload = function (e) {
     }
 };
 
-if (typeof jQuery == 'undefined') { 
+/*if (typeof jQuery == 'undefined') { 
 	var head = document.getElementsByTagName('head')[0];
 	script = document.createElement('script');
 	script.id = 'jQuery';
@@ -2424,7 +2424,7 @@ if (typeof jQuery == 'undefined') {
 	script.type = 'text/javascript';
 	script.src = '<?php print XOOPS_URL; ?>/modules/formulize/libraries/jquery/jquery-migrate-1.2.1.js';
 	head.appendChild(script);
-}
+}*/
 
 function showPop(url) {
 

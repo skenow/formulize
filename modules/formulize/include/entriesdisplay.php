@@ -1794,25 +1794,29 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 	$endDateElement->setExtra("class='formulize_daterange' target='$handle'");
 
 	// eliminating jquery includes from modules/formulize
-	/*static $js;
+	static $js;
 	if($js) { // only need to include this code once!
 		$js = "";
 	} else {
 		$js = "<script type='text/javascript'>;
-		if (typeof jQuery == 'undefined') { 
-				var head = document.getElementsByTagName('head')[0];
-				script = document.createElement('script');
-				script.id = 'jQuery';
-				script.type = 'text/javascript';
-				script.src = '".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-1.11.0.min.js';
-				head.appendChild(script);
 
-				//jquery migration plugin
+		// check jquery version
+		if (typeof jQuery == 'undefined' || $().jquery != '1.11.0') { 
 				var head = document.getElementsByTagName('head')[0];
 				script = document.createElement('script');
 				script.id = 'jQuery';
 				script.type = 'text/javascript';
-				script.src = '".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-migrate-1.2.1.js';
+				script.src = 'http://code.jquery.com/jquery-1.11.0.min.js';
+				head.appendChild(script);
+		}
+
+		// check for jQuery migrate plugin
+		if (typeof jQuery.migrateWarnings == 'undefined') {}
+				var head = document.getElementsByTagName('head')[0];
+				script = document.createElement('script');
+				script.id = 'jQuery';
+				script.type = 'text/javascript';
+				script.src = 'http://code.jquery.com/jquery-migrate-1.1.0.min.js';
 				head.appendChild(script);
 		}
 		$().click(function() {
@@ -1826,7 +1830,7 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 			$('#formulize_hidden_daterange_'+handle).val('>='+start+'//'+'<='+end);
 		});
 		</script>";
-	}*/
+	}
 	return $startDateElement->render() . " ". _formulize_QDR_to . " " . $endDateElement->render() . " <input type=button name=qdrGoButton value='" . _formulize_QDR_go . "' onclick=\"javascript:showLoading();\"></input>\n<input type='hidden' id='formulize_hidden_daterange_".$handle."' name='search_".$handle."' value='".$search_text."' ></input>\n$js";
    } else {
 	return "";

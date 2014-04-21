@@ -1792,11 +1792,13 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 	$startDateElement->setExtra("class='formulize_daterange'");
 	$endDateElement = new XoopsFormTextDateSelect ('', 'formulize_daterange_end_'.$handle, 15, strtotime($endText));
 	$endDateElement->setExtra("class='formulize_daterange' target='$handle'");
-	static $js;
+
+	// eliminating jquery includes from modules/formulize
+	/*static $js;
 	if($js) { // only need to include this code once!
 		$js = "";
 	} else {
-		$js = "<script type='text/javascript'>
+		$js = "<script type='text/javascript'>;
 		if (typeof jQuery == 'undefined') { 
 				var head = document.getElementsByTagName('head')[0];
 				script = document.createElement('script');
@@ -1824,7 +1826,7 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 			$('#formulize_hidden_daterange_'+handle).val('>='+start+'//'+'<='+end);
 		});
 		</script>";
-	}
+	}*/
 	return $startDateElement->render() . " ". _formulize_QDR_to . " " . $endDateElement->render() . " <input type=button name=qdrGoButton value='" . _formulize_QDR_go . "' onclick=\"javascript:showLoading();\"></input>\n<input type='hidden' id='formulize_hidden_daterange_".$handle."' name='search_".$handle."' value='".$search_text."' ></input>\n$js";
    } else {
 	return "";
@@ -2958,26 +2960,27 @@ function interfaceJavascript($fid, $frid, $currentview, $useWorking, $useXhr, $l
 ?>
 <script type='text/javascript'>
 
-if (typeof jQuery == 'undefined') { 
+/*if (typeof jQuery == 'undefined') { 
 	var head = document.getElementsByTagName('head')[0];
 	script = document.createElement('script');
 	script.id = 'jQuery';
 	script.type = 'text/javascript';
 	script.src = '<?php print XOOPS_URL; ?>/modules/formulize/libraries/jquery/jquery-1.11.0.min.js';
 	head.appendChild(script);
-}
+}*/
 
-<?php
-if($useXhr) {
-	print " initialize_formulize_xhr();\n";
-	drawXhrJavascript();
-	print "</script>";
-	print "<script type=\"text/javascript\" src=\"".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-1.11.0.min.js\"></script>\n";
+/*<?php
+//if($useXhr) {
+//	print " initialize_formulize_xhr();\n";
+//	drawXhrJavascript();
+//	print "</no script>";  // added "no" so that ending <script> tag could be commented out
+//  print "<script type=\"text/javascript\" src=\"".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-1.11.0.min.js\"></no script>\n";
 	print "<script type='text/javascript'>";
 	print "var elementStates = new Array();";
 	print "var savingNow = \"\";";
 	print "var elementActive = \"\";";
-?>
+?>*/
+
 function renderElement(handle,element_id,entryId,fid,check) {
 	if(elementStates[handle] == undefined) {
 		elementStates[handle] = new Array();

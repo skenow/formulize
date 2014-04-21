@@ -25,3 +25,32 @@ jQuery(document).ready(function() {
         formulizechanged = 1;
     });
 });
+
+// check for jquery
+if (!window.jQuery || $().jquery != "1.11.0") {  
+  var jq = document.createElement('script');
+  jq.type = 'text/javascript';
+  jq.src = 'http://code.jquery.com/jquery-1.11.0.min.js';
+  document.getElementsByTagName('head')[0].appendChild(jq);
+}
+
+// check for jquery migrate
+if (typeof jQuery.migrateWarnings == 'undefined') {
+    var jqmig = document.createElement('script');
+    jqmig.type = 'text/javascript';
+    jqmig.src = 'http://code.jquery.com/jquery-migrate-1.2.1.min.js';
+    document.getElementsByTagName('head')[0].appendChild(jqmig);
+}
+
+// check for jquery ui
+if(!$.ui || $.ui.version != "1.10.4") {
+  var jqui = document.createElement('script');
+  jqui.type = 'text/javascript';
+  jqui.src = "".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-ui-1.8.2.custom.min.js";
+  document.getElementsByTagName('head')[0].appendChild(jqui);
+
+  jquicss = document.createElement("link");
+  jquicss.type = 'test/css';
+  jquicss.href = "".XOOPS_URL."/modules/formulize/libraries/jquery/css/start/jquery-ui-1.8.2.custom.css";
+  document.getElementsByTagName('head')[0].appendChild(jquicss);
+}

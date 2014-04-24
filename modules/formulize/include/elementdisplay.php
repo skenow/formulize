@@ -335,7 +335,6 @@ function displayElement($formframe="", $ele, $entry="new", $noSave = false, $scr
 	}
 }
 
-/* ALTERED - 20100316 - freeform - jeff/julian - start */
 function buildEvaluationCondition($match,$indexes,$filterElements,$filterOps,$filterTerms,$entry,$entryData)
 {
 	$evaluationCondition = "";

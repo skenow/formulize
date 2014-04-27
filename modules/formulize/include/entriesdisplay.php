@@ -1797,7 +1797,7 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 		$js = "";
 	} else {
 		$js = "<script type='text/javascript'>
-		if (typeof jQuery == 'undefined') { 
+		/*if (typeof jQuery == 'undefined') { 
 				var head = document.getElementsByTagName('head')[0];
 				script = document.createElement('script');
 				script.id = 'jQuery';
@@ -1812,7 +1812,7 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 				script.type = 'text/javascript';
 				script.src = '".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-migrate-1.2.1.js';
 				head.appendChild(script);
-		}
+		}*/
 		$().click(function() {
 			$('.formulize_daterange').change();	
 		});
@@ -2958,21 +2958,21 @@ function interfaceJavascript($fid, $frid, $currentview, $useWorking, $useXhr, $l
 ?>
 <script type='text/javascript'>
 
-if (typeof jQuery == 'undefined') { 
+/*if (typeof jQuery == 'undefined') { 
 	var head = document.getElementsByTagName('head')[0];
 	script = document.createElement('script');
 	script.id = 'jQuery';
 	script.type = 'text/javascript';
 	script.src = '<?php print XOOPS_URL; ?>/modules/formulize/libraries/jquery/jquery-1.11.0.min.js';
 	head.appendChild(script);
-}
+}*/
 
 <?php
 if($useXhr) {
 	print " initialize_formulize_xhr();\n";
 	drawXhrJavascript();
 	print "</script>";
-	print "<script type=\"text/javascript\" src=\"".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-1.11.0.min.js\"></script>\n";
+	//print "<script type=\"text/javascript\" src=\"".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-1.11.0.min.js\"></script>\n";
 	print "<script type='text/javascript'>";
 	print "var elementStates = new Array();";
 	print "var savingNow = \"\";";

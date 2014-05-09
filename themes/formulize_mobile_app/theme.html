@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<{$icms_langcode}>">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<{$icms_langcode}>" class="ui-mobile">
 <head>
 <!-- Center block custom positioning -->
     <{* Center blocks display order
@@ -33,6 +33,11 @@
     
 <!-- Sheet Css -->
     <link rel="stylesheet" type="text/css" media="all" href="<{$icms_imageurl}><{if isset($icms_rtl) and $icms_rtl}>rtl/<{/if}>style.css" />
+
+<!-- jQuery Mobile -->
+
+    <!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">;
+    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>;-->
 </head>
 
 <body id="<{$icms_dirname}>" class="<{$icms_langcode}><{if isset($formulize_screen_id) and $formulize_screen_id}> formulize-screen formulize-screen-<{$formulize_screen_id}><{/if}>">
@@ -95,5 +100,11 @@
     <{$icms_footer}>
     </div>
     </div>
+
+    <!-- Hide cols and enable swipint -->
+    <{$mobileHideJS}>
+    <{$mobileSwipeRJS}>
+    <{$mobileSwipeLJS}>
+
 </body>
 </html>

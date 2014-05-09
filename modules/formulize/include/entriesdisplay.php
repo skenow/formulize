@@ -46,6 +46,47 @@
 
 
 global $xoopsConfig;
+global $xoopsTpl;
+
+// hide all cols except the first one on load
+$xoopsTpl->assign('mobileHideJS', '<script>$(document).ready(function() { alert( "ready! - about to hide cols" ); $(".column").not(".column0").hide();}); </script>');
+
+// on right swipe, move one col to the left
+$xoopsTpl->assign('mobileSwipeRJS', '<script>$("td").swiperight(function() {
+			alert("RIGHT SWIPE DETECTED!");
+			var id = $(event.target).attr("id");
+			var arr = id.split("_");
+  			//alert("col: " + arr[2]);
+  			var col = parseInt(arr[2]);
+
+  			// if we are on the leftmost col, we cannot go to the left, so do nothing
+  			if (col != 0) {
+  				$(".column" + arr[2]).hide( "slide", { direction: "right" }, "slow", function(){
+  					$(".column" + (col - 1)).show("slide", {direction: "left"}, "slow");
+  				} );
+  				//$(".column" + (col - 1)).show("slide", {direction: "left"}, "slow");
+  			}
+		});</script>');
+
+// on left swipe, move one col to the right
+$xoopsTpl->assign('mobileSwipeLJS', '<script>// on left swipe, move one col to the right
+		jQuery("td").swipeleft(function() {
+			alert("LEFT SWIPE DETECTED!");
+			var id = $(event.target).attr("id");
+			var arr = id.split("_");
+
+  			// if we are on the rightmost col, we cannot go right,
+  			// so do nothing
+  			var col = parseInt(arr[2]);
+  			if (col != 2) {
+  				$(".column" + arr[2]).hide("slide", {direction: "left"}, "slow", function () {
+  					$(".column" + (col + 1)).show("slide", {direction: "right"}, "slow");
+  				});
+  				//$(".column" + (col + 1)).show("slide", {direction: "right"}, "slow");
+  			}
+		});</script>');
+
+
 // load the formulize language constants if they haven't been loaded already
 	if ( file_exists(XOOPS_ROOT_PATH."/modules/formulize/language/".$xoopsConfig['language']."/main.php") ) {
 		include_once XOOPS_ROOT_PATH."/modules/formulize/language/".$xoopsConfig['language']."/main.php";

@@ -45,14 +45,14 @@ if (typeof jQuery.migrateWarnings == 'undefined') {
 }
 
 // check for jquery ui 
-if (!jQuery.ui || jQuery.ui.version != "1.8.2") {
+if (!jQuery.ui || jQuery.ui.version != "1.10.4") {
     var jqui = document.createElement('script');
     jqui.type = 'text/javascript';
-    jqui.src = "".XOOPS_URL."/modules/formulize/libraries/jquery/jquery-ui-1.8.2.custom.min.js";
+    jqui.src = "http://code.jquery.com/ui/1.10.4/jquery-ui.min.js";
     document.getElementsByTagName('head')[0].appendChild(jqui);
 
     jquicss = document.createElement("link");
-    jquicss.type = 'test/css';
-    jquicss.href = "".XOOPS_URL."/modules/formulize/libraries/jquery/css/start/jquery-ui-1.8.2.custom.css";
+    jquicss.type = 'text/css';
+    jquicss.href = "http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css";
     document.getElementsByTagName('head')[0].appendChild(jquicss);
 }

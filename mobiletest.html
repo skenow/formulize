@@ -218,50 +218,53 @@ Calendar._DIR = "ltr";
     <div class="ui-panel-inner">
         <p>
             <input type="button" name="changecols" value="Change columns" onclick="javascript:showPop('http://localhost:8888/formulize/modules/formulize/include/changecols.php?fid=1&amp;frid=&amp;cols=1,2');">
-            <br>
-            <input type="button" class="formulize_button" id="formulize_resetViewButton" name="resetviewbutton" value="Reset view" onclick="javascript:showLoadingReset();">
-            <br>
-            <input type="button" class="formulize_button" id="formulize_saveViewButton" name="save" value="Save view" onclick="javascript:showPop('http://localhost:8888/formulize/modules/formulize/include/save.php?fid=1&amp;frid=&amp;lastloaded=&amp;cols=1,2&amp;currentview=all&amp;loadonlyview=0');">
-            <br><input type="button" class="formulize_button" id="formulize_deleteViewButton" name="delete" value="Delete view" onclick="javascript:delete_view(this.form, '10000', '4');">
-            <br>
-            <input type="button" class="formulize_button" id="formulize_selectAllButton" name="sellall" value="Select all" onclick="selectAll(this.check);">
-            <br>
-            <input type="button" class="formulize_button" id="formulize_clearSelectButton" name="clearall" value="Clear selection" onclick="unselectAll(this.uncheck);">
-            <br>
-            <input type="button" class="formulize_button" id="formulize_cloneButton" name="clonesel" value="Clone selected" onclick="javascript:confirmClone();">
-            <br>
-            <input type="button" class="formulize_button" id="formulize_deleteButton" name="deletesel" value="Delete selected" onclick="javascript:confirmDel();">
-            <br>
-            <br>
-            <input type="button" class="formulize_button" id="formulize_calcButton" name="calculations" value="Calculations" onclick="javascript:showPop('http://localhost:8888/formulize/modules/formulize/include/pickcalcs.php?fid=1&amp;frid=&amp;calc_cols=&amp;calc_calcs=&amp;calc_blanks=&amp;calc_grouping=');">
-            <br>
-            <input type="button" class="formulize_button" id="formulize_exportButton" name="export" value="Export Entries" onclick="javascript:showPop('http://localhost:8888/formulize/modules/formulize/include/export.php?fid=1&amp;frid=&amp;cols=1,2&amp;eq=1399859386');">
-            <br>
-            <input type="button" class="formulize_button" id="formulize_importButton" name="impdata" value="Import Data" onclick="javascript:showPop('http://localhost:8888/formulize/modules/formulize/include/import.php?fid=1&amp;eq=1399859386');">
-            <br>
-            <input type="button" class="formulize_button" id="formulize_notifButton" name="notbutton" value="Notifications" onclick="javascript:showPop('http://localhost:8888/formulize/modules/formulize/include/setnot.php?fid=1');">
-            <br>
-            <input type="button" class="formulize_button" id="formulize_addButton" name="addentry" value="Add one entry" onclick="javascript:addNew('single');">
-            <br>
-            <input type="button" class="formulize_button" id="formulize_addMultiButton" name="addentry" value="Add multiple entries" onclick="javascript:addNew();">
+            
+            <input type="button" name="resetviewbutton" value="Reset view" onclick="javascript:showLoadingReset();">
+            
+            <input type="button" name="save" value="Save view" onclick="javascript:showPop('http://localhost:8888/formulize/modules/formulize/include/save.php?fid=1&amp;frid=&amp;lastloaded=&amp;cols=1,2&amp;currentview=all&amp;loadonlyview=0');">
+            
+            <input type="button" name="delete" value="Delete view" onclick="javascript:delete_view(this.form, '10000', '4');">
+            
+            <input type="button" name="sellall" value="Select all" onclick="selectAll(this.check);">
+            
+            <input type="button" name="clearall" value="Clear selection" onclick="unselectAll(this.uncheck);">
+            
+            <input type="button" name="clonesel" value="Clone selected" onclick="javascript:confirmClone();">
+            
+            <input type="button" name="deletesel" value="Delete selected" onclick="javascript:confirmDel();">
+            
+            <input type="button" name="calculations" value="Calculations" onclick="javascript:showPop('http://localhost:8888/formulize/modules/formulize/include/pickcalcs.php?fid=1&amp;frid=&amp;calc_cols=&amp;calc_calcs=&amp;calc_blanks=&amp;calc_grouping=');">
+            
+            <input type="button" name="export" value="Export Entries" onclick="javascript:showPop('http://localhost:8888/formulize/modules/formulize/include/export.php?fid=1&amp;frid=&amp;cols=1,2&amp;eq=1399859386');">
+            
+            <input type="button" name="impdata" value="Import Data" onclick="javascript:showPop('http://localhost:8888/formulize/modules/formulize/include/import.php?fid=1&amp;eq=1399859386');">
+            
+            <input type="button" name="notbutton" value="Notifications" onclick="javascript:showPop('http://localhost:8888/formulize/modules/formulize/include/setnot.php?fid=1');">
+            
+            <input type="button" name="addentry" value="Add one entry" onclick="javascript:addNew('single');">
+            
+            <input type="button" name="addentry" value="Add multiple entries" onclick="javascript:addNew();">
         </p>
     </div>
 </div>
+
+<div class="ui-panel-wrapper">
 <div data-role="content" class="ui-content" role="main">
     <a href="#buttonpanel" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-bars">Actions</a>
     <b>Current View: </b>
     <br>
     
-        <span>&nbsp;&nbsp;Entries by all users in all groups</span>
-        <select name="currentview1" id="currentview1" size="1" onchange="javascript:change_view(this.form, '4', '4');">
-            <option value="">STANDARD VIEWS:</option>
-            <option value="mine">&nbsp;&nbsp;Entries by me</option>
-            <option value="group">&nbsp;&nbsp;Entries by all users in my group(s)</option>
-            <option value="all" selected="">&nbsp;&nbsp;Entries by all users in all groups</option>
-            <option value="">&nbsp;&nbsp;Entries by all users in...[pick groups]</option>
-        </select>
+    <span>&nbsp;&nbsp;Entries by all users in all groups</span>
+    <select name="currentview1" id="currentview1" size="1" onchange="javascript:change_view(this.form, '4', '4');">
+        <option value="">STANDARD VIEWS:</option>
+        <option value="mine">&nbsp;&nbsp;Entries by me</option>
+        <option value="group">&nbsp;&nbsp;Entries by all users in my group(s)</option>
+        <option value="all" selected="">&nbsp;&nbsp;Entries by all users in all groups</option>
+        <option value="">&nbsp;&nbsp;Entries by all users in...[pick groups]</option>
+    </select>
         
 blahblahblah
+</div>
 </div>
 <input type="hidden" name="newcols" id="newcols" value="">
 <input type="hidden" name="oldcols" id="oldcols" value="1,2">

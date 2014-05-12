@@ -48,6 +48,10 @@
 global $xoopsConfig;
 global $xoopsTpl;
 
+// include jQuery mobile
+$xoopsTpl->assign('mobileInclude', '<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>');
+
 // hide all cols except the first one on load
 $xoopsTpl->assign('mobileHideJS', '<script>$(document).ready(function() { alert( "ready! - about to hide cols" ); $(".column").not(".column0").hide();}); </script>');
 
@@ -78,7 +82,9 @@ $xoopsTpl->assign('mobileSwipeLJS', '<script>// on left swipe, move one col to t
   			// if we are on the rightmost col, we cannot go right,
   			// so do nothing
   			var col = parseInt(arr[2]);
-  			if (col != 2) {
+  			alert("current column: " + col);
+  			alert("max column: " + ($("table").find("tr:first td").length - 3));
+  			if (col != ($("table").find("tr:first td").length - 3)) {
   				$(".column" + arr[2]).hide("slide", {direction: "left"}, "slow", function () {
   					$(".column" + (col + 1)).show("slide", {direction: "right"}, "slow");
   				});

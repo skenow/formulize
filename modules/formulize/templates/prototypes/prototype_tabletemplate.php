@@ -1,4 +1,6 @@
-<?php
+<?php 
+
+global $is_mobile_version;
 
 $filename = "";
 	// $settings['xport'] no longer set by a page load, except if called as part of the import process to create a template for updating
@@ -242,6 +244,17 @@ $filename = "";
 		print "<p>" . _formulize_DE_LOE_LIMIT_REACHED1 . " <b>" . $LOE_limit . "</b> " . _formulize_DE_LOE_LIMIT_REACHED2 . " <a href=\"\" onclick=\"javascript:forceQ();return false;\">" . _formulize_DE_LOE_LIMIT_REACHED3 . "</a></p>\n";
 	}
 	
+	if ($is_mobile_version) {
+		print "STUFF IS WORKING";
+			
+		// close content div
+		print "</div>";
+			
+		// close page div
+		print "</div>";
+	}
+
 	if($scrollBoxWasSet) {
+		
 		print "</div>";
 	}

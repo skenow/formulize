@@ -15,6 +15,31 @@ function checkForCommon(Obj, form1, form2, lid) {
         }
     }
 }
+
+function checkOneToOne(Obj, form1, form2, lid) {
+
+    for (var i=0; i < $('select[name=relationships-rel'+lid+']')[0].options.length; i++) {
+        // one-to-one is selected, disable mainform-subform
+        if($('select[name=relationships-rel'+lid+']')[0].options[i].selected && $('select[name=relationships-rel'+lid+']')[0].options[i].text == 'One to One') {
+
+            for (var j=0; j < $('#linkages'+lid)[0].options.length; j++) {
+                if($('#linkages'+lid)[0].options[j].value == 'mainform-subform') {
+                    $('#linkages'+lid)[0].options[j].disabled = true;
+                    return;
+                }
+            }
+
+        }
+    }
+    // one-to-one is not selected, enable mainform-subform
+    for (var j=0; j < $('#linkages'+lid)[0].options.length; j++) {
+        if($('#linkages'+lid)[0].options[j].value == 'mainform-subform') {
+            $('#linkages'+lid)[0].options[j].disabled = false;
+            return;
+        }
+    }
+
+}
 </script>
 
 <div id="dialog-common-values" title="<{$smarty.const._AM_FRAME_WHICH_ELEMENTS}>" style='display:none'>
@@ -76,7 +101,7 @@ function checkForCommon(Obj, form1, form2, lid) {
                     <td><{$link->main_form->title}></td>
                     <td><{$link->linked_form->title}></td>
                     <td>
-                        <select name=relationships-rel<{$link->lid}> size=1>
+                        <select name=relationships-rel<{$link->lid}> size=1 onchange="javascript:checkOneToOne(this.form.linkages<{$link->lid}>, '<{$link->main_form->id_form}>', '<{$link->linked_form->id_form}>', '<{$link->lid}>');">
                             <option value="1"<{if $link->relationship eq 1}> selected="selected"<{/if}>><{$smarty.const._AM_FRAME_ONETOONE}></option>
                             <option value="2"<{if $link->relationship eq 2}> selected="selected"<{/if}>><{$smarty.const._AM_FRAME_ONETOMANY}></option>
                             <option value="3"<{if $link->relationship eq 3}> selected="selected"<{/if}>><{$smarty.const._AM_FRAME_MANYTOONE}></option>
@@ -91,6 +116,11 @@ function checkForCommon(Obj, form1, form2, lid) {
                             <{foreach from=$link->link_options key=linkoptionNumber item=linkoption}>
                                 <option value="<{$linkoption.value}>"<{if $linkoption.value == $link->link_selected}> selected="selected"<{/if}>><{$linkoption.name}></option>
                             <{/foreach}>
+                            <{if $link->relationship neq 1}>
+                                <option value='mainform-subform'>Join mainform and subform entries together</option>
+                            <{else}>
+                                <option value='mainform-subform' disabled>Join mainform and subform entries together</option>
+                            <{/if}>
                         </select>
                         <{if $link->common eq 1}>
                             <input type="hidden" name="relationships-preservecommon<{$link->lid}>" value="<{$link->key1}>+<{$link->key2}>"></input>

@@ -198,8 +198,14 @@ function updatelinks($fl_id, $value) {
     $keys = explode("+", $value);
     if(isset($keys[2]) AND $keys[2] == "common") {
         $common = 1;
+        $join_main_sub = 0;
     } else {
         $common = $processedValues['relationships']['preservecommon'.$fl_id] == $value ? 1 : 0;
+        if(isset($keys[0]) AND $keys[0] == "mainform-subform") {
+            $join_main_sub = 1;
+            $keys[0] = 999999;
+            $keys[1] = 999999;
+        }
     }
     if($keys[0] > 0){
         updateIndex($keys[0]);
@@ -209,7 +215,7 @@ function updatelinks($fl_id, $value) {
         updateIndex($keys[1]);
     }
 
-    $sql = "UPDATE " . $xoopsDB->prefix("formulize_framework_links") . " SET fl_key1='" . $keys[0] . "', fl_key2='" . $keys[1] . "', fl_common_value='$common' WHERE fl_id='$fl_id'";
+    $sql = "UPDATE " . $xoopsDB->prefix("formulize_framework_links") . " SET fl_key1='" . $keys[0] . "', fl_key2='" . $keys[1] . "', fl_common_value='$common', fl_subform_join='$join_main_sub' WHERE fl_id='$fl_id'";
     if(!$res = $xoopsDB->query($sql)) {
         print "Error: could not update key fields for framework link $fl_id";
     }

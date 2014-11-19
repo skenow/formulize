@@ -271,6 +271,7 @@ CREATE TABLE formulize_framework_links (
   fl_unified_display smallint(5),
   fl_unified_delete smallint(5),
   fl_common_value tinyint(1) NOT NULL default '0',
+  fl_subform_join tinyint(1) NOT NULL default '0',
   PRIMARY KEY (`fl_id`)
 ) ENGINE=MyISAM;
 

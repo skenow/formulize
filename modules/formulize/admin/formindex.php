@@ -110,9 +110,9 @@ function patch40() {
 	 * IT IS ALSO CRITICAL THAT THE PATCH PROCESS CAN BE RUN OVER AND OVER AGAIN NON-DESTRUCTIVELY
 	 * 
 	 * ====================================== */
-	
-	$checkThisTable = 'formulize';
-	$checkThisField = 'ele_use_default_when_blank';
+
+	$checkThisTable = 'formulize_framework_links';
+	$checkThisField = 'fl_subform_join';
 	$checkThisProperty = false;
 	$checkPropertyForValue = false;
 	
@@ -322,6 +322,7 @@ if(!in_array($xoopsDB->prefix("formulize_resource_mapping"), $existingTables)) {
         $sql['add_on_before_save'] = "ALTER TABLE " . $xoopsDB->prefix("formulize_id") . " ADD `on_before_save` text";
 		$sql['add_form_note'] = "ALTER TABLE " . $xoopsDB->prefix("formulize_id") . " ADD `note` text";
 		$sql['add_use_default_when_blank'] = "ALTER TABLE " . $xoopsDB->prefix("formulize") . " ADD `ele_use_default_when_blank` tinyint(1) NOT NULL default '0'";
+        $sql['subformjoin'] = "ALTER TABLE " . $xoopsDB->prefix("formulize_framework_links") . " ADD `fl_subform_join` tinyint(1) NOT NULL default '0'";
 		
 		foreach($sql as $key=>$thissql) {
 			if(!$result = $xoopsDB->query($thissql)) {
@@ -363,6 +364,8 @@ if(!in_array($xoopsDB->prefix("formulize_resource_mapping"), $existingTables)) {
                     print "form note field already added.  result: OK<br>";
 				} elseif($key === "add_use_default_when_blank") {
 						print "use default when blank already added.  result: OK<br>";
+                } elseif($key === "subformjoin") {
+                    print "mainform_subform framework value already added.  result: OK<br>";
 				} elseif(strstr($key, 'drop_from_formulize_id_')) {
 					continue;
 				} else {

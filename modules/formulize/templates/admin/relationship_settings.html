@@ -118,6 +118,9 @@ function checkOneToOne(Obj, form1, form2, lid) {
                             <{/foreach}>
                             <{if $link->relationship neq 1}>
                                 <option value='mainform-subform'>Join mainform and subform entries together</option>
+                                <{if $link->key1 eq "32767" and $link->key2 eq "32767"}>
+                                    <option value='mainform-subform' selected="selected">Join mainform and subform entries together</option>
+                                <{/if}>
                             <{else}>
                                 <option value='mainform-subform' disabled>Join mainform and subform entries together</option>
                             <{/if}>

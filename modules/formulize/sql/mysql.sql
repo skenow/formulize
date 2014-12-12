@@ -374,3 +374,12 @@ CREATE TABLE formulize_deletion_logs (
   INDEX i_del_id (del_log_id)
 ) ENGINE=MyISAM;
 
+CREATE TABLE formulize_foreign_keys (
+  fk_id smallint(5) NOT NULL auto_increment,
+  form_id_1 smallint(5),
+  form_id_2 smallint(5),
+  entry_id_1 int(7),
+  entry_id_2 int(7),
+  PRIMARY KEY (`fk_id`),
+) ENGINE=MyISAM;
+

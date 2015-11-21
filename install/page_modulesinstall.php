@@ -25,7 +25,7 @@ $pageHasHelp = false;
 
 $vars =& $_SESSION['settings'];
 
-include_once ICMS_ROOT_PATH."/mainfile.php";
+include_once "../mainfile.php";
 include_once ICMS_ROOT_PATH."/include/common.php";
 include_once "../include/cp_functions.php";
 include_once './class/dbmanager.php';

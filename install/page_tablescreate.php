@@ -18,11 +18,9 @@
  *
  */
 
-clearstatcache(true, "../mainfile.php");
-sleep(1);
 require_once 'common.inc.php';
 if (!defined( 'XOOPS_INSTALL' ) )	exit();
-
+include_once "../mainfile.php";
 icms_core_Filesystem::chmod("../mainfile.php", 0444);
 if (defined('XOOPS_TRUST_PATH') && XOOPS_TRUST_PATH != '') {
 	icms_core_Filesystem::chmod(XOOPS_TRUST_PATH, 0777);
@@ -46,10 +44,7 @@ $pageHasHelp = false;
 
 $vars =& $_SESSION['settings'];
 
-include "../mainfile.php";
 if (!defined("XOOPS_ROOT_PATH")) {
-    sleep(1);
-    // mainfile.php does not yet contain the saved changes written by the installer, so reload the page and try again
     header("Location: ".$_SERVER["REQUEST_URI"]);
     exit();
 }

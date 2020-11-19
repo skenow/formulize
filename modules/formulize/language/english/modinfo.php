@@ -47,8 +47,8 @@ define("_MI_formulize_SEND_ADMIN","Send to site admin only");
 define("_MI_formulize_SEND_ADMIN_DESC","Settings of \"Send to group\" will be ignored");
 define("_MI_formulize_PROFILEFORM","Which form is to be used as part of the registration process and when viewing and editing accounts? (requires use of the Registration Codes module)");
 
-define("_MI_formulize_ALL_DONE_SINGLES","Should the 'All Done' button appear at the bottom of the form when editing an entry, and creating a new entry in a 'one-entry-per-user' form?");
-define("_MI_formulize_SINGLESDESC","The 'All Done' button is used to leave a form without saving the information in the form.  If you have made changes to the information in a form and then you click 'All Done' without first clicking 'Save', you get a warning that your data has not been saved.  Because of the way the 'Save' button and 'All Done' button work in tandem, there is normally no way to save information and leave a form all at once.  This bothers/confuses some users.  Set this option to 'Yes' to remove the 'All Done' button and turn the behaviour of the 'Save' button to 'save-and-leave-the-form-all-at-once'.  This option does not affect situations where the user is adding multiple entries to a form (where the form reloads blank every time you click 'Save').");
+define("_MI_formulize_ALL_DONE_SINGLES","Should the 'All Done' button appear at the bottom of the form when editing an entry, and creating a new entry in a 'one-entry-per-user' form? (Deprecated - use Form Screen settings)");
+define("_MI_formulize_SINGLESDESC","This option is overriden by the settings in Form screens. The 'All Done' button (Leave button) is used to leave a form without saving the information in the form.  If you have made changes to the information in a form and then you click 'All Done' without first clicking 'Save', you get a warning that your data has not been saved.  Because of the way the 'Save' button and 'All Done' button work in tandem, there is normally no way to save information and leave a form all at once.  This bothers/confuses some users.  Set this option to 'Yes' to remove the 'All Done' button and turn the behaviour of the 'Save' button to 'save-and-leave-the-form-all-at-once'.  This option does not affect situations where the user is adding multiple entries to a form (where the form reloads blank every time you click 'Save').");
 
 define("_MI_formulize_LOE_limit", "What is the maximum number of entries that should be displayed in a list of entries, without confirmation from the user that they want to see all entries?");
 define("_MI_formulize_LOE_limit_DESC", "If a dataset is very large, displaying a list of entries screen can take a long time, several minutes even.  Use this preference to specify the maximum number of entries that your system should try to display at once.  If a dataset contains more entries than this limit, the user will be asked if they want to load the entire dataset or not.");
@@ -100,3 +100,11 @@ define("_MI_formulizeMENU_DESC","Displays an individually configurable menu in a
 
 // Names of blocks for this module (Not all module has blocks)
 define("_MI_formulizeMENU_BNAME","Form Menu");
+
+define("_MI_formulize_EXPORTINTROCHAR","Prefix strings in .csv files with a character to smooth importing and appearance in Excel and Google?");
+define("_MI_formulize_EXPORTINTROCHARDESC","Excel and Google Sheets try to be helpful and automatically interpret certain values when opening .csv files. This can damage your data. To force non-numeric values to be read as-is, Formulize can prefix them with certain characters that will trigger them to be read as plain strings by Excel and Google. However, this can cause havoc in other programs if you need plain .csv data. The default behaviour suits opening downloaded files in Excel, and using the IMPORTDATA function in Google Sheets to gather data via a makecsv.php reference.");
+define("_MI_formulize_EIC_BASIC", "Prefix strings with a TAB character (for Excel), unless makecsv.php is generating the file, then use an apostrophe (for Google Sheets)");
+define("_MI_formulize_EIC_ALWAYSAPOS", "Always prefix strings with an apostrophe (for Google Sheets)");
+define("_MI_formulize_EIC_ALWAYSTAB", "Always prefix strings with a TAB (for Excel)");
+define("_MI_formulize_EIC_PLAIN", "Never prefix strings (for programs that need clean, raw data)");
+

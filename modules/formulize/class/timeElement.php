@@ -111,31 +111,26 @@ class formulizeTimeElementHandler extends formulizeElementsHandler {
         if($isDisabled) {
             $formElement = new xoopsFormLabel($caption, $this->formatDataForList($ele_value, $element->getVar('ele_handle'), $entry_id));
         } else {
-            static $scriptIncluded = false;
+            global $output_timeelement_js;
             $timeScript = "";
-            if(!$scriptIncluded) {
-                // depends on includeResource function which is part of formDisplay.php and will exist when any regular form has been rendered onto the screen.
-                // it will not be available when only an element by element rendering is in effect
-                // wait up to 8 seconds for the scripts to finish loading, but bail after that and don't initialize the elements (otherwise endless loop)
+            if(!$output_timeelement_js) {
+                $output_timeelement_js = $markupName;
                 $timeScript .= "<script type='text/javascript'>
-jQuery(document).ready(function(){
-    includeResource('".XOOPS_URL."/modules/formulize/libraries/jquery/timeentry/jquery.timeentry.css', 'link');
-    includeResource('".XOOPS_URL."/modules/formulize/libraries/jquery/timeentry/jquery.plugin.min.js', 'script');
-    includeResource('".XOOPS_URL."/modules/formulize/libraries/jquery/timeentry/jquery.timeentry.js', 'script');
-    includeResource('".XOOPS_URL."/modules/formulize/libraries/jquery/timeentry/jquery.mousewheel.js', 'script');
-    initializeTimeElements();
-});
-var timeElementWaiting = 0;
+
 function initializeTimeElements() {
-    if(jQuery.timeEntry === undefined && timeElementWaiting <= 8) {
-        timeElementWaiting = timeElementWaiting + 1;
-        setTimeout(initializeTimeElements,500);
-    } else if(jQuery.timeEntry !== undefined) {
-        jQuery('.formulize-time-element').timeEntry({spinnerImage: '".XOOPS_URL."/modules/formulize/libraries/jquery/timeentry/spinnerDefault.png'});
-    }
+    jQuery('.formulize-time-element').timeEntry({spinnerImage: '".XOOPS_URL."/modules/formulize/libraries/jquery/timeentry/spinnerDefault.png'});
 }
+
+jQuery(document).ready(function(){    
+    if(jQuery.timeEntry === undefined) {
+        setTimeout(initializeTimeElements, 1000); // hail mary, wait for a second if jQuery isn't finished loading??
+    } else {
+        initializeTimeElements();
+    }
+});
+
 </script>";
-                $scriptIncluded = true;
+                
             }
             $timeElement = new xoopsFormText($caption, $markupName, 10, 10, $ele_value); // caption, markup name, size, maxlength, default value, according to the xoops form class
             $timeElement->setExtra("class='formulize-time-element'");
@@ -156,7 +151,7 @@ function initializeTimeElements() {
     // $element is the element object
     function prepareDataForSaving($value, $element) {
         // have to convert this to a 24 hour time for saving
-        $value = $this->convert12To24HourTime($value);
+        //$value = $this->convert12To24HourTime($value); // RIGHT NOW THE TIME WIDGET FORCES 24 HOURS ON EVERYONE. THIS IS DONE IN THE JS FILE. SO NO NEED TO CONVERT VALUES.
         if($value == "") { $value = "{WRITEASNULL}"; }
         return $value;
     }
@@ -193,7 +188,8 @@ function initializeTimeElements() {
     // this method will format a dataset value for display on screen when a list of entries is prepared
     // for standard elements, this step is where linked selectboxes potentially become clickable or not, among other things
     // Set certain properties in this function, to control whether the output will be sent through a "make clickable" function afterwards, sent through an HTML character filter (a security precaution), and trimmed to a certain length with ... appended.
-    function formatDataForList($value, $handle, $entry_id) {
+    // For time elements, you don't need handle or entry id to format stuff
+    function formatDataForList($value, $handle="", $entry_id="") {
         $this->clickable = true; // make urls clickable
         $this->striphtml = true; // remove html tags as a security precaution
         $this->length = 100; // truncate to a maximum of 100 characters, and append ... on the end

@@ -38,6 +38,19 @@
   <{include file="db:admin/element_linkedfilter.html"}>
   
   <{include file="db:admin/element_linkedsortoptions.html"}>
+    
+  <{include file="db:admin/alternate_fields_for_linked_elements.html"}>
   
 </div>
 
+<script>
+$("#snapshot-<{$content.ele_value.snapshot}>").attr('checked',1);
+    
+    $('input[name="linked_yesno"]').change(function() {
+        if($('input[name="linked_yesno"]:checked').val() == 1) {
+            $('#snapshot-values').show(200);
+        } else {
+            $('#snapshot-values').hide(200);
+        }
+    });
+</script>

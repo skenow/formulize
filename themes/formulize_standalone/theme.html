@@ -38,10 +38,26 @@
             jQuery('#formulizeform input[type="radio"]').keypress(function(e) {
                 var key = String.fromCharCode(e.keyCode).toLowerCase();
                 jQuery('input[name="'+jQuery(this).attr('name')+'"]').each(function() {
-                    if(key == jQuery('label[for='+jQuery(this).attr('id')+']').text()) {
+                    checkText = jQuery('label[for='+jQuery(this).attr('id')+']').text();
+                    if(key == checkText || key == checkText.charAt(0).toLowerCase()) {
                         jQuery(this).prop('checked', true).focus().trigger('change');
                     } 
                 })
+            });
+
+            // make radio buttons uncheckable
+            jQuery("input[type=radio]").each(function() {
+                jQuery(this).data('checkedstatus', jQuery(this).prop("checked"));
+            });
+            jQuery("input[type=radio]").click(function () {
+                if (jQuery(this).data('checkedstatus')) {
+                    jQuery(this).prop("checked", false).change();
+                    jQuery(this).data('checkedstatus', false);
+                } else {
+                    jQuery(this).prop("checked", true).change();
+                    jQuery(this).data('checkedstatus', true);
+                }
+                jQuery(this).siblings('input[type="radio"]').data('checkedstatus', false);
             });
         });
     </script>

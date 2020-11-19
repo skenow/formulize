@@ -91,9 +91,7 @@ global $xoopsDB;
             
             $sql = 'SELECT links.*, group_concat(group_id separator \',\') as permissions FROM '.$xoopsDB->prefix("formulize_menu_links").' as links ';
 			$sql .= ' LEFT JOIN '.$xoopsDB->prefix("formulize_menu_permissions").' as perm ON links.menu_id = perm.menu_id ';
-			$sql .= ' WHERE appid = ' . $id. ' '. $groupSQL .' GROUP BY menu_id,appid,screen,rank,url,link_text ORDER BY rank';
-            
-            //echo $sql;
+			$sql .= ' WHERE appid = ' . $id. ' '. $groupSQL .' GROUP BY menu_id,appid,screen,`rank`,url,link_text ORDER BY `rank`';
             
             if ($result = $this->db->query($sql)) { 
                 
@@ -451,7 +449,16 @@ class formulizeApplicationsHandler {
     function getMenuLinksForApp($appid,$all=false){
         global $xoopsDB;
         $links_handler = xoops_getmodulehandler('ApplicationMenuLinks', 'formulize');
-        return $links_handler->get($appid,$all); 
+        if(!is_array($appid)) {
+            $appid = array($appid);
+        }
+        $foundLinks = array();
+        foreach($appid as $aid) {
+            if($links = $links_handler->get($aid,$all)) {
+                $foundLinks = array_merge($foundLinks, $links);
+            }
+        }
+        return $foundLinks;
     }
     
     
@@ -461,11 +468,11 @@ class formulizeApplicationsHandler {
         global $xoopsDB;
         
         $rank = 1;
-        $rankquery = "SELECT MAX(rank) FROM `".$xoopsDB->prefix("formulize_menu_links")."` WHERE appid=".$appid.";";
+        $rankquery = "SELECT MAX(`rank`) FROM `".$xoopsDB->prefix("formulize_menu_links")."` WHERE appid=".$appid.";";
         if($result = $xoopsDB->query($rankquery)) {
 	    //if empty query, then rank = 1, else, rank is the next larger number
             $max = $xoopsDB->fetchArray($result);
-            $rank= $max['MAX(rank)']+1;
+            $rank= $max['MAX(`rank`)']+1;
         }
         
         //0=menuid, 1=menuText, 2=screen, 3=url, 4=groupids, 5=default_screen  6=note 
@@ -566,7 +573,7 @@ class formulizeApplicationsHandler {
         foreach($Links as $link) {
   			$menu_id = $link->getVar('menu_id');	
   			$rank = $link->getVar('rank');           
-        	$updatesql = "UPDATE `".$xoopsDB->prefix("formulize_menu_links")."` SET rank= ".$rank." where menu_id=".$menu_id.";";
+        	$updatesql = "UPDATE `".$xoopsDB->prefix("formulize_menu_links")."` SET `rank`= ".$rank." where menu_id=".$menu_id.";";
         	if(!$result = $xoopsDB->query($updatesql)) {
             	exit("Error sorting Menu List. SQL dump:\n" . $updatesql . "\n".$xoopsDB->error()."\nPlease contact <a href=mailto:info@formulize.org>info@formulize.org</a> for assistance.");
         	}

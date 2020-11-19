@@ -314,6 +314,7 @@ define("_formulize_SUBFORM_SIMPLE_LABEL", "What text should appear on the button
 define("_formulize_SUBFORM_MULTIPLE_BUTTON", "Display a button with a text box for choosing the number of entries to add");
 define("_formulize_SUBFORM_MULTIPLE_LABEL", "What text should be used to describe each entry? ie: Add x Entries, Add x Participants, etc.");
 define("_formulize_DELETE_CHECKED", "Delete checked items");
+define("_formulize_CLONE_CHECKED", "Clone checked items");
 define("_formulize_ADD_HELP", "Add an entry in this section by clicking the <i>Add</i> button.");
 define("_formulize_ADD_HELP2", "See an entire entry by clicking the <i>View</i> button.");
 define("_formulize_ADD_HELP3", "Update an entry by changing the values on the right.");
@@ -323,6 +324,7 @@ define("_formulize_SUBFORM_FILTER_GO","Go");
 define("_formulize_SUBFORM_FILTER_SEARCH","Search for: ");
 define("_AM_ELE_SUBFORM_NEWENTRY_LABEL", "New entry");
 define("_formulize_SAVE", "Save");
+define("_formulize_SAVE_AND_GOBACK", "Save and Go Back");
 define("_formulize_SAVE_AND_LEAVE", "Save and Leave");
 define("_formulize_DONE", "Leave Page");
 define("_formulize_CONFIRMNOSAVE", "You have not saved your changes!  Is that OK?  Click 'Cancel' to return to the form and then click 'Save' to save your changes.");
@@ -336,7 +338,8 @@ define("_formulize_INFO_CONTINUE2", "You can make another entry by filling in th
 define("_formulize_INFO_SAVEBUTTON", "Click the <i>" . _formulize_SAVE . "</i> button to save your changes.");
 define("_formulize_INFO_SAVE1", "Click the <i>");
 define("_formulize_INFO_SAVE2", "</i> button to save your changes.");
-define("_formulize_INFO_SAVEANDLEAVE", "Click the <i>"._formulize_SAVE_AND_LEAVE."</i> button if you want to save your changes and leave this page.");
+define("_formulize_INFO_SAVEANDLEAVE1", "Click the <i>");
+define("_formulize_INFO_SAVEANDLEAVE2", "</i> button if you want to save your changes and leave this page.");
 define("_formulize_INFO_NOSAVE", "You can review this entry, but you <i>cannot save changes</i>.");
 define("_formulize_INFO_MAKENEW", "You can make a new entry by filling in the form below.");
 
@@ -389,6 +392,7 @@ define("_formulize_DE_EXPORT_MAKEFILE", "Start data file download");
 define("_formulize_DE_EXPORT_SHOW_ADVANCED", "Show advanced options");
 define("_formulize_DE_EXPORT_HIDE_ADVANCED", "Hide advanced options");
 define("_formulize_DB_EXPORT_TO_EXCEL", "Use compatibility mode for some versions of Microsoft Excel (helps with accented characters in some cases)");
+define("_formulize_DB_EXPORT_NULL_OPTION", "Use this value in place of all NULL values: ");
 define("_formulize_EXPORT_FILENAME_TEXT", "Exported_data_from");
 
        
@@ -603,7 +607,8 @@ define("_formulize_USERNAME_HELP3", " characters long)");
 define("_formulize_PASSWORD_HELP1", " characters long)");
 
 // "Other" for checkboxes and radio buttons:
-define("_formulize_OPT_OTHER", "Other: ");
+define("_formulize_OPT_OTHERWORD", "Other"); 
+define("_formulize_OPT_OTHER", _formulize_OPT_OTHERWORD.": ");
 
 // Notifications
 define("_formulize_DE_NOTBUTTON", "Notifications");
@@ -641,7 +646,7 @@ define("_formulize_DE_NOT_SUBJTEXT", "Use this custom subject line: ");
 define("_formulize_DE_NOT_DIGEST_SUBJECT", "Notification Digest");
 
 // multi-page forms
-define("_formulize_DMULTI_THANKS", "<h1>You're done!</h1><p>Thanks for taking the time to fill in that form.  We really appreciate it.</p>");
+define("_formulize_DMULTI_THANKS", "<h1>You're done!</h1><p>Thanks for taking the time to fill in that form.  We really appreciate it.</p>{thankYouNav}");
 define("_formulize_DMULTI_NEXT", "Save and Continue");
 define("_formulize_DMULTI_PREV", "Save and Go Back");
 define("_formulize_DMULTI_SAVE", "Save and Finish");
@@ -662,6 +667,8 @@ define("_formulize_DE_IMPORT_STEP3", "Step 3: upload the modified file");
 define("_formulize_DE_IMPORT_FILE", "Select the file you modified and upload it.");
 define("_formulize_DE_IMPORT_GO", "Upload");
 define("_formulize_DE_IMPORT_VALIDATEDATA", "Automatically validate the structure and data in the .csv file before actually importing (highly recommended!)");
+define("_formulize_DE_IMPORT_UPDATEDERIVED", "Automatically updated derived values in the form");
+define("_formulize_DE_IMPORT_SENDNOTIFICATIONS", "Automatically send notifications to users based on the imported data");
 define("_formulize_DE_IMPORT_INSTRUCTIONS", "<p><b>Open the file you downloaded in a spreadsheet program, like Excel, and modify it</b> so it contains the data you want to upload.  You don't have to do this right now, you can modify the file and come back later to upload it.</p>
 
 <p>When you save the file, <b>make sure you save it in .csv format.</b>  If you save it in a different format, like .xls, then the import process won't work!</p>");
@@ -739,7 +746,7 @@ define("_AM_UPLOAD", "Upload a file:");
 define("_AM_UPLOAD_DELETE", "  Delete this file");
 define("_AM_UPLOAD_DELETE_FAIL", "There was an error deleting the file, please reload the form and try again.");
 define("_AM_UPLOAD_DELETE_WARN", "Do you really want to delete this file?");
-define("_AM_UPLOAD_LOST", "Your file was uploaded, but could not be moved to a permanent location on the server.  Please try again.  If this happens again, please inform the webmaster about this error..");
+define("_AM_UPLOAD_LOST", "Your file was uploaded, but could not be moved to a permanent location on the server.  Please try again.  If this happens again, please inform the webmaster about this error.");
 define("_AM_UPLOAD_MOD", "Replace this with a new file:");
 define("_AM_UPLOAD_NOLOCATION", "Your file was uploaded, but the location where we need to save it on the server does not exist.  Please inform the webmaster about this error.");
 define("_AM_UPLOAD_ERROR_MIMETYPES", "The type of file you uploaded is not allowed for '");
@@ -750,6 +757,11 @@ define("_AM_UPLOAD_ERR_NO_TMP_DIR", "There is no temporary folder on the server 
 define("_AM_UPLOAD_ERR_CANT_WRITE", "Your file was uploaded, but could not be saved on the web server, maybe because the hard drive is full.  Please inform the webmaster about this error.");
 define("_AM_UPLOAD_ERR_EXTENSION", "The web server rejected your file (a PHP extension stopped it from being uploaded).");
 /* End Upload element translation by François */
+
+define("_AM_GOOGLEFILE_SELECT", "Select");
+define("_AM_GOOGLEFILE_DELETE_WARN", "Are you sure you want to remove");
+define("_AM_GOOGLEFILE_REQUIRED", "You must select a file for");
+
 
 define("_formulize_CLOSE_FORM_ELEMENT", "You need to close the form element that is open first before you edit this one");
 

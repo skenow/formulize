@@ -62,6 +62,8 @@ if($screens['type'] == 'multiPage') {
   $screen_handler = xoops_getmodulehandler('formScreen', 'formulize');
 } else if($screens['type'] == 'template') {
     $screen_handler = xoops_getmodulehandler('templateScreen', 'formulize');
+} else if($screens['type'] == 'calendar') {
+    $screen_handler = xoops_getmodulehandler('calendarScreen', 'formulize');
 }
 
 
@@ -116,6 +118,9 @@ if($isNew) {
       $screen->setVar('displayheading', 1);
       $screen->setVar('reloadblank', 0);
       $screen->setVar('savebuttontext', _formulize_SAVE);
+      $screen->setVar('saveandleavebuttontext', _formulize_SAVE_AND_LEAVE);
+      $screen->setVar('printableviewbuttontext', _formulize_PRINTVIEW);
+      $screen->setVar('savebuttontext', _formulize_SAVE);
       $screen->setVar('alldonebuttontext', _formulize_DONE);
   } else if ($screens['type'] == 'template') {
       $screen->setVar('custom_code', "");
@@ -123,7 +128,12 @@ if($isNew) {
       $screen->setVar('savebuttontext', _formulize_SAVE);
       $screen->setVar('donebuttontext', _formulize_SAVE_AND_LEAVE);
       $screen->setVar('donedest', "");
+  } else if($screens['type'] == 'calendar') {
+      $screen->setVar('caltype', 'month');
+      $screen->setVar('datasets', array());
   }
+
+  
 
 } else {
   $screen = $screen_handler->get($sid);
@@ -135,15 +145,37 @@ $originalFrid = intval($screen->getVar('frid'));
 $screen->setVar('frid',$screens['frid']);
 $screen->setVar('type',$screens['type']);
 $screen->setVar('useToken',$screens['useToken']);
+$screen->setVar('anonNeedsPasscode',$screens['anonNeedsPasscode']);
 
 if(!$sid = $screen_handler->insert($screen)) {
   print "Error: could not save the screen properly: ".$xoopsDB->error();
 }
 
+$reloadNow = false;
+$passcode_handler = xoops_getmodulehandler('passcode', 'formulize');
+if($_POST['delete_passcode']) {
+    $passcode_handler->delete($_POST['delete_passcode']);
+    $reloadNow = true;
+}
+foreach($_POST as $key=>$value) {
+    if(substr($key, 0, 16)=="passcode_expiry_") {
+        $id = str_replace("passcode_expiry_", "", $key);
+        $passcode_handler->updateExpiry($id, $value);
+    }
+}
+if($_POST['add_existing_passcode']) {
+    $passcode_handler->copyPasscodeToScreen($_POST['existing_passcode'], $sid);
+    $reloadNow = true;
+}
+if($_POST['make_new_passcode']) {
+    $passcode_handler->insert($_POST['new_passcode'], $_POST['new_notes'], $sid);
+    $reloadNow = true;
+}
+
+
 if($isNew) {
   
   // write out the necessary templates...
-  // templates - initialize with the necessary php opening tags
   if($screens['type'] == "multiPage") {
     $screen_handler->writeTemplateToFile("", 'toptemplate', $screen);
     $screen_handler->writeTemplateToFile("", 'elementtemplate', $screen);
@@ -155,11 +187,14 @@ if($isNew) {
   } elseif($screens['type'] == "template") {
       $screen_handler->write_custom_code_to_file("", $screen);
       $screen_handler->write_template_to_file("", $screen);
+  } elseif($screens['type'] == "calendar") {
+      $screen_handler->writeTemplateToFile("", 'toptemplate', $screen);
+      $screen_handler->writeTemplateToFile("", 'bottomtemplate', $screen);
   }
 
     // send code to client that will to be evaluated
   $url = XOOPS_URL . "/modules/formulize/admin/ui.php?page=screen&tab=settings&aid=".$aid.'&fid='.$fid.'&sid='.$sid;
   print '/* eval */ window.location = "'.$url.'";';
-} elseif(intval($originalFrid) != intval($screens['frid'])) {
+} elseif(intval($originalFrid) != intval($screens['frid']) OR $reloadNow) {
   print '/* eval */ reloadWithScrollPosition();';
 }

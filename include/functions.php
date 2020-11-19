@@ -2712,8 +2712,10 @@ function icms_need_do_br($moduleName=false) {
  * @return url that google will redirect to after authentication
  */
 
-function authenticationURL() {
+function authenticationURL($needAuth) {
+    if(!$needAuth) { return ''; }
     $client = setupAuthentication();
+    $client->setPrompt('select_account');
     $authUrl = $client->createAuthUrl();
     return $authUrl;
 }
@@ -2727,13 +2729,15 @@ function authenticationURL() {
 
 function setupAuthentication() {
 	//Google API PHP Library includes
-	require_once XOOPS_ROOT_PATH.'/libraries/googleapiclient/autoload.php';
+	require_once XOOPS_ROOT_PATH.'/libraries/googleapiclient/vendor/autoload.php';
 	//redirect uri for when google authentication is done and it comes back to formulize
 	$redirect_uri = XOOPS_URL;
 	
 	//Create Client Request to access Google API
 	$client = new Google_Client();
 	
+    $client->setAccessType ("offline");
+    
 	$auth_creds = XOOPS_TRUST_PATH.'/client_secrets.json';
 	if (file_exists($auth_creds)) {
 		//set credentials for Auth
@@ -2747,6 +2751,7 @@ function setupAuthentication() {
 
 	//want to request email info for username later on
 	$client->setScopes('email');
+    $client->addScope('https://www.googleapis.com/auth/drive');
 	$client->addScope('profile');
 
 	//Send Client Request

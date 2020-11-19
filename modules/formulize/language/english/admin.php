@@ -104,6 +104,9 @@ define("_AM_SETTINGS_FORM_APP_PART","Which applications is this form part of?");
 define("_AM_SETTINGS_FORM_APPNEW","Create a new application for this form to be part of?");
 define("_AM_SETTINGS_FORM_DEFAULT_GROUP_PERM","Which groups of users should have permission to alter this form's settings?");
 
+define("_AM_CAL_SCREEN_TEMPLATES","Templates");
+define("_AM_CAL_SCREEN_DATA","Datasets");
+
 
 /*mod Language for permissions*/
 define("_AM_PERMISSIONS_CHOOSE_GROUPS","Which groups do you want to set permissions for?");
@@ -171,6 +174,7 @@ define("_AM_SCREEN_CREATE"," Create a new Screen");
 define("_AM_SCREEN_FORMSCREENS","Form Screens");
 define("_AM_SCREEN_LISTSCREENS","List Screens");
 define("_AM_SCREEN_TEMPLATESCREENS","Template Screens");
+define("_AM_SCREEN_CALENDARSCREENS","Calendar Screens");
 define("_AM_SCREEN_DELETESCREENS","Are you sure you want to delete this screen? All configuration settings for this screen will be lost!");
 define("_AM_SCREEN_RELATIONWARNING", "Note: This screen uses a different relationship setting than one or more list screens.");
 
@@ -210,7 +214,7 @@ define("_AM_ELE_CAPTION","Caption");
 define("_AM_ELE_CAPTION_DESC","<br /></b>{SEPAR} permit you to not display the element name");
 define("_AM_ELE_DEFAULT","Default value");
 define("_AM_ELE_LEFTRIGHT_TEXT","Contents of the right side");
-define("_AM_ELE_LEFTRIGHT_DESC","Any text or HTML code that you type here will appear on the right beside the caption.  You can use PHP code instead of text or HTML, just make sure it contains '&#36;value = &#36;something;' and Formulize will read this text as PHP code.");
+define("_AM_ELE_LEFTRIGHT_DESC","Any text or HTML code that you type here will appear on the right beside the caption.  You can use PHP code instead of text or HTML, just make sure it contains '&#36;value = &#36;something;' and Formulize will read this text as PHP code. In the PHP code, you can use display(\$entry, \$dataHandle) to access information saved in the active entry. You can use \$entry_id to get the entry id number in the database.");
 define("_AM_ELE_DESC","Descriptive text");
 define("_AM_ELE_DESC_HELP","Whatever you type in this box will appear below the caption, just like this text does.");
 define("_AM_ELE_COLHEAD","Column Heading (optional)");
@@ -689,11 +693,11 @@ define("_AM_FORMULIZE_SCREEN_LOE_TEMPLATEINTRO2", "<span style=\"font-weight: no
 <li>\$notifButton</li>
 <li>\$currentViewList</li>
 <li>\$changeColsButton</li>
+<li>\$calcButton</li>
 <li>\$saveButton (if any columns are displayed as form elements)</li>
 </ul>
 </td><td>
 <ul>
-<li>\$calcButton</li>
 <li>\$advSearchButton</li>
 <li>\$cloneButton</li>
 <li>\$deleteButton</li>
@@ -703,12 +707,14 @@ define("_AM_FORMULIZE_SCREEN_LOE_TEMPLATEINTRO2", "<span style=\"font-weight: no
 <li>\$saveViewButton</li>
 <li>\$deleteViewButton</li>
 <li>\$pageNavControls (if there is more than one page of entries)</li>
+<li>\$globalQuickSearch (to show a search box that looks in all displayed fields at once)</li>
 </ul>
 </td>
 </tr>
 </table>
 <p>For Quicksearch boxes, use \"\$quickSearch<i>Column</i>\" where <i>Column</i> is the element's data handle. See the List Template above for <a href=\"#elementhandles\">a list of the element handles</a>.  <b>Note:</b> you must turn off the quicksearch boxes at the top of the columns before you can use them in a top template.</p>\n
 <p>You can also make Quickfilter dropdown boxes, by using \"\$quickFilter<i>Column</i>\".  This only works for selectboxes, radio buttons and checkboxes.</p>\n
+<p>You can also make QuickMultiFilter checkboxes, by using \"\$quickMultiFilter<i>Column</i>\".  This only works for selectboxes, radio buttons and checkboxes.</p>\n
 <p>You can also make Quickfilter date range selectors, by using \"\$quickDateRange<i>Column</i>\".  This only works for date boxes.</p>\n
 <p>For Custom Buttons, use \"\$handle\" where <i>handle</i> is the handle you specified for that button.  You can use \"\$messageText\" to control where the clicked button's message will appear on the screen.  By default, the message appears centred at the top.</p>\n<p>If the current view list is available, you can determine which view was last selected from the list, by checking whether <i>\$The_view_name</i> is true or not.  You can also check <i>\$viewX</i> where X is a number corresponding to the position of the view in the list, 1 through n.  You can use this to put if..else clauses into your template, so it changes depending what view is selected.</p>\n<p><b>List Template</b></p>\n<p>If you specify any PHP code for the List Template, it will be used to draw in each row of the list.</p>\n<p>You do not need to create a foreach loop or any other loop structure in this template.  The PHP code you specify will be executed inside a loop that runs once for each entry.</p>\n<p>You have full access to Formulize objects, functions, variables and constants in this template, including <i>\$fid</i> for the form ID.  Use \$entry to refer to the current entry in the list.  For example:</p>\n<p style=\"font-family: courier\">&nbsp;&nbsp;&nbsp;display(\$entry, \"phonenumber\");</p>\n<p>That code will display the phone number recorded in that entry (assuming \"phonenumber\" is a valid element handle).</p><p>You can use \"\$selectionCheckbox\" to display the special checkbox used to select an entry.</p><p>You can use a special function called \"viewEntryLink\" to create a link to the entry so users can edit it.  This function takes up to three parameters.  The first is the text that will be clickable.  Examples:</p><p style=\"font-family: courier\">&nbsp;&nbsp;&nbsp;print viewEntryLink(\"Click to view this entry\");<br>&nbsp;&nbsp;&nbsp;print viewEntryLink(display(\$entry, \"taskname\"));<br>&nbsp;&nbsp;&nbsp;print viewEntryLink(\"&lt;img src='images/button.jpg'&gt;\");</p>
 <p>Optionally, you can also specify a specific entry to edit, and also which screen to edit it in.  This is often useful when the dataset contains more than one form (from a relationship), and you are using the <i>internalRecordIds</i> function to identify which entries in the other forms are being included.  Examples:</p><p style=\"font-family: courier\">&nbsp;&nbsp;&nbsp;print viewEntryLink(\"Click to view this entry\", 123); // takes the user to entry 123 in this form<br><br>
@@ -799,9 +805,17 @@ define("_AM_FORMULIZE_USE_DEFAULT_WHEN_BLANK_DESC", "For example, showing defaul
 define("_AM_FORMULIZE_USE_DEFAULT_WHEN_BLANK_ONLY_NEW", "Only for new entries");
 define("_AM_FORMULIZE_USE_DEFAULT_WHEN_BLANK_ALL_WHEN_BLANK", "For any entry, when the saved value is blank");
 
+define("_AM_FORMULIZE_SCREEN_CAL_DESC_TOPTEMPLATE", "You can type PHP code into either or both of the template boxes below.  Code in the <i>top template</i> box will be rendered above the calendar.  Code in the <i>bottom template</i> box will be rendered below the calendar.");
+define("_AM_FORMULIZE_SCREEN_CAL_DESC_TOPTEMPLATE2", "You can use <i>\$quickSearch</i> and <i>\$quickFilter</i> variables in the template to display search boxes and filters, ie: \$quickSearchelement_handle. The list of available element handles is available below the top template.");
 //template screen
 define("_AM_FORM_SCREEN_TEMPLATES_OPTIONS","Options");
 define("_AM_FORMULIZE_SCREEN_TEMPLATE_SAVEBUTTONTEXT", "Text for the 'Save' button: ");
 define("_AM_FORMULIZE_SCREEN_TEMPLATE_DONEBUTTONTEXT", "Text for the 'Done' button: ");
 define("_AM_FORMULIZE_SCREEN_TEMPLATE_DONEDEST", "The URL that users should be directed to when leaving the page (Optional, Formulize will set this automatically when the page is displayed, based on where the user came from, and will return them to that page after. Form submissions are saved when leaving the page.)");
 define("_AM_FORMULIZE_SCREEN_TEMPLATE_HELP", "All variables defined in the custom code below will be available in the template by using <{\$variableName}>, and you can also use <{\$saveButton}> to position the a button that triggers saving of any form elements, and <{\$doneButton}> to position a button that triggers saving and will redirect the user to the done destination. Button text and the done destination can be set in the 'Options' tab.");
+
+define("_AM_FORMULIZE_EXPLODE_COLUMNS_ON_EXPORT", "How should values in this element be handled when exporting to spreadsheet?");
+define("_AM_FORMULIZE_EXPLODE_COLUMNS_ON_EXPORT_OFF", "Show as a comma separated list inside one cell");
+define("_AM_FORMULIZE_EXPLODE_COLUMNS_ON_EXPORT_ON", "Show one column per option in this element, and use the following values in the cells:");
+define("_AM_FORMULIZE_EXPORTOPTIONS_HASVALUE", "Value to show if an option is selected:");
+define("_AM_FORMULIZE_EXPORTOPTIONS_DOESNOTEHAVEVALUE", "Value to show if an option is NOT selected:");

@@ -311,7 +311,11 @@ if ($ele_type=='text') {
     $options['ele_value_yes'] = $ele_value['_YES'];
     $options['ele_value_no'] = $ele_value['_NO'];
 } elseif ($ele_type == "subform") {
+    
+    $ele_value['enforceFilterChanges'] = isset($ele_value['enforceFilterChanges']) ? $ele_value['enforceFilterChanges'] : 1;
+    
     $ele_value[1] = explode(",",$ele_value[1]);
+    $ele_value['disabledelements'] = explode(",",$ele_value['disabledelements']);
     global $xoopsDB;
     $validForms1 = q("SELECT t1.fl_form1_id, t2.desc_form FROM " . $xoopsDB->prefix("formulize_framework_links") . " AS t1, " . $xoopsDB->prefix("formulize_id") . " AS t2 WHERE t1.fl_form2_id=" . intval($fid) . " AND t1.fl_unified_display=1 AND t1.fl_relationship != 1 AND t1.fl_form1_id=t2.id_form");
     $validForms2 = q("SELECT t1.fl_form2_id, t2.desc_form FROM " . $xoopsDB->prefix("formulize_framework_links") . " AS t1, " . $xoopsDB->prefix("formulize_id") . " AS t2 WHERE t1.fl_form1_id=" . intval($fid) . " AND t1.fl_unified_display=1 AND t1.fl_relationship != 1 AND t1.fl_form2_id=t2.id_form");
@@ -351,10 +355,14 @@ if ($ele_type=='text') {
 
     // compile a list of data-entry screens for this form
     $options['subform_screens'] = array();
-    $screen_options = q("SELECT sid, title FROM ".$xoopsDB->prefix("formulize_screen")." WHERE fid=".intval($formtouse)." and type='form'");
+    $screen_options = q("SELECT sid, title, type FROM ".$xoopsDB->prefix("formulize_screen")." WHERE fid=".intval($formtouse)." and (type='form' OR type='multiPage')");
     $options['subform_screens'][0] = "(Use Default Screen)";
     foreach($screen_options as $screen_option) {
+        if($screen_option["type"] == 'multiPage') {
+            $options['subform_screens'][$screen_option["sid"]] = $screen_option["title"]." (row display only, when entries open full screen)";            
+        } else {
             $options['subform_screens'][$screen_option["sid"]] = $screen_option["title"];
+    }
     }
 
     // setup the UI for the subform conditions filter
@@ -363,7 +371,7 @@ if ($ele_type=='text') {
     $options['background'] = $ele_value[3];
     $options['heading'] = $ele_value[0];
     $options['sideortop'] = $ele_value[5] == 1 ? "side" : "above";
-    $grid_elements_criteria = new Criteria();
+    $grid_elements_criteria = new Criteria('');
     $grid_elements_criteria->setSort('ele_order');
     $grid_elements_criteria->setOrder('ASC');
     $grid_elements = $element_handler->getObjects($grid_elements_criteria, $fid);
@@ -495,7 +503,23 @@ if ($ele_type=='text') {
     $options['ib_style_options']['head'] = "head";
     $options['ib_style_options']['form-heading'] = "form-heading";
 }
+
+
+if(!isset($ele_value['snapshot'])) {
+    $ele_value['snapshot'] = 0;
+}
+
 $options['ele_value'] = $ele_value;
+
+if($elementObject->hasMultipleOptions AND !$elementObject->isLinked) {
+    $advanced['hasMultipleOptions'] = true;
+    $exportOptions = $elementObject->getVar('ele_exportoptions');
+    $advanced['exportoptions_onoff'] = (is_array($exportOptions) AND count($exportOptions) > 0) ? 1 : 0;
+    $advanced['exportoptions_hasvalue'] = $exportOptions['indicators']['hasValue'];
+    $advanced['exportoptions_doesnothavevalue'] = $exportOptions['indicators']['doesNotHaveValue'];
+} else {
+    $advanced['exportoptions_onoff'] = 0;
+}
 
 // if this is a custom element, then get any additional values that we need to send to the template
 $customValues = array();
@@ -573,7 +597,7 @@ function createDataTypeUI($ele_type, $element,$id_form,$ele_encrypt) {
         $customTypeNeedsUI = $customTypeObject->needsDataType;
     }
 
-    if (($ele_type == "text" OR $ele_type == "textarea" OR $ele_type == "select" OR $ele_type == "radio" OR $ele_type == "checkbox" OR $ele_type == "derived" OR $customTypeNeedsUI) AND !$ele_encrypt) {
+    if (($ele_type == "text" OR $ele_type == "textarea" OR $ele_type == "select" OR $ele_type == "radio" OR $ele_type == "derived" OR $customTypeNeedsUI) AND !$ele_encrypt) {
         if ($element) {
             $defaultTypeInformation = $element->getDataTypeInformation();
             $defaultType = $defaultTypeInformation['dataType'];
@@ -654,7 +678,7 @@ function has_index($element,$id_form) {
     $formObject = $form_handler->get($id_form);
 
     //Complex check if
-    $elementDataSQL = "SELECT stats.index_name FROM information_schema.statistics AS stats INNER JOIN (SELECT count( 1 ) AS amountCols, index_name FROM information_schema.statistics WHERE table_name = '".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle'))."' GROUP BY index_name) AS amount ON amount.index_name = stats.index_name WHERE stats.table_name = '".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle'))."' AND stats.column_name = '".$element->getVar('ele_handle')."' AND amount.amountCols =1";
+    $elementDataSQL = "SELECT stats.index_name FROM information_schema.statistics AS stats INNER JOIN (SELECT count( 1 ) AS amountCols, index_name FROM information_schema.statistics WHERE table_schema = '".SDATA_DB_NAME."' AND table_name = '".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle'))."' GROUP BY index_name) AS amount ON amount.index_name = stats.index_name WHERE stats.table_name = '".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle'))."' AND stats.column_name = '".$element->getVar('ele_handle')."' AND amount.amountCols =1";
 
     // Simple sql with no check that it is not a multi column index
     //$elementDataSQL = "SHOW  INDEX  FROM ".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle'))." WHERE Column_Name = '".$element->getVar('ele_handle')."'";

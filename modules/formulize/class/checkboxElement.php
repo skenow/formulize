@@ -31,6 +31,7 @@
 // There is a corresponding admin template for this element type in the templates/admin folder
 
 require_once XOOPS_ROOT_PATH . "/modules/formulize/class/elements.php"; // you need to make sure the base element class has been read in first!
+require_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
 
 class formulizeCheckboxElement extends formulizeformulize {
     
@@ -41,7 +42,15 @@ class formulizeCheckboxElement extends formulizeformulize {
         $this->overrideDataType = "text"; // use this to set a datatype for the database if you need the element to always have one (like 'date').  set needsDataType to false if you use this.
         $this->adminCanMakeRequired = true; // set to true if the webmaster should be able to toggle this element as required/not required
         $this->alwaysValidateInputs = false; // set to true if you want your custom validation function to always be run.  This will override any required setting that the webmaster might have set, so the recommendation is to set adminCanMakeRequired to false when this is set to true.
+        $this->canHaveMultipleValues = true;
+        $this->hasMultipleOptions = true; 
         parent::__construct();
+    }
+    
+    // returns true if the option is one of the values the user can choose from in this element    
+    function optionIsValid($option) {
+        $ele_value = $this->getVar('ele_value');
+        return (isset($ele_value[2][$option]) OR in_array($option, $this->getVar('ele_uitext'))) ? true : false;
     }
     
 }
@@ -65,7 +74,6 @@ class formulizeCheckboxElementHandler extends formulizeElementsHandler {
     // it receives the element object and returns an array of data that will go to the admin UI template
     // when dealing with new elements, $element might be FALSE
     function adminPrepare($element) {
-        
         $dataToSendToTemplate = array();
         if(is_object($element) AND is_subclass_of($element, 'formulizeformulize')) {
 			$ele_value = $this->backwardsCompatibility($element->getVar('ele_value'));
@@ -112,8 +120,30 @@ class formulizeCheckboxElementHandler extends formulizeElementsHandler {
 		if($selectedElementObject) {
 			list($optionSortOrder, $selectedOptionsSortOrder) = createFieldList($ele_value[12], false, $selectedElementObject->getVar('id_form'), "elements-ele_value[12]", _AM_ELE_LINKFIELD_ITSELF);
 			$dataToSendToTemplate['optionSortOrder'] = $optionSortOrder->render();
+            
+            // list of elements to display when showing this element in a list
+            list($listValue, $selectedListValue) = createFieldList($ele_value[EV_MULTIPLE_LIST_COLUMNS], false, $selectedElementObject->getVar('id_form'),
+                "elements-ele_value[".EV_MULTIPLE_LIST_COLUMNS."]", _AM_ELE_LINKSELECTEDABOVE, true);
+            $listValue->setValue($ele_value[EV_MULTIPLE_LIST_COLUMNS]); // mark the current selections in the form element
+            $dataToSendToTemplate['listValue'] = $listValue->render();
+    
+            // list of elements to display when showing this element as an html form element (in form or list screens)
+            list($displayElements, $selectedListValue) = createFieldList($ele_value[EV_MULTIPLE_FORM_COLUMNS], false, $selectedElementObject->getVar('id_form'),
+                "elements-ele_value[".EV_MULTIPLE_FORM_COLUMNS."]", _AM_ELE_LINKSELECTEDABOVE, true);
+            $displayElements->setValue($ele_value[EV_MULTIPLE_FORM_COLUMNS]); // mark the current selections in the form element
+            $dataToSendToTemplate['displayElements'] = $displayElements->render();
+    
+            // list of elements to export to spreadsheet
+            list($exportValue, $selectedExportValue) = createFieldList($ele_value[EV_MULTIPLE_SPREADSHEET_COLUMNS], false, $selectedElementObject->getVar('id_form'),
+                "elements-ele_value[".EV_MULTIPLE_SPREADSHEET_COLUMNS."]", _AM_ELE_VALUEINLIST, true);
+            $exportValue->setValue($ele_value[EV_MULTIPLE_SPREADSHEET_COLUMNS]); // mark the current selections in the form element
+            $dataToSendToTemplate['exportValue'] = $exportValue->render();
+            
 		} else {
 			$dataToSendToTemplate['optionSortOrder'] = "";
+            $dataToSendToTemplate['exportValue'] = "";
+            $dataToSendToTemplate['displayElements'] = "";
+            $dataToSendToTemplate['listValue'] = "";
 		}
 		
         
@@ -130,7 +160,15 @@ class formulizeCheckboxElementHandler extends formulizeElementsHandler {
         
         if(is_object($element) AND is_subclass_of($element, 'formulizeformulize')) {
             
-			$ele_value = array(12=>$ele_value[12], 15=>$ele_value[15], 'checkbox_scopelimit'=>$ele_value['checkbox_scopelimit'], 'checkbox_formlink_anyorall'=>$ele_value['checkbox_formlink_anyorall']); // initialize with the values that we don't need to parse/adjust
+			$ele_value = array(
+                EV_MULTIPLE_LIST_COLUMNS=>$ele_value[EV_MULTIPLE_LIST_COLUMNS],
+                EV_MULTIPLE_FORM_COLUMNS=>$ele_value[EV_MULTIPLE_FORM_COLUMNS],
+                EV_MULTIPLE_SPREADSHEET_COLUMNS=>$ele_value[EV_MULTIPLE_SPREADSHEET_COLUMNS],
+                12=>$ele_value[12],
+                15=>$ele_value[15],
+                'checkbox_scopelimit'=>$ele_value['checkbox_scopelimit'],
+                'checkbox_formlink_anyorall'=>$ele_value['checkbox_formlink_anyorall']
+            ); // initialize with the values that we don't need to parse/adjust
             
             if(isset($_POST['formlink']) AND $_POST['formlink'] != "none") {
                 global $xoopsDB;
@@ -300,7 +338,8 @@ class formulizeCheckboxElementHandler extends formulizeElementsHandler {
     // $element is the element object
     // $entry_id is the ID number of the entry where this particular element comes from
     // $screen is the screen object that is in effect, if any (may be null)
-    function render($ele_value, $caption, $markupName, $isDisabled, $element, $entry_id, $screen=false, $owner) {
+    // $renderAsHiddenDefault is a flag to control what happens when we render as a hidden element for users who can't normally access the element -- typically we would set the default value inside a hidden element, or the current value if for some reason an entry is passed
+    function render($ele_value, $caption, $markupName, $isDisabled, $element, $entry_id, $screen=false, $owner, $renderAsHiddenDefault = false) {
 	
 		$ele_value = $this->backwardsCompatibility($ele_value);
 	
@@ -458,11 +497,14 @@ class formulizeCheckboxElementHandler extends formulizeElementsHandler {
 			$renderedElement = implode(", ", $disabledOutputText);
         } else {
 			$renderedElement = $form_ele1->render();
+            if($renderAsHiddenDefault) {
+                $renderedElement .= "\n$renderedHoorvs\n$disabledHiddenValues\n";    
+            }
         }
 
 		$form_ele = new XoopsFormLabel(
 			$caption,
-			"$renderedElement\n$renderedHoorvs\n$disabledHiddenValues\n"
+			$renderedElement
 		);
 		$ele_desc = $element->getVar('ele_desc', "f"); // the f causes no stupid reformatting by the ICMS core to take place
 		$form_ele->setDescription(html_entity_decode($ele_desc,ENT_QUOTES));
@@ -587,7 +629,7 @@ class formulizeCheckboxElementHandler extends formulizeElementsHandler {
     }
     
 	function backwardsCompatibility($ele_value) {
-		if(!isset($ele_value[2]) AND (!isset($ele_value[5]) OR (!is_array($ele_value[5]) AND !is_numeric($ele_value[5])))) {
+		if(!is_numeric(key($ele_value)) OR (!isset($ele_value[2]) AND (!isset($ele_value[5]) OR (!is_array($ele_value[5]) AND !is_numeric($ele_value[5]))))) {
 			$ele_value = array(2=>$ele_value,5=>array());
 		}
 		return $ele_value;

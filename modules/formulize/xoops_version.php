@@ -31,9 +31,9 @@
 
 $modversion = array(
 	'name' => _MI_formulize_NAME,
-	'version' => "5.1",
+	'version' => "6.0",
 	'description' => _MI_formulize_DESC,
-	'author' => "Freeform Solutions",
+	'author' => "Julian Egelstaff & Freeform Solutions",
 	'credits' => "",
 	'help' => "",
 	'license' => "GPL",
@@ -68,6 +68,7 @@ $modversion['tables'] = array(
 	"formulize_screen_multipage",
 	"formulize_screen_listofentries",
 	"formulize_screen_template",
+    "formulize_screen_calendar",
 	"formulize_entry_owner_groups",
 	"formulize_application_form_link",
 	"formulize_applications",
@@ -80,7 +81,8 @@ $modversion['tables'] = array(
 	"formulize_deletion_logs",
     "formulize_apikeys",
 	"formulize_tokens",
-    "formulize_digest_data"
+    "formulize_digest_data",
+    "formulize_passcodes"
 );
 
 $modversion['formulize_exportable_tables'] = array(
@@ -101,6 +103,7 @@ $modversion['formulize_exportable_tables'] = array(
 	"formulize_screen_multipage",
 	"formulize_screen_listofentries",
 	"formulize_screen_template",
+    "formulize_screen_calendar",
     "formulize_entry_owner_groups",
 	"formulize_application_form_link",
 	"formulize_applications",
@@ -109,7 +112,8 @@ $modversion['formulize_exportable_tables'] = array(
 	"formulize_group_filters",
 	"formulize_groupscope_settings",
     "formulize_apikeys",
-    "formulize_tokens"
+    "formulize_tokens",
+    "formulize_passcodes"
 );
 
 
@@ -280,6 +284,16 @@ $modversion['table_metadata'] = array(
             )
         )
     ),
+    "formulize_screen_calendar" => array(
+        "fields" => array(),
+        "joins" => array(
+            array(
+                "join_table" => "formulize_screen",
+                "join_field" => array("sid", "sid"),
+                "field" => "title"
+            )
+        )
+    ),
     "formulize_advanced_calculations" => array(
         "fields" => array("name"),
         "joins" => array()
@@ -357,6 +371,10 @@ $modversion['table_metadata'] = array(
     ),
     "formulize_tokens" => array(
         "fields" => array("groups","tokenkey"),
+        "joins" => array()
+    ),
+    "formulize_passcodes" => array(
+        "fields" => array("passcode", "screen"),
         "joins" => array()
     )
 );
@@ -625,6 +643,27 @@ $modversion['templates'][] = array(
 $modversion['templates'][] = array(
 	'file' => 'admin/element_options_delimiter_choice.html',
     'description' => '');
+$modversion['templates'][] = array(
+	'file' => 'admin/screen_calendar_data_sections.html',
+    'description' => '');
+$modversion['templates'][] = array(
+	'file' => 'admin/screen_calendar_data.html',
+    'description' => '');
+$modversion['templates'][] = array(
+	'file' => 'admin/screen_calendar_templates.html',
+    'description' => '');
+$modversion['templates'][] = array(
+	'file' => 'passcode.html',
+    'description' => '');
+$modversion['templates'][] = array(
+	'file' => 'admin/multipage_navigation2-above.html',
+    'description' => '');
+$modversion['templates'][] = array(
+	'file' => 'admin/multipage_navigation2-below.html',
+    'description' => '');
+$modversion['templates'][] = array(
+	'file' => 'admin/alternate_fields_for_linked_elements.html',
+    'description' => '');
     
 //	Module Configs
 // $xoopsModuleConfig['t_width']
@@ -839,6 +878,30 @@ $modversion['config'][] = array(
 );
 
 $modversion['config'][] = array(
+	'name' => 'customScope',
+	'title' => '_MI_formulize_CUSTOMSCOPE',
+	'description' => '_MI_formulize_CUSTOMSCOPEDESC',
+	'formtype' => 'textarea',
+	'valuetype' => 'text',
+	'default' => '',
+);
+
+$modversion['config'][] = array(
+	'name' => 'exportIntroChar',
+	'title' => '_MI_formulize_EXPORTINTROCHAR',
+	'description' => '_MI_formulize_EXPORTINTROCHARDESC',
+	'formtype' => 'select',
+	'valuetype' => 'int',
+	'default' => '1',
+    'options' => array(
+      _MI_formulize_EIC_BASIC=>1,
+      _MI_formulize_EIC_ALWAYSAPOS=>2,
+      _MI_formulize_EIC_ALWAYSTAB=>3,
+      _MI_formulize_EIC_PLAIN=>4
+        )
+);
+
+$modversion['config'][] = array(
 	'name' => 'notifyByCron',
 	'title' => '_MI_formulize_NOTIFYBYCRON',
 	'description' => '_MI_formulize_NOTIFYBYCRONDESC',
@@ -846,16 +909,6 @@ $modversion['config'][] = array(
 	'valuetype' => 'int',
 	'default' => '0',
 );
-
-$modversion['config'][] = array(
-	'name' => 'customScope',
-	'title' => '_MI_formulize_CUSTOMSCOPE',
-	'description' => '_MI_formulize_CUSTOMSCOPEDESC ',
-	'formtype' => 'textarea',
-	'valuetype' => 'text',
-	'default' => '',
-);
-
 
 //bloc
 $modversion['blocks'][1] = array(

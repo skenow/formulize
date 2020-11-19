@@ -30,6 +30,7 @@
 // this file gets all the data about a particular page of a screen, so it can be edited
 
 require_once "../../../mainfile.php";
+include_once("admin_header.php");
 
 include_once XOOPS_ROOT_PATH."/modules/formulize/include/functions.php";
 include_once XOOPS_ROOT_PATH."/class/xoopsformloader.php";
@@ -64,7 +65,10 @@ if ($frid) {
     $framework_handler =& xoops_getModuleHandler('frameworks', 'formulize');
     $frameworkObject = $framework_handler->get($frid);
     foreach($frameworkObject->getVar("links") as $thisLinkObject) {
-        if ($thisLinkObject->getVar("unifiedDisplay") AND $thisLinkObject->getVar("relationship") == 1) {
+        if ($thisLinkObject->getVar("unifiedDisplay") AND ( $thisLinkObject->getVar("relationship") == 1 OR
+                    ($thisLinkObject->getVar("relationship") == 2 AND $thisLinkObject->getVar("form1") != $form_id)
+                    OR ($thisLinkObject->getVar("relationship") == 3 AND $thisLinkObject->getVar("form2") != $form_id)
+                     )) {
             $thisFid = $thisLinkObject->getVar("form1") == $fid ? $thisLinkObject->getVar("form2") : $thisLinkObject->getVar("form1");
             $options = multiPageScreen_addToOptionsList($thisFid, $options);
         }
@@ -87,7 +91,7 @@ if (isset($filterSettingsToSend['details'])) { // if this is in the old format (
     $newFilterSettingsToSend[2] = $filterSettingsToSend['details']['terms'];
     $filterSettingsToSend = $newFilterSettingsToSend;
 }
-$pageConditions = formulize_createFilterUI($filterSettingsToSend, "pagefilter_".$pageIndex, $screen->getVar('fid'), "popupform");
+$pageConditions = formulize_createFilterUI($filterSettingsToSend, "pagefilter_".$pageIndex, $screen->getVar('fid'), "popupform", $frid);
 
 // make isSaveLocked preference available to template
 $content['isSaveLocked'] = sendSaveLockPrefToTemplate();

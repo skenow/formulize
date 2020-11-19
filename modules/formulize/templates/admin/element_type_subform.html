@@ -37,6 +37,11 @@
                 <label for="elements-ele_value[6]-no"><input type="radio" id="elements-ele_value[6]-no" name="elements-ele_value[6]" value="hideaddentries"<{if $content.ele_value[6] eq 'hideaddentries' OR $content.ele_value[6] eq ''}> checked="checked"<{/if}>/><{$smarty.const._AM_ELE_SUBFORM_ADD_NONE}></label>
             </div>
         </div>
+        
+        <div class="form-item">
+            <p>Do not show the button if there are <input type='text' size=2 id='elements-ele_value[addButtonLimit]' name='elements-ele_value[addButtonLimit]' value='<{$content.ele_value.addButtonLimit}>' /> or more entries already.</p>
+            <div class="description">Leave blank, or 0, to always show the button</div>
+        </div>
 
         <div class="form-item" id="add-button-appearance">
             <p>If the button for adding entries is shown, how should it look?</p><br />
@@ -102,8 +107,18 @@
 			    <div class="form-radios">
 			    </div>
                 <div class="form-radios">
-				    <label for="elements-ele_value[3]-1"><input type="radio" id="elements-ele_value[3]-1" name="elements-ele_value[3]" value="1"<{if $content.ele_value[3] == 1 }> checked="checked"<{/if}>/>Show the <i>View</i> buttons, open entries full screen (reloads the page, and <i>Save and Leave</i> then returns to the main form)</label>
+				    <label for="elements-ele_value[3]-1"><input type="radio" id="elements-ele_value[3]-1" name="elements-ele_value[3]" value="1"<{if $content.ele_value[3] == 1 }> checked="checked"<{/if}>/>Show the <i>View</i> buttons, open entries full screen (reloads the page, clicking <i>Save and Leave</i> returns to the main form)</label>
 			    </div>
+                <div class="form-radios">
+                <br>
+                <p>Disable these elements in each row:</p>
+                <select name="elements_ele_value_disabledelements[]" size="10" multiple>
+				<{html_options options=$content.subformelements selected=$content.ele_value.disabledelements}>
+                </select>
+                <div class="description">Elements selected will be rendered as "read only" values, instead of as form elements.</div>
+                </div>
+                
+                
                 </div>
 			    
 			    </fieldset>
@@ -113,7 +128,7 @@
         <fieldset>
             <legend><{$smarty.const._AM_ELE_SUBFORM_IFFORM}></legend>
 	    <p><{$smarty.const._AM_ELE_SUBFORM_SCREEN}></p>
-            <select id="element-subform" name="elements-ele_value[display_screen]" size="1">
+            <select id="element-subform-screen" name="elements-ele_value[display_screen]" size="1">
                 <{html_options options=$content.subform_screens selected=$content.ele_value.display_screen}>
             </select>
             <div class="description"><{$smarty.const._AM_ELE_SUBFORM_SCREEN_HELP}></div>
@@ -136,27 +151,30 @@
 <div class="form-item">
 <fieldset>
 <legend>Which entries in the subform should be accessible through this subform element?</legend>
-<div id="filterdiv">
+    <div id="filterdiv">
 	<{if $content.subformfilter}>
-				<{$content.subformfilter}>
+        <{$content.subformfilter}>
+    </div>
+    <p><label for="enforceFilterChanges"><input type='checkbox' id='enforceFilterChanges' name='elements-ele_value[enforceFilterChanges]' value=1 <{if $content.ele_value.enforceFilterChanges}>checked<{/if}> /> Keep elements in sync with the parent entry if they are filtered by a "match all" <i>equals</i> condition (=).</label></p>
+    <div class="description">
+        By default, all entries in a subform that are tied to the main form will be accessible.  You can set conditions here that will limit which entries will be accessible.  This is useful if you have multiple types of entries in a subform, and want the user to interact with each type in a separate place.  For example, a Housing subform might have entries for "apartments," "townhouses," and "houses".  You could set this subform element to just show apartments, and another subform element to just show houses.
+    </div>
+    <div class="description">
+        If you have any "match all" conditions that use the = operator, then any new entries you add through the subform interface, will have those values assigned automatically.  For example, if you limit this subform interface to only entries where "type" = "apartment" then all new entries you create would have the value of "type" set to "apartment". This behaviour can be turned off. If you have the same subform being used in different places, with competing filter conditions, you might not want the synchronization behaviour.
+    </div>
+    <div>
         <p>Allow the user to filter entries manually, based on this element:</p>
         <select name="elements-ele_value[UserFilterByElement]" size="1">
-			<{html_options options=$content.subformUserFilterElements selected=$content.ele_value.UserFilterByElement}>
-		</select>
-				</div>
-				<div class="description">
-By default, all entries in a subform that are tied to the main form will be accessible.  You can set conditions here that will limit which entries will be accessible.  This is useful if you have multiple types of entries in a subform, and want the user to interact with each type in a separate place.  For example, a Housing subform might have entries for "apartments," "townhouses," and "houses".  You could set this subform element to just show apartments, and another subform element to just show houses.
-				</div>
-				<div class="description">
-				If you have any "match all" conditions that use the = operator, then any new entries you add through the subform interface, will have those values assigned automatically.  For example, if you limit this subform interface to only entries where "type" = "apartment" then all new entries you create would have the value of "type" set to "apartment".
-				</div>
-        <div class="description">
+            <{html_options options=$content.subformUserFilterElements selected=$content.ele_value.UserFilterByElement}>
+        </select>
+    </div>            
+    <div class="description">
         If you allow the user to filter based on a selected element, then no subform entries will appear until the user has typed something in the filter box. Then, only the matching entries will be shown. Filters you specify above will be applied in addition to the filter the user types.
-        </div>
-				<{else}>
-					<p>You need to select a subform and save this element before you can choose conditions.</p>
-        </div>
-<{/if}>					
+    </div>
+	<{else}>
+		<p>You need to select a subform and save this element before you can choose conditions.</p>
+    </div>
+    <{/if}>					
 </fieldset>
 </div>
 
@@ -213,4 +231,40 @@ By default, all entries in a subform that are tied to the main form will be acce
 		return false;
 	});
 
+    var prevVal;
+    function removeNonDisplayedElementsFromDisabledList() {
+        // if some elements are selected...
+        if ($("[name^=elements_ele_value_1]").children(":not(option:selected)").length < $("[name^=elements_ele_value_1]").children().length) {
+            $("[name^=elements_ele_value_1]").children(":not(option:selected)").each(function() {
+                $("[name^=elements_ele_value_disabledelements] option[value="+$(this).val()+"]").remove();
+            });
+        // no elements are selected, so replicate the entire list...
+        } else {
+            $("[name^=elements_ele_value_1]").children().each(function() {
+                addElementToDisabledList($(this).val(), prevVal, $(this).index());
+                prevVal = $(this).val();
+            });
+        }
+    }
+    
+    function addElementToDisabledList(optionValue, prevOptionValue, i) {
+        if(optionValue != 'null' && $("[name^=elements_ele_value_disabledelements] option[value="+optionValue+"]").length == 0) {
+            if (i == 0) {
+                $("[name^=elements_ele_value_disabledelements]").prepend('<option value="'+optionValue+'">'+$("[name^=elements_ele_value_1] option[value="+optionValue+"]").text()+'</option>');
+            } else {
+                $('<option value="'+optionValue+'">'+$("[name^=elements_ele_value_1] option[value="+optionValue+"]").text()+'</option>').insertAfter($("[name^=elements_ele_value_disabledelements] option[value="+prevOptionValue+"]"));
+            }
+        }
+    }
+    
+    $("[name^=elements_ele_value_1]").change(function() {
+        var eles = String($(this).val()).split(',');
+        for (i = 0; i < eles.length; i++) {
+            addElementToDisabledList(eles[i], eles[i-1], i);
+        }
+        removeNonDisplayedElementsFromDisabledList();
+    });
+    
+    removeNonDisplayedElementsFromDisabledList()
+    
 </script>

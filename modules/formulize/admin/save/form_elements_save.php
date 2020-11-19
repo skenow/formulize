@@ -59,7 +59,8 @@ foreach($processedValues['elements'] as $property=>$values) {
 }
 
 // retrieve all the elements that belong to this form
-$elements = $element_handler->getObjects(null,$fid);
+$criteria = new Criteria('ele_type', 'anonPasscode', '!=');
+$elements = $element_handler->getObjects($criteria,$fid);
 
 // get the new order of the elements...
 $newOrder = explode("drawer-2[]=", str_replace("&", "", $_POST['elementorder']));
@@ -179,10 +180,12 @@ if($_POST['convertelement']) {
 
 if($_POST['deleteelement']) {
   $element = $element_handler->get($_POST['deleteelement']);
+  if(!$element->isSystemElement) {
   $ele_type = $element->getVar('ele_type');
 	$element_handler->delete($element);
   if($ele_type != "areamodif" AND $ele_type != "ib" AND $ele_type != "sep" AND $ele_type != "subform" AND $ele_type != "grid") {
     $element_handler->deleteData($element); //added aug 14 2005 by jwe  
+    }
   }
 }
 
@@ -205,6 +208,8 @@ if($_POST['cloneelement']) {
   }
   $element_handler->insert($thisElementObject);
   $ele_id = $thisElementObject->getVar('ele_id');
+  $thisElementObject->setVar('ele_handle',$formObject->getVar('form_handle').'_'.$ele_id);
+  $element_handler->insert($thisElementObject);
   $ele_type = $thisElementObject->getVar('ele_type');
   $databaseElement = ($ele_type == "areamodif" OR $ele_type == "ib" OR $ele_type == "sep" OR $ele_type == "subform" OR $ele_type == "grid" OR (property_exists($thisElementObject,'hasData') AND $thisElementObject->hasData == false) ) ? false : true;
   if($databaseElement) {
@@ -215,7 +220,7 @@ if($_POST['cloneelement']) {
 		$fieldStateData = $xoopsDB->fetchArray($fieldStateRes);
 		$dataType = $fieldStateData['Type'];
 	}
-  $form_handler->insertElementField($thisElementObject, $dataType); 
+    $form_handler->insertElementField($thisElementObject, $dataType);
   }
   print "/* eval */ window.location = '".XOOPS_URL."/modules/formulize/admin/ui.php?page=element&ele_id=$ele_id&aid=".intval($_POST['aid'])."';";
 }

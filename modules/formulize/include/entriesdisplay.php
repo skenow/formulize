@@ -228,10 +228,6 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 			}
 		}
 		$savename = $_POST['savename'];
-		if(get_magic_quotes_gpc()) {
-			$savename = stripslashes($savename);
-		}
-
 
 		// flatten quicksearches -- one value in the array for every column in the view
 		$allcols = explode(",", $_POST['oldcols']);
@@ -627,7 +623,8 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 	// also, convert any { } terms to literal values for users who can't update other reports, if the last loaded report doesn't belong to them (they're presumably just report consumers, so they don't need to preserve the abstract terms)
 	$hiddenQuickSearches = array(); // array used to indicate quick searches that should be present even if the column is not displayed to the user
 	foreach($_POST as $k=>$v) {
-		if(substr($k, 0, 7) == "search_" AND !in_array(substr($k, 7), $showcols) AND !in_array(substr($k, 7), $pubfilters)) {
+        
+        if(substr($k, 0, 7) == "search_" AND !in_array(substr($k, 7), $showcols) AND !in_array(substr($k, 7), $pubfilters)) {
 			if(substr($v, 0, 1) == "!" AND substr($v, -1) == "!") {// don't strip searches that have ! at front and back
 				$hiddenQuickSearches[] = substr($k, 7);
 				continue; // since the { } replacement is meant for the ease of use of non-admin users, and hiddenQuickSearches never show up to users on screen, we can skip the potentially expensive operations below in this loop
@@ -635,13 +632,47 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 				unset($_POST[$k]);
 			}
 		}
+        
+        // check for starting and ending ! ! and put them back at the end if necessary
+        $needPreserveHiddenMarkers = false;
+        if(substr($v, 0, 1) == "!" AND substr($v, -1) == "!") {
+            $needPreserveHiddenMarkers = true;
+            $v = substr($v, 1, -1);
+        }
+        
+        $operatorToPutBack = "";
+        if(substr($v, 0, 1) == '=') {
+            $operatorToPutBack = '=';
+        }
+        if(substr($v, 0, 1) == '>') {
+            $operatorToPutBack = '>';
+        }
+        if(substr($v, 0, 1) == '<') {
+            $operatorToPutBack = '<';
+        }
+        if(substr($v, 0, 1) == '!') {
+            $operatorToPutBack = '!';
+        }
+        if(substr($v, 0, 2) == '!=') {
+            $operatorToPutBack = '!=';
+        }
+        if(substr($v, 0, 2) == '<=') {
+            $operatorToPutBack = '<=';
+        }
+        if(substr($v, 0, 2) == '>=') {
+            $operatorToPutBack = '>=';
+        }
+        
 		// if this is not a report/view that was created by the user, and they don't have update permission, then convert any { } terms to literals
 		// remove any { } terms that don't have a passed in value (so they appear as "" to users)
 		// only deal with terms that start and end with { } and not ones where the { } terms is not the entire term
-		if(is_string($v) AND substr($v, 0, 1) == "{" AND substr($v, -1) == "}"
+        
+        $valueToCheck = str_replace($operatorToPutBack, '', $v);
+        
+		if(is_string($v) AND substr($valueToCheck, 0, 1) == "{" AND substr($valueToCheck, -1) == "}"
 			AND substr($k, 0, 7) == "search_" AND (in_array(substr($k, 7), $showcols) OR in_array(substr($k, 7), $pubfilters)))
 		{
-			$requestKeyToUse = substr($v,1,-1);
+			$requestKeyToUse = substr($valueToCheck,1,-1);
 			if(!strstr($requestKeyToUse,"}") AND !strstr($requestKeyToUse, "{")) { // double check that there's no other { } in the term!
 				$activeViewId = substr($settings['lastloaded'], 1); // will have a p in front of the number, to show it's a published view (or an s, but that's unlikely to ever happen in this case)
 				$ownerOfLastLoadedViewData = q("SELECT sv_owner_uid FROM " . $xoopsDB->prefix("formulize_saved_views") . " WHERE sv_id=".intval($activeViewId));
@@ -649,7 +680,10 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 				if(!$update_other_reports AND $uid != $ownerOfLastLoadedView) {
 					$filterValue = convertVariableSearchToLiteral($v, $requestKeyToUse); // returns updated value, or false to kill value, or true to do nothing
                     if(!is_bool($filterValue)) {
-                        $_POST[$k] = $filterValue;
+                        $_POST[$k] = $operatorToPutBack.$filterValue;
+                        if($needPreserveHiddenMarkers) {
+                           $_POST[$k] = '!'.$_POST[$k].'!';
+                        }
                     } elseif($filterValue === false) {
                         unset($_POST[$k]); // clear terms where no match was found, because this term is not active on the current page, so don't confuse users by showing it
                     }
@@ -724,7 +758,26 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 
 	$settings['oldcols'] = implode(",", $showcols);
 
-	$settings['ventry'] = isset($_POST['formulize_originalVentry']) ? $_POST['formulize_originalVentry'] : $_POST['ventry'];
+    // if there's a bunch of go_back info, and no entry, then we should not show list, we need to display something else entirely
+    if(isset($_POST['go_back_form']) AND $_POST['go_back_form'] AND isset($_POST['go_back_entry']) AND $_POST['go_back_entry'] AND (!isset($_POST['ventry']) OR !$_POST['ventry'])) {
+        $go_back_entry = strstr($_POST['go_back_entry'], ',') ? explode(',',$_POST['go_back_entry']) : array($_POST['go_back_entry']);
+        $lastKey = count($go_back_entry)-1;
+        $settings['ventry'] = $go_back_entry[$lastKey];
+        $_POST['ventry'] = $go_back_entry[$lastKey];
+        $_POST['parent_entry'] = $_POST['go_back_entry'];
+		$_POST['parent_form'] = $_POST['go_back_form'];
+        $_POST['parent_page'] = $_POST['go_back_page'];
+        $_POST['parent_subformElementId'] = $_POST['go_back_subformElementId'];
+        unset($_POST['go_back_form']);
+        unset($_POST['go_back_entry']);
+        unset($_POST['go_back_page']);
+        unset($_POST['goto_sfid']);
+        unset($_POST['sub_fid']);
+    } elseif(isset($_POST['formulize_originalVentry']) AND is_numeric($_POST['formulize_originalVentry'])) {
+        $settings['ventry'] = $_POST['formulize_originalVentry'];
+    } else {
+        $settings['ventry'] = $_POST['ventry'];
+    }
 
 	// get sort and order options
 
@@ -774,11 +827,12 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 		$customButtonDetails = $screen->getVar('customactions');
 		if(is_numeric($_POST['caid']) AND isset($customButtonDetails[$_POST['caid']])) {
 			list($caCode, $caElements, $caActions, $caValues, $caMessageText, $caApplyTo, $caPHP, $caInline) = processCustomButton($_POST['caid'], $customButtonDetails[$_POST['caid']]); // just processing to get the info so we can process the click.  Actual output of this button happens lower down
-			$messageText = processClickedCustomButton($caElements, $caValues, $caActions, $caMessageText, $caApplyTo, $caPHP, $caInline);
+			$messageText = processClickedCustomButton($caElements, $caValues, $caActions, $caMessageText, $caApplyTo, $caPHP, $caInline, $screen);
 		}
 	}
 
 	if($_POST['ventry']) { // user clicked on a view this entry link
+        
 		include_once XOOPS_ROOT_PATH . '/modules/formulize/include/formdisplay.php';
 
 		if($_POST['ventry'] == "addnew" OR $_POST['ventry'] == "single") {
@@ -789,25 +843,21 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 			$this_ent = $settings['ventry'];
 		}
 
-		if(($screen AND $screen->getVar("viewentryscreen") != "none" AND $screen->getVar("viewentryscreen")) OR $_POST['overridescreen']) {
-      if(strstr($screen->getVar("viewentryscreen"), "p")) { // if there's a p in the specified viewentryscreen, then it's a pageworks page -- added April 16 2009 by jwe
-        $page = intval(substr($screen->getVar("viewentryscreen"), 1));
-        include XOOPS_ROOT_PATH . "/modules/pageworks/index.php";
-        return;
-      } else {
+		if(($screen AND $screen->getVar("viewentryscreen")) OR $_POST['overridescreen']) {
+            if(strstr($screen->getVar("viewentryscreen"), "p")) { // if there's a p in the specified viewentryscreen, then it's a pageworks page -- added April 16 2009 by jwe
+                $page = intval(substr($screen->getVar("viewentryscreen"), 1));
+                include XOOPS_ROOT_PATH . "/modules/pageworks/index.php";
+                return;
+            } else {
+                $screenToLoad = determineViewEntryScreen($screen, $fid);
 				$screen_handler = xoops_getmodulehandler('screen', 'formulize');
-				if($_POST['overridescreen']) {
-					$screenToLoad = intval($_POST['overridescreen']);
-				} else {
-					$screenToLoad = intval($screen->getVar('viewentryscreen'));
-				}
 
 				$viewEntryScreenObject = $screen_handler->get($screenToLoad);
 				if($viewEntryScreenObject->getVar('type')=="listOfEntries") {
 					exit("You're sending the user to a list of entries screen instead of some kind of form screen, when they're editing an entry.  Check what screen is defined as the screen to use for editing an entry, or what screen id you're using in the viewEntryLink or viewEntryButton functions in the template.");
 				}
 				$viewEntryScreen_handler = xoops_getmodulehandler($viewEntryScreenObject->getVar('type').'Screen', 'formulize');
-  			$displayScreen = $viewEntryScreen_handler->get($viewEntryScreenObject->getVar('sid'));
+                $displayScreen = $viewEntryScreen_handler->get($viewEntryScreenObject->getVar('sid'));
 				if($displayScreen->getVar('type')=="form") {
 					if($_POST['ventry'] != "single") {
 						$displayScreen->setVar('reloadblank', 1); // if the user clicked the add multiple button, then specifically override that screen setting so they can make multiple entries
@@ -815,17 +865,21 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 						$displayScreen->setVar('reloadblank', 0); // otherwise, if they did click the single button, make sure the form reloads with their entry
 					}
 				}
-                
-            if($displayScreen->getVar('fid') != $fid) {
-                // display screen is for another form in the active relationship, so figure out what all the entries are, and display the first entry in the set that's for the form this screen is based on
-                $dataSetEntries = checkForLinks($frid, array($fid), $fid, array($fid=>array($this_ent))); // returns array of the forms and entries in the dataset
-                $this_ent = $dataSetEntries['entries'][$displayScreen->getVar('fid')][0]; // first entry for the screen's form, in this dataset - see formdisplay.php for more detailed example of usage of checkforlinks
+                // NEED TO PROPAGATE ANY ANON PASSCODE FOR THE CURRENT SCREEN, INTO THE SESSION BUT ASSIGNED TO THE NEW SCREEN, SO IT WILL BE SAVED PROPERLY WHEN THE FORM IS SUBMITTED THROUGH THAT SCREEN, IF APPLICABLE
+                // THIS IS SAFE TO DO, BECAUSE IF THE PASSCODE IS NOT VALID FOR THE OTHER SCREEN, IT WILL FAIL VALIDATION WHEN THE USER GOES TO THAT SCREEN DIRECTLY. WE'RE NOT GIVING THEM A FREE PASS TO SOMETHING THEY SHOULDN'T OTHERWISE SEE.
+                if(isset($_SESSION['formulize_passCode_'.$screen->getVar('sid')])) {
+                    $_SESSION['formulize_passCode_'.$displayScreen->getVar('sid')] = $_SESSION['formulize_passCode_'.$screen->getVar('sid')];
+                }
+                if(!$_POST['overridescreen'] AND $displayScreen->getVar('fid') != $fid) {
+                    // display screen is for another form in the active relationship, so figure out what all the entries are, and display the first entry in the set that's for the form this screen is based on
+                    $dataSetEntries = checkForLinks($frid, array($fid), $fid, array($fid=>array($this_ent))); // returns array of the forms and entries in the dataset
+                    $this_ent = $dataSetEntries['entries'][$displayScreen->getVar('fid')][0]; // first entry for the screen's form, in this dataset - see formdisplay.php for more detailed example of usage of checkforlinks
+                }
+                $viewEntryScreen_handler->render($displayScreen, $this_ent, $settings);
+                global $renderedFormulizeScreen; // picked up at the end of initialize.php so we set the right info in the template when the whole page is rendered
+                $renderedFormulizeScreen = $displayScreen;
+                return;
             }
-  			$viewEntryScreen_handler->render($displayScreen, $this_ent, $settings);
-			global $renderedFormulizeScreen; // picked up at the end of initialize.php so we set the right info in the template when the whole page is rendered
-			$renderedFormulizeScreen = $displayScreen;
-			return;
-      }
 		} else {
 
 			if($_POST['ventry'] != "single") {
@@ -1090,7 +1144,6 @@ function drawInterface($settings, $fid, $frid, $groups, $mid, $gperm_handler, $l
 
 	// establish text and code for buttons, whether a screen is in effect or not
 	$screenButtonText = array();
-	$screenButtonText['modifyScreenLink'] = ($edit_form AND $screen AND $module_admin_rights) ? _formulize_DE_MODIFYSCREEN : "";
 	$screenButtonText['changeColsButton'] = _formulize_DE_CHANGECOLS;
 	$screenButtonText['calcButton'] = _formulize_DE_CALCS;
 	$screenButtonText['advCalcButton'] = _formulize_DE_ADVCALCS;
@@ -1106,6 +1159,10 @@ function drawInterface($settings, $fid, $frid, $groups, $mid, $gperm_handler, $l
 	$screenButtonText['resetViewButton'] = _formulize_DE_RESETVIEW;
 	$screenButtonText['saveViewButton'] = _formulize_DE_SAVE;
 	$screenButtonText['deleteViewButton'] = _formulize_DE_DELETE;
+
+    // first 15 items must be the action buttons!
+
+    $screenButtonText['modifyScreenLink'] = ($edit_form AND $screen AND $module_admin_rights) ? _formulize_DE_MODIFYSCREEN : "";
 	$screenButtonText['currentViewList'] = _formulize_DE_CURRENT_VIEW;
 	$screenButtonText['saveButton'] = _formulize_SAVE;
 	$screenButtonText['globalQuickSearch'] = _formulize_GLOBAL_SEARCH;
@@ -1170,7 +1227,7 @@ function drawInterface($settings, $fid, $frid, $groups, $mid, $gperm_handler, $l
     formulize_benchmark("before creating button: ".$scrButton);
 		$buttonCodeArray[$scrButton] = formulize_screenLOEButton($scrButton, $scrText, $settings, $fid, $frid, $colhandles, $flatcols, $pubstart, $loadOnlyView, $calc_cols, $calc_calcs, $calc_blanks, $calc_grouping, $singleMulti[0]['singleentry'], $lastloaded, $currentview, $endstandard, $pickgroups, $viewoptions, $loadviewname, $advcalc_acid, $screen);
     formulize_benchmark("button done");
-		if($buttonCodeArray[$scrButton] AND $onActionButtonCounter < 14) { // first 14 items in the array should be the action buttons only
+		if($buttonCodeArray[$scrButton] AND $onActionButtonCounter < 14) { // first 0-14 items in the array should be the action buttons only
 			$atLeastOneActionButton = true;
 		}
 		$onActionButtonCounter++;
@@ -1344,9 +1401,12 @@ function drawInterface($settings, $fid, $frid, $groups, $mid, $gperm_handler, $l
 		}
 
     formulize_benchmark("before rendering top template");
+        $buttonCodeArray['submitButton'] = $submitButton;
 		formulize_screenLOETemplate($screen, "top", $buttonCodeArray, $settings, $messageText);
     formulize_benchmark("after rendering top template");
-		$buttonCodeArray['submitButton'] = $submitButton; // send this back so that we can put it at the bottom of the page if necessary
+        if(strstr($screen->getTemplate('toptemplate'), "\$submitButton")) {
+            unset($buttonCodeArray['submitButton']); // do not send this back if it has been used. Otherwise, send it back and we can put it at the bottom of the page if necessary
+        }
 
 	}
 
@@ -1627,13 +1687,21 @@ function drawEntries($fid, $cols, $searches="", $frid="", $scope, $standalone=""
 			print "</td></tr>\n";
 		}
 
+        
+        if($columnWidth) {
+            $columnWidthParam = "style=\"width: $columnWidth" . "px\"";
+        } else {
+            $columnWidthParam = "";
+        }
+        
+        
         if($useHeadings) {
             $headers = getHeaders($cols, true); // second param indicates we're using element headers and not ids
-            drawHeaders($headers, $cols, $useCheckboxes, $useViewEntryLinks, count($inlineButtons), $settings['lockedColumns']);
+            drawHeaders($headers, $cols, $useCheckboxes, $useViewEntryLinks, count($inlineButtons), $settings['lockedColumns'], $columnWidthParam);
         }
 
 		if($useSearch) {
-			drawSearches($searches, $settings, $useCheckboxes, $useViewEntryLinks, count($inlineButtons), false, $hiddenQuickSearches);
+			drawSearches($searches, $settings, $useCheckboxes, $useViewEntryLinks, count($inlineButtons), false, $hiddenQuickSearches, array(), $columnWidthParam);
 		}
 
         if (count($data) == 0) {
@@ -1669,7 +1737,7 @@ function drawEntries($fid, $cols, $searches="", $frid="", $scope, $standalone=""
 					}
 					$headcounter++;
 
-					print "<tr>\n";
+					print "<tr class=\"entry-row\">\n";
 					if($class=="even") {
 						$class="odd";
 					} else {
@@ -1677,11 +1745,11 @@ function drawEntries($fid, $cols, $searches="", $frid="", $scope, $standalone=""
 					}
 					unset($linkids);
 
-					$linkids = internalRecordIds($entry, $mainFormHandle);
+					$linkids = internalRecordIds($entry, $fid);
 
 					// draw in the margin column where the links and metadata goes
 					if($useViewEntryLinks OR $useCheckboxes != 2) {
-						print "<td class=\"head formulize-controls\">\n";
+						print "<td class=\"head $class formulize-controls\">\n";
 					}
 
 					if(!$settings['lockcontrols']) { //  AND !$loadview) { // -- loadview removed from this function sept 24 2005
@@ -1709,12 +1777,6 @@ function drawEntries($fid, $cols, $searches="", $frid="", $scope, $standalone=""
 
 					$column_counter = 0;
 
-					if($columnWidth) {
-						$columnWidthParam = "style=\"width: $columnWidth" . "px\"";
-					} else {
-						$columnWidthParam = "";
-					}
-
           for($i=0;$i<count($cols);$i++) {
             //formulize_benchmark("drawing one column");
 						$col = $cols[$i];
@@ -1722,7 +1784,7 @@ function drawEntries($fid, $cols, $searches="", $frid="", $scope, $standalone=""
 						$classToUse = $class . " column column".$i;
 						$cellRowAddress = $id+2;
 						if($i==0) {
-							print "<td $columnWidthParam class=\"$class floating-column\" id='floatingcelladdress_$cellRowAddress'>\n";
+                            print "<td $columnWidthParam class=\"$class floating-column\" id='floatingcelladdress_$cellRowAddress'></td>\n";
 						}
 						print "<td $columnWidthParam class=\"$classToUse\" id=\"celladdress_".$cellRowAddress."_".$i."\">\n";
 						if($col == "creation_uid" OR $col == "mod_uid") {
@@ -1797,6 +1859,12 @@ function drawEntries($fid, $cols, $searches="", $frid="", $scope, $standalone=""
 						}
 					}
 
+                    // if columnWidth specified in screen settings by admin, then we need a phantom extra cell in the table that will have no width applied, and so the browser will squish everything else based on the width admin has specified
+                    // What an epic hack!
+                    if($columnWidthParam) {
+                        print "<td class='$class formulize-spacer'>&nbsp;</td>";
+                    }
+
 					// handle hidden elements for passing back to custom buttons
 					foreach($hiddenColumns as $thisHiddenCol) {
 						print "\n<input type=\"hidden\" name=\"hiddencolumn_".$linkids[0]."_$thisHiddenCol\" value=\"" . htmlspecialchars(display($entry, $thisHiddenCol)) . "\"></input>\n";
@@ -1841,7 +1909,7 @@ function drawEntries($fid, $cols, $searches="", $frid="", $scope, $standalone=""
 					${'view'.$viewNumber} = true;
 				} else {
 					${$thisViewName} = false;
-					$view{'view'.$viewNumber} = false;
+					${'view'.$viewNumber} = false;
 				}
 				$viewNumber++;
 			}
@@ -1857,7 +1925,7 @@ function drawEntries($fid, $cols, $searches="", $frid="", $scope, $standalone=""
 				if($entry != "") {
 
 					// Set up the variables for the link to the current entry, and the checkbox that can be used to select the current entry
-					$linkids = internalRecordIds($entry, $mainFormHandle);
+					$linkids = internalRecordIds($entry, $fid);
 					$entry_id = $linkids[0]; // make a nice way of referring to this for in the eval'd code
 					$form_id = $fid; // make a nice way of referring to this for in the eval'd code
 					if(!$settings['lockcontrols']) { //  AND !$loadview) { // -- loadview removed from this function sept 24 2005
@@ -1881,7 +1949,7 @@ function drawEntries($fid, $cols, $searches="", $frid="", $scope, $standalone=""
 						}
 					} // end of IF NO LOCKCONTROLS
 
-					$ids = internalRecordIds($entry, $mainFormHandle);
+					$ids = internalRecordIds($entry, $fid);
 					foreach($inlineButtons as $caid=>$thisCustomAction) {
 						list($caCode) = processCustomButton($caid, $thisCustomAction, $ids[0], $entry); // only bother with the code, since we already processed any clicked button above
 						if($caCode) {
@@ -1954,7 +2022,7 @@ function viewEntryButton($linkContents, $overrideId="", $overrideScreen="") {
 // this function draws in the search box row
 // returnOnly is used to return the HTML code for the boxes, and that only happens when we are gathering the boxes because a custom list template is in use
 // $filtersRequired can be 'true' which means include all valid filters, or it can be a list of fields (matching values in the cols array) which require filters
-function drawSearches($searches, $settings, $useBoxes, $useLinks, $numberOfButtons, $returnOnly=false, $hiddenQuickSearches=array(), $filtersRequired=array()) {
+function drawSearches($searches, $settings, $useBoxes, $useLinks, $numberOfButtons, $returnOnly=false, $hiddenQuickSearches=array(), $filtersRequired=array(), $columnWidthParam=false) {
     $quickSearchBoxes = array();
 
     if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/docs/search_help_"._LANGCODE.".html")) {
@@ -1984,15 +2052,13 @@ function drawSearches($searches, $settings, $useBoxes, $useLinks, $numberOfButto
 		$classToUse = "head column column".$i;
 		if(!$returnOnly) {
 			if($i==0) {
-				print "<td class='head floating-column' id='floatingcelladdress_1'>\n";
+				print "<td class='head floating-column' id='floatingcelladdress_1'></td>\n";
 			}
 			print "<td class='$classToUse' id='celladdress_1_$i'><div class='main-cell-div' id='cellcontents_1_".$i."'>\n";
-            print $search_help; // if search help was not included in the margin, then it will be included beside each search box now
         }
 
         //formulize_benchmark("drawing one search");
 		$search_text = isset($searches[$cols[$i]]) ? strip_tags(htmlspecialchars($searches[$cols[$i]]), ENT_QUOTES) : "";
-		$search_text = get_magic_quotes_gpc() ? stripslashes($search_text) : $search_text;
 		$boxid = "";
 		$clear_help_javascript = "";
 		if(count($searches) == 0 AND !$returnOnly) {
@@ -2028,8 +2094,7 @@ function drawSearches($searches, $settings, $useBoxes, $useLinks, $numberOfButto
 		if($i == count($cols)-1) {
             $hiddenQuickSearchesToMake = array_merge($hiddenQuickSearches, $pubfilters); // include the published filters/searches that the user may have assigned to this screen
 			foreach($hiddenQuickSearchesToMake as $thisHQS) {
-				$search_text = isset($searches[$thisHQS]) ? htmlspecialchars(strip_tags($searches[$thisHQS]), ENT_QUOTES) : "";
-				$search_text = get_magic_quotes_gpc() ? stripslashes($search_text) : $search_text;
+				$search_text = isset($searches[$thisHQS]) ? strip_tags(htmlspecialchars($searches[$thisHQS], ENT_QUOTES)) : ""; // striping tags after htmlspecialchars is probably unnecessary, but can't hurt(?)
 				$quickSearchBoxes[$thisHQS]['search'] = "<input type=text name='search_$thisHQS' value=\"$search_text\" $clear_help_javascript onchange=\"javascript:window.document.controls.ventry.value = '';\"></input>\n";
         if(is_array($filtersRequired) OR $filtersRequired === true) {
           if($filtersRequired === true OR in_array($thisHQS, $filtersRequired)) {
@@ -2054,6 +2119,14 @@ function drawSearches($searches, $settings, $useBoxes, $useLinks, $numberOfButto
 		for($i=0;$i<$numberOfButtons;$i++) {
 			print "<td class=head>&nbsp;</td>\n";
 		}
+        
+        // if columnWidth specified in screen settings by admin, then we need a phantom extra cell in the table that will have no width applied, and so the browser will squish everything else based on the width admin has specified
+        // What an epic hack!
+        if($columnWidthParam) {
+            print '<td class="head formulize-spacer">&nbsp;</td>';
+        }
+        
+        
 		print "</tr>\n";
 	}
 
@@ -2109,9 +2182,8 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 	}
 	include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
 	$startDateElement = new XoopsFormTextDateSelect ('', 'formulize_daterange_sta_'.$handle, 15, strtotime($startText));
-	$startDateElement->setExtra("class='formulize_daterange'");
 	$endDateElement = new XoopsFormTextDateSelect ('', 'formulize_daterange_end_'.$handle, 15, strtotime($endText));
-	$endDateElement->setExtra("class='formulize_daterange' target='$handle'");
+	
 	static $js;
 	if($js) { // only need to include this code once!
 		$js = "";
@@ -2128,7 +2200,7 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 		$().click(function() {
 			$('.formulize_daterange').change();
 		});
-		$('.formulize_daterange').change(function() {
+		$(\"[id^='formulize_daterange_sta_'],[id^='formulize_daterange_end_']\").change(function() {
 			var id = new String($(this).attr('id'));
 			var handle = id.substr(24);
 			var start = $('#formulize_daterange_sta_'+handle).val();
@@ -2144,7 +2216,7 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 }
 
 // this function writes in the headers for the columns in the results box
-function drawHeaders($headers, $cols, $useBoxes=null, $useLinks=null, $numberOfButtons, $lockedColumns=array()) {
+function drawHeaders($headers, $cols, $useBoxes=null, $useLinks=null, $numberOfButtons, $lockedColumns=array(), $columnWidthParam=false) {
 	static $checkedHelpLink = false;
 	static $headingHelpLink;
 	static $row_id = 1;
@@ -2162,12 +2234,12 @@ function drawHeaders($headers, $cols, $useBoxes=null, $useLinks=null, $numberOfB
 
 	print "<tr>";
 	if($useBoxes != 2 OR $useLinks) {
-		print "<td class=head>&nbsp;</td>\n";
+		print "<td class=\"head formulize-controls-head\">&nbsp;</td>\n";
 	}
 	for($i=0;$i<count($headers);$i++) {
 		$classToUse = "head column column".$i;
 		if($i==0) {
-			print "<td class='head floating-column' id='floatingcelladdress_h{$row_id}'>\n";
+			print "<td class='head floating-column' id='floatingcelladdress_h{$row_id}'></td>\n";
 		}
 		print "<td class='$classToUse' id='celladdress_h{$row_id}_$i'><div class='main-cell-div' id='cellcontents_h{$row_id}_".$i."'>\n";
 
@@ -2183,6 +2255,13 @@ function drawHeaders($headers, $cols, $useBoxes=null, $useLinks=null, $numberOfB
 	for($i=0;$i<$numberOfButtons;$i++) {
 		print "<td class=head>&nbsp;</td>\n";
 	}
+    
+    // if columnWidth specified in screen settings by admin, then we need a phantom extra cell in the table that will have no width applied, and so the browser will squish everything else based on the width admin has specified
+    // What an epic hack!
+    if($columnWidthParam) {
+        print '<td class="head formulize-spacer">&nbsp;</td>';
+    }
+    
 	print "</tr>\n";
 }
 
@@ -2191,17 +2270,18 @@ function clickableSortLink($handle, $contents) {
 	$sort = strip_tags($_POST['sort']);
 	$order = strip_tags($_POST['order']);
 	$output = "";
+
+	$output .= "<div style='padding-right:20px;'><a style='display:flex;' href=\"\" alt=\"" . _formulize_DE_SORTTHISCOL . "\" title=\"" . _formulize_DE_SORTTHISCOL . "\" onclick=\"javascript:sort_data('" . $handle . "');return false;\">";
+  $output .= "<div style=''>".$contents."</div><div style='min-width:15px; padding-left:5px;'>";
 	if($handle == $sort) {
 		if($order == "SORT_DESC") {
-			$imagename = "desc.gif";
+			$iconname = "fa-sort-amount-down";
 		} else {
-			$imagename = "asc.gif";
+			$iconname = "fa-sort-amount-up";
 		}
-		$output .= "<img src='" . XOOPS_URL . "/modules/formulize/images/$imagename' align=left>";
+		$output .= "<i class='fas ".$iconname."'></i>";
 	}
-	$output .= "<a href=\"\" alt=\"" . _formulize_DE_SORTTHISCOL . "\" title=\"" . _formulize_DE_SORTTHISCOL . "\" onclick=\"javascript:sort_data('" . $handle . "');return false;\">";
-	$output .= $contents;
-  	$output .= "</a>\n";
+  $output .= "</div></a></div>\n";
 	return $output;
 }
 
@@ -3107,9 +3187,9 @@ function printResults($masterResults, $blankSettings, $groupingSettings, $groupi
 			$parsed_css = $css->css;
 			// parsed_css seems to have only one key when looking at the default template...key is the number of styles?
 			foreach($parsed_css as $thiscss) {
-				$head = isset($thiscss['.head']['background-color']) ? $thiscss['.head']['background-color'] : isset($thiscss['.head']['background']) ? $thiscss['.head']['background'] : "";
-				$even = isset($thiscss['.even']['background-color']) ? $thiscss['.even']['background-color'] : isset($thiscss['.even']['background']) ? $thiscss['.even']['background'] : "";
-				$odd = isset($thiscss['.odd']['background-color']) ? $thiscss['.odd']['background-color'] : isset($thiscss['.odd']['background']) ? $thiscss['.odd']['background'] : "";
+				$head = isset($thiscss['.head']['background-color']) ? $thiscss['.head']['background-color'] : (isset($thiscss['.head']['background']) ? $thiscss['.head']['background'] : "");
+				$even = isset($thiscss['.even']['background-color']) ? $thiscss['.even']['background-color'] : (isset($thiscss['.even']['background']) ? $thiscss['.even']['background'] : "");
+				$odd = isset($thiscss['.odd']['background-color']) ? $thiscss['.odd']['background-color'] : (isset($thiscss['.odd']['background']) ? $thiscss['.odd']['background'] : "");
 			}
 		}
     formulize_benchmark("after reading stylesheet");
@@ -3755,10 +3835,11 @@ jQuery(window).load(function() {
 		return false;
 	});
 
-	jQuery(window).scrollTop(<?php print intval($_POST['formulize_scrollx']); ?>);
-	jQuery(window).scrollLeft(<?php print intval($_POST['formulize_scrolly']); ?>);
-
 <?php
+    if(isset($_POST['formulize_scrollx']) OR isset($_POST['formulize_scrolly'])) {
+        print "jQuery(window).scrollTop(".intval($_POST['formulize_scrollx']).");
+        jQuery(window).scrollLeft(".intval($_POST['formulize_scrolly']).");";
+    }
 
 foreach($lockedColumns as $thisColumn) {
 	if(is_numeric($thisColumn)) {
@@ -3777,11 +3858,13 @@ foreach($lockedColumns as $thisColumn) {
 	});
 
 	var saveButtonOffset = jQuery('#floating-list-of-entries-save-button').offset();
-	saveButtonOffset.left = 15;
-	floatSaveButton(saveButtonOffset);
-	jQuery(window).scroll(function () {
-		floatSaveButton(saveButtonOffset);
-	});
+    if (saveButtonOffset) {
+        saveButtonOffset.left = 15;
+        floatSaveButton(saveButtonOffset);
+        jQuery(window).scroll(function () {
+            floatSaveButton(saveButtonOffset);
+        });
+    }
 
 });
 
@@ -3811,8 +3894,11 @@ jQuery(window).scroll(function () {
         jQuery('.floating-column').css('margin-top', ((window.pageYOffset)*-1));
 });
 
-</script>
 <?php
+
+print checkForChrome();
+print "</script>";
+
 }
 
 //THIS FUNCTION READS A LEGACY REPORT (ONE GENERATED IN 1.6rc OR PREVIOUS)
@@ -4185,7 +4271,7 @@ function formulize_screenLOETemplate($screen, $type, $buttonCodeArray, $settings
 			${'view'.$viewNumber} = true;
 		} else {
 			${$thisViewName} = false;
-			$view{'view'.$viewNumber} = false;
+			${'view'.$viewNumber} = false;
 		}
 		$viewNumber++;
 	}
@@ -4230,10 +4316,11 @@ function formulize_screenLOETemplate($screen, $type, $buttonCodeArray, $settings
 }
 
 // THIS FUNCTION PROCESSES THE REQUESTED BUTTONS AND GENERATES HTML PLUS SENDS BACK INFO ABOUT THAT BUTTON
-// $caid is the id of this button, $thisCustomAction is all the settings for this button, $entries is optional and is a comma separated list of entries that should be modified by this button (only takes effect on inline buttons, and possible future types)
-// $entries is the entry ID that should be altered when this button is clicked.  Only sent for inline buttons.  Looks like it is only ever a single ID of the main entry of the line where the button was clicked?
-// $entry is only sent from inline buttons, so that any PHP/HTML to be rendered inline has access to all the values of the current entry
-function processCustomButton($caid, $thisCustomAction, $entries="", $entry="") {
+// $caid is the id of this button,
+// $thisCustomAction is all the settings for this button, 
+// $entry_id is the entry ID that should be altered when this button is clicked.  Only sent for inline buttons.  Looks like it is only ever a single ID of the main entry of the line where the button was clicked?
+// $entry is the getData result package for this entry. Only sent from inline buttons, so that any PHP/HTML to be rendered inline has access to all the values of the current entry
+function processCustomButton($caid, $thisCustomAction, $entry_id="", $entry="") {
 
 	global $xoopsUser;
 	$userGroups = $xoopsUser ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
@@ -4261,7 +4348,7 @@ function processCustomButton($caid, $thisCustomAction, $entries="", $entry="") {
 		$caActions[] = $effectProperties['action'];
 		$caValues[] = $effectProperties['value'];
 		$caPHP[] = isset($effectProperties['code']) ? $effectProperties['code'] : "";
-		$caHTML[$caid.'...'.$effectid.'...'.$entries] = isset($effectProperties['html']) ? $effectProperties['html'] : "";
+		$caHTML[$caid.'...'.$effectid.'...'.$entry_id] = isset($effectProperties['html']) ? $effectProperties['html'] : "";
 		$isHTML = isset($effectProperties['html']) ? true : $isHTML;
 	}
 	if($isHTML AND $entry) { // code to be rendered in place
@@ -4277,15 +4364,15 @@ function processCustomButton($caid, $thisCustomAction, $entries="", $entry="") {
 		}
 		$caCode = $allHTML;
 	} else {
-		$nameIdAddOn = $thisCustomAction['appearinline'] ? $nameIdAddOn+1 : "";
-		$caCode = "<input type=button style=\"width: 140px; cursor: pointer;\" name=\"" . $thisCustomAction['handle'] . "$nameIdAddOn\" id=\"" . $thisCustomAction['handle'] . "$nameIdAddOn\" value=\"" . trans($thisCustomAction['buttontext']) . "\" onclick=\"javascript:customButtonProcess('$caid', '$entries', '".str_replace("'","\'",$thisCustomAction['popuptext'])."');\">\n";
+		$nameIdAddOn = $thisCustomAction['appearinline'] ? $entry_id : "";
+		$caCode = "<input type=button style=\"cursor: pointer;\" name=\"" . $thisCustomAction['handle'] . "$nameIdAddOn\" id=\"" . $thisCustomAction['handle'] . "$nameIdAddOn\" value=\"" . trans($thisCustomAction['buttontext']) . "\" onclick=\"javascript:customButtonProcess('$caid', '$entry_id', '".str_replace("'","\'",$thisCustomAction['popuptext'])."');\">\n";
 	}
 
 	return array(0=>$caCode, 1=>$caElements, 2=>$caActions, 3=>$caValues, 4=>$thisCustomAction['messagetext'], 5=>$thisCustomAction['applyto'], 6=>$caPHP, 7=>$thisCustomAction['appearinline']);
 }
 
 // THIS FUNCTION PROCESSES CLICKED CUSTOM BUTTONS
-function processClickedCustomButton($clickedElements, $clickedValues, $clickedActions, $clickedMessageText, $clickedApplyTo, $caPHP, $caInline) {
+function processClickedCustomButton($clickedElements, $clickedValues, $clickedActions, $clickedMessageText, $clickedApplyTo, $caPHP, $caInline, $screen) {
 
 	if(!is_numeric($_POST['caid'])) { return; } // 'caid' might be set in post, but we're not processing anything unless there actually is a value there
 
@@ -4316,8 +4403,8 @@ function processClickedCustomButton($clickedElements, $clickedValues, $clickedAc
 			$clickedEntries = $GLOBALS['formulize_selectedEntries'];
 		}
 		foreach($caPHP as $thisCustomCode) {
-			foreach($clickedEntries as $thisClickedEntry) {
-				$GLOBALS['formulize_thisEntryId'] = $thisClickedEntry;
+			foreach($clickedEntries as $formulize_thisEntryId) {
+				$GLOBALS['formulize_thisEntryId'] = $formulize_thisEntryId;
 				eval($thisCustomCode);
 			}
 		}
@@ -4354,6 +4441,7 @@ function processClickedCustomButton($clickedElements, $clickedValues, $clickedAc
 		// process changes to each entry
 		foreach($caEntries as $id=>$thisEntry) { // loop through all the entries this button click applies to
   		$GLOBALS['formulize_thisEntryId'] = $csEntries[$id]; // sent up to global scope so it can be accessed by the gatherHiddenValues function without the user having to type ", $id" in the function call
+            $formulize_thisEntryId = $csEntries[$id];
 			$maxIdReq = 0;
 			// don't use "i" in this loop, since it's a common variable name and would potentially conflict with names in the eval'd scope
 			// same is true of "thisentry" and other variables here!
@@ -4366,21 +4454,17 @@ function processClickedCustomButton($clickedElements, $clickedValues, $clickedAc
 				} else {
 					$valueToWrite = $clickedValues[$ixz];
 				}
+                
 				$maxIdReq = writeElementValue("", $clickedElements[$ixz], $thisEntry, $valueToWrite, $clickedActions[$ixz], "", $formulize_lvoverride, $csEntries[$id]);
+
 			}
-			/*
-			// if you pass in $screen, you could try to do something like this...but it would increase overhead, and really, a more unified way of handling writing custom button data and updating derived values, needs to be created.
 			if($maxIdReq) {
-				$form_handler = xoops_getmodulehandler('forms', 'formulize');
 				$element_handler = xoops_getmodulehandler('elements', 'formulize');
 				$elementObject = $element_handler->get($clickedElements[0]);
-				$formObject = $form_handler->get($elementObject->getVar('id_form'));
-				if(array_search("derived", $formObject->getVar('elementTypes'))) { // only bother if there is a derived value in the form
 					// NOTE: if there are derived values involving something other than the fid of the updated form, and the frid of the screen, then they won't be updated when this custom button is clicked!!
 					$frid = $screen ? $screen->getVar('frid') : 0;
 					formulize_updateDerivedValues($maxIdReq, $elementObject->getVar('id_form'), $frid);
 				}
-			}*/
 		}
 	}
 	return $clickedMessageText;
@@ -4407,7 +4491,14 @@ function formulize_screenLOEButton($button, $buttonText, $settings, $fid, $frid,
 		$buttonText = trans($buttonText);
 		switch ($button) {
 			case "modifyScreenLink":
-				return "<a href=" . XOOPS_URL . "/modules/formulize/admin/ui.php?page=screen&sid=".$screen->getVar('sid').">" . $buttonText . "</a>";
+                $applications_handler = xoops_getmodulehandler('applications', 'formulize');
+                $apps = $applications_handler->getApplicationsByForm($screen->getVar('fid'));
+                if(is_array($apps) AND count($apps)>0) {
+                    $firstAppId = $apps[key($apps)]->getVar('appid');
+                } else {
+                    $firstAppId = 0;
+                }
+				return "<a href=" . XOOPS_URL . "/modules/formulize/admin/ui.php?page=screen&sid=".$screen->getVar('sid')."&fid=".$screen->getVar('fid')."&aid=".$firstAppId.">" . $buttonText . "</a>";
 				break;
 			case "changeColsButton":
 				return "<input type=button class=\"formulize_button\" id=\"formulize_$button\" name=changecols value='" . $buttonText . "' onclick=\"javascript:showPop('" . XOOPS_URL . "/modules/formulize/include/changecols.php?fid=$fid&frid=$frid&cols=$colhandles');\"></input>";
@@ -4499,7 +4590,7 @@ function formulize_screenLOEButton($button, $buttonText, $settings, $fid, $frid,
 				return "<input type=button class=\"formulize_button\" id=\"formulize_$button\" name=deSubmitButton value='" . $buttonText . "' onclick=\"javascript:showLoading();\"></input>";
 				break;
 			case "globalQuickSearch":
-				return "<input type=text id=\"formulize_$button\" name=\"global_search\" placeholder='" . $buttonText . "' value='" . $settings['global_search'] . "' onchange=\"javascript:window.document.controls.ventry.value = '';\"></input>";
+				return "<input type=text id=\"formulize_$button\" name=\"global_search\" value='" . $settings['global_search'] . "' onchange=\"javascript:window.document.controls.ventry.value = '';\"></input>";
 				break;
 		}
 	} elseif($button == "currentViewList") { // must always set a currentview value in POST even if the list is not visible
@@ -4556,7 +4647,7 @@ function formulize_gatherDataSet($settings=array(), $searches, $sort="", $order=
 		}
 	}
 
-
+	// MASSIVELY DEPRECATED...
 	// Order of operations for the requested advanced search options
 	// 1. unpack the settings necessary for the search
 	// 2. loop through the data and store the results, unsetting $data as we go, and then reassigning the found array to $data at the end
@@ -4627,260 +4718,12 @@ function formulize_gatherDataSet($settings=array(), $searches, $sort="", $order=
 			$query_string .= ") { \$query_result=1; } else { \$query_result=0; }";
 		}
 	}
+    // END OF MASSIVELY DEPRECATED
 
-	// build the filter out of the searches array
-	$start = 1;
-	$filter = "";
-	$ORstart = 1;
-	$ORfilter = "";
-	$individualORSearches = array();
-    $element_handler = xoops_getmodulehandler('elements','formulize');
-	global $xoopsUser;
-	foreach($searches as $key => $master_one_search) { // $key is the element handle
-		// convert "between 2001-01-01 and 2002-02-02" to a normal date filter with two dates
-		$count = preg_match("/^[bB][eE][tT][wW][eE][eE][nN] ([\d]{1,4}[-][\d]{1,2}[-][\d]{1,4}) [aA][nN][dD] ([\d]{1,4}[-][\d]{1,2}[-][\d]{1,4})\$/", $master_one_search, $matches);
-		if ($count > 0) {
-			$master_one_search = ">={$matches[1]}//<={$matches[2]}";
-		}
-
-		// split search based on new split string
-		$intermediateArray = explode("//", trim($master_one_search, "//")); // ignore trailing // because that will just cause an unnecessary blank search
-
-		$searchArray = array();
-
-		foreach($intermediateArray as $one_search) {
-			// if $one_search contains both OR and AND, just add it as-is; we don't support this kind of nesting
-			if (strpos($one_search, " OR ") !== FALSE AND strpos($one_search, " AND ") !== FALSE) {
-				$searchArray[] = $one_search;
-			}
-			// split on OR and add all split results, prepended with OR
-			else if (strpos($one_search, " OR ") !== FALSE) {
-				foreach(explode(" OR ", $one_search) as $or_term) {
-						$searchArray[] = "OR" . $or_term;
-				}
-			}
-			// split on AND and add all split results
-			else if (strpos($one_search, " AND ") !== FALSE) {
-				foreach(explode(" AND ", $one_search) as $and_term) {
-					$searchArray[] = $and_term;
-				}
-			}
-			// otherwise just add to the array
-			else {
-				$searchArray[] = $one_search;
-			}
-		}
-
-		foreach($searchArray as $one_search) {
-            // used for trapping the {BLANK} keywords into their own space so they don't interfere with each other, or other filters
-            $addToItsOwnORFilter = false;
-            $ownORFilterKey = "";
-
-            $dataHandler = new formulizeDataHandler(false);
-            $metadataFieldTypes = $dataHandler->metadataFieldTypes;
-
-            if (isset($metadataFieldTypes[$key])){
-                $ele_type = $metadataFieldTypes[$key];
-            }
-            else{
-                $elementObject = $element_handler->get($key);
-                if(!is_object($elementObject)) {
-                    continue; // ignore references to non-elements (probably deleted columns in a saved view)
-                }
-                $ele_type = $elementObject->getVar('ele_type');
-            }
-
-		    // remove the qsf_ parts to make the quickfilter searches work
-		    if(substr($one_search, 0, 4)=="qsf_") {
-              $qsfparts = explode("_", $one_search);
-			  $allowsMulti = false;
-			  if($ele_type == "select") {
-				$ele_value = $elementObject->getVar('ele_value');
-				if($ele_value[1]) {
-				  $allowsMulti = true;
-				}
-			  } elseif($ele_type == "checkbox") {
-				$allowsMulti = true;
-		      }
-			  if($allowsMulti) {
-				$one_search = $qsfparts[2]; // will default to using LIKE since there's no operator
-			  } else {
-				$one_search = "=".$qsfparts[2];
-			  }
-		    }
-
-			// strip out any starting and ending ! that indicate that the column should not be stripped
-			if(substr($one_search, 0, 1) == "!" AND substr($one_search, -1) == "!") {
-				$one_search = substr($one_search, 1, -1);
-			}
-
-			// look for OR indicators...if all caps OR is at the front, then that means that this search is to put put into a separate set of OR filters that gets appended as a set to the main set of AND filters
-		    $addToORFilter = false; // flag to indicate if we need to apply the current search term to a set of "OR'd" terms
-			if(substr($one_search, 0, 2) == "OR" AND strlen($one_search) > 2) {
-                if(substr($one_search, 2, 3)== "SET") {
-                    $addToItsOwnORFilter = true;
-                    $ownORFilterKey = substr($one_search, 2, 4);
-                    $one_search = substr($one_search, 6);
-                } else {
-				$addToORFilter = true;
-				$one_search = substr($one_search, 2);
-			}
-			}
-
-			// look for operators
-			$operators = array(0=>"=", 1=>">", 2=>"<", 3=>"!");
-			$operator = "";
-			if(in_array(substr($one_search, 0, 1), $operators)) {
-				// operator found, check to see if it's <= or >= and set start point for term accordingly
-				$startpoint = (substr($one_search, 0, 2) == ">=" OR substr($one_search, 0, 2) == "<=" OR substr($one_search, 0, 2) == "!=" OR substr($one_search, 0, 2) == "<>") ? 2 : 1;
-				$operator = substr($one_search, 0, $startpoint);
-        if($operator == "!") { $operator = "NOT LIKE"; }
-				$one_search = substr($one_search, $startpoint);
-			}
-
-			// look for blank search terms and convert them to {BLANK} so they are handled properly
-			if($one_search === "") {
-				$one_search = "{BLANK}";
-			}
-
-			// look for { } and transform special terms into what they should be for the filter
-			if(substr($one_search, 0, 1) == "{" AND substr($one_search, -1) == "}") {
-				$searchgetkey = substr($one_search, 1, -1);
-
-				if (substr($searchgetkey, 0, 5) == "TODAY") {
-					$number = substr($searchgetkey, 6);
-					$one_search = date("Y-m-d",mktime(0, 0, 0, date("m") , date("d")+$number, date("Y")));
-				} elseif($searchgetkey == "USER") {
-					if($xoopsUser) {
-                        $one_search = htmlspecialchars_decode($xoopsUser->getVar('name'), ENT_QUOTES);
-						if(!$one_search) { $one_search = htmlspecialchars_decode($xoopsUser->getVar('uname'), ENT_QUOTES); }
-					} else {
-						$one_search = 0;
-					}
-				} elseif($searchgetkey == "USERNAME") {
-					if($xoopsUser) {
-                        $one_search = htmlspecialchars_decode($xoopsUser->getVar('name'), ENT_QUOTES);
-					} else {
-						$one_search = "";
-					}
-				} elseif($searchgetkey == "BLANK") { // special case, we need to construct a special OR here that will look for "" OR IS NULL
-				  if($operator == "!=" OR $operator == "NOT LIKE") {
-				    $blankOp1 = "!=";
-				    $blankOp2 = " IS NOT NULL ";
-				  } else {
-				    $addToItsOwnORFilter = $addToORFilter ? false : true; // if this is not going into an OR filter already because the user asked for it to, then let's
-				    $blankOp1 = "=";
-				    $blankOp2 = " IS NULL ";
-				  }
-				  $one_search = "/**/$blankOp1][$key/**//**/$blankOp2";
-				  $operator = ""; // don't use an operator, we've specially constructed the one_search string to have all the info we need
-				} elseif($searchgetkey == "PERGROUPFILTER") {
-					$one_search = $searchgetkey;
-					$operator = "";
-				} elseif(isset($_POST[$searchgetkey]) OR isset($_GET[$searchgetkey])) {
-                    $one_search = isset($_POST[$searchgetkey]) ? htmlspecialchars(strip_tags(trim($_POST[$searchgetkey])), ENT_QUOTES) : "";
-					$one_search = ($one_search==="" AND isset($_GET[$searchgetkey])) ? htmlspecialchars(strip_tags(trim($_GET[$searchgetkey])), ENT_QUOTES) : $one_search;
-					if($one_search==="") {
-						continue;
-					}
-				} elseif($searchgetkey) { // we were supposed to find something above, but did not, so there is a user defined search term, which has no value, ergo disregard this search term
-					continue;
-				} else {
-					$one_search = "";
-					$operator = "";
-				}
-			} else {
-				// handle alterations to non { } search terms here...
-				if ($ele_type == "date") {
-                    $search_date = strtotime($one_search);
-                    // only search on a valid date string (otherwise it will be converted to the unix epoch)
-                    if (false !== $search_date) {
-                        $one_search = date('Y-m-d', $search_date);
-                    }
-				}
-			}
-
-			// do additional search for {USERNAME} or {USER} in case they are embedded in another string
-			if($xoopsUser) {
-                $one_search = str_replace("{USER}", htmlspecialchars_decode($xoopsUser->getVar('name'), ENT_QUOTES), $one_search);
-				$one_search = str_replace("{USERNAME}", htmlspecialchars_decode($xoopsUser->getVar('uname'), ENT_QUOTES), $one_search);
-			}
-
-            if(isset($GLOBALS['formulize_searchOperatorOverride'][$key])) {
-                $operator = $GLOBALS['formulize_searchOperatorOverride'][$key];
-            }
-			if($operator) {
-				$one_search = $one_search . "/**/" . $operator;
-			}
-			if($addToItsOwnORFilter) {
-                if($ownORFilterKey) {
-                    if(!isset($individualORSearches[$ownORFilterKey])) {
-                        $individualORSearches[$ownORFilterKey] = $key ."/**/$one_search";    
-                    } else {
-                        $individualORSearches[$ownORFilterKey] .= "][".$key ."/**/$one_search";    
-                    }
-                } else {
-				$individualORSearches[] = $key ."/**/$one_search";
-                }
-			} elseif($addToORFilter) {
-				if(!$ORstart) { $ORfilter .= "]["; }
-				$ORfilter .= $key . "/**/$one_search"; // . formulize_db_escape($one_search); // mysql_real_escape_string no longer necessary here since the extraction layer does the necessary dirty work for us
-				$ORstart = 0;
-			} else {
-				if(!$start) { $filter .= "]["; }
-				$filter .= $key . "/**/$one_search"; // . formulize_db_escape($one_search); // mysql_real_escape_string no longer necessary here since the extraction layer does the necessary dirty work for us
-				$start = 0;
-			}
-
-		}
-	}
-	//print $filter;
-	// if there's a set of options that have been OR'd, then we need to construction a more complex filter
-
-	if($ORfilter OR count($individualORSearches)>0) {
-		$filterIndex = 0;
-		$arrayFilter[$filterIndex][0] = "and";
-		$arrayFilter[$filterIndex][1] = $filter;
-		if($ORfilter) {
-			$filterIndex++;
-			$arrayFilter[$filterIndex][0] = "or";
-			$arrayFilter[$filterIndex][1] = $ORfilter;
-		}
-		if(count($individualORSearches)>0) {
-			foreach($individualORSearches as $thisORfilter) {
-				$filterIndex++;
-				$arrayFilter[$filterIndex][0] = "or";
-				$arrayFilter[$filterIndex][1] = $thisORfilter;
-			}
-		}
-		$filter = $arrayFilter;
-		$filterToCompare = serialize($filter);
-	} else {
-		$filterToCompare = $filter;
-	}
+	$filter = formulize_parseSearchesIntoFilter($searches);
+    $filterToCompare = is_array($filter) ? serialize($filter) : $filter;
 
 	$regeneratePageNumbers = false;
-	// handle magic quotes if necessary
-	if(get_magic_quotes_gpc()) {
-		$_POST['formulize_previous_filter'] = stripslashes($_POST['formulize_previous_filter']);
-		$_POST['formulize_previous_querystring'] = stripslashes($_POST['formulize_previous_querystring']);
-		$_POST['formulize_previous_scope'] = stripslashes($_POST['formulize_previous_scope']);
-	}
-
-
-	if($frid) { // if there's a framework, figure out all the forms in the framework and check if any of them had data saved on this pageload
-		$framework_handler = xoops_getmodulehandler('frameworks', 'formulize');
-		$frameworkObject = $framework_handler->get($frid);
-		$readElementsWasRunOnAForm = false;
-		foreach($frameworkObject->getVar('fids') as $thisFid) {
-			if(isset($GLOBALS['formulize_allWrittenEntryIds'][$thisFid])) {
-				$readElementsWasRunOnAForm = true;
-				break;
-			}
-		}
-	} else {
-		$readElementsWasRunOnAForm = isset($GLOBALS['formulize_allWrittenEntryIds'][$fid]) ? true : false;
-	}
 
   /*
 	global $xoopsUser;
@@ -4891,7 +4734,6 @@ function formulize_gatherDataSet($settings=array(), $searches, $sort="", $order=
 			print "<br>lastentry: ".$_POST['lastentry'];
 			print "<br>deletion requests: ".$GLOBALS['formulize_deletionRequested'];
 			print "<br>writeElementValue: ".$GLOBALS['formulize_writeElementValueWasRun'];
-			print "<br>readElements: ".$readElementsWasRunOnAForm;
 			print "<br>filter to compare: ".$filterToCompare;
 			print "<br>(different from) previous filter: ".$_POST['formulize_previous_filter'];
 			print "<br>flatscope: $flatscope";
@@ -4916,10 +4758,17 @@ function formulize_gatherDataSet($settings=array(), $searches, $sort="", $order=
     //print "limitStart: $limitStart<br>limitSize: $limitSize<br>";
 
 		$GLOBALS['formulize_getCountForPageNumbers'] = true; // flag used to trigger setting of the count of entries in the dataset
+        if($screen) {
+            $fundamental_filters = $screen->getVar('fundamental_filters');
+            if(is_array($fundamental_filters) AND count($fundamental_filters)>0) {
+                $filter = array('fundamental_filters'=>$fundamental_filters, 'active_filters'=>$filter);
+            }
+        }
 		$data = getData($frid, $fid, $filter, "AND", $scope, $limitStart, $limitSize, $sort, $order, $forcequery);
 
     if($currentURL=="") { return array(0=>"", 1=>"", 2=>""); } //current URL should only be "" if this is called directly by the special formulize_getCalcs function
 
+        // MASSIVELY DEPRECATED...
 		if($query_string AND is_array($data)) { $data = formulize_runAdvancedSearch($query_string, $data); } // must do advanced search after caching the data, so the advanced search results are not contained in the cached data.  Otherwise, we would have to rerun the base extraction every time we wanted to change just the advanced search query.  This way, advanced search changes can just hit the cache, and not the db.
 
 

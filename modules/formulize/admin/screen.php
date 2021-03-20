@@ -378,8 +378,18 @@ if ($screen_id != "new" && $settings['type'] == 'multiPage') {
     $multipageOptions['paraentryrelationship'] = $screen->getVar('paraentryrelationship');
     $multipageOptions['donedest'] = $screen->getVar('donedest');
     $multipageOptions['finishisdone'] = $screen->getVar('finishisdone');
-    $multipageOptions['navstyle'] = $screen->getVar('navstyle') == 1 ? 1 : 0;
-    $multipageOptions['buttontext'] = $screen->getVar('buttontext');
+    $multipageOptions['navstyle'] = $screen->getVar('navstyle') ? $screen->getVar('navstyle') : 0;
+    $multipageOptions['showpageselector'] = $screen->getUIOption('showpageselector') ? 'checked' : '';
+    $multipageOptions['showpageindicator'] = $screen->getUIOption('showpageselector') ? 'checked' : '';
+    $multipageOptions['showpagetitles'] = $screen->getUIOption('showpagetitles') ? 'checked' : '';
+    $buttonText = $screen->getVar('buttontext');
+    $multipageOptions['thankyoulinktext'] = is_array($buttonText) ? $buttonText['thankyoulinktext'] : $buttonText;
+    $multipageOptions['thankyoulinktext'] = $multipageOptions['thankyoulinktext'] ? $multipageOptions['thankyoulinktext'] : _formulize_DMULTI_ALLDONE;
+    $multipageOptions['prevButtonText'] = (is_array($buttonText) AND $buttonText['prevButtonText']) ? $buttonText['prevButtonText'] : _formulize_DMULTI_PREV;
+    $multipageOptions['leaveButtonText'] = (is_array($buttonText) AND $buttonText['leaveButtonText']) ? $buttonText['leaveButtonText'] : _formulize_SAVE_AND_LEAVE;
+    $multipageOptions['saveButtonText'] = (is_array($buttonText) AND $buttonText['saveButtonText']) ? $buttonText['saveButtonText'] :  _formulize_SAVE;
+    $multipageOptions['finishButtonText'] = (is_array($buttonText) AND $buttonText['finishButtonText']) ? $buttonText['finishButtonText'] : _formulize_DMULTI_SAVE;
+    $multipageOptions['nextButtonText'] = (is_array($buttonText) AND $buttonText['nextButtonText']) ? $buttonText['nextButtonText'] : _formulize_DMULTI_NEXT;
     $multipageOptions['printall'] = $screen->getVar('printall');
     $multipageOptions['displaycolumns'] = $screen->getVar('displaycolumns') == 1 ? "onecolumn" : "twocolumns";
     $multipageOptions['column1width'] = $screen->getVar('column1width') ? $screen->getVar('column1width') : '20%';
@@ -529,7 +539,7 @@ $multipageTemplates['themes'] = icms_view_theme_Factory::getThemesList();
 $themeDefaultPath = XOOPS_ROOT_PATH."/modules/formulize/templates/screens/".$screen->getVar('theme')."/default/".$settings['type']."/";
 $templates['seedtemplates'] = $themeDefaultPath;
 if(!file_exists($themeDefaultPath)) {
-    $templates['seedtemplates'] = str_replace($screen->getVar('theme'), '', $themeDefaultPath);    
+    $templates['seedtemplates'] = str_replace($screen->getVar('theme').'/default', 'default', $themeDefaultPath);    
 }
 
 // common values should be assigned to all tabs

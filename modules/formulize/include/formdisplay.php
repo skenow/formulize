@@ -64,6 +64,9 @@ function memory_usage() {
 }
 
 
+// set once, outside class and methods, so it is set once and then all forms and subforms can fill it up as they are called and rendered
+$GLOBALS['formulize_startHiddenElements'] = array();
+
 // NEED TO USE OUR OWN VERSION OF THE CLASS, TO GET ELEMENT NAMES IN THE TR TAGS FOR EACH ROW <-- that's how it started... now so much more
 class formulize_themeForm extends XoopsThemeForm {
     
@@ -84,7 +87,7 @@ class formulize_themeForm extends XoopsThemeForm {
      * @param   string  $class  CSS class name for <td> tag
      * @name    string  $name   name of the element being inserted, which we keep so we can then put the right id tag into its row
      */
-    public function insertBreakFormulize($extra = '', $class= '', $name, $element_handle) {
+    public function insertBreakFormulize($extra = '', $class= '', $name='', $element_handle='') {
         $ibContents = $extra."<<||>>".$name."<<||>>".$element_handle."<<||>>".$class; // can only assign strings or real element objects with addElement, not arrays
         $this->addElement($ibContents);
     }
@@ -144,11 +147,9 @@ class formulize_themeForm extends XoopsThemeForm {
 				. " action='" . $this->getAction()
 				. "' method='" . $this->getMethod()
 				. "' onsubmit='return xoopsFormValidate_" . $ele_name . "();'" . $this->getExtra() . ">";
-                
         $template = $this->getTemplate('toptemplate');
         $ret .= $this->processTemplate($template, array('formTitle'=>$this->getTitle()));
 		$hidden = '';
-        $GLOBALS['formulize_startHiddenElements'] = array();
 		list($ret, $hidden) = $this->_drawElements($this->getElements(), $ret, $hidden);
         $template = $this->getTemplate('bottomtemplate');
         $ret .= $this->processTemplate($template);
@@ -1130,7 +1131,7 @@ function displayForm($formframe, $entry="", $mainform="", $done_dest="", $button
 			if(!$form) {
 
                 $firstform = 1;
-                if(isset($passedInTitle)) {
+                if(isset($passedInTitle) OR $titleOverride == 'all') {
                     $title = trans($passedInTitle);
                 } elseif($screen) {
                     $title = trans($screen->getVar('title'));
@@ -1242,7 +1243,7 @@ function displayForm($formframe, $entry="", $mainform="", $done_dest="", $button
 
 			if($titleOverride=="1" AND !$firstform) { // set onetooneTitle flag to 1 when function invoked to force drawing of the form title over again
 				$title = trans(getFormTitle($this_fid));
-				$form->insertBreak("<table><th>$title</th></table>","");
+				$form->insertBreakFormulize("<table><th>$title</th></table>","head");
 			}
 
 			// if this form has a parent, then determine the $parentLinks
@@ -1328,7 +1329,7 @@ function displayForm($formframe, $entry="", $mainform="", $done_dest="", $button
 				$subUICols = drawSubLinks($subform_id, $sub_entries, $uid, $groups, $frid, $mid, $fid, $entry);
 				unset($subLinkUI);
 				if(isset($subUICols['single'])) {
-					$form->insertBreak($subUICols['single'], "even");
+					$form->insertBreakFormulize($subUICols['single'], "even");
 				} else {
 					$subLinkUI = new XoopsFormLabel($subUICols['c1'], $subUICols['c2']);
 					$form->addElement($subLinkUI);
@@ -2100,7 +2101,9 @@ function drawSubLinks($subform_id, $sub_entries, $uid, $groups, $frid, $mid, $fi
     }
     
     $viewType = ($showViewButtons == 2 OR $showViewButtons == 3) ? 'Modal' : '';
+    $viewType = stristr($_SERVER['SCRIPT_NAME'], 'subformdisplay-elementsonly.php') ? 'Modal' : $viewType;
     $addViewType = ($showViewButtons == 2) ? 'Modal' : '';
+    $addViewType = stristr($_SERVER['SCRIPT_NAME'], 'subformdisplay-elementsonly.php') ? 'Modal' : $addViewType;
     
 	if((!$_POST['form_submitted'] OR $ignoreFormSubmitted) AND count($sub_entries[$subform_id]) == 0 AND $defaultblanks > 0 AND ($rowsOrForms == "row"  OR $rowsOrForms =='')) {
 	
@@ -2167,13 +2170,25 @@ function drawSubLinks($subform_id, $sub_entries, $uid, $groups, $frid, $mid, $fi
             $hideaddentries = 'hideaddentries';
         }
         
+        $sortClause = " sub.entry_id ";
+        $joinClause = "";
         if(isset($subform_element_object->ele_value["SortingElement"]) AND $subform_element_object->ele_value["SortingElement"]) {
             $sortElementObject = $element_handler->get($subform_element_object->ele_value["SortingElement"]);
             $sortDirection = $subform_element_object->ele_value["SortingDirection"] == "DESC" ? "DESC" : "ASC";
-            $sortClause = " `".$sortElementObject->getVar('ele_handle')."` ".$sortDirection;
-        } else {
-			$sortClause = " entry_id ";
-		}
+            $sortTablePrefix = $sortElementObject->isLinked ? 'source' : 'sub';
+            // if linked, go join to the source element
+            if($sortTablePrefix == 'source') {
+                $sortEleValue = $sortElementObject->getVar('ele_value');
+                $sortEleValue2Parts = explode("#*=:*", $sortEleValue[2]);
+                $sourceFid = $sortEleValue2Parts[0];
+                $sourceHandle = $sortEleValue2Parts[1];
+                $sourceFormObject = $form_handler->get($sourceFid);
+                $joinClause = " LEFT JOIN ".$xoopsDB->prefix("formulize_".$sourceFormObject->getVar('form_handle'))." as source ON sub.`".$sortElementObject->getVar('ele_handle')."` = source.entry_id ";
+                $sortClause = " source.`$sourceHandle` ".$sortDirection;
+            } else {
+                $sortClause = " $sortTablePrefix.`".$sortElementObject->getVar('ele_handle')."` ".$sortDirection;
+            }
+        } 
 		
         if(isset($subform_element_object->ele_value["UserFilterByElement"]) AND $subform_element_object->ele_value["UserFilterByElement"]) {
             $matchingEntryIds = array();
@@ -2183,7 +2198,7 @@ function drawSubLinks($subform_id, $sub_entries, $uid, $groups, $frid, $mid, $fi
                 foreach($matchingEntries as $matchingEntry) {
                     $matchingEntryIds = array_merge($matchingEntryIds, internalRecordIds($matchingEntry, $subform_id));
                 }
-                $filterClause = " AND entry_id IN (".implode(",", $matchingEntryIds).")";
+                $filterClause = " AND sub.entry_id IN (".implode(",", $matchingEntryIds).")";
             } else {
                 $filterClause = " AND false ";
             }
@@ -2192,7 +2207,7 @@ function drawSubLinks($subform_id, $sub_entries, $uid, $groups, $frid, $mid, $fi
         }
         
 		$sformObject = $form_handler->get($subform_id);
-		$subEntriesOrderSQL = "SELECT entry_id FROM ".$xoopsDB->prefix("formulize_".$sformObject->getVar('form_handle'))." WHERE entry_id IN (".implode(",", $sub_entries[$subform_id]).") $filterClause ORDER BY $sortClause";
+		$subEntriesOrderSQL = "SELECT sub.entry_id FROM ".$xoopsDB->prefix("formulize_".$sformObject->getVar('form_handle'))." as sub $joinClause WHERE sub.entry_id IN (".implode(",", $sub_entries[$subform_id]).") $filterClause ORDER BY $sortClause";
 		if($subEntriesOrderRes = $xoopsDB->query($subEntriesOrderSQL)) {
 			$sub_entries[$subform_id] = array();
 			while($subEntriesOrderArray = $xoopsDB->fetchArray($subEntriesOrderRes)) {
@@ -2676,7 +2691,7 @@ function compileElements($fid, $form, $element_handler, $prevEntry, $entry, $go_
                 // 2 is the number of default blanks, 3 is whether to show the view button or not, 4 is whether to use captions as headings or not, 5 is override owner of entry, $owner is mainform entry owner, 6 is hide the add button, 7 is the conditions settings for the subform element, 8 is the setting for showing just a row or the full form, 9 is text for the add entries button
                 $subUICols = drawSubLinks($thissfid, $sub_entries, $uid, $groups, $frid, $mid, $fid, $entry, $customCaption, $customElements, $ele_value[2], $ele_value[3], $ele_value[4], $ele_value[5], $owner, $ele_value[6], $ele_value[7], $this_ele_id, $ele_value[8], $ele_value[9], $i);
 				if(isset($subUICols['single'])) {
-					$form->insertBreak($subUICols['single'], "even");
+					$form->insertBreakFormulize($subUICols['single'], "even");
 				} else {
 					$subLinkUI = new XoopsFormLabel($subUICols['c1'], $subUICols['c2']);
 					$form->addElement($subLinkUI);
@@ -2701,7 +2716,7 @@ function compileElements($fid, $form, $element_handler, $prevEntry, $entry, $go_
                 $form->addElement($gridElement);
                 unset($gridElement); // because addElement received values by reference, we need to destroy it here, so if it is recreated in a subsequent iteration, we don't end up overwriting elements we've already assigned. Ack! Ugly!
 			} else {
-				$form->insertBreak($gridContents, "head"); // head is the css class of the cell
+				$form->insertBreakFormulize($gridContents, "head"); // head is the css class of the cell
 			}
 		} elseif($ele_type == "ib" OR is_array($form_ele)) {
 			// if it's a break, handle it differently...$form_ele may be an array if it's a non-interactive element such as a grid
@@ -2793,7 +2808,7 @@ function compileElements($fid, $form, $element_handler, $prevEntry, $entry, $go_
 // $groups is deprecated and not used in this function any longer
 // $owner_groups is used when dealing with a usernames or fullnames selectbox
 // $element is the element object representing the element we're loading the previously saved value for
-function loadValue($prevEntry, $element, $ele_value, $owner_groups, $groups, $entry, $profileForm="") {
+function loadValue($prevEntry, $element, $ele_value, $owner_groups, $groups, $entry_id, $profileForm="") {
 
 	global $myts;
 	/*
@@ -2845,7 +2860,7 @@ function loadValue($prevEntry, $element, $ele_value, $owner_groups, $groups, $en
      				// if the handle was not found in the existing values for this entry, then return the ele_value, unless we're looking at an existing entry, and then we need to clear defaults first
                 // unless we're supposed to use the defaults when the element is blank
      				if(!is_numeric($key) AND $key=="") { 
-                    if($entry AND $element->getVar('ele_use_default_when_blank') == false) {
+                    if($entry_id AND $element->getVar('ele_use_default_when_blank') == false) {
                         // clear defaults if applicable/necessary...
      						switch($type) {
      							case "text":
@@ -2973,7 +2988,7 @@ function loadValue($prevEntry, $element, $ele_value, $owner_groups, $groups, $en
 								}
 							}
 						}							
-						if ($type == "radio" AND $entry != "new" AND ($value === "" OR is_null($value)) AND array_search(1, $ele_value)) { // for radio buttons, if we're looking at an entry, and we've got no value to load, but there is a default value for the radio buttons, then use that default value (it's normally impossible to unset the default value of a radio button, so we want to ensure it is used when rendering the element in these conditions)
+						if ($type == "radio" AND $entry_id != "new" AND ($value === "" OR is_null($value)) AND array_search(1, $ele_value)) { // for radio buttons, if we're looking at an entry, and we've got no value to load, but there is a default value for the radio buttons, then use that default value (it's normally impossible to unset the default value of a radio button, so we want to ensure it is used when rendering the element in these conditions)
 							$ele_value = $ele_value;
 						} elseif ($type != "select")
 						{
@@ -3000,7 +3015,9 @@ function loadValue($prevEntry, $element, $ele_value, $owner_groups, $groups, $en
 					}
 					break;
 				case "date":
-
+					if(!$value AND substr($ele_value[0],0,1) == '{' AND substr($ele_value[0],-1) == '}') {
+						$value = $ele_value[0];
+					}
 					$ele_value[0] = $value;
 
 					break;
@@ -3549,7 +3566,10 @@ jQuery.ajaxSetup({
 function loadSub(dialogObject) {
     dialogObject.empty();
     dialogObject.html('<div id="subentry-dialog-content"><center><?php print $workingMessageGif; ?></center></div>');
-    dialogObject.load('<?php print XOOPS_URL; ?>/modules/formulize/include/subformdisplay-elementsonly.php?fid='+dialogObject.data('fid')+'&entry_id='+dialogObject.data('next_entry_id')+'&subformElementId='+dialogObject.data('subformElementId'));
+    dialogObject.load('<?php print XOOPS_URL; ?>/modules/formulize/include/subformdisplay-elementsonly.php?fid='+dialogObject.data('fid')+'&entry_id='+dialogObject.data('next_entry_id')+'&subformElementId='+dialogObject.data('subformElementId'), function() {
+        jQuery(".ui-dialog-content").scrollTop(dialogObject.yposition);
+        if(typeof setDatePickerMinMaxValues === 'function') { setDatePickerMinMaxValues(); }
+    });
 }
 
 function redrawSubRow(entry_id,subformElementId) {
@@ -3584,8 +3604,6 @@ function goSubModal(ent, fid, frid, mainformFid, mainformEntryId, subformElement
     subEntryDialog.data('subformElementId', subformElementId);
     subEntryDialog.data('yposition', modalScroll);
     subEntryDialog.dialog('open');
-    setTimeout(function() {jQuery(".ui-dialog-content").scrollTop(modalScroll);}, 1000 );
-    
 }
 
 function saveSub(reload) {
@@ -3594,36 +3612,45 @@ function saveSub(reload) {
             savingSubEntry = true;
             subEntryDialog.children('div').css('opacity', '0.5');
             subEntryDialog.append('<div id=savingmessage style="padding-top: 10px;"><?php print $savingMessageGif; ?></div>');
-            var formData = subEntryDialog.children('form').serialize();
-            jQuery.post('<?php print XOOPS_URL; ?>/modules/formulize/include/readelements.php', formData, function() {
-                jQuery.post('<?php print XOOPS_URL; ?>/modules/formulize/formulize_xhr_responder.php?op=update_derived_value&uid=<?php global $xoopsUser; print $xoopsUser ? $xoopsUser->getVar('uid') : 0; ?>&fid='+subEntryDialog.data('mainformFid')+'&frid='+subEntryDialog.data('frid')+'&entryId='+subEntryDialog.data('mainformEntryId')+'&returnElements=1', function(data) {
-                savingSubEntry = false;
-                    if(reload && reload == 'reload') {
-                    jQuery('#formulize_mainform').append(jQuery('#formulize_modal .delbox:checked'));
-                    subEntryDialog.dialog('close');
-                    validateAndSubmit();
-                } else {
-                        if(reload && reload == 'leave') {
+            jQuery('#formulize_modal input[type="hidden"]').prop('disabled', false);
+            var formData = new FormData(jQuery('#formulize_modal')[0]);
+            //var formData = subEntryDialog.children('form').serialize();
+            jQuery.post({
+                url: '<?php print XOOPS_URL; ?>/modules/formulize/include/readelements.php',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function() {
+                    jQuery.post('<?php print XOOPS_URL; ?>/modules/formulize/formulize_xhr_responder.php?op=update_derived_value&uid=<?php global $xoopsUser; print $xoopsUser ? $xoopsUser->getVar('uid') : 0; ?>&fid='+subEntryDialog.data('mainformFid')+'&frid='+subEntryDialog.data('frid')+'&entryId='+subEntryDialog.data('mainformEntryId')+'&returnElements=1', function(data) {
+                        savingSubEntry = false;
+                        if(reload && reload == 'reload') {
+                            jQuery('#formulize_mainform').append(jQuery('#formulize_modal .delbox:checked'));
                             subEntryDialog.dialog('close');
+                            validateAndSubmit();
                         } else {
-                            if(reload && reload == 'new') {
-                                subEntryDialog.data('next_entry_id', 'new');
+                            if(reload && reload == 'leave') {
+                                subEntryDialog.dialog('close');
+                            } else {
+                                if(reload && reload == 'new') {
+                                    subEntryDialog.data('next_entry_id', 'new');
+                                }
+                                loadSub(subEntryDialog);
                             }
-                    loadSub(subEntryDialog);
+                            redrawSubRow(subEntryDialog.data('entry_id'), subEntryDialog.data('subformElementId'));
+                            var elements = JSON.parse(data);
+                            for(elementId in elements) {
+                                var rowSelector = 'formulize-de_'+subEntryDialog.data('mainformFid')+'_'+subEntryDialog.data('mainformEntryId')+'_'+elementId;
+                                // if the element is shown, and there has been a change of value, then update it
+                                if(window.document.getElementById(rowSelector) !== null && window.document.getElementById(rowSelector).style.display != 'none'
+                                    && jQuery('#'+rowSelector).html() != elements[elementId]) {
+                                        jQuery('#'+rowSelector).empty();
+                                        jQuery('#'+rowSelector).append(elements[elementId]);
+                                }
+                            }
                         }
-                    redrawSubRow(subEntryDialog.data('entry_id'), subEntryDialog.data('subformElementId'));
-                        var elements = JSON.parse(data);
-                        for(elementId in elements) {
-                            var rowSelector = 'formulize-de_'+subEntryDialog.data('mainformFid')+'_'+subEntryDialog.data('mainformEntryId')+'_'+elementId;
-                            // if the element is shown, and there has been a change of value, then update it
-                            if(window.document.getElementById(rowSelector) !== null && window.document.getElementById(rowSelector).style.display != 'none'
-                                && jQuery('#'+rowSelector).html() != elements[elementId]) {
-                                    jQuery('#'+rowSelector).empty();
-                                    jQuery('#'+rowSelector).append(elements[elementId]);
-                            }
+                    });
                 }
-                    }
-                });
             });
         }
     }
@@ -3673,7 +3700,11 @@ $useragent=$_SERVER['HTTP_USER_AGENT'];
 if(!preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i',$useragent)||preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i',substr($useragent,0,4))) {
 ?>
 jQuery(document).ready(function() {
-    jQuery(".icms-date-box").each(function(){
+    setDatePickerMinMaxValues();
+});
+
+function setDatePickerMinMaxValues() {
+	jQuery(".icms-date-box").each(function(){
         date_input = jQuery(this);
         var options = {};
         // copy datepicker_defaults so the original is not modified
@@ -3697,7 +3728,8 @@ jQuery(document).ready(function() {
             date_input.datepicker(options);
         }
     });
-});
+}
+
 function check_date_limits(element_id) {
     var date_input = jQuery("#"+element_id);
     var min_date = date_input.attr('min-date');
@@ -3913,6 +3945,7 @@ function checkCondition(handle, currentHTML, elementValuesForURL) {
             if(data != '{NOCHANGE}' && (currentHTML != data || (window.document.getElementById('formulize-'+handle) !== null && window.document.getElementById('formulize-'+handle).style.display == 'none'))) {
 				jQuery('#formulize-'+handle).empty();
 				jQuery('#formulize-'+handle).append(data);
+				if(typeof setDatePickerMinMaxValues === 'function') { setDatePickerMinMaxValues(); }
                 // unless it is a hidden element, show the table row...
                 if(parseInt(data.indexOf(\"input type='hidden'\"))!=0) {
                     if(window.document.getElementById('formulize-'+handle) !== null) {

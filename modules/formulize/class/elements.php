@@ -227,7 +227,7 @@ class formulizeElementsHandler {
 		}
 		return $instance;
 	}
-	function &create() {
+	function create() {
 		return new formulizeformulize();
 	}
 
@@ -454,13 +454,13 @@ class formulizeElementsHandler {
 	}
 
 	// id_as_key can be true, false or "handle" or "element_id" in which case handles or the element ids will be used
-	function &getObjects($criteria = null, $id_form , $id_as_key = false){
+	function &getObjects($criteria = null, $id_form = 0, $id_as_key = false){
 		$ret = array();
 		$limit = $start = 0;
 //		awareness of $criteria added, Sept 1 2005, jwe
 //		removal of ele_display=1 from next line and addition of the renderWhere line in the conditional below
-		$sql = 'SELECT * FROM '.formulize_TABLE.' WHERE id_form='.$id_form;
-
+        $idFormOperator = $id_form > 0 ? "=" : ">";
+		$sql = 'SELECT * FROM '.formulize_TABLE.' WHERE id_form '.$idFormOperator.' '.intval($id_form);
 
 		if( isset($criteria)) { 
 			$sql .= $criteria->render() ? ' AND ('.$criteria->render().')' : '';
@@ -542,7 +542,7 @@ class formulizeElementsHandler {
 	}
 	
 	// this method is used by custom elements, to do final output from the "local" formatDataForList method, so the custom element developer can simply set booleans there, and they will be enforced here
-	function formatDataForList($value) {
+	function formatDataForList($value, $handle="", $entry_id=0) {
 		global $myts;
 		if($this->length == 0) {
 			$this->length = 35;

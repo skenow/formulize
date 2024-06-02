@@ -3,16 +3,23 @@
 	<{include file="db:admin/element_linkedoptionlist.html"}>
 
     <{include file="db:admin/element_options_delimiter_choice.html"}>
-    
+
        <div class="form-item">
     <fieldset>
 		<legend>If the options are linked -- or are {FULLNAMES} or {USERNAMES}</legend>
 		<div class="form-item">
 		<fieldset>
-			<legend>Limit them to values from the groups selected here</legend>
-			<select id="element-formlink_scope" name="element_formlink_scope[]" size="10" multiple>
-			<{html_options options=$content.formlink_scope_options selected=$content.formlink_scope}>
-			</select>
+			<legend>Limit them to...</legend>
+            <div class="form-radios">
+                <label for="elements-ele_value[formlink_useonlyusersentries]-1"><input type="radio" id="elements-ele_value[formlink_useonlyusersentries]-1" name="elements-ele_value[formlink_useonlyusersentries]" value="1"<{if $content.ele_value.formlink_useonlyusersentries eq 1}> checked="checked"<{/if}>/>The entries created by the user</label>
+            </div>
+            <div class="form-radios">
+                <label for="elements-ele_value[formlink_useonlyusersentries]-0"><input type="radio" id="elements-ele_value[formlink_useonlyusersentries]-0" name="elements-ele_value[formlink_useonlyusersentries]" value="0"<{if $content.ele_value.formlink_useonlyusersentries eq 0}> checked="checked"<{/if}>/>The entries created by these groups:</label>
+            </div>
+            <br>
+            <select id="element-formlink_scope" name="element_formlink_scope[]" size="10" multiple>
+            <{html_options options=$content.formlink_scope_options selected=$content.formlink_scope}>
+            </select>
             <br/><br/>
             <fieldset>
                 <div class="form-radios">
@@ -33,19 +40,20 @@
             </div>
         </fieldset>
 	</fieldset>
-</div>  
-    
+</div>
+
   <{include file="db:admin/element_linkedfilter.html"}>
-  
+
   <{include file="db:admin/element_linkedsortoptions.html"}>
-    
+
   <{include file="db:admin/alternate_fields_for_linked_elements.html"}>
-  
+
 </div>
 
 <script>
 $("#snapshot-<{$content.ele_value.snapshot}>").attr('checked',1);
-    
+$("#selfreference-<{$content.ele_value.selfreference}>").attr('checked',1);
+
     $('input[name="linked_yesno"]').change(function() {
         if($('input[name="linked_yesno"]:checked').val() == 1) {
             $('#snapshot-values').show(200);

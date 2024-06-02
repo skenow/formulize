@@ -546,6 +546,7 @@ define("_AM_FORM_DATATYPE_VARCHAR2"," characters (varchar)");
 define("_AM_FORM_DATATYPE_CHAR1","Store as text, exactly ");
 define("_AM_FORM_DATATYPE_CHAR2"," characters in length (char)");
 define("_AM_FORM_DATATYPE_DATE"," Store as a date");
+define("_AM_FORM_DATATYPE_DATETIME"," Store as a date and time");
 
 
 // SCREENS...including multipage
@@ -798,7 +799,7 @@ define("_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION_REPLACE", "Replace t
 define("_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION_REMOVE", "Remove the specified value from the current value");
 define("_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION_APPEND", "Append the specified value to the end of the current value");
 
-define("_AM_FORMULIZE_SCREEN_TEMPLATE_DESC_TEMPLATE", "Enter Smarty html template code here.");
+define("_AM_FORMULIZE_SCREEN_TEMPLATE_DESC_TEMPLATE", "Enter Smarty html template code here. Use the <{ }> for the Smarty tags (not { } like normal). Important: make sure <a href='".XOOPS_URL."/modules/system/admin.php?fct=preferences&op=show&confcat_id=1' target='_blank'>your site preferences</a> are set to \"always check templates for modifications\" if you are editing your template code.");
 define("_AM_FORMULIZE_SCREEN_TEMPLATE_DESC_CUSTOM_CODE", "Enter PHP code here. Any variables defined in this code will be available in the Smarty template.");
 
 
@@ -820,6 +821,7 @@ define("_AM_FORMULIZE_SCREEN_TEMPLATE_SAVEBUTTONTEXT", "Text for the 'Save' butt
 define("_AM_FORMULIZE_SCREEN_TEMPLATE_DONEBUTTONTEXT", "Text for the 'Done' button: ");
 define("_AM_FORMULIZE_SCREEN_TEMPLATE_DONEDEST", "The URL that users should be directed to when leaving the page (Optional, Formulize will set this automatically when the page is displayed, based on where the user came from, and will return them to that page after. Form submissions are saved when leaving the page.)");
 define("_AM_FORMULIZE_SCREEN_TEMPLATE_HELP", "All variables defined in the custom code below will be available in the template by using <{\$variableName}>, and you can also use <{\$saveButton}> to position the a button that triggers saving of any form elements, and <{\$doneButton}> to position a button that triggers saving and will redirect the user to the done destination. Button text and the done destination can be set in the 'Options' tab.");
+define("_AM_FORMULIZE_SCREEN_TEMPLATE_VIEWENTRYSCREEN", "If you use the <i>viewEntryLink</i> or <i>viewEntryButton</i> functions, which screen should be used to display the entries?");
 
 define("_AM_FORMULIZE_EXPLODE_COLUMNS_ON_EXPORT", "How should values in this element be handled when exporting to spreadsheet?");
 define("_AM_FORMULIZE_EXPLODE_COLUMNS_ON_EXPORT_OFF", "Show as a comma separated list inside one cell");

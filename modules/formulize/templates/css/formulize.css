@@ -179,7 +179,7 @@
   font-size: 15px; }
 
 .formulize-form-submit-button {
-    background-color: #008CC4 !important; 
+    background-color: #008CC4 !important;
     text-indent: 0;
     font-weight: normal;
     min-width: 185px;
@@ -192,8 +192,10 @@
 }
 
 .formulize-page-navigation {
-  display: inline-block;
-  margin: 1em 1em 1em 0;
+  display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	margin: 1em 1em 1em 0;
   padding: 0.6em;
   background-color: #f7f7f7;
   border-radius: 4px; }
@@ -297,6 +299,10 @@ a.formulize-open-close-link {
   width: 350px;
   font-size: 1.2em; }
 
+.subform-textarea-element {
+    white-space: normal;
+}
+
 .formulize-subform-table {
   width: auto;
   border-collapse: collapse;
@@ -391,7 +397,6 @@ button:focus, input[type='submit']:focus, input[type='button']:focus, input[type
   display: inline-block; }
 
 .formulize-element-edit-link {
-  float: right;
   font-weight: normal;
   border: 1px solid #b3b3b3;
   padding: 0.1em 0.5em;
@@ -424,7 +429,8 @@ td.even .formulize-element-edit-link:hover, td.odd .formulize-element-edit-link:
   #formulize-entry-lock-message #formulize-entry-lock-icon {
     float: left;
     font-size: 200%;
-    padding: 0.4em 0.7em; }
+    position: relative;
+    top: -0.2em }
 
 td a.heading-locked, td a.heading-unlocked {
   font-family: "formulize-icons";
@@ -528,7 +534,7 @@ td.head div.xoops-form-element-caption, td.head div.xoops-form-element-caption-r
 }
 
 @media print {
-    
+
   body {
     font-size: 10pt; }
 
@@ -602,7 +608,7 @@ td.head div.xoops-form-element-caption, td.head div.xoops-form-element-caption-r
 
   .formulize-element-edit-link {
     display: none; }
-    
+
 }
 
 .appcatspacer {
@@ -619,13 +625,17 @@ td.head div.xoops-form-element-caption, td.head div.xoops-form-element-caption-r
     text-decoration: line-through;
     color: red;
 }
-          
+
 .right-align-text {
     text-align: right;
 }
 
 .formulize-spacer-column {
     width: auto;
+}
+
+span.formulize-filter-value {
+    display: none;
 }
 
 #formulize-button-controls input {
@@ -637,4 +647,33 @@ div[id^=cellcontents_1_] {
 }
 div[id^=cellcontents_1_] label {
     white-space: nowrap;
+}
+
+.formulize-display-element-edit-icon {
+	float: left; margin-right: 5px; margin-bottom: 5px;
+}
+
+.formulize-display-element-contents {
+	padding-left: 2em;
+}
+
+.formulize-uploaded-image-thumbnail {
+  max-width: 200px;
+  display: inline;
+  border: 1px solid black;
+}
+
+table.formulize-grid td.head {
+  padding-bottom: 0.5em;
+}
+
+.formulize-grid td {
+	padding-right: 1em;
+	vertical-align: bottom;
+}
+
+#listofentries div.main-cell-div > span,
+#listofentries div.formulize-display-element-contents > span {
+	display: block;
+	padding-bottom: 0.3em;
 }

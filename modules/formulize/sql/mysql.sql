@@ -326,6 +326,7 @@ CREATE TABLE formulize_saved_views (
   sv_quicksearches text,
   sv_global_search text,
   sv_pubfilters text,
+  sv_entriesperpage varchar(4) NOT NULL default '',
   PRIMARY KEY (sv_id)
 ) ENGINE=InnoDB;
 
@@ -371,6 +372,7 @@ CREATE TABLE formulize_id (
   store_revisions tinyint(1) NOT NULL default '0',
   on_before_save text,
   on_after_save text,
+  on_delete text,
   custom_edit_check text,
   note text,
   send_digests tinyint(1) NOT NULL default 0,
@@ -386,6 +388,7 @@ CREATE TABLE formulize (
   ele_colhead varchar(255) NULL default '',
   ele_handle varchar(255) NOT NULL default '',
   ele_order smallint(2) NOT NULL default '0',
+  ele_sort smallint(2) NULL default NULL,
   ele_req tinyint(1) NOT NULL default '1',
   ele_encrypt tinyint(1) NOT NULL default '0',
   ele_value text NOT NULL,
@@ -395,6 +398,7 @@ CREATE TABLE formulize (
   ele_display text NOT NULL,
   ele_disabled text NOT NULL,
   ele_filtersettings text NOT NULL,
+	ele_disabledconditions text NOT NULL,
   ele_forcehidden tinyint(1) NOT NULL default '0',
   ele_private tinyint(1) NOT NULL default '0',
   ele_use_default_when_blank tinyint(1) NOT NULL default '0',
@@ -452,6 +456,7 @@ CREATE TABLE formulize_screen_template (
   donedest varchar(255) NOT NULL default '',
   savebuttontext varchar(255) NOT NULL default '',
   donebuttontext varchar(255) NOT NULL default '',
+  viewentryscreen varchar(10) NOT NULL default '',
   template text NOT NULL,
   PRIMARY KEY (`templateid`),
   INDEX i_sid (`sid`)

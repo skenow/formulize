@@ -98,7 +98,7 @@ class formulizeListOfEntriesScreen extends formulizeScreen {
         $this->initVar("viewentryscreen", XOBJ_DTYPE_TXTBOX, NULL, false, 10);
         $this->initVar("fundamental_filters", XOBJ_DTYPE_ARRAY);
     }
-	
+
 }
 
 
@@ -334,7 +334,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
     // $screen is a screen object
     // since the number of params for the render method can vary from screen type to screen type, this should take a single array that we unpack in the method, so the number of params is common to all types, ie: one array
     function render($screen, $entry, $loadThisView) {
-        $previouslyRenderingScreen = $GLOBALS['formulize_screenCurrentlyRendering'];
+			$previouslyRenderingScreen = (isset($GLOBALS['formulize_screenCurrentlyRendering']) AND $GLOBALS['formulize_screenCurrentlyRendering']) ? $GLOBALS['formulize_screenCurrentlyRendering'] : null;
         $formframe = $screen->getVar('frid') ? $screen->getVar('frid') : $screen->getVar('fid');
         $mainform = $screen->getVar('frid') ? $screen->getVar('fid') : "";
         include_once XOOPS_ROOT_PATH . "/modules/formulize/include/entriesdisplay.php";
@@ -345,8 +345,9 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 
     public function setDefaultListScreenVars($defaultListScreen, $defaultFormScreenId, $formTitle, $fid)
     {
+        global $xoopsConfig;
         // View
-        $defaultListScreen->setVar('defaultview', 'all');
+        $defaultListScreen->setVar('defaultview', serialize(array(XOOPS_GROUP_USERS => FORMULIZE_QUERY_SCOPE_GLOBAL)));
         $defaultListScreen->setVar('usecurrentviewlist', _formulize_DE_CURRENT_VIEW);
         $defaultListScreen->setVar('limitviews', serialize(array(0 => 'allviews')));
         $defaultListScreen->setVar('useworkingmsg', 1);
@@ -387,6 +388,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
         $defaultListScreen->setVar('frid', 0);
         $defaultListScreen->setVar('type', 'listOfEntries');
         $defaultListScreen->setVar('useToken', 1);
+        $defaultListScreen->setVar('theme', $xoopsConfig['theme_set']);
     }
 }
 

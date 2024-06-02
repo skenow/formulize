@@ -73,6 +73,7 @@ if ($_GET['ele_id'] != "new") {
     if (!$defaultOrder) {
         $firstElementOrder = " selected";
     }
+    $defaultSort = $elementObject->getVar('ele_sort');
     $colhead = $elementObject->getVar('ele_colhead');
     $caption = $elementObject->getVar('ele_caption', "f"); // the f causes no stupid reformatting by the ICMS core to take place, like making clickable links, etc
     $ele_type = $elementObject->getVar('ele_type');
@@ -117,6 +118,11 @@ if ($_GET['ele_id'] != "new") {
     $ele_filtersettings = $elementObject->getVar('ele_filtersettings');
     $filterSettingsToSend = (count((array) $ele_filtersettings) > 0) ? $ele_filtersettings : "";
     $display['filtersettings'] = formulize_createFilterUI($filterSettingsToSend, "elementfilter", $fid, "form-3");
+
+    $ele_disabledconditions = $elementObject->getVar('ele_disabledconditions');
+    $disabledConditionsToSend = (count((array) $ele_disabledconditions) > 0) ? $ele_disabledconditions : "";
+    $display['disabledconditions'] = formulize_createFilterUI($ele_disabledconditions, "disabledconditions", $fid, "form-3");
+
     $display['ele_forcehidden'] = $elementObject->getVar('ele_forcehidden') ? " checked" : "";
     $display['ele_private'] = $elementObject->getVar('ele_private') ? " checked" : "";
     $ele_encrypt = $elementObject->getVar('ele_encrypt');
@@ -163,6 +169,9 @@ if ($_GET['ele_id'] != "new") {
         if (!isset($ele_value[4])) {
             $ele_value[4] = isset($formulizeConfig['number_sep']) ? $formulizeConfig['number_sep'] : ',';
         }
+				if (!isset($ele_value[5]) OR $ele_value[5] == '') {
+					$ele_value[5] = "<?php\n";
+				}
     }
 
     $ele_uitext = $elementObject->getVar('ele_uitext');
@@ -171,6 +180,7 @@ if ($_GET['ele_id'] != "new") {
     $fid = intval($_GET['fid']);
     $elementName = "New element";
     $defaultOrder = "bottom";
+    $defaultSort = "";
     $elementObject = false;
     $names['ele_caption'] = $elementName;
     $ele_type = $_GET['type'];
@@ -199,10 +209,12 @@ if ($_GET['ele_id'] != "new") {
             $ele_value[2] = isset($formulizeConfig['number_prefix']) ? $formulizeConfig['number_prefix'] : '';
             $ele_value[3] = isset($formulizeConfig['number_decimalsep']) ? $formulizeConfig['number_decimalsep'] : '.';
             $ele_value[4] = isset($formulizeConfig['number_sep']) ? $formulizeConfig['number_sep'] : ',';
+						$ele_value[0] = "<?php\n";
             break;
         case "subform":
-            $ele_value[2] = 1;
+            $ele_value[2] = 0;
             $ele_value[3] = 1;
+						$ele_value[6] = 'subform';
             $ele_value['simple_add_one_button'] = 1;
             $ele_value['show_delete_button'] = 1;
             $ele_value['show_clone_button'] = 1;
@@ -243,6 +255,7 @@ $formName = printSmart($formObject->getVar('title'), 30);
 $formHandle=printSmart($formObject->getVar('form_handle'), 30);
 
 // package up the elements into a list for ordering purposes
+// also, the sort options
 $orderOptions = array();
 $ele_colheads = $formObject->getVar('elementColheads');
 $ele_captions = $formObject->getVar('elementCaptions');
@@ -250,11 +263,14 @@ foreach($formObject->getVar('elements') as $elementId) {
     $elementTextToDisplay = $ele_colheads[$elementId] ? printSmart($ele_colheads[$elementId]) : printSmart($ele_captions[$elementId]);
     if ($ele_id != $elementId) {
         $orderOptions[$elementId] = "After: ".$elementTextToDisplay;
+        $sortOptions[$elementId] = "Sort by value of: ".$elementTextToDisplay;
     }
 }
 $names['orderoptions'] = $orderOptions;
 $names['defaultorder'] = $defaultOrder;
 $names['firstelementorder'] = $firstElementOrder;
+$names['sortoptions'] = $sortOptions;
+$names['defaultsort'] = $defaultSort;
 
 // common values should be assigned to all tabs
 $common['name'] = '';
@@ -313,16 +329,19 @@ if ($ele_type=='text') {
     $options['ele_value_yes'] = $ele_value['_YES'];
     $options['ele_value_no'] = $ele_value['_NO'];
 } elseif ($ele_type == "subform") {
-    
+
     if(!isset($ele_value['show_delete_button'])) {
         $ele_value['show_delete_button'] = 1;
     }
     if(!isset($ele_value['show_clone_button'])) {
         $ele_value['show_clone_button'] = 1;
     }
-    
+    if(!isset($ele_value['FilterByElementStartState'])) {
+        $ele_value['FilterByElementStartState'] = 0;
+    }
+
     $ele_value['enforceFilterChanges'] = isset($ele_value['enforceFilterChanges']) ? $ele_value['enforceFilterChanges'] : 1;
-    
+
     $ele_value[1] = explode(",",$ele_value[1]);
     if (is_string($ele_value['disabledelements'])) {
         $ele_value['disabledelements'] = explode(",",$ele_value['disabledelements']);
@@ -389,7 +408,11 @@ if ($ele_type=='text') {
 
 } elseif ($ele_type=="radio") {
     $ele_value = formulize_mergeUIText($ele_value, $ele_uitext);
-    $options['useroptions'] = $ele_value;
+    $newEleValueForRadios = array();
+    foreach($ele_value as $k=>$v) {
+        $newEleValueForRadios[str_replace('&', '&amp;', $k)] = $v;
+    }
+    $options['useroptions'] = $newEleValueForRadios;
 
 } elseif ($ele_type=="select") {
     if ($ele_id == "new") {
@@ -419,7 +442,7 @@ if ($ele_type=='text') {
 
     list($formlink, $selectedLinkElementId) = createFieldList($ele_value[2]);
     $options['linkedoptions'] = $formlink->render();
-    
+
     list($optionsLimitByElement, $limitByElementElementId) = createFieldList($ele_value['optionsLimitByElement'], false, false, "elements-ele_value[optionsLimitByElement]", _NONE);
     $options['optionsLimitByElement'] = $optionsLimitByElement->render();
     if($limitByElementElementId) {
@@ -428,7 +451,7 @@ if ($ele_type=='text') {
             $options['optionsLimitByElementFilter'] = formulize_createFilterUI($ele_value['optionsLimitByElementFilter'], "optionsLimitByElementFilter", $limitByElementElementObject->getVar('id_form'), "form-2");
         }
     }
-    
+
 
     // setup the list value and export value option lists, and the default sort order list, and the list of possible default values
     if ($options['islinked']) {
@@ -465,7 +488,7 @@ if ($ele_type=='text') {
             }
             $options['optionDefaultSelectionDefaults'] = $ele_value[13];
             $options['optionDefaultSelection'] = $allLinkedValues; // array with keys as entry ids and values as text
-            
+
             // handle additional linked source mapping options...
             list($thisFormFieldList, $thisFormFieldListSelected) = createFieldList('throwawayvalue', false, $fid, 'throwawayname', 'This Form');
             $options['mappingthisformoptions'] = $thisFormFieldList->getOptions();
@@ -642,6 +665,8 @@ function createDataTypeUI($ele_type, $element,$id_form,$ele_encrypt) {
         $charType->addOption('char', _AM_FORM_DATATYPE_CHAR1.$charTypeSize->render()._AM_FORM_DATATYPE_CHAR2);
         $dateType = new XoopsFormRadio('', 'element_datatype', $defaultType);
         $dateType->addOption('date', _AM_FORM_DATATYPE_DATE);
+        $dateTimeType = new XoopsFormRadio('', 'element_datatype', $defaultType);
+        $dateTimeType->addOption('datetime', _AM_FORM_DATATYPE_DATETIME);
         if ($defaultType != "text" AND $defaultType != "int" AND $defaultType != "decimal" AND $defaultType != "varchar" AND $defaultType != "char" AND $defaultType != "date") {
             $otherType = new XoopsFormRadio('', 'element_datatype', $defaultType);
             $otherType->addOption($defaultType, _AM_FORM_DATATYPE_OTHER.$defaultType);
@@ -653,6 +678,7 @@ function createDataTypeUI($ele_type, $element,$id_form,$ele_encrypt) {
         $dataTypeTray->addElement($varcharType);
         $dataTypeTray->addElement($charType);
         $dataTypeTray->addElement($dateType);
+        $dataTypeTray->addElement($dateTimeType);
         $renderedUI .= $dataTypeTray->render();
     }
     return $renderedUI;
@@ -664,7 +690,7 @@ function formulize_mergeUIText($values, $uitext) {
         // don't alter linked selectbox properties
         return $values;
     }
-    
+
     if (is_array($values)) {
         $newvalues = array();
         foreach($values as $key=>$value) {

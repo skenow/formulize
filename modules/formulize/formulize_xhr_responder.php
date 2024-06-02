@@ -138,8 +138,18 @@ switch($op) {
     break;
 
   case 'get_element_html':
+		/*
+		Renders elements for display inside lists of entries, because the user clicked the icon
+		the GET param0 through param4 are:
+		1 - handle
+		2 - element_id
+		3 - entryId
+		4 - fid
+		5 - deInstanceCounter
+		*/
     include_once XOOPS_ROOT_PATH."/modules/formulize/include/elementdisplay.php";
     displayElement("", formulize_db_escape($_GET['param2']), intval($_GET['param3']));
+		print "<input type='hidden' name='detoken_".intval($_GET['param4']).'_'.intval($_GET['param3']).'_'.intval($_GET['param2'])."' value=".$GLOBALS['xoopsSecurity']->createToken(0, 'formulize_display_element_token').">";
     break;
 
   case 'get_element_value':
@@ -172,14 +182,17 @@ switch($op) {
             ${$k} = $v;
         }
       } elseif(substr($k, 0, 3) == 'de_') {
-        $keyParts = explode("_", $k); // ANY KEY PASSED THAT IS THE NAME OF A DE_ ELEMENT IN MARKUP, WILL GET UNPACKED AS A VALUE THAT CAN BE SUBBED IN WHEN DOING LOOKUPS LATER ON.
+        $keyParts = explode("_", $k); // ANY KEY PASSED THAT IS THE NAME OF A DE_ ELEMENT IN MARKUP, WILL GET UNPACKED AS A VALUE THAT CAN BE SUBBED IN WHEN DOING LOOKUPS LATER ON. This is because these elements are the elements that might determine how the conditionally rendered element behaves; it might be sensitive to these values.
         $passedEntryId = $keyParts[2];
         $passedElementId = $keyParts[3];
         $passedElementObject = $element_handler->get($passedElementId);
         $handle = $passedElementObject->getVar('ele_handle');
-        $databaseReadyValue = prepDataForWrite($passedElementObject, $v, $_GET['entryId']);
-        $databaseReadyValue = $databaseReadyValue === "{WRITEASNULL}" ? NULL : $databaseReadyValue;
-            if(is_string($v) && substr($v, 0, 9)=="newvalue:") { $sendBackValue[$k] = $databaseReadyValue; }
+        if(is_string($v) && substr($v, 0, 9)=="newvalue:") {
+					$databaseReadyValue = 'new';
+				} else {
+					$databaseReadyValue = prepDataForWrite($passedElementObject, $v, $entryId);
+					$databaseReadyValue = $databaseReadyValue === "{WRITEASNULL}" ? NULL : $databaseReadyValue;
+				}
         $GLOBALS['formulize_asynchronousFormDataInDatabaseReadyFormat'][$passedEntryId][$handle] = $databaseReadyValue;
         $apiFormatValue = prepvalues($databaseReadyValue, $handle, $passedEntryId); // will be an array
         if(is_array($apiFormatValue) AND count((array) $apiFormatValue)==1) {
@@ -188,64 +201,38 @@ switch($op) {
         $GLOBALS['formulize_asynchronousFormDataInAPIFormat'][$passedEntryId][$handle] = $apiFormatValue;
       }
     }
-    $elementObject = $element_handler->get($elementId);
-    $html = "";
-    if($onetoonekey AND $entryId != 'new') {
-      // the onetoonekey is what changed, not a regular conditional element, so in that case, we need to re-determine the entryId that we should be displaying
-      // rebuild entries and fids so it only has the main form entry in it, since we want to get the correct other one-to-one entries back
-      $onetooneentries = array($onetoonefid => array($onetooneentries[$onetoonefid][0]));
-      $onetoonefids = array($onetoonefid);
-      $checkForLinksResults = checkForLinks($onetoonefrid, $onetoonefids, $onetoonefid, $onetooneentries);
-      $entryId = $checkForLinksResults['entries'][$elementObject->getVar('id_form')][0];
-      $entryId = $entryId ? $entryId : 0;
-    } elseif($onetoonekey) {
-      // we're supposed to pull in an entry based solely on the value in the conditional element...
-      // what we need is the element in the dependent one to one form that is linked to the main form
-      include_once XOOPS_ROOT_PATH . "/modules/formulize/class/frameworks.php";
-      include_once XOOPS_ROOT_PATH . "/modules/formulize/class/data.php";
-      $relationship = new formulizeFramework($onetoonefrid);
-      $targetElement = false;
-      foreach($relationship->getVar('links') as $link) {
-        if($link->getVar('form1')==$onetoonefid AND $link->getVar('form2')==$fid AND $link->getVar('relationship')==1) {
-          $sourceElement = $link->getVar('key1');
-          $targetElement = $link->getVar('key2');
-        } elseif($link->getVar('form2')==$onetoonefid AND $link->getVar('form1')==$fid AND $link->getVar('relationship')==1) {
-          $sourceElement = $link->getVar('key2');
-          $targetElement = $link->getVar('key1');
-        }
-        if($targetElement) {
-          $data_handler = new formulizeDataHandler($onetoonefid);
-          if($link->getVar('common')) {
-            $entryId = $data_handler->findFirstEntryWithValue($targetElement, $databaseReadyValue);  
-          } elseif($sourceElement==$passedElementId) {
-            $entryId = $databaseReadyValue; // use entry id of the value selected in the conditional element that triggered this -- expected when the A form contains a link to the B form, and the B form values are supposed to come in when something is selected
-          }
-          break;
-        }
-      }
-    }
-    if(!$onetoonekey OR ($entryId AND $entryId != 'new')) {
-    if(security_check($fid, $entryId)) {
+		// Normally, the entryId we're rendering is the one displayed in the form at load time, elements are dependent on conditions, but always rendered as in that entry.
+		// In a one-to-one situation, if the relationship is based on a linked element, we need to render elements from the entry selected in the governing element
+		// If the relationship is common value then we need to try to determine which entry is connected to it, if any
+		if($onetoonekey) {
+			if(oneToOneRelationshipLinkBasedOnCommonValue($onetoonefrid, $onetoonefids)) {
+				$onetooneentries = array($onetoonefid => array($onetooneentries[$onetoonefid][0]));
+				$onetoonefids = array($onetoonefid);
+				$checkForLinksResults = checkForLinks($onetoonefrid, $onetoonefids, $onetoonefid, $onetooneentries);
+				$entryId = $checkForLinksResults['entries'][$fid][0];
+				$entryId = $entryId ? $entryId : 'new';
+			} else {
+				$entryId = $databaseReadyValue;
+			}
+		}
+		// render the elements and package them in JSON
+    $jsonSep = '';
+    $json = '{ "elements" : [';
+    foreach(explode(',',$elementId) as $thisElementId) {
+      $elementObject = $element_handler->get($thisElementId);
+			$html = "";
+      $json .= $jsonSep.'{ "handle" : '.json_encode('de_'.$_GET['fid'].'_'.$_GET['entryId'].'_'.$thisElementId);
+      if(security_check($fid, $entryId)) {
         $html = renderElement($elementObject, $entryId);
-        if(count((array) $sendBackValue)>0) {
-          // if we wrote any new values in autocomplete boxes, pass them back so we can alter their values in markup so new entries are not created again!
-          print '{ "data" : '.json_encode($html).', "newvalues" : [';
-          $start = true;
-          foreach($sendBackValue as $key=>$value) {
-            if(!$start) {
-                print ', ';
-            }
-            print '{ "name" : "'.$key.'" , "value" : '.json_encode($value).' }';
-            $start = false;
-          }
-          print "] }";
-        } else {
-            print $html;
-        }
+        $json .= ', "data" : '.json_encode($html);
+      } else {
+       	$json .= ', "data" : '.json_encode('{NOCHANGE}');
       }
-    } else {
-        print '{NOCHANGE}';
+      $json .= '}';
+      $jsonSep = ', '; // set the separator now in case there are more elements to process
     }
+    $json .= ']}';
+    print $json;
     break;
 
 
@@ -305,20 +292,21 @@ switch($op) {
 
     list($views, $viewNames, $viewFrids, $viewPublished) = $formulizeForm->getFormViews($_POST['form_id']);
     $frameworks = $framework_handler->getFrameworksByForm($_POST['form_id']);
-    for ($i = 0; $i <= count((array) $viewNames); $i++) {
+    $sendNames = array();
+    foreach($viewNames as $i=>$viewName) {
         if(!$viewPublished[$i]) {
-            unset($views[$i]);
-            unset($viewNames[$i]);
             continue;
         }
         if($viewFrids[$i]) {
-            $viewNames[$i] .= " (" . _AM_FORMULIZE_SCREEN_LOE_VIEW_ONLY_IN_FRAME . $frameworks[$viewFrids[$i]]->getVar('name') . ")";
+            $sendNames[$views[$i]] = $viewName." (" . _AM_FORMULIZE_SCREEN_LOE_VIEW_ONLY_IN_FRAME . $frameworks[$viewFrids[$i]]->getVar('name') . ")";
         } else {
-            $viewNames[$i] .= " (" . _AM_FORMULIZE_SCREEN_LOE_VIEW_ONLY_NO_FRAME . ")";
+            $sendNames[$views[$i]] = $viewName." (" . _AM_FORMULIZE_SCREEN_LOE_VIEW_ONLY_NO_FRAME . ")";
         }
     }
-
-    $array = array_map(null, $views, $viewNames);
+    asort($sendNames);
+    // make an array where each value is an array made up of the values from the passed arrays, ie: the key from each entry in sendNames, and the value
+    // necessary because of how the iteration happens on the receiving end
+    $array = array_map(null, array_keys($sendNames), $sendNames);
 
     echo json_encode($array);
     break;
@@ -327,39 +315,48 @@ switch($op) {
 }
 
 function renderElement($elementObject, $entryId) {
-    
-    include_once XOOPS_ROOT_PATH . "/modules/formulize/include/elementdisplay.php";
-    // "" is framework, ie: not applicable
-    $GLOBALS['formulize_asynchronousRendering'][$elementObject->getVar('ele_handle')] = true;
-    $deReturnValue = displayElement("", $elementObject, $entryId, false, null, null, false); // false, null, null, false means it's not a noSave element, no screen, no prevEntry data passed in, and do not render the element on screen
-    unset($GLOBALS['formulize_asynchronousRendering']);
-    if(is_array($deReturnValue)) {
-        if($deReturnValue[0] == 'hidden') {
-            if(is_object($deReturnValue[2])) {
-                return $deReturnValue[2]->render();
-            }
-        } else {
-            $form_ele = $deReturnValue[0];
-            if($elementObject->getVar('ele_req') AND is_object($form_ele)) {
-                $form_ele->setRequired();
-            }
-            $isDisabled = $deReturnValue[1];
-            require_once XOOPS_ROOT_PATH."/modules/formulize/include/formdisplay.php"; // need the formulize_themeForm
-            $form = new formulize_themeForm('formulizeAsynchElementRender','',''); // prepare empty form object just for rendering element
-            if($elementObject->getVar('ele_type') == "ib") {// if it's a break, handle it differently...
-                $entryForDEElements = (is_numeric($entryId) AND $entryId) ? $entryId : 'new';
-                $form->insertBreakFormulize("<div class=\"formulize-text-for-display\">" . trans(stripslashes($form_ele[0])) . "</div>", $form_ele[1], 'de_'.$elementObject->getVar('id_form').'_'.$entryForDEElements.'_'.$elementObject->getVar('ele_id'), $elementObject->getVar("ele_handle"));
-                $hidden = '';
-                $html = '';
-                list($html, $hidden) = $form->_drawElements($form->getElements(), $html, $hidden);
-            } else {
-              $html = $form->_drawElementElementHTML($form_ele);
-            }
-            if($html) {
-                $html = trans($html);
-                return $html;
-            }
-        }
-    }
-    return false;
+
+	$GLOBALS['formulize_asynchronousRendering'][$elementObject->getVar('ele_handle')] = true;
+	$deReturnValue = displayElement("", $elementObject, $entryId, false, null, null, false); // false, null, null, false means it's not a noSave element, no screen, no prevEntry data passed in, and do not render the element on screen
+	unset($GLOBALS['formulize_asynchronousRendering']);
+
+	// element is allowed, so prep some stuff for rendering...
+	if(is_array($deReturnValue)) {
+		$form_ele = $deReturnValue[0];
+		if($elementObject->getVar('ele_req') AND is_object($form_ele)) {
+				$form_ele->setRequired();
+		}
+		$isDisabled = $deReturnValue[1];
+		$elementContents = $form_ele;
+
+		// prepare empty form object just for rendering element
+		$form = new formulize_themeForm('formulizeAsynchElementRender','','');
+
+		// figure out what we've got on our hands to render
+		$breakClass = 'head';
+		$entryForDEElements = (is_numeric($entryId) AND $entryId) ? $entryId : 'new';
+		if($elementObject->getVar('ele_type') == "ib") {
+			$elementContents = "<div class=\"formulize-text-for-display\">" . trans(stripslashes($form_ele[0])) . "</div>";
+			$breakClass = $form_ele[1];
+		} elseif($elementObject->getVar('ele_type') == "grid") {
+			$elementContents = renderGrid($elementObject, $entryForDEElements); // won't take into account the existing entry's saved values or the screen config when rendering the consituent elements, but probably doesn't matter.
+		}
+
+		// render the element
+		if(is_object($elementContents)) {
+			$html = $form->_drawElementElementHTML($elementContents);
+		} else {
+			$form->insertBreakFormulize($elementContents, $breakClass, 'de_'.$elementObject->getVar('id_form').'_'.$entryForDEElements.'_'.$elementObject->getVar('ele_id'), $elementObject->getVar("ele_handle"));
+			$hidden = '';
+			$html = '';
+			list($html, $hidden) = $form->_drawElements($form->getElements(), $html, $hidden);
+		}
+
+		// return the html, or nothing
+		if($html) {
+			$html = trans($html);
+			return $html;
+		}
+	}
+	return false;
 }

@@ -28,7 +28,7 @@
 	</div>
 
 	<{include file="db:admin/element_linkedoptionlist.html"}>
-        
+
     <div class="form-item" id='linkedsourcemapping' style='display: none;'>
         <fieldset>
             <legend>When creating a new entry in the linked source form, map other values to the source form too:</legend>
@@ -76,7 +76,14 @@
 		<legend>If the options are linked -- or are {FULLNAMES} or {USERNAMES}</legend>
 		<div class="form-item">
 		<fieldset>
-			<legend>Limit them to values from the groups selected here</legend>
+            <legend>Limit them to...</legend>
+            <div class="form-radios">
+                <label for="elements-ele_value[formlink_useonlyusersentries]-1"><input type="radio" id="elements-ele_value[formlink_useonlyusersentries]-1" name="elements-ele_value[formlink_useonlyusersentries]" value="1"<{if $content.ele_value.formlink_useonlyusersentries eq 1}> checked="checked"<{/if}>/>The entries created by the user</label>
+            </div>
+            <div class="form-radios">
+                <label for="elements-ele_value[formlink_useonlyusersentries]-0"><input type="radio" id="elements-ele_value[formlink_useonlyusersentries]-0" name="elements-ele_value[formlink_useonlyusersentries]" value="0"<{if $content.ele_value.formlink_useonlyusersentries eq 0}> checked="checked"<{/if}>/>The entries created by these groups:</label>
+            </div>
+            <br>
 			<select id="element-formlink_scope" name="element_formlink_scope[]" size="10" multiple>
 			<{html_options options=$content.formlink_scope_options selected=$content.formlink_scope}>
 			</select>
@@ -102,7 +109,7 @@
                     <{$content.optionsLimitByElementFilter}><br />
                     <div class="description">Use the filter options to isolate a specific entry in the other form. Dynamic { } references are possible for referring to the values of elements in this form.</div>
                     <{else}>
-                    <div class="description">Select an element and then save, to get filter options for isolating a single entry in the selected form.</div>    
+                    <div class="description">Select an element and then save, to get filter options for isolating a single entry in the selected form.</div>
                     <{/if}>
                 </div>
             </fieldset>
@@ -113,11 +120,11 @@
 	</div>
     </fieldset>
 </div>
-        
+
         <{include file="db:admin/element_linkedfilter.html"}>
-        
+
         <{include file="db:admin/element_linkedsortoptions.html"}>
-        
+
 		  <div class="form-item">
 		    <fieldset>
 			    <legend>Show as links in lists of entries?</legend>
@@ -134,21 +141,20 @@
 
 	<div class="form-item">
 	  <fieldset>
-		  <legend>Are there restrictions on how many times each option can be picked?</legend>
+		  <legend>Restrictions on options</legend>
 	        <div class="form-radios">
-            <label for="elements-ele_value[9]-0"><input type="radio" id="elements-ele_value[9]-0" name="elements-ele_value[9]" value="0" <{if $content.ele_value[9] eq 0}>checked<{/if}>/>No</label>
+            <label for="elements-ele_value[9]-0"><input type="radio" id="elements-ele_value[9]-0" name="elements-ele_value[9]" value="0" <{if $content.ele_value[9] eq 0}>checked<{/if}>/>No restrictions</label>
 	        </div>
 	        <div class="form-radios">
-		        <label for="elements-ele_value[9]-1"><input type="radio" id="elements-ele_value[9]-1" name="elements-ele_value[9]" value="1" <{if $content.ele_value[9] eq 1}>checked<{/if}>/>Each option can only be chosen once</label>
+						<label for="elements-ele_value[9]-2"><input type="radio" id="elements-ele_value[9]-2" name="elements-ele_value[9]" value="2" <{if $content.ele_value[9] eq 2}>checked<{/if}>/>Once someone has selected the option, <b>they cannot select it again</b> in any other entry.</label>
 	        </div>
 	        <div class="form-radios">
-            <label for="elements-ele_value[9]-2"><input type="radio" id="elements-ele_value[9]-2" name="elements-ele_value[9]" value="2" <{if $content.ele_value[9] eq 2}>checked<{/if}>/>Each option can only be chosen once, per user</label>
+            <label for="elements-ele_value[9]-3"><input type="radio" id="elements-ele_value[9]-3" name="elements-ele_value[9]" value="3" <{if $content.ele_value[9] eq 3}>checked<{/if}>/>Once someone has selected the option, <b>no one in their group can select it again</b> in any other entry.</label>
 	        </div>
 	        <div class="form-radios">
-            <label for="elements-ele_value[9]-3"><input type="radio" id="elements-ele_value[9]-3" name="elements-ele_value[9]" value="3" <{if $content.ele_value[9] eq 3}>checked<{/if}>/>Each option can only be chosen once, per group</label>
+						<label for="elements-ele_value[9]-1"><input type="radio" id="elements-ele_value[9]-1" name="elements-ele_value[9]" value="1" <{if $content.ele_value[9] eq 1}>checked<{/if}>/>Once someone has selected the option, <b>no one else can select it again</b> in any other entry.</label>
 	        </div>
-			  <div class="description">
-			  </div>
+					<br>
 	  </fieldset>
 	</div>
 
@@ -177,7 +183,7 @@
 </div>
 
 <script type="text/javascript">
-    
+
   $("[name='new-mapping']").click(function (){
     number = $(".elementmappings:last").attr('name');
     number = parseInt(number) + 1;
@@ -192,7 +198,7 @@
     $("[name='new-mapping']").blur();
     setDisplay('savewarning','block');
   });
-    
+
     $("[name^=mappingthisform]").live('change', function() {
         if ($(this).val() == 'mapaliteralvalue') {
             $(this).attr('name', 'turnedoff');
@@ -200,12 +206,12 @@
             $(this).hide();
         }
     });
-    
+
     function removeMapping(number) {
         $('.elementmappings').remove('[name="'+number+'"]');
         setDisplay('savewarning','block');
     }
-    
+
  $("#elements-ele_value_0").focus(function() {
 	  $("#list").attr('checked',1);
  });
@@ -249,15 +255,16 @@
 	  $(".savebutton").click();
 		return false;
 	});
- 
- 	$("div#optionsLimitByElementFilterDiv > input#addcon").click(function () {
+
+ 	$("div#optionsLimitByElementFilterDiv > input[name=addcon]").click(function () {
 		$("[name=reload_option_page]").val(1);
 	  $(".savebutton").click();
 		return false;
 	});
- 
+
     $("#snapshot-<{$content.ele_value.snapshot}>").attr('checked',1);
-    
+		$("#selfreference-<{$content.ele_value.selfreference}>").attr('checked',1);
+
     <{if $content.ele_id != 'new'}>
     var snapshotWarning = true;
     $('input[name*="snapshot"]').change(function() {
@@ -267,7 +274,7 @@
         }
     })
     <{/if}>
-    
+
     $('input[name="linked_yesno"]').change(function() {
         if($('input[name="linked_yesno"]:checked').val() == 1) {
             $('#snapshot-values').show(200);
@@ -275,8 +282,8 @@
             $('#snapshot-values').hide(200);
         }
     });
- 
- 
+
+
     function showHideLinkedSourceMapping() {
         if ($('[name="elements_listordd"]:checked').val()==2 && $('[name="elements-ele_value\\[snapshot\\]"]:checked').val() != 1 && $('[name="elements-ele_value\\[16\\]"]:checked').val() == 1 && $('#formlink').val() != 'none') {
             if($('#linkedsourcemapping').css('display') == 'none') {
@@ -290,18 +297,18 @@
             $('#linkedsourcemapping').css('display', 'none');
         }
     }
-    
+
     $(document).ready(function() {
         showHideLinkedSourceMapping();
-        
+
         $('[name="elements_listordd"]').change(function() {
             showHideLinkedSourceMapping();
         });
-        
+
         $('[name="elements-ele_value\\[16\\]"]').change(function() {
             showHideLinkedSourceMapping();
         });
-        
+
         $('#formlink').change(function() {
             showHideLinkedSourceMapping();
 	});
@@ -309,7 +316,7 @@
         $('[name="elements-ele_value\\[snapshot\\]"]').change(function() {
             showHideLinkedSourceMapping();
         })
-       
+
 
 	});
 

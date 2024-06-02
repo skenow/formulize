@@ -49,17 +49,6 @@ if (!isset($_GET['op']) AND !defined('_FORMULIZE_UI_PHP_INCLUDED')){
 include_once XOOPS_ROOT_PATH."/modules/formulize/class/forms.php"; // form class
 include_once XOOPS_ROOT_PATH."/modules/formulize/include/extract.php";
 include_once XOOPS_ROOT_PATH."/modules/formulize/include/functions.php";
-include_once XOOPS_ROOT_PATH.'/class/xoopsform/grouppermform.php'; // Classe permissions
-$module_id = $xoopsModule->getVar('mid'); // recupere le numero id du module
-
-$n = 0;
-$m = 0;
-include_once XOOPS_ROOT_PATH."/class/xoopstree.php";
-include_once XOOPS_ROOT_PATH."/class/xoopslists.php";
-include_once XOOPS_ROOT_PATH."/include/xoopscodes.php";
-include_once XOOPS_ROOT_PATH."/class/module.errorhandler.php";
-$myts =& MyTextSanitizer::getInstance();
-$eh = new ErrorHandler;
 
 // this functions runs the SQL and returns false if it failed, also outputs error message to screen
 // returns the result object of the query if it was successful
@@ -79,28 +68,6 @@ function formulize_DBPatchCheckSQL($sql, &$needsPatch) {
 
 // database patch logic for 4.0 and higher
 function patch40() {
-    
-    $module_handler = xoops_gethandler('module');
-    $formulizeModule = $module_handler->getByDirname("formulize");
-    $metadata = $formulizeModule->getInfo();
-    $versionNumber = $metadata['version'];
-    
-    // CHECK THAT THEY ARE AT 3.1 LEVEL, IF NOT, LINK TO PATCH31
-    // Check for ele_handle being 255 in formulize table
-    global $xoopsDB;
-    // note very odd use of LIKE as a clause of its own in SHOW statements, very strange, but that's what MySQL does
-    $fieldStateSQL = "SHOW COLUMNS FROM " . $xoopsDB->prefix("formulize") ." LIKE 'ele_handle'";
-    if (!$fieldStateRes = $xoopsDB->queryF($fieldStateSQL)) {
-        print "Error: could not determine if your Formulize database structure is up to date.  Please contact <a href=\"mailto:info@formulize.org\">info@formulize.org</a> for assistance.<br>\n";
-        return false;
-    }
-    $fieldStateData = $xoopsDB->fetchArray($fieldStateRes);
-    $dataType = $fieldStateData['Type'];
-    if ($dataType != "varchar(255)") {
-        print "<h1>Your database schema is out of date.  You must run \"patch31\" before running the current patch.</h1>\n";
-        print "<p><a href=\"" . XOOPS_URL . "/modules/formulize/admin/formindex.php?op=patch31\">Click here to run \"patch31\".</a></p>\n";
-        return;
-    }
 
     /* ======================================
      * We must check here for the latest change, so we can tell the user whether they need to update or not!!
@@ -114,17 +81,23 @@ function patch40() {
      *
      * IN ADDITION TO THE UPDATE HERE, THE mysql.sql FILE MUST BE UPDATED WITH THE REQUIRED CHANGES SO NEW INSTALLATIONS ARE UP TO DATE
      *
-     * IT IS ALSO CRITICAL THAT THE PATCH PROCESS CAN BE RUN OVER AND OVER AGAIN NON-DESTRUCTIVELY
-     *
-     * ====================================== */
+     * IT IS ALSO CRITICAL THAT THE PATCH PROCESS CAN BE RUN OVER AND OVER AGAIN NON-DESTRUCTIVELY */
 
-    $checkThisTable = 'formulize_screen';
-	$checkThisField = 'theme';
-	$checkThisProperty = 'Type';
-	$checkPropertyForValue = 'varchar(101)';
+    $checkThisTable = 'formulize_screen_template';
+		$checkThisField = 'viewentryscreen';
+		$checkThisProperty = '';
+		$checkPropertyForValue = '';
+
+		/*
+		* ====================================== */
+
+		global $xoopsDB;
+    $module_handler = xoops_gethandler('module');
+    $formulizeModule = $module_handler->getByDirname("formulize");
+    $metadata = $formulizeModule->getInfo();
+    $versionNumber = $metadata['version'];
 
     $needsPatch = false;
-
     $tableCheckSql = "SELECT 1 FROM information_schema.tables WHERE table_schema = '".SDATA_DB_NAME."' AND table_name = '".$xoopsDB->prefix(formulize_db_escape($checkThisTable)) ."'";
     $tableCheckRes = formulize_DBPatchCheckSQL($tableCheckSql, $needsPatch); // may modify needsPatch!
     if ($tableCheckRes AND !$needsPatch AND $checkThisField) { // table was found, and we're looking for a field in it
@@ -172,7 +145,7 @@ function patch40() {
           INDEX i_uid (`uid`)
         ) ENGINE=InnoDB;";
         }
-        
+
         if (!in_array($xoopsDB->prefix("formulize_digest_data"), $existingTables)) {
             $sql[] = "CREATE TABLE `".$xoopsDB->prefix("formulize_digest_data")."` (
                 `digest_id` int(11) unsigned NOT NULL auto_increment,
@@ -187,7 +160,7 @@ function patch40() {
                 INDEX i_fid (`fid`)
               ) ENGINE=InnoDB;";
         }
-        
+
         if (!in_array($xoopsDB->prefix("formulize_groupscope_settings"), $existingTables)) {
             $sql[] = "CREATE TABLE `".$xoopsDB->prefix("formulize_groupscope_settings")."` (
                 `groupscope_id` int(11) NOT NULL auto_increment,
@@ -216,10 +189,10 @@ function patch40() {
                 INDEX i_maxuses (maxuses),
                 INDEX i_currentuses (currentuses)
             ) ENGINE=InnoDB;";
-        } 
-        
-        
-        
+        }
+
+
+
         if (!in_array($xoopsDB->prefix("formulize_group_filters"), $existingTables)) {
             $sql[] = "CREATE TABLE `".$xoopsDB->prefix("formulize_group_filters")."` (
   `filterid` int(11) NOT NULL auto_increment,
@@ -352,12 +325,13 @@ function patch40() {
             donedest varchar(255) NOT NULL default '',
             savebuttontext varchar(255) NOT NULL default '',
             donebuttontext varchar(255) NOT NULL default '',
+            viewentryscreen varchar(10) NOT NULL default '',
             template text NOT NULL,
             PRIMARY KEY (`templateid`),
             INDEX i_sid (`sid`)
         ) ENGINE=InnoDB;";
         }
-        
+
         if (!in_array($xoopsDB->prefix("formulize_apikeys"), $existingTables)) {
             $sql[] = "CREATE TABLE " . $xoopsDB->prefix("formulize_apikeys") . " (
                 `key_id` int(11) unsigned NOT NULL auto_increment,
@@ -369,7 +343,7 @@ function patch40() {
                 INDEX i_apikey (apikey),
                 INDEX i_expiry (expiry)
             ) ENGINE=InnoDB;";
-        }      
+        }
 
 
         if (!in_array($xoopsDB->prefix("formulize_passcodes"), $existingTables)) {
@@ -396,7 +370,7 @@ function patch40() {
                 INDEX i_sid (`sid`)
               ) ENGINE=InnoDB;";
         }
-        
+
         // if this is a standalone installation, then we want to make sure the session id field in the DB is large enough to store whatever session id we might be working with
         if (file_exists(XOOPS_ROOT_PATH."/integration_api.php")) {
             $sql['increase_session_id_size'] = "ALTER TABLE ".$xoopsDB->prefix("session")." CHANGE `sess_id` `sess_id` varchar(60) NOT NULL";
@@ -450,7 +424,7 @@ function patch40() {
         $sql['add_pubfilters'] = "ALTER TABLE " . $xoopsDB->prefix("formulize_saved_views") . " ADD `sv_pubfilters` text";
         $sql['add_backdrop_group'] = "ALTER TABLE " . $xoopsDB->prefix("formulize_resource_mapping") . " ADD external_id_string text NULL default NULL";
         $sql['add_backdrop_group_index'] = "ALTER TABLE ". $xoopsDB->prefix("formulize_resource_mapping") ." ADD INDEX i_external_id_string (external_id_string(10))";
-        $sql['add_advance_view_field'] = "ALTER TABLE " . $xoopsDB->prefix("formulize_screen_listofentries") . " ADD `advanceview` text NOT NULL"; 
+        $sql['add_advance_view_field'] = "ALTER TABLE " . $xoopsDB->prefix("formulize_screen_listofentries") . " ADD `advanceview` text NOT NULL";
 		$sql['defaultview_ele_type_text'] = "ALTER TABLE " . $xoopsDB->prefix("formulize_screen_listofentries") . " CHANGE `defaultview` `defaultview` TEXT NOT NULL ";
         $sql['add_ele_uitextshow'] = "ALTER TABLE " . $xoopsDB->prefix("formulize") . " ADD `ele_uitextshow` tinyint(1) NOT NULL default 0";
         $sql['add_send_digests'] = "ALTER TABLE " . $xoopsDB->prefix("formulize_id") . " ADD send_digests tinyint(1) NOT NULL default 0";
@@ -472,6 +446,8 @@ function patch40() {
         $sql['form_screen_printableview'] = "ALTER TABLE ".$xoopsDB->prefix("formulize_screen_form"). " ADD `printableviewbuttontext` varchar(255) NOT NULL default ''";
         $sql['rm_ext_id_null'] = "ALTER TABLE " . $xoopsDB->prefix("formulize_resource_mapping") . " CHANGE `external_id` `external_id` INT(11) NULL DEFAULT NULL";
         $sql['sliderfix'] = "UPDATE " . $xoopsDB->prefix("formulize") . " SET ele_type = 'slider' WHERE ele_type = 'newslider'";
+				if(file_exists(XOOPS_ROOT_PATH.'/modules/formulize/class/newsliderElement.php')) { unlink(XOOPS_ROOT_PATH.'/modules/formulize/class/newsliderElement.php'); }
+				if(file_exists(XOOPS_ROOT_PATH.'/modules/formulize/templates/admin/element_type_newslider.html')) { unlink(XOOPS_ROOT_PATH.'/modules/formulize/templates/admin/element_type_newslider.html'); }
         $sql['buttontexttext'] = "ALTER TABLE " . $xoopsDB->prefix("formulize_screen_multipage") . " CHANGE `buttontext` `buttontext` TEXT NULL DEFAULT NULL";
         $sql['form_screen_multipage_showpagetitles'] = "ALTER TABLE ".$xoopsDB->prefix("formulize_screen_multipage") . " ADD `showpagetitles` tinyint(1) NOT NULL";
         $sql['form_screen_multipage_showpageselector'] = "ALTER TABLE ".$xoopsDB->prefix("formulize_screen_multipage") . " ADD `showpageselector` tinyint(1) NOT NULL";
@@ -483,6 +459,13 @@ function patch40() {
         $sql['form_screen_multipage_elementdefaults'] = "ALTER TABLE ".$xoopsDB->prefix("formulize_screen_multipage") . " ADD `elementdefaults` text NOT NULL";
         $sql['not_cons_arbitrary'] = "ALTER TABLE ".$xoopsDB->prefix("formulize_notification_conditions") . " ADD `not_cons_arbitrary` text NULL default NULL";
         $sql['screen_theme_change'] = "ALTER TABLE ".$xoopsDB->prefix("formulize_screen"). " CHANGE `theme` `theme` varchar(101) NOT NULL default ''";
+        $sql['element_sort'] = "ALTER TABLE ".$xoopsDB->prefix("formulize") . " ADD `ele_sort` smallint(2) NULL default NULL";
+        $sql['sv_entriesperpage'] = "ALTER TABLE ".$xoopsDB->prefix("formulize_saved_views") . " ADD `sv_entriesperpage` varchar(4) NOT NULL default ''";
+        $sql['on_delete'] = "ALTER TABLE ".$xoopsDB->prefix("formulize_id") . " ADD `on_delete` text";
+        $sql['viewentryscreen_templates'] = "ALTER TABLE ".$xoopsDB->prefix('formulize_screen_template') . " ADD `viewentryscreen` varchar(10) NOT NULL default ''";
+				$sql['ele_disabledconditions'] = "ALTER TABLE ".$xoopsDB->prefix("formulize"). " ADD `ele_disabledconditions` text NOT NULL";
+				$sql['update_module_name'] = "UPDATE ".$xoopsDB->prefix("modules")." SET name = 'Formulize' WHERE dirname = 'formulize' AND name = 'Forms'";
+				unlink(XOOPS_ROOT_PATH.'/cache/adminmenu_english.php');
 
         $needToSetSaveAndLeave = true;
         $needToSetPrintableView = true;
@@ -577,7 +560,7 @@ function patch40() {
                     print "Multipage form screen UI controls already added. result OK<br>";
                 } elseif($key === "screen_theme") {
                     print "Theme setting for screens already added. result: OK<br>";
-                } elseif($key === "form_screen_displaytype") {    
+                } elseif($key === "form_screen_displaytype") {
                     print "Form screen element container display type already added. result: OK<br>";
                 } elseif($key === "form_screen_multipage_displayheading") {
                     print "Multipage screens displayheading already added. result: OK<br>";
@@ -590,18 +573,134 @@ function patch40() {
                     $needToMigrateFormScreensToMultipage = false;
                 } elseif($key === "not_cons_arbitrary") {
                     print "Arbitrary email already added to notification options. result: OK<br>";
+                } elseif($key === "element_sort") {
+                    print "Element sorting order already added. result: OK<br>";
+                } elseif($key === "sv_entriesperpage") {
+                    print "Entries per page already added. result: OK<br>";
+                } elseif($key === "on_delete") {
+                    print "On Delete already added. result: OK<br>";
+                } elseif($key === "viewentryscreen_templates") {
+                    print "View entry screen option for template screens already added. result: OK<br>";
+								} elseif($key === "ele_disabledconditions") {
+                    print "Disabled conditions already added. result: OK<br>";
                 } else {
                     exit("Error patching DB for Formulize $versionNumber. SQL dump:<br>" . $thissql . "<br>".$xoopsDB->error()."<br>Please contact <a href=mailto:info@formulize.org>info@formulize.org</a> for assistance.");
                 }
+            } elseif($key === "on_delete") {
+                // on delete successfully added, and so this one time and one time only, never in the future (and since on delete was added now, it will never be added again) set the config option for custom button effects to Yes
+                if(!$xoopsDB->query("UPDATE ".$xoopsDB->prefix('config')." SET conf_value = 1 WHERE conf_name = 'useOldCustomButtonEffectWriting'")) {
+                    print "Error setting preference for old custom button writing method<br>";
+                }
             }
         }
-        
+
+				// add opening <?php tags to code snippets that don't have them
+				// 1. derived value formulas $ele_value[0]
+				// 2. Textbox $ele_value[2] if they contain $default
+				// 3. Textarea $ele_value[0] if they contain $default
+				// 4. ib $ele_value[0] if they contain $value
+				// 5. areamodif $ele_value[0] if they contain $value
+
+				// query for the elements...
+				$elementsNeedingOpeningPHPTagsSQL = "SELECT ele_id, ele_type, ele_value FROM ".$xoopsDB->prefix('formulize')." WHERE
+					(ele_type = 'derived')
+					OR (ele_type IN ('ib', 'areamodif') AND ele_value LIKE '%\$value%')
+					OR (ele_type IN ('text', 'textarea') AND ele_value LIKE '%\$default%') ";
+				if($res = $xoopsDB->query($elementsNeedingOpeningPHPTagsSQL)) {
+					// loop through the results...
+					while($record = $xoopsDB->fetchArray($res)) {
+						// isolate the value we're targetting...
+						$eleValueKey = $record['ele_type'] == 'text' ? 2 : 0; // figure out which key we need to look in based on the element type (text is 2, everything else is 0)
+						$newEleValue = unserialize(($record['ele_value']));
+						$newEleValue[$eleValueKey] = trim($newEleValue[$eleValueKey]);
+						// is the value missing the opening php tag?
+						if(substr($newEleValue[$eleValueKey], 0, 5) != '<?php') {
+							// add the tag and update the database...
+							$newEleValue[$eleValueKey] = "<?php\n".$newEleValue[$eleValueKey];
+							$newEleValue = serialize($newEleValue);
+							$updateSQL = "UPDATE ".$xoopsDB->prefix('formulize')." SET ele_value = ".$xoopsDB->quoteString($newEleValue)." WHERE ele_id = ".$record['ele_id'];
+							if(!$updateRes = $xoopsDB->query($updateSQL)) {
+								print "Notice: could not add opening PHP tag to the code in element ".$record['ele_id']." with the SQL:<br>".str_replace('<', '&lt;',$updateSQL)."<br>".$xoopsDB->error()."<br>This is not a critical error. You can add the tag yourself at the top of the code, if you want the editor to provide highlighting. For more information contact <a href=mailto:info@formulize.org>info@formulize.org</a>.<br>";
+							}
+						}
+					}
+				} else {
+					exit("Error detecting code snippets that need opening PHP tags. SQL dump:<br>".$elementsNeedingOpeningPHPTagsSQL."<br>".$xoopsDB->error()."<br>Please contact <a href=mailto:info@formulize.org>info@formulize.org</a> for assistance.");
+				}
+
+				// Same operation, on the form procedures
+				// query for the procedures...
+				$formProceduresNeedingOpeningPHPTagsSQL = "SELECT id_form as fid, on_before_save, on_after_save, on_delete, custom_edit_check
+					FROM ".$xoopsDB->prefix('formulize_id')." WHERE
+					(on_before_save != '' AND on_before_save NOT LIKE '<?php%')
+					OR (on_after_save != '' AND on_after_save NOT LIKE '<?php%')
+					OR (on_delete != '' AND on_delete NOT LIKE '<?php%')
+					OR (custom_edit_check != '' AND custom_edit_check NOT LIKE '<?php%') ";
+				if($res = $xoopsDB->query($formProceduresNeedingOpeningPHPTagsSQL)) {
+					// loop through the results...
+					while($record = $xoopsDB->fetchArray($res)) {
+						// for each record that was returned from the DB, make a list of all the events and then check each event...
+						$events = array('on_before_save', 'on_after_save', 'on_delete', 'custom_edit_check');
+						foreach($events as $i=>$event) {
+							$record[$event] = trim($record[$event]);
+							// if the event is missing the opening php tag, then let's make a SQL snippet containing the updated code we want to write to the DB
+							if($record[$event] AND substr($record[$event], 0, 5) != '<?php') {
+								$events[$i] = "$event = ".$xoopsDB->quoteString("<?php\n".$record[$event]);
+							} else { // otherwise, throw away this event, we won't be doing an update on it
+								unset($events[$i]);
+							}
+						}
+						// update the database with the new code for the relevant events
+						$updateProcSQL = "UPDATE ".$xoopsDB->prefix('formulize_id')." SET ".implode(', ',$events)." WHERE id_form = ".$record['fid'];
+						if(!$updateProcRes = $xoopsDB->query($updateProcSQL)) {
+							print "Notice: could not add opening PHP tag to the code in procedures for form ".$record['fid']." with the SQL:<br>".str_replace('<', '&lt;',$updateProcSQL)."<br>".$xoopsDB->error()."<br>This is not a critical error. You can add the tag yourself at the top of the code, if you want the editor to provide highlighting. For more information contact <a href=mailto:info@formulize.org>info@formulize.org</a>.<br>";
+						}
+					}
+				} else {
+					exit("Error detecting procedures that need opening PHP tags. SQL dump:<br>".$formProceduresNeedingOpeningPHPTagsSQL."<br>".$xoopsDB->error()."<br>Please contact <a href=mailto:info@formulize.org>info@formulize.org</a> for assistance.");
+				}
+
+				// Same operation on the custom button effects
+				$customButtonsNeedingOpeningPHPTagsSQL = "SELECT `sid`, `customactions` FROM ".$xoopsDB->prefix('formulize_screen_listofentries')." WHERE customactions LIKE '%\"custom_code\";%' OR customactions LIKE '%\"custom_html\";%'";
+				if($res = $xoopsDB->query($customButtonsNeedingOpeningPHPTagsSQL)) {
+					// loop through the results...
+					while($record = $xoopsDB->fetchArray($res)) {
+						// for each record that was returned from the DB, decode the button stuff and check if the custom_html or custom_code has an opening tag
+						$customActions = unserialize($record['customactions']);
+						foreach($customActions as $actionId=>$actionSettings) {
+							foreach($actionSettings as $effectId=>$effectSettings) {
+								if(!is_numeric($effectId)) { continue; } // ugly, effects are all numeric keys, other keys at same level are strings for other metadata
+								switch($actionSettings['applyto']) {
+									case 'custom_html':
+										if(substr($effectSettings['html'], 0, 5) != '<?php') {
+											$customActions[$actionId][$effectId]['html'] = "<?php\n".$effectSettings['html']; // assign update to the source array
+										}
+										break;
+									case 'custom_code':
+										if(substr($effectSettings['code'], 0, 5) != '<?php') {
+											$customActions[$actionId][$effectId]['code'] = "<?php\n".$effectSettings['code']; // assign update to the source array
+										}
+										break;
+								}
+							}
+						}
+						$customActions = serialize($customActions);
+						// update the database with the new code for the relevant custom buttons
+						$updateCustomButtonsSQL = "UPDATE ".$xoopsDB->prefix('formulize_screen_listofentries')." SET `customactions` = ".$xoopsDB->quoteString($customActions)." WHERE sid = ".$record['sid'];
+						if(!$updateProcRes = $xoopsDB->query($updateCustomButtonsSQL)) {
+							print "Notice: could not add opening PHP tag to the code in the custom buttons on screen ".$record['sid']." with the SQL:<br>".str_replace('<', '&lt;',$updateCustomButtonsSQL)."<br>".$xoopsDB->error()."<br>This is not a critical error. You can add the tag yourself at the top of the code, if you want the editor to provide highlighting. For more information contact <a href=mailto:info@formulize.org>info@formulize.org</a>.<br>";
+						}
+					}
+				} else {
+					exit("Error detecting custom buttons that need opening PHP tags. SQL dump:<br>".$customButtonsNeedingOpeningPHPTagsSQL."<br>".$xoopsDB->error()."<br>Please contact <a href=mailto:info@formulize.org>info@formulize.org</a> for assistance.");
+				}
+
         global $xoopsConfig;
         $themeSql = 'UPDATE '.$xoopsDB->prefix('formulize_screen').' SET theme = "'.$xoopsConfig['theme_set'].'" WHERE theme = ""';
         if(!$res = $xoopsDB->query($themeSql)) {
             exit("Error patching DB for Formulize $versionNumber. Could not update screens with default theme. SQL dump:<br>".$themeSql."<br>".$xoopsDB->error()."<br>Please contact <a href=mailto:info@formulize.org>info@formulize.org</a> for assistance.");
         }
-        
+
         $newConfigSQL = array();
         $sql = "SELECT * FROM ".$xoopsDB->prefix("config")." WHERE conf_name = 'auth_2fa'";
         if($res = $xoopsDB->query($sql)) {
@@ -679,7 +778,7 @@ function patch40() {
                 }
             }
         }
-        
+
         // ADD FONT SIZE OPTION TO PROFILE
         $sql = "SELECT * FROM ".$xoopsDB->prefix("profile_field")." WHERE field_name = 'fontsize'";
         if($res = $xoopsDB->query($sql)) {
@@ -704,7 +803,7 @@ function patch40() {
                 }
             }
         }
-        
+
         // if this is the first time we're adding the saveandleave and printable view options... set the values to the language constants
         if($needToSetSaveAndLeave) {
             $sql = "UPDATE ".$xoopsDB->prefix("formulize_screen_form"). " SET saveandleavebuttontext = '"._formulize_SAVE_AND_LEAVE."'";
@@ -714,8 +813,8 @@ function patch40() {
             $sql = "UPDATE ".$xoopsDB->prefix("formulize_screen_form"). " SET printableviewbuttontext = '"._formulize_PRINTVIEW."'";
             $xoopsDB->query($sql);
         }
-        
-        
+
+
         // change any non-serialized array defaultview settings for list of entries screens, into serialized arrays indicating the view for Registered Users (group 2)
         $sql1 = "UPDATE ".$xoopsDB->prefix("formulize_screen_listofentries")." SET defaultview = CONCAT('a:1:{i:2;i:',defaultview,';}') WHERE defaultview NOT LIKE '%{%' AND defaultview != 'b:0;' AND concat('',defaultview * 1) = defaultview"; //concat in where isolates numbers
         if(!$res = $xoopsDB->query($sql1)) {
@@ -891,9 +990,9 @@ function patch40() {
             print "Updating relationships with unified delete option.  result: OK<br>";
             }
         }
-        
+
         $screenpathname = XOOPS_ROOT_PATH."/modules/formulize/templates/screens/".$xoopsConfig['theme_set']."/";
-        
+
         // If current theme folder does not exists for templates, then create it and copy the default folder contents over to it.
         if(!file_exists($screenpathname)) {
             recurse_copy(XOOPS_ROOT_PATH."/modules/formulize/templates/screens/default/",$screenpathname);
@@ -928,7 +1027,7 @@ function patch40() {
                                 if($additional_theme != $handleArray['theme']) {
                                     saveTemplate("// Placeholder because this older screen predates the use of the Open List Template", $handleArray['sid'], "openlisttemplate", $additional_theme);
                                     saveTemplate("// Placeholder because this older screen predates the use of the Close List Template", $handleArray['sid'], "closelisttemplate", $additional_theme);
-                                }    
+                                }
                             }
                         }
                     }
@@ -972,8 +1071,8 @@ function patch40() {
 
         // Goes through all templates in screenpathname
         emptyTemplateFixer($screenpathname);
-        
-        $formToMultipageMap = array();        
+
+        $formToMultipageMap = array();
         if($needToMigrateFormScreensToMultipage) {
             // copy form screens to multipage screens
             // rename form screens to add (Legacy) to the end of the names/titles
@@ -997,7 +1096,7 @@ function patch40() {
                     'reloadblank'
                 );
                 foreach($sameProperties as $property) {
-                    $multipageScreenObject->setVar($property, $formScreenObject->getVar($property));    
+                    $multipageScreenObject->setVar($property, $formScreenObject->getVar($property));
                 }
                 // for compatibility with the Anari theme, single column layout should be auto-auto, two column layout should be percentage width, and auto. Take the existing column 1 width in case of 2 column layout, unless it's auto and then set to 20%.
                 if($formScreenObject->getVar('displaycolumns')==1) {
@@ -1007,9 +1106,9 @@ function patch40() {
                     $multipageScreenObject->setVar('column1width', $newCol1Width);
                 }
                 $multipageScreenObject->setVar('column2width', 'auto');
-                
+
                 $multipageScreenObject->setVar('displayheading', $formScreenObject->getVar('displayheading'));
-                $multipageScreenObject->setVar('elementdefaults', serialize($formScreenObject->getVar('elementdefaults')));    
+                $multipageScreenObject->setVar('elementdefaults', serialize($formScreenObject->getVar('elementdefaults')));
                 $multipageScreenObject->setVar('type', 'multiPage');
                 $multipageScreenObject->setVar('buttontext', serialize(array(
                     'thankyoulinktext'=>'',
@@ -1035,9 +1134,9 @@ function patch40() {
                 $multipageScreenObject->setVar('pagetitles', serialize(array(0=>$formScreenObject->getVar('title'))));
                 $multipageScreenObject->setVar('conditions', serialize(array(0=>array())));
                 $multipageScreenObject->setVar('printall', 0);
-                $multipageScreenObject->setVar('paraentryform', 0); 
+                $multipageScreenObject->setVar('paraentryform', 0);
                 $multipageScreenObject->setVar('paraentryrelationship', 0);
-                $multipageScreenObject->setVar('navstyle', 1);	                
+                $multipageScreenObject->setVar('navstyle', 1);
                 $multipageScreenObject->setVar('showpagetitles', 0);
                 $multipageScreenObject->setVar('showpageindicator', 0);
                 $multipageScreenObject->setVar('showpageselector', 0);
@@ -1054,7 +1153,7 @@ function patch40() {
                 } else {
                     print "ERROR: could not create new version of form screen ".$fs->getVar('sid')."<br>Please contact <a href=mailto:info@formulize.org>info@formulize.org</a> for assistance.<br>";
                 }
-                
+
                 // copy to an additional theme(s) that may have been specified
                 if(isset($_GET['additional_themes'])) {
                     $skipTheme = $formScreenObject->getVar('theme');
@@ -1070,12 +1169,12 @@ function patch40() {
                             $multipageScreenObject->setVar('sid', $multiSid);
                             $multipageScreenObject->setVar('theme', $additional_theme);
                             if($multipage_screen_handler->insert($multipageScreenObject) == false) {
-                                print "ERROR: could not create new version of form screen ".$fs->getVar('sid')." for additional theme $additional_theme<br>Please contact <a href=mailto:info@formulize.org>info@formulize.org</a> for assistance.<br>";        
+                                print "ERROR: could not create new version of form screen ".$fs->getVar('sid')." for additional theme $additional_theme<br>Please contact <a href=mailto:info@formulize.org>info@formulize.org</a> for assistance.<br>";
                             }
                         }
                     }
                 }
-                    
+
                 unset($_POST['toptemplate']);
                 unset($_POST['elementtemplate1']);
                 unset($_POST['elementtemplate2']);
@@ -1086,11 +1185,11 @@ function patch40() {
                 if($form_screen_handler->insert($formScreenObject) == false) {
                     print "ERROR: could not update form screen ".$fs->getVar('sid')." with (Legacy) flag<br>Please contact <a href=mailto:info@formulize.org>info@formulize.org</a> for assistance.<br>";
                 }
-                                
+
             }
-            
+
             if(!isset($_GET['skip_ref_updates'])) {
-            
+
                 // swap all subform element screen declarations
                 $criteria = new Criteria('ele_type', 'subform');
                 $element_handler = xoops_getmodulehandler('elements','formulize');
@@ -1105,7 +1204,7 @@ function patch40() {
                         }
                     }
                 }
-                
+
                 // swap all list of entries display screen declarations, including "default form" to actual sid
                 $criteria = new Criteria('type', 'listOfEntries');
                 $list_screen_handler = xoops_getmodulehandler('listOfEntriesScreen','formulize');
@@ -1131,11 +1230,11 @@ function patch40() {
                         }
                     }
                 }
-            
+
             }
-            
+
             print "<script>alert(\"Formulize 7 introduces an all new, modern and mobile friendly theme called 'Anari'. To use the new theme, go to System -> Site Configuration -> Preferences -> General Settings and change the Default Theme to 'Anari'.\");</script>";
-            
+
         }
 
         $sql = array();
@@ -1148,7 +1247,25 @@ function patch40() {
         foreach($sql as $thisSql) {
             $xoopsDB->query($thisSql);
         }
-        
+
+				// check for ele_forcehidden elements, and flag them to the user
+				$sql = "SELECT f.desc_form, e.ele_caption, e.ele_colhead FROM ".$xoopsDB->prefix("formulize")." AS e LEFT JOIN ".$xoopsDB->prefix("formulize_id")." AS f ON f.id_form = e.id_form WHERE e.ele_forcehidden = 1 ORDER BY f.desc_form, e.ele_colhead, e.ele_caption";
+				$res = $xoopsDB->query($sql);
+				$forceHiddenElements = "";
+				$formTitle = "";
+				while($array = $xoopsDB->fetchArray($res)) {
+					if($formTitle != $array['desc_form']) {
+						$forceHiddenElements .= $forceHiddenElements ? " \\n " : "";
+						$forceHiddenElements .= $array['desc_form'].": \\n ";
+						$formTitle = $array['desc_form'];
+					}
+					$forceHiddenElements .= $array['ele_colhead'] ? " ".$array['ele_colhead'] : " ".$array['ele_caption'];
+					$forceHiddenElements .= " \\n ";
+				}
+				if($forceHiddenElements) {
+					print "<script>alert(\" Some of your form elements have the 'force hidden' setting turned on. They are listed at the end of this message. \\n\\n The 'force hidden' setting caused hidden versions of elements to be included in forms, when the user did not have permission to view them. This setting is now deprecated and non-functional. You should verify that the affected forms are working properly for all users. \\n\\n In the highly unlikely event that something is not working, please contact info@formulize.org for assistance. \\n\\n You can turn off this warning in the database, by setting the value of 'ele_forcehidden' in the 'formulize' table to 0 for all these elements: \\n\\n $forceHiddenElements \");</script>";
+				}
+
         print "DB updates completed.  result: OK";
     }
 }

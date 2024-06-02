@@ -61,6 +61,7 @@ if(!defined("XOOPS_ROOT_PATH")) {
 }
 
 include_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
+include_once XOOPS_ROOT_PATH .'/modules/formulize/include/customCodeForApplications.php';
 
 global $xoopsConfig;
 // load the formulize language constants if they haven't been loaded already
@@ -100,7 +101,6 @@ if(!$element_handler) {
 	$element_handler = xoops_getmodulehandler('elements', 'formulize');
 }
 
-$formulize_up = array(); // container for user profile info
 $formulize_elementData = array(); // this array has multiple dimensions, in this order:  form id, entry id, element id.  "new" means a nea entry.  Multiple new entries will be recorded as new1, new2, etc
 $formulize_subformBlankCues = array();
 // loop through POST and catalogue everything that we need to do something with
@@ -126,7 +126,7 @@ foreach($_POST as $k=>$v) {
 		$GLOBALS['formulizeEleSub_' . $noSaveHandle] = $v;
 		$GLOBALS['formulizeEleSub_' . $element_metadata[3]] = $v;
 		unset($element);
-		
+
 	} elseif(substr($k, 0, 9) == "desubform") { // handle blank subform elements
 		$elementMetaData = explode("_", $k);
 		$elementObject = $element_handler->get($elementMetaData[3]);
@@ -144,9 +144,9 @@ foreach($_POST as $k=>$v) {
 		// also...the entry id that the new entries received was stored after writing in this array:
 		// this is the subform id, and the subform placeholder, which must receive the last insert id when it's values are saved
 		//$GLOBALS['formulize_subformCreateEntry'][$element->getVar('id_form')][$desubformEntryIndex]
-		
+
 	} elseif(substr($k, 0, 6) == "decue_") {
-		// store values according to form, entry and element ID 
+		// store values according to form, entry and element ID
 		// prep them all for writing
 		$elementMetaData = explode("_", $k);
         $elementObject = $element_handler->get($elementMetaData[3]);
@@ -155,17 +155,9 @@ foreach($_POST as $k=>$v) {
 			$formulize_elementData[$elementMetaData[1]][$elementMetaData[2]][$elementMetaData[3]] = $v;
 		} elseif(is_numeric($elementMetaData[1]) AND $elementObject->getVar('ele_type') != 'anonPasscode') {
 			$formulize_elementData[$elementMetaData[1]][$elementMetaData[2]][$elementMetaData[3]] = "{WRITEASNULL}"; // no value returned for this element that was included (cue was found) so we write it as blank to the db
-		}		
-	
-	} elseif(substr($k, 0, 12) == "userprofile_") {
-		$formulize_up[substr($k, 12)] = $v;
-	}
-}
+		}
 
-// write all the user profile info
-if(count((array) $formulize_up)>0) {
-	  $formulize_up['uid'] = $GLOBALS['userprofile_uid'];
-		writeUserProfile($formulize_up, $uid);
+	}
 }
 
 // figure out proxy user situation
@@ -197,12 +189,16 @@ if(count((array) $formulize_elementData) > 0 ) { // do security check if it look
   $formulizeModule =& $module_handler->getByDirname("formulize");
   $formulizeConfig =& $config_handler->getConfigsByCat(0, $formulizeModule->getVar('mid'));
   $modulePrefUseToken = $formulizeConfig['useToken'];
-	$useToken = $screen ? $screen->getVar('useToken') : $modulePrefUseToken; 
+	$useToken = $screen ? $screen->getVar('useToken') : $modulePrefUseToken;
 	if(isset($GLOBALS['xoopsSecurity']) AND $useToken) { // avoid security check for versions of XOOPS that don't have that feature, or for when it's turned off
-		$GLOBALS['formulize_securityCheckPassed'] = true;
-		if (!$GLOBALS['xoopsSecurity']->check() AND (!strstr($cururl, "modules/wfdownloads") AND !strstr($cururl, "modules/smartdownload"))) { // skip the security check if we're in wfdownloads/smartdownloads since that module should already be handling the security checking
+		$GLOBALS['formulize_securityCheckPassed'] = false;
+		if ($GLOBALS['xoopsSecurity']->check()) {
+			$GLOBALS['formulize_securityCheckPassed'] = true;
+		} elseif($GLOBALS['xoopsSecurity']->validateToken($_POST["detoken_".$elementMetaData[1]."_".$elementMetaData[2]."_".$elementMetaData[3]], name: 'formulize_display_element_token')) {
+			$GLOBALS['formulize_securityCheckPassed'] = true;
+		}
+		if($GLOBALS['formulize_securityCheckPassed'] == false) {
 			print "<b>Error: the data you submitted could not be saved in the database.</b>";
-			$GLOBALS['formulize_securityCheckPassed'] = false;
 			return false;
 		}
 	}
@@ -211,13 +207,42 @@ if(count((array) $formulize_elementData) > 0 ) { // do security check if it look
 	$form_handler = xoops_getmodulehandler('forms', 'formulize');
 
 foreach($formulize_elementData as $elementFid=>$entryData) { // for every form we found data for...
-    
+
 	$formulize_formObject = $form_handler->get($elementFid);
     // TODO: should the one-entry-per-group permission be checked in the permissions handler instead?
 	$oneEntryPerGroupForm = ($formulize_formObject->getVar('single') == "group");
 
     // for every entry in the form...
     foreach($entryData as $currentEntry => $values) {
+
+				// FIRST, try to handle any one to one situations where new entries have been written...
+				// If the entry is new, check if a newvalue was submitted from a counterpart form in a one to one connection to this one, use that entry instead of 'new'
+				if(substr($currentEntry, 0 , 3) == "new") {
+					checkForLinks($frid, array(), $elementFid, entries: false, unified_display: true); // sets up the $GLOBALS metadata we loop through next, which will be an array of arrays, each having keys fid, keyself, keyother, common
+					foreach($GLOBALS['formulize_checkForLinks_oneToOneMetaData'] as $linkData) {
+						// if the form for this link was submitted this pageload...
+						if(in_array($linkData['fid'], array_keys($formulize_elementData))) {
+							// figure out the fid, entry id, and element id that we should lookup in $_POST to see if it has the 'newvalue:' prefix
+							// assume only one entry (first) submitted to be written for the fid is all we care about
+							$lookupFid = $linkData['fid'];
+							$lookupEntryId = array_key_first($formulize_elementData[$lookupFid]);
+							$lookupElementId = $linkData['keyself'];
+							$keyselfElementObject = $element_handler->get($lookupElementId);
+							// if the keyself element is a linked element and it wrote a new value into the target form
+							if($keyselfElementObject->isLinked AND substr($_POST["de_{$lookupFid}_{$lookupEntryId}_{$lookupElementId}"], 0, 9) === 'newvalue:') {
+								if($linkData['common']) {
+									// write the value from the key element in the other form, as the value for the key element in this form
+									$values[$linkData['keyother']] = $formulize_elementData[$lookupFid][$lookupEntryId][$lookupElementId];
+								} else {
+									// write the current data ($values) that we'll be saving next, into that entry which was just written in response to the 'newvalue' operation, instead of creating another new entry in this form
+									$currentEntry = $formulize_elementData[$lookupFid][$lookupEntryId][$lookupElementId];
+								}
+								break; // go with the first one we found
+							}
+						}
+					}
+				}
+
         if(substr($currentEntry, 0 , 3) == "new") {
             // handle entries in the form that are new. if there is more than one new entry, they will be listed as new1, new2, new3, etc
 			$subformElementId = 0;
@@ -239,7 +264,12 @@ foreach($formulize_elementData as $elementFid=>$entryData) { // for every form w
                             $GLOBALS['formulize_subformCreateEntry'][$elementFid][] = $writtenEntryId;
                         }
                         $formulize_newEntryIds[$elementFid][] = $writtenEntryId; // log new ids (and all ids) and users for recording ownership info later
-                        $formulize_newEntryUsers[$elementFid][] = $creation_user;
+                        if(isset($GLOBALS['formulize_overrideProxyUser'])) {
+                            $formulize_newEntryUsers[$elementFid][] = intval($GLOBALS['formulize_overrideProxyUser']);
+                            unset($GLOBALS['formulize_overrideProxyUser']);
+                        } else {
+                            $formulize_newEntryUsers[$elementFid][] = $creation_user;
+                        }
                         $formulize_allWrittenEntryIds[$elementFid][] = $writtenEntryId;
                         $formulize_allSubmittedEntryIds[$elementFid][] = $writtenEntryId;
                         $formulize_newSubformBlankElementIds[$elementFid][$writtenEntryId] = $subformElementId;
@@ -249,7 +279,7 @@ foreach($formulize_elementData as $elementFid=>$entryData) { // for every form w
                         $notEntriesList['new_entry'][$elementFid][] = $writtenEntryId; // log the notification info
                         writeOtherValues($writtenEntryId, $elementFid, $subformBlankCounter); // write the other values for this entry
                         if($creation_user == 0) { // handle cookies for anonymous users
-                            setcookie('entryid_'.$elementFid, $writtenEntryId, time()+60*60*24*7, '/');	// the slash indicates the cookie is available anywhere in the domain (not just the current folder)				
+                            setcookie('entryid_'.$elementFid, $writtenEntryId, time()+60*60*24*7, '/');	// the slash indicates the cookie is available anywhere in the domain (not just the current folder)
                             $_COOKIE['entryid_'.$elementFid] = $writtenEntryId;
                         }
                         afterSavingLogic($values, $writtenEntryId);
@@ -310,7 +340,7 @@ if(count((array) $fundamentalDefaults) == 0 AND $screen AND is_a($screen, 'formu
     $fundamental_filters = $screen->getVar('fundamental_filters')    ;
     if(is_array($fundamental_filters)) {
         $fundamentalDefaults = getFilterValuesForEntry($fundamental_filters);
-    } 
+    }
 }
 // set the ownership info of the new entries created...use a custom named handler, so we don't conflict with any other data handlers that might be using the more conventional 'data_handler' name, which can happen depending on the scope within which this file is included
 // plus set any fundamental filters on new entries
@@ -321,19 +351,19 @@ foreach($formulize_newEntryIds as $newEntryFid=>$entries){
     // first, set any fundamental filters if any
     if(isset($fundamentalDefaults[$newEntryFid])) {
         foreach($entries as $thisEntry) {
-            formulize_writeEntry($fundamentalDefaults[$newEntryFid],$thisEntry);	
+            formulize_writeEntry($fundamentalDefaults[$newEntryFid],$thisEntry);
         }
-    }    
+    }
 }
 
 // reassign entry ownership for an entry if the user requested that, and has permission
 if(isset($updateOwnerFid) AND $gperm_handler->checkRight("update_entry_ownership", $updateOwnerFid, $groups, $mid)) {
 	updateOwnerForFormEntry($updateOwnerFid, $updateOwnerNewOwnerId, $updateOwnerEntryId);
-    
+
     // check if any other form that was submitted, is used in a subform element where the subform entries are supposed to be owned by the owner of the mainform entry
     // if so, reassign the submitted entries from that form too
     $formulize_formObject = $form_handler->get($updateOwnerFid);
-    $elementTypes = $formulize_formObject->getVar('elementTypes');    
+    $elementTypes = $formulize_formObject->getVar('elementTypes');
     foreach(array_keys($elementTypes, 'subform') as $subformElementId) {
         $subformElement = $element_handler->get($subformElementId);
         $subformEleValue = $subformElement->getVar('ele_value');
@@ -442,7 +472,7 @@ foreach($formulize_allWrittenEntryIds as $allWrittenFid=>$entries) {
             }
         }
     }
-	
+
 	// check for things that we should be updating based on the framework in effect for any override screen that has been declared...should we be doing the same lookup of entries in checkForLinks as we do above in normal procedure, so we update only based on mainform(s) in the overrideFrid??
 	if($overrideFrid AND $overrideFrid != $frid AND $derivedValueFound) {
         if($allWrittenFid == $overrideFid) {
@@ -454,7 +484,7 @@ foreach($formulize_allWrittenEntryIds as $allWrittenFid=>$entries) {
             }
         }
 	}
-	
+
 }
 
 // check for any forms that were written, that did not have derived values updated as part of the framework
@@ -473,7 +503,7 @@ if($frid) {
 // send notifications
 foreach($notEntriesList as $notEvent=>$notDetails) {
 	foreach($notDetails as $notFid=>$notEntries) {
-		$notEntries = array_unique($notEntries); 
+		$notEntries = array_unique($notEntries);
 		sendNotifications($notFid, $notEvent, $notEntries);
 	}
 }
@@ -510,109 +540,7 @@ function afterSavingLogic($values,$entry_id) {
 function updateOwnerForFormEntry($updateOwnerFid, $updateOwnerNewOwnerId, $updateOwnerEntryId) {
     $data_handler_for_owner_updating = new formulizeDataHandler($updateOwnerFid);
 	if(!$data_handler_for_owner_updating->setEntryOwnerGroups($updateOwnerNewOwnerId, $updateOwnerEntryId, true)) { // final true causes an update, instead of a normal setting of the groups from scratch.  Entry's creation user is updated too.
-		print "<b>Error: could not update the entry ownership information.  Please report this to the webmaster right away, including which entry you were trying to update.</b>";		
+		print "<b>Error: could not update the entry ownership information.  Please report this to the webmaster right away, including which entry you were trying to update.</b>";
 	}
 	$data_handler_for_owner_updating->updateCaches($updateOwnerEntryId);
-}
-
-
-// THIS FUNCTION TAKES THE DATA PASSED BACK FROM THE USERPROFILE PART OF A FORM AND SAVES IT AS PART OF THE XOOPS USER PROFILE
-function writeUserProfile($data, $uid) {
-
-	// following code largely borrowed from edituser.php
-	// values we receive:
-	// name
-	// email
-	// viewemail
-	// timezone_offset
-	// password
-	// vpass
-	// attachsig
-	// user_sig
-	// umode
-	// uorder
-	// notify_method
-	// notify_mode
-
-	global $xoopsUser, $xoopsConfig;
-	$config_handler =& xoops_gethandler('config');
-    $confType = defined('XOOPS_CONF_USER') ? XOOPS_CONF_USER : ICMS_CONF_USER;
-	$xoopsConfigUser =& $config_handler->getConfigsByCat($confType);
-
-	include_once XOOPS_ROOT_PATH . "/language/" . $xoopsConfig['language'] . "/user.php";
-
-	$errors = array();
-    if (!empty($data['uid'])) {
-        $uid = intval($data['uid']);
-    }
-		
-    if (empty($uid)) {
-	redirect_header(XOOPS_URL,3,_US_NOEDITRIGHT);
-        exit();
-    } elseif(is_object($xoopsUser)) {
-			if($xoopsUser->getVar('uid') != $uid) {
-				redirect_header(XOOPS_URL,3,_US_NOEDITRIGHT);
-				exit();	
-			}
-    }
-
-    $myts =& MyTextSanitizer::getInstance();
-    if ($xoopsConfigUser['allow_chgmail'] == 1) {
-        $email = '';
-        if (!empty($data['email'])) {
-            $email = $myts->stripSlashesGPC(trim($data['email']));
-        }
-        if ($email == '' || !checkEmail($email)) {
-            $errors[] = _US_INVALIDMAIL;
-        }
-    }
-    $password = '';
-    $vpass = '';
-    if (!empty($data['password'])) {
-     	  $password = $myts->stripSlashesGPC(trim($data['password']));
-    }
-    if ($password != '') {
-     	  if (strlen($password) < $xoopsConfigUser['minpass']) {
-           	$errors[] = sprintf(_US_PWDTOOSHORT,$xoopsConfigUser['minpass']);
-        }
-        if (!empty($data['vpass'])) { 
-     	      $vpass = $myts->stripSlashesGPC(trim($data['vpass']));
-        }
-     	  if ($password != $vpass) {
-            $errors[] = _US_PASSNOTSAME;
-     	  }
-    }
-    if (count((array) $errors) > 0) {
-        echo '<div>';
-        foreach ($errors as $er) {
-            echo '<span style="color: #ff0000; font-weight: bold;">'.$er.'</span><br />';
-        }
-        echo '</div><br />';
-    } else {
-        $member_handler =& xoops_gethandler('member');
-        $edituser =& $member_handler->getUser($uid);
-        $edituser->setVar('name', $data['name']);
-        if ($xoopsConfigUser['allow_chgmail'] == 1) {
-            $edituser->setVar('email', $email, true);
-        }
-        $user_viewemail = (!empty($data['user_viewemail'])) ? 1 : 0;
-        $edituser->setVar('user_viewemail', $user_viewemail);
-        if ($password != '') {
-            $edituser->setVar('pass', md5($password), true);
-        }
-        $edituser->setVar('timezone_offset', $data['timezone_offset']);
-        $attachsig = !empty($data['attachsig']) ? 1 : 0;
-	  $edituser->setVar('attachsig', $attachsig);
-        $edituser->setVar('user_sig', xoops_substr($data['user_sig'], 0, 255));
-        $edituser->setVar('uorder', $data['uorder']);
-        $edituser->setVar('umode', $data['umode']);
-        $edituser->setVar('notify_method', $data['notify_method']);
-        $edituser->setVar('notify_mode', $data['notify_mode']);
-
-        if (!$member_handler->insertUser($edituser)) {
-            echo $edituser->getHtmlErrors();
-						exit();
-        }
-    }
-
 }

@@ -31,9 +31,9 @@
 
 $modversion = array(
 	'name' => _MI_formulize_NAME,
-	'version' => "7.11",
+	'version' => "7.3",
 	'description' => _MI_formulize_DESC,
-	'author' => "Julian Egelstaff & Freeform Solutions",
+	'author' => "The Formulize Project - formulize.org",
 	'credits' => "",
 	'help' => "",
 	'license' => "GPL",
@@ -713,7 +713,8 @@ $modversion['templates'][] = array(
 $modversion['templates'][] = array(
 	'file' => 'admin/managepermissions.html',
 	'description' => '');
-    
+
+
 //	Module Configs
 // $xoopsModuleConfig['t_width']
 $modversion['config'][1] = array(
@@ -755,7 +756,6 @@ $modversion['config'][] = array(
 	'default' => '35',
 );
 
-// $xoopsModuleConfig['delimeter']
 $modversion['config'][] = array(
 	'name' => 'delimeter',
 	'title' => '_MI_formulize_DELIMETER',
@@ -764,26 +764,6 @@ $modversion['config'][] = array(
 	'valuetype' => 'text',
 	'default' => 'br',
 	'options' => array(_MI_formulize_DELIMETER_BR=>'br', _MI_formulize_DELIMETER_SPACE=>'space'),
-);
-
-// get all the available forms and populate the options array
-// this is not permission controlled yet -- should make use of the edit_form permission perhaps
-global $xoopsDB;
-$getFormsSQL = "SELECT id_form, desc_form FROM " . $xoopsDB->prefix("formulize_id");
-$resFormsSQL = $xoopsDB->query($getFormsSQL);
-$pformoptions["-------------"] = 0;
-while($resArray = $xoopsDB->fetchArray($resFormsSQL)) {
-	$pformoptions[$resArray['desc_form']] = $resArray['id_form'];
-}
-// $xoopsModuleConfig['profileForm']
-$modversion['config'][] = array(
-	'name' => 'profileForm',
-	'title' => '_MI_formulize_PROFILEFORM',
-	'description' => '',
-	'formtype' => 'select',
-	'valuetype' => 'int',
-	'default' => '0',
-	'options' => $pformoptions,
 );
 
 $modversion['config'][] = array(
@@ -795,7 +775,6 @@ $modversion['config'][] = array(
 	'default' => 1,
 );
 
-// $xoopsModuleConfig['LOE_limit']
 $modversion['config'][] = array(
 	'name' => 'LOE_limit',
 	'title' => '_MI_formulize_LOE_limit',
@@ -805,7 +784,6 @@ $modversion['config'][] = array(
 	'default' => '5000',
 );
 
-// $xoopsModuleConfig['useToken']
 $modversion['config'][] = array(
 	'name' => 'useToken',
 	'title' => '_MI_formulize_USETOKEN',
@@ -822,10 +800,9 @@ $modversion['config'][] = array(
 	'description' => '_MI_formulize_ISSAVELOCKEDDESC',
 	'formtype' => 'yesno',
 	'valuetype' => 'int',
-	'default' => 0, // no is the default
+	'default' => 0
 );
 
-// number formatting options
 $modversion['config'][] = array(
 	'name' =>'number_decimals',
 	'title' => '_MI_formulize_NUMBER_DECIMALS',
@@ -880,7 +857,6 @@ $modversion['config'][] = array(
 	'default' => 1,
 );
 
-// control if caching is on or off
 $modversion['config'][] = array(
 	'name' => 'useCache',
 	'title' => '_MI_formulize_USECACHE',
@@ -968,14 +944,22 @@ $modversion['config'][] = array(
 	'default' => '0',
 );
 
-//bloc
+$modversion['config'][] = array(
+	'name' => 'useOldCustomButtonEffectWriting',
+	'title' => '_MI_formulize_USEOLDCUSTOMBUTTONEFFECTWRITING',
+	'description' => '_MI_formulize_USEOLDCUSTOMBUTTONEFFECTWRITINGDESC',
+	'formtype' => 'yesno',
+	'valuetype' => 'int',
+	'default' => '0',
+);
+
 $modversion['blocks'][1] = array(
 	'file' => "mymenu.php",
 	'name' => _MI_formulizeMENU_BNAME,
 	'description' => "",
 	'show_func' => "block_formulizeMENU_show",
     'template' => 'menu_controller.html');
-    
+
 // Notifications -- added by jwe 10/10/04, removed for 2.0, reinstated for 2.2 with improved options
 $modversion['hasNotification'] = 1;
 
@@ -1030,6 +1014,3 @@ if(isset($GLOBALS['formulize_notificationSubjectOverride'])) {
 	$modversion['notification']['event'][2]['mail_subject'] = $GLOBALS['formulize_notificationSubjectOverride'];
 	$modversion['notification']['event'][3]['mail_subject'] = $GLOBALS['formulize_notificationSubjectOverride'];
 }
-
-// ADD PREFERENCES FOR THE NAVSTYLE FOR NEW FORMS AND THE DEFAULT PAGE TITLE?
-// currently default is tabs, and default page title is the screen title

@@ -38,9 +38,11 @@ require(XOOPS_ROOT_PATH."/header.php");
 
 global $xoopsDB;
 
+include_once XOOPS_ROOT_PATH . "/modules/formulize/include/common.php";
+include_once XOOPS_ROOT_PATH . "/modules/formulize/include/readelements.php";
+
 $form_handler = xoops_getmodulehandler('forms', 'formulize');
 $application_handler = xoops_getmodulehandler('applications', 'formulize');
-include_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
 $allowedForms = allowedForms();
 
 if(isset($_GET['id']) AND $_GET['id'] === "all") {
@@ -52,6 +54,7 @@ if(isset($_GET['id']) AND $_GET['id'] === "all") {
 }
 
 $allAppData = array();
+$soloLink = 'start';
 foreach($applicationsToDraw as $aid) {
     if(is_object($aid)) {
         $aid = $aid->getVar('appid'); // when 'all' is requested, the array will be of objects, not ids
@@ -66,10 +69,26 @@ foreach($applicationsToDraw as $aid) {
         $app_name = _AM_CATGENERAL;
     }
     $formsToSend = getNavDataForForms($links);
-    if(count((array) $formsToSend)>0) {
+    if(count((array) $formsToSend)==1) {
+        $soloLink = $soloLink === 'start' ? $formsToSend[0]['url'] : ""; // will only be set to a URL the first time, if there is anything else
+    } elseif(count((array) $formsToSend)>0) {
         $allAppData[] = array('app_name'=>$app_name, 'noforms'=>0, 'formData'=>$formsToSend);
+        $soloLink = count($formsToSend) > 1 ? "" : $soloLink;
     }
-    
+
+}
+
+// only one link in the entire menu, so go to that page
+if($soloLink AND $soloLink != 'start') {
+    header("location: ".$soloLink);
+    exit();
+
+}
+// no links in the entire menu, boot the user to the homepage. Anons will be able to login there.
+global $xoopsUser;
+if(count($allAppData)==0 AND !$xoopsUser) {
+	header("location: ".XOOPS_URL);
+	exit();
 }
 
 // retrieve the xoops_version info
@@ -88,19 +107,8 @@ function getNavDataForForms($links) {
     $formsToSend = array();
     $i=0;
     foreach($links as $link) {
-        $suburl = XOOPS_URL."/modules/formulize/index.php?".$link->getVar("screen");
-        $url = $link->getVar("url");
-        if(strlen($url) > 0){
-            if(substr($url, 0, 1)=="/") {
-                $url = XOOPS_URL.$url;
-            } else {
-            $pos = strpos($url,"://");
-            if($pos === false){
-                $url = "http://".$url;
-                }
-            }
-            $suburl = $url;
-        }
+        $url = buildMenuLinkURL($link);
+        $suburl = $url ? $url : XOOPS_URL."/modules/formulize/index.php?".$link->getVar("screen");
         $formsToSend[$i]['url'] = $suburl;
         $formsToSend[$i]['title'] = $link->getVar("text");
         $i++;

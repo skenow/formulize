@@ -71,6 +71,9 @@ if(!$ele_id = intval($_GET['ele_id'])) { // on new element saves, new ele_id can
   }
 }
 $element = $element_handler->get($ele_id);
+if($element->isSystemElement) {
+	exit();
+}
 $ele_type = $element->getVar('ele_type');
 $fid = $element->getVar('id_form');
 
@@ -130,7 +133,7 @@ if($ele_type == "subform") {
     if(!isset($processedValues['elements']['ele_value']['enforceFilterChanges'])) {
         $processedValues['elements']['ele_value']['enforceFilterChanges'] = 0;
     }
-    
+
   if(!$_POST['elements-ele_value'][3]) {
     $processedValues['elements']['ele_value'][3] = 0;
   }
@@ -154,9 +157,9 @@ if($ele_type == "subform") {
         break;
 
   }
-  $processedValues['elements']['ele_value'][1] = implode(",",$_POST['elements_ele_value_1']);
+  $processedValues['elements']['ele_value'][1] = implode(",",(array)$_POST['elements_ele_value_1']);
   $processedValues['elements']['ele_value']['disabledelements'] = (isset($_POST['elements_ele_value_disabledelements']) AND count((array) $_POST['elements_ele_value_disabledelements']) > 0) ? implode(",",$_POST['elements_ele_value_disabledelements']) : array();
-  $processedValues['elements']['ele_value'][7] = parseSubmittedConditions('subformfilter', 'optionsconditionsdelete'); // post key, delete key
+  list($processedValues['elements']['ele_value'][7], $_POST['reload_option_page']) = parseSubmittedConditions('subformfilter', 'optionsconditionsdelete'); // post key, delete key
 }
 
 if($ele_type == "radio") {
@@ -173,8 +176,8 @@ if($ele_type == "select") {
   $ele_value = $element->getVar('ele_value');
 
   if(isset($_POST['formlink']) AND $_POST['formlink'] != "none") {
-    // select box is not currently linked and user is requesting to link
-    if (!$element->isLinked){
+    // select box is not currently linked and user is requesting to link (as long as it's not the first save of the element)
+    if ($_POST['formulize_admin_key'] != 'new' AND !$element->isLinked) {
       $form_handler->updateField($element, $element->getVar("ele_handle"), "bigint(20)");
     }
 
@@ -196,7 +199,7 @@ if($ele_type == "select") {
       }
     }
   }
-  
+
   // gather any additional mappings specified by the user
   $mappingCounter = 0;
   $processedValues['elements']['ele_value']['linkedSourceMappings'] = array();
@@ -210,7 +213,7 @@ if($ele_type == "select") {
   if($mappingCounter == 0) { // nothing written
     $processedValues['elements']['ele_value']['linkedSourceMappings'] = null;
   }
-  
+
   $processedValues['elements']['ele_value'][8] = 0;
   if($_POST['elements_listordd'] == 2) {
     $processedValues['elements']['ele_value'][0] = 1; // rows is 1
@@ -240,60 +243,9 @@ if($ele_type == "select") {
   }
   $processedValues['elements']['ele_value'][3] = implode(",", $_POST['element_formlink_scope']);
 
-  // handle conditions
-  // grab any conditions for this page too
-  // add new ones to what was passed from before
-
-  $filter_key = 'formlinkfilter';
-  if($_POST["new_".$filter_key."_term"] != "") {
-    $_POST[$filter_key."_elements"][] = $_POST["new_".$filter_key."_element"];
-    $_POST[$filter_key."_ops"][] = $_POST["new_".$filter_key."_op"];
-    $_POST[$filter_key."_terms"][] = $_POST["new_".$filter_key."_term"];
-    $_POST[$filter_key."_types"][] = "all";
-    $_POST['reload_option_page'] = true;
-  }
-  if($_POST["new_".$filter_key."_oom_term"] != "") {
-    $_POST[$filter_key."_elements"][] = $_POST["new_".$filter_key."_oom_element"];
-    $_POST[$filter_key."_ops"][] = $_POST["new_".$filter_key."_oom_op"];
-    $_POST[$filter_key."_terms"][] = $_POST["new_".$filter_key."_oom_term"];
-    $_POST[$filter_key."_types"][] = "oom";
-    $_POST['reload_option_page'] = true;
-  }
-  // then remove any that we need to
-  if(isset($_POST['optionsconditionsdelete']) AND $_POST['optionsconditionsdelete']) {
-  $conditionsDeleteParts = explode("_", $_POST['optionsconditionsdelete']);
-    $deleteTarget = intval($conditionsDeleteParts[1]);
-    // go through the passed filter settings starting from the one we need to remove, and shunt the rest down one space
-    // need to do this in a loop, because unsetting and key-sorting will maintain the key associations of the remaining high values above the one that was deleted
-    $originalCount = count((array) $_POST[$filter_key."_elements"]);
-    for($i=$deleteTarget;$i<$originalCount;$i++) { 
-      if($i>$deleteTarget) {
-        $_POST[$filter_key."_elements"][$i-1] = $_POST[$filter_key."_elements"][$i];
-        $_POST[$filter_key."_ops"][$i-1] = $_POST[$filter_key."_ops"][$i];
-        $_POST[$filter_key."_terms"][$i-1] = $_POST[$filter_key."_terms"][$i];
-        $_POST[$filter_key."_types"][$i-1] = $_POST[$filter_key."_types"][$i];
-      }
-      if($i==$deleteTarget OR $i+1 == $originalCount) {
-        // first time through or last time through, unset things
-        unset($_POST[$filter_key."_elements"][$i]);
-        unset($_POST[$filter_key."_ops"][$i]);
-        unset($_POST[$filter_key."_terms"][$i]);
-        unset($_POST[$filter_key."_types"][$i]);
-      }
-    }
-    $_POST['reload_option_page'] = true;
-  }
-  if(count((array) $_POST[$filter_key."_elements"]) > 0){
-    $processedValues['elements']['ele_value'][5][0] = $_POST[$filter_key."_elements"];
-    $processedValues['elements']['ele_value'][5][1] = $_POST[$filter_key."_ops"];
-    $processedValues['elements']['ele_value'][5][2] = $_POST[$filter_key."_terms"];
-    $processedValues['elements']['ele_value'][5][3] = $_POST[$filter_key."_types"];
-  } else {
-    $processedValues['elements']['ele_value'][5] = "";
-  }
-
-  $processedValues['elements']['ele_value']['optionsLimitByElementFilter'] = parseSubmittedConditions('optionsLimitByElementFilter', 'optionsLimitByElementFilterDelete'); // post key, delete key, processedValues, ele_value key for conditions
-
+	list($processedValues['elements']['ele_value'][5], $formLinkFilterChanged) = parseSubmittedConditions('formlinkfilter', 'optionsconditionsdelete');
+  list($processedValues['elements']['ele_value']['optionsLimitByElementFilter'], $optionsLimitChanged) = parseSubmittedConditions('optionsLimitByElementFilter', 'optionsLimitByElementFilterDelete');
+	$_POST['reload_option_page'] = ($formLinkFilterChanged OR $optionsLimitChanged) ? true : false;
 
   /**newly added for autocomplete box to make sure when {USERNAMES} and {FULLNAMES} are selected, system will not allow new entries to be added
     *ele_value[8] ==1 will make sure it's an autocomplete box
@@ -302,18 +254,18 @@ if($ele_type == "select") {
     *
     *when $processedValues['elements']['ele_value'][2]['{USERNAMES}'] = 1, that means this one is checked;
     *	if it's 0, then it's not checked
-    *							
+    *
     *this also applys in database: "{USERNAMES}";i:1; as selected;
     *			       "{USERNAMES}";i:0; for not selected.
     *
-    *you can use those lines to check the value. 
+    *you can use those lines to check the value.
     *  error_log("usernames: ".print_r($processedValues['elements']['ele_value'][2]['{USERNAMES}']));
     *  error_log("fullnames: ".print_r($processedValues['elements']['ele_value'][2]['{FULLNAMES}']));
     *
     *Added by Jinfu MAR 2015
     */
 
-    if($processedValues['elements']['ele_value'][8] == 1 && is_array($processedValues['elements']['ele_value'][2]) && 
+    if($processedValues['elements']['ele_value'][8] == 1 && is_array($processedValues['elements']['ele_value'][2]) &&
        (isset($processedValues['elements']['ele_value'][2]['{USERNAMES}']) || isset($processedValues['elements']['ele_value'][2]['{FULLNAMES}']))) {
       $processedValues['elements']['ele_value'][16]=0;
   }
@@ -346,7 +298,7 @@ if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.ph
   $customTypeHandler = xoops_getmodulehandler($ele_type."Element", 'formulize');
   $ele_value_before_adminSave = serialize($element->getVar('ele_value'));
   $changed = $customTypeHandler->adminSave($element, $processedValues['elements']['ele_value']); // cannot use getVar to retrieve ele_value from element, due to limitation of the base object class, when dealing with set values that are arrays and not being gathered directly from the database (it wants to unserialize them instead of treating them as literals)
-  $ele_value_after_adminSave = is_array($element->vars['ele_value']['value']) ? serialize($element->vars['ele_value']['value']) : $element->vars['ele_value']['value']; // get raw value because it won't have been serialized yet since it hasn't been written to the DB...if we use getVar, it will try to unserialize it for us, but that won't work because it hasn't been serialized yet -- if this value is not an array, take it as is though, since then it is simply unchanged from when it was originally set as the serialized value we want  
+  $ele_value_after_adminSave = is_array($element->vars['ele_value']['value']) ? serialize($element->vars['ele_value']['value']) : $element->vars['ele_value']['value']; // get raw value because it won't have been serialized yet since it hasn't been written to the DB...if we use getVar, it will try to unserialize it for us, but that won't work because it hasn't been serialized yet -- if this value is not an array, take it as is though, since then it is simply unchanged from when it was originally set as the serialized value we want
   if($ele_value_before_adminSave === $ele_value_after_adminSave) {
     unset($processedValues['elements']['ele_value']); // no change, so nothing to write below
   }
@@ -360,7 +312,7 @@ if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.ph
 foreach($processedValues['elements'] as $property=>$value) {
   // if we're setting something other than ele_value, or
   // we're setting ele_value for an element type that
-  // has an adminSave method of its own. 
+  // has an adminSave method of its own.
   // We don't want to set ele_value if it was modified during
   // adminSave, because we might clobber user's changes
   // so the user has to setVar in adminSave themselves!

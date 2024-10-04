@@ -32,7 +32,7 @@
 
 // Added Oct. 16 2006
 // setup flag for whether the Freeform Solutions user archiving patch has been applied to the core
-global $xoopsDB, $xoopsConfig;
+global $xoopsDB, $xoopsConfig, $icmsConfig;
 $sql = "SELECT * FROM " . $xoopsDB->prefix("users") . " LIMIT 0,1";
 if($res = $xoopsDB->query($sql)) {
   $resarray = $xoopsDB->fetchArray($res);
@@ -1628,7 +1628,7 @@ function buildScope($currentView, $member_handler, $gperm_handler, $uid, $groups
 // THIS FUNCTION SENDS TEXT THROUGH THE TRANSLATION ROUTINE IF MARCAN'S MULTILANGUAGE HACK IS INSTALLED
 // THIS FUNCTION IS ALSO AWARE OF THE XLANGUAGE MODULE IF THAT IS INSTALLED.  
 function trans($string) {
-  $myts =& MyTextSanitizer::getInstance();
+  $myts = MyTextSanitizer::getInstance();
   if(function_exists('easiestml')) {
     global $easiestml_lang;
     $easiestml_lang = isset($_GET['lang'])?$_GET['lang']:$easiestml_lang;   // this is required when linked with a Drupal install
@@ -1657,7 +1657,7 @@ function getMaxIdReq() {
 function prepDataForWrite($element, $ele) {
 
 	global $myts;
-	if(!$myts) { $myts =& MyTextSanitizer::getInstance(); }
+	if(!$myts) { $myts = MyTextSanitizer::getInstance(); }
 
 	$ele_type = $element->getVar('ele_type');
 	$ele_value = $element->getVar('ele_value');
@@ -1862,14 +1862,14 @@ function prepDataForWrite($element, $ele) {
 					$value = $myts->stripSlashesGPC($ele);
 				break;
 				/*
-				 * Hack by Félix<INBOX International>
+				 * Hack by Fï¿½lix<INBOX International>
 				 * Adding colorpicker form element
 				 */
 				case 'colorpick':
 					$value = $ele;
 				break;
 				/*
-				 * End of Hack by Félix<INBOX International>
+				 * End of Hack by Fï¿½lix<INBOX International>
 				 * Adding colorpicker form element
 				 */
 				default:
@@ -2005,14 +2005,14 @@ function checkOther($key, $id){
 function writeOtherValues($id_req, $fid) {
 	global $xoopsDB, $myts;
 	/*
-	 * Hack by Félix <INBOX Solutions> for sedonde
+	 * Hack by Fï¿½lix <INBOX Solutions> for sedonde
 	 * myts == NULL
 	 */
 	if(!$myts){
-		$myts =& MyTextSanitizer::getInstance();
+		$myts = MyTextSanitizer::getInstance();
 	}
 	/*
-	 * Hack by Félix <INBOX Solutions> for sedonde
+	 * Hack by Fï¿½lix <INBOX Solutions> for sedonde
 	 * myts == NULL
 	 */
 	include_once XOOPS_ROOT_PATH . "/modules/formulize/class/forms.php";
@@ -2281,7 +2281,8 @@ function _formatLinksRegularElement($matchtext, $textWidth, $ele_type, $handle, 
     $matchtext = $elementTypeHandler->formatDataForList($matchtext, $handle, $entryBeingFormatted);
     return $matchtext;
   } else {
-    return $myts->makeClickable(printSmart(trans($myts->htmlSpecialChars($matchtext)), $textWidth));	    
+    $rtn = $myts->makeClickable(printSmart(trans($myts->htmlSpecialChars($matchtext)), $textWidth));	    
+    return $rtn;
   }
 }
 
@@ -2568,7 +2569,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 	// 17. determine the users subscribed and subscribe the necessary others with a oncethendelete mode
 	// 18. trigger the notification
 
-	global $xoopsDB, $xoopsUser, $xoopsConfig;
+	global $xoopsDB, $xoopsUser, $xoopsConfig, $icmsConfig;
 
 	$uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
 
@@ -2746,7 +2747,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
         if(!file_exists(XOOPS_ROOT_PATH."/modules/formulize/language/".$xoopsConfig['language']."/mail_template/".$templateFileName)) {
           continue;
         } else {
-          $templateFileContents = file_get_contents(XOOPS_ROOT_PATH."/modules/formulize/language/".$xoopsConfig['language']."/mail_template/".$templateFileName);
+          $templateFileContents = file_get_contents(XOOPS_ROOT_PATH."/modules/formulize/language/".$icmsConfig['language']."/mail_template/".$templateFileName);
           if(strstr($templateFileContents, "{ELEMENT")) {
             // gather the data for this entry and make it available to the template, since it uses an element tag in the message
 			// Only do this getData call if we don't already have data from the database...$data[0] == "" will probably never be true in Formulize 3.0 and higher, but will evaluate as expected, with a warning about [0] being an invalid offset or something like that
@@ -2770,6 +2771,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 		          $uids_complete[] = -1; // if we are notifying an arbitrary e-mail address, then this uid will have been added to the uids_conditions array, so let's add it to the complete array, so that our notification doesn't get ignored as being "out of scope" based on uids
 			}
 			$uids_cust_real = compileNotUsers2($uids_cust_con, $uids_complete, $notification_handler, $fid, $event, $mid);
+
 			// set the custom template and subject
 	            $module_handler =& xoops_gethandler('module');
 		    $module =& $module_handler->get($mid);
@@ -2787,8 +2789,27 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 			}
 			$oldsubject = $not_config['event'][$evid]['mail_subject'];
 			$oldtemp = $not_config['event'][$evid]['mail_template'];
-			$not_config['event'][$evid]['mail_template'] = $thiscon['not_cons_template'] == "" ? $not_config['event'][$evid]['mail_template'] : $thiscon['not_cons_template'];
-			$not_config['event'][$evid]['mail_subject'] = $thiscon['not_cons_subject'] == "" ? $not_config['event'][$evid]['mail_subject'] : $thiscon['not_cons_subject'];
+	       		// rewrite the notification with the subject and template we want, then reset
+	      		$GLOBALS['formulize_notificationTemplateOverride'] = $thiscon['not_cons_template'] == "" 
+	               	    ? $not_config['event'][$evid]['mail_template'] 
+		            : $thiscon['not_cons_template'];
+		        $GLOBALS['formulize_notificationSubjectOverride'] = $thiscon['not_cons_subject'] == "" 
+		            ? $not_config['event'][$evid]['mail_subject'] 
+		            : $thiscon['not_cons_subject'];
+		        $not_config['event'][$evid]['mail_template'] = $thiscon['not_cons_template'] == "" 
+		            ? $not_config['event'][$evid]['mail_template'] 
+		            : $thiscon['not_cons_template'];
+		        $not_config['event'][$evid]['mail_subject'] = $thiscon['not_cons_subject'] == "" 
+		            ? $not_config['event'][$evid]['mail_subject'] 
+		            : $thiscon['not_cons_subject'];
+		        // loop through the variables and do replacements in the subject, if any
+		        if (strstr($not_config['event'][$evid]['mail_subject'], "{ELEMENT")) {
+		            foreach ($extra_tags as $tag=>$value) {
+		                str_replace("{".$tag."}",$value, $not_config['event'][$evid]['mail_subject']);
+		                str_replace("{".$tag."}",$value, $GLOBALS['formulize_notificationSubjectOverride']);
+		            }
+		        }
+			
 			// trigger the event
 			if(count($uids_cust_real) > 0) {
 				if(in_array(-1, $uids_cust_real)) {
@@ -2801,6 +2822,9 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 			}
 			$not_config['event'][$evid]['mail_subject'] = $oldsubject;
 			$not_config['event'][$evid]['mail_template'] = $oldtemp;
+		        unset($GLOBALS['formulize_notificationTemplateOverride']);
+            		unset($GLOBALS['formulize_notificationSubjectOverride']);
+
 			unset($uids_cust_real);
 			unset($uids_cust_con);
 		}
@@ -2833,7 +2857,7 @@ function sendNotificationToEmail($email, $event, $tags, $subject, $template) {
     $templateDir = XOOPS_ROOT_PATH."/modules/formulize/language/english/mail_template/";
     include_once XOOPS_ROOT_PATH."/modules/formulize/language/english/modinfo.php";
   }
-  
+ if (empty($template)) { 
   switch($event) {
     case("new_entry"):
       $template = 'form_newentry.tpl';
@@ -2848,7 +2872,7 @@ function sendNotificationToEmail($email, $event, $tags, $subject, $template) {
       $subject = _MI_formulize_NOTIFY_DELENTRY_MAILSUB;
       break;
   }
-  
+ }
   $xoopsMailer =& getMailer();
   include_once XOOPS_ROOT_PATH . '/include/notification_constants.php';
   $xoopsMailer->useMail();
@@ -3014,10 +3038,10 @@ print "$prevValue<br><br>";
 	if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
 
 	global $xoopsUser, $formulize_mgr, $xoopsDB, $myts;
-	if(!is_object($myts)) { $myts =& MyTextSanitizer::getInstance(); }
+	if(!is_object($myts)) { $myts = MyTextSanitizer::getInstance(); }
 
 	if(!$formulize_mgr) {
-		$formulize_mgr =& xoops_getmodulehandler('elements', 'formulize');
+		$formulize_mgr = xoops_getmodulehandler('elements', 'formulize');
 	}
 
 	$uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;

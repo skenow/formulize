@@ -35,7 +35,9 @@
 
 //include 'header.php'; //redundant as all the code that this calls is now called from within each function (since the functions operate on a standalone basis)
 
-include_once XOOPS_ROOT_PATH.'/class/mail/phpmailer/class.phpmailer.php';
+if (file_exists(XOOPS_ROOT_PATH . '/class/mail/phpmailer/class.phpmailer.php')) {
+	include_once XOOPS_ROOT_PATH.'/class/mail/phpmailer/class.phpmailer.php';
+}
 
 $GLOBALS['formulize_asynchronousFormDataInDatabaseReadyFormat'] = array();
 $GLOBALS['formulize_asynchronousFormDataInAPIFormat'] = array();
@@ -97,17 +99,17 @@ if ( $res ) {
   }
 }
 
-$myts =& MyTextSanitizer::getInstance();
+$myts = MyTextSanitizer::getInstance();
 $title = $myts->displayTarea($desc_form);
 if(!isset($formulize_screen_id)) {
-  $xoopsTpl->assign('xoops_pagetitle', $title);
+  $xoopsTpl->assign('icms_pagetitle', $title);
 } 
 
 // get the global or group permission
 $groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 $uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
 $mid = getFormulizeModId();
-$gperm_handler = &xoops_gethandler('groupperm');
+$gperm_handler =& icms::handler('icms_member_groupperm');
 $view_globalscope = $gperm_handler->checkRight("view_globalscope", $fid, $groups, $mid);
 $view_groupscope = $gperm_handler->checkRight("view_groupscope", $fid, $groups, $mid);
 
@@ -143,7 +145,7 @@ if($sid) {
 		}
 		
     if(is_object($xoopsTpl)) {
-      $xoopsTpl->assign('xoops_pagetitle', $screen->getVar('title'));
+      $xoopsTpl->assign('icms_pagetitle', $screen->getVar('title'));
     }
 		
 	}

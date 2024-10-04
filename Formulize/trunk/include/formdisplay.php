@@ -288,7 +288,7 @@ function getEntryValues($entry, $formulize_mgr, $groups, $fid, $elements="", $mi
 	
 		// exclude private elements unless the user has view_private_elements permission, or update_entry permission on a one-entry-per group entry
 		$private_filter = "";
-		$gperm_handler =& xoops_gethandler('groupperm');
+		$gperm_handler =& icms::handler('icms_member_groupperm');
 		$view_private_elements = $gperm_handler->checkRight("view_private_elements", $fid, $groups, $mid);
 	
 		if(!$view_private_elements AND $uid != $owner AND !$groupEntryWithUpdateRights) {
@@ -414,8 +414,8 @@ if(!is_numeric($titleOverride) AND $titleOverride != "" AND $titleOverride != "a
 		$entry = $GLOBALS['formulize_newEntryIds'][$fid][0];
 	}
 
-	$member_handler =& xoops_gethandler('member');
-	$gperm_handler = &xoops_gethandler('groupperm');
+	$member_handler =& icms::handler('icms_member');
+	$gperm_handler = &icms::handler('icms_member_groupperm');
 	if($profileForm === "new") { 
 		 // spoof the $groups array based on the settings for the regcode that has been validated by register.php
 		$reggroupsq = q("SELECT reg_codes_groups FROM " . XOOPS_DB_PREFIX . "_reg_codes WHERE reg_codes_code=\"" . $GLOBALS['regcode'] . "\"");
@@ -691,7 +691,7 @@ if(!is_numeric($titleOverride) AND $titleOverride != "" AND $titleOverride != "a
 				} else {
 					$form = new formulize_themeForm($title, 'formulize', "$currentURL", "post", true); // extended class that puts formulize element names into the tr tags for the table, so we can show/hide them as required
 				}
-				$form->setExtra("enctype='multipart/form-data'"); // impératif!
+				$form->setExtra("enctype='multipart/form-data'"); // impï¿½ratif!
 	
 				if(is_array($settings)) { $form = writeHiddenSettings($settings, $form); }
 				$form->addElement (new XoopsFormHidden ('ventry', $settings['ventry'])); // necessary to trigger the proper reloading of the form page, until Done is called and that form does not have this flag.
@@ -865,9 +865,9 @@ if(!is_numeric($titleOverride) AND $titleOverride != "" AND $titleOverride != "a
 			// saving message
 			print "<div id=savingmessage style=\"display: none; position: absolute; width: 100%; right: 0px; text-align: center; padding-top: 50px;\">\n";
 			if ( file_exists(XOOPS_ROOT_PATH."/modules/formulize/images/saving-".$xoopsConfig['language'].".gif") ) {
-				print "<img src=\"" . XOOPS_URL . "/modules/formulize/images/saving-" . $xoopsConfig['language'] . ".gif\">\n";
+				print "<img alt='Saving...' src=\"" . XOOPS_URL . "/modules/formulize/images/saving-" . $xoopsConfig['language'] . ".gif\">\n";
 			} else {
-				print "<img src=\"" . XOOPS_URL . "/modules/formulize/images/saving-english.gif\">\n";
+				print "<img alt='Saving...' src=\"" . XOOPS_URL . "/modules/formulize/images/saving-english.gif\">\n";
 			}
 			print "</div>\n";
 
@@ -2060,14 +2060,14 @@ function loadValue($prevEntry, $i, $ele_value, $owner_groups, $groups, $entry, $
 
 	global $myts;
 	/*
-	 * Hack by Félix <INBOX Solutions> for sedonde
+	 * Hack by Fï¿½lix <INBOX Solutions> for sedonde
 	 * myts == NULL
 	 */
 	if(!$myts){
 		$myts =& MyTextSanitizer::getInstance();
 	}
 	/*
-	 * Hack by Félix <INBOX Solutions> for sedonde
+	 * Hack by Fï¿½lix <INBOX Solutions> for sedonde
 	 * myts == NULL
 	 */
 			$type = $i->getVar('ele_type');
@@ -2139,12 +2139,12 @@ function loadValue($prevEntry, $i, $ele_value, $owner_groups, $groups, $entry, $
 					break;
 				case "textarea":
 				/*
-				 * Hack by Félix<INBOX International>
+				 * Hack by Fï¿½lix<INBOX International>
 				 * Adding colorpicker form element
 				 */
 				case "colorpick":
 				/*
-				 * End of Hack by Félix<INBOX International>
+				 * End of Hack by Fï¿½lix<INBOX International>
 				 * Adding colorpicker form element
 				 */
 					$ele_value[0] = $value;								

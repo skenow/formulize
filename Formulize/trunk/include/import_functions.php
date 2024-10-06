@@ -1132,7 +1132,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 							
 							if(IMPORT_WRITE) {
 								if(!$result = $xoopsDB->queryF($updateSQL)) {
-									print "<br><b>FAILED</b> to update data, SQL: $updateSQL<br>".mysql_error()."<br>";
+									print "<br><b>FAILED</b> to update data, SQL: $updateSQL<br>".icms::$xoopsDB->error()."<br>";
 								}
 							}
 
@@ -1164,13 +1164,13 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 									{
 										
 										static $duplicatesFound = false;
-										if(strstr(mysql_error(), "Duplicate entry")) {
+										if(strstr(icms::$xoopsDB->error(), "Duplicate entry")) {
 											if(!$duplicatesFound) {
 												print "<br><b>FAILED</b> to insert <i>some</i> data.  At least one duplicate value was found in a column that does not allow duplicate values.<br>";
 												$duplicatesFound = true;
 											}
 										} else {
-											print "<br><b>FAILED</b> to insert data, SQL: $insertElement<br>".mysql_error()."<br>";
+											print "<br><b>FAILED</b> to insert data, SQL: $insertElement<br>".icms::$xoopsDB->error()."<br>";
 										}
 									} else {
 										// need to record new group ownership info too
@@ -1195,7 +1195,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 			include_once XOOPS_ROOT_PATH . "/modules/formulize/class/data.php";
 			$data_handler = new formulizeDataHandler($id_form);
 			if(!$groupResult = $data_handler->setEntryOwnerGroups($usersMap, $entriesMap)) {
-				print "ERROR: failed to write the entry ownership information to the database.<br>".mysql_error()."<br>";
+				print "ERROR: failed to write the entry ownership information to the database.<br>".icms::$xoopsDB->error()."<br>";
 			}
 		}
 

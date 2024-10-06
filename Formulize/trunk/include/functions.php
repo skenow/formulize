@@ -676,7 +676,7 @@ function getHeaderList ($fid, $needids=false, $convertIdsToElementHandles=false)
         }
         $headerlist = array_merge($savedMetaHeaders, $headerlist); // add the non numeric headers back in to the front
       } else {
-        print "Error: could not convert Element IDs to Handles when retrieving the header list.  SQL error: ".mysql_error()."<br>";
+        print "Error: could not convert Element IDs to Handles when retrieving the header list.  SQL error: ".icms::$xoopsDB->error()."<br>";
       }
     } else { // no numeric headers, so just return the non numeric ones
       $headerlist = $savedMetaHeaders;
@@ -1337,7 +1337,7 @@ function prepExport($headers, $cols, $data, $fdchoice, $custdel="", $title, $tem
 	if($template == "update") {
 		$sql = "INSERT INTO " . $xoopsDB->prefix("formulize_valid_imports") . " (file, id_reqs) VALUES (\"$tempfold\", \"" . serialize($id_req) . "\")";
 		if(!$res = $xoopsDB->queryF($sql)) {
-			exit("Error: could not write import information to the database.  SQL: $sql<br>".mysql_error());
+			exit("Error: could not write import information to the database.  SQL: $sql<br>".icms::$xoopsDB->error());
 		}
 	}
 

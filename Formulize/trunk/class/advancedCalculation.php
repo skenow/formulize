@@ -184,7 +184,7 @@ class formulizeAdvancedCalculationHandler {
     }
 
     if( !$result ){
-      print "Error: this advanced calculation could not be saved in the database.  SQL: $sql<br>".mysql_error();
+      print "Error: this advanced calculation could not be saved in the database.  SQL: $sql<br>".icms::$xoopsDB->error();
       return false;
     }
 
@@ -217,7 +217,7 @@ class formulizeAdvancedCalculationHandler {
     global $xoopsDB;
     $sql = "INSERT INTO ".$xoopsDB->prefix("formulize_advanced_calculations")." (fid, name, description, input, output, steps, steptitles, fltr_grps, fltr_grptitles ) SELECT fid, CONCAT(name,' - copy'), description, input, output, steps, steptitles, fltr_grps, fltr_grptitles FROM ".$xoopsDB->prefix("formulize_advanced_calculations")." WHERE acid=".intval($acid);
     if(!$res = $xoopsDB->queryF($sql)) {
-	print "Error: cloning procedure SQL failed. ".mysql_error()."<br>SQL:<br>$sql";
+	print "Error: cloning procedure SQL failed. ".icms::$xoopsDB->error()."<br>SQL:<br>$sql";
 	return false;
     } else {
 	return true;
@@ -246,7 +246,7 @@ class formulizeAdvancedCalculationHandler {
     $result = $this->db->queryF($sql);
 
     if( !$result ){
-      print "Error: this advanced calculation log could not be saved in the database.  SQL: $sql<br>".mysql_error();
+      print "Error: this advanced calculation log could not be saved in the database.  SQL: $sql<br>".icms::$xoopsDB->error();
       return false;
     }
 
@@ -258,7 +258,7 @@ class formulizeAdvancedCalculationHandler {
     $result = $this->db->queryF($sql);
 
     if( !$result ){
-      print "Error: this advanced calculation log item could not be saved in the database.  SQL: $sql<br>".mysql_error();
+      print "Error: this advanced calculation log item could not be saved in the database.  SQL: $sql<br>".icms::$xoopsDB->error();
       return false;
     }
 
@@ -968,7 +968,7 @@ class formulizeAdvancedCalculationHandler {
     if(isset($GLOBALS['formulize_procedures_tablenames'])) {
         $sql = "DROP TABLE `".implode("`, `",$GLOBALS['formulize_procedures_tablenames'])."`;";
         if(!$res = $xoopsDB->queryF($sql)) {
-        	print "Error: could not drop the temporary tables created by this procedure.<br>".mysql_error()."<br>$sql";
+        	print "Error: could not drop the temporary tables created by this procedure.<br>".icms::$xoopsDB->error()."<br>$sql";
         }
         unset( $GLOBALS['formulize_procedures_tablenames'] );
     }
@@ -1424,7 +1424,7 @@ function createProceduresTable($array, $permTableName = "") {
     global $xoopsDB;
    //print "$sql<br>";
     if(!$res = $xoopsDB->queryF($sql)) {
-	print "Error: could not create table for the Procedure.<br>".mysql_error()."<br>$sql";
+	print "Error: could not create table for the Procedure.<br>".icms::$xoopsDB->error()."<br>$sql";
     } elseif(!$permTableName) {
 	$GLOBALS['formulize_procedures_tablenames'][] = $tablename;
     }
@@ -1436,7 +1436,7 @@ function createProceduresTable($array, $permTableName = "") {
     // need to do the interim query here because of the length of the query
    //print "$sql<br>";
     if(!$res = $xoopsDB->queryF($sql)) {
-	print "Error: could not insert values into the table for the Procedure.<br>".mysql_error()."<br>$sql";
+	print "Error: could not insert values into the table for the Procedure.<br>".icms::$xoopsDB->error()."<br>$sql";
     }
     $start = true;
     $sql = $sqlbase;
@@ -1485,7 +1485,7 @@ function createProceduresTable($array, $permTableName = "") {
     }
 
     if(!$res = $xoopsDB->queryF($sql)) {
-	print "Error: could not insert values into the table for the Procedure.<br>".mysql_error()."<br>$sql";
+	print "Error: could not insert values into the table for the Procedure.<br>".icms::$xoopsDB->error()."<br>$sql";
     }
     
     return $tablename;

@@ -51,7 +51,7 @@ if(!is_numeric($_GET['title'])) {
 	}
 
 	$sql=sprintf("SELECT id_form FROM ".$xoopsDB->prefix("formulize_id")." WHERE desc_form='%s'",$title);
-	$res = mysql_query ( $sql ) or die('Erreur SQL !<br>'.$requete.'<br>'.mysql_error());
+	$res = mysql_query ( $sql ) or die('Erreur SQL !<br>'.$requete.'<br>'.icms::$xoopsDB->error());
 
 	if ( $res ) {
 		  while ( $row = $xoopsDB->fetchRow ( $res ) ) {
@@ -123,12 +123,12 @@ if( $_POST['op'] != 'save' ){
 	<tr><td class="even"><li><a href="elements.php?title='.$title.'&op=edit&amp;ele_type=derived">'._AM_ELE_DERIVED.'</a></td></tr>';
 
 	/*
-	 * Hack by Félix<INBOX International>
+	 * Hack by Fï¿½lix<INBOX International>
 	 * Adding colorpicker form element
 	 */
 	echo '<tr><td class="even"><li><a href="elements.php?title='.$title.'&op=edit&amp;ele_type=colorpick">'._AM_ELE_COLORPICK.'</a></td></tr>';
 	/*
-	 * End of Hack by Félix<INBOX International>
+	 * End of Hack by Fï¿½lix<INBOX International>
 	 * Adding colorpicker form element
 	 */
 	// upload not yet enabled in formulize (redisplay of file info not supported, upload itself not tested)
@@ -311,7 +311,7 @@ if( $_POST['op'] != 'save' ){
 	echo '<td valign=top><center><a href="../admin/mailindex.php?title='.$title.'">' . _AM_GOTO_PARAMS . ' <br><img src="../images/xfmail.png"></a></center></td>';
 	echo '</tr></table></center>';
 
-	//echo '<br><br>lien a insérer : &lt;a href&nbsp;="'.XOOPS_URL.'/modules/formulize/index.php?fid='.$title.'">'.$realtitle.'&lt;/a><br><br>';   
+	//echo '<br><br>lien a insï¿½rer : &lt;a href&nbsp;="'.XOOPS_URL.'/modules/formulize/index.php?fid='.$title.'">'.$realtitle.'&lt;/a><br><br>';   
 
 
 include 'footer.php';

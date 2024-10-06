@@ -121,7 +121,7 @@ class formulizeApplicationsHandler {
             $foundForms[] = $formArray['fid'];
           }
         } else {
-          print mysql_error();
+          print icms::$xoopsDB->error();
         }
         $newApp->assignVar('forms', serialize($foundForms)); // need to serialize arrays when assigning to array properties in the xoops object class
         $cachedApps[$newAppId] = $newApp;
@@ -184,7 +184,7 @@ class formulizeApplicationsHandler {
     }
 
     if( !$result ){
-      print "Error: this application could not be saved in the database.  SQL: $sql<br>".mysql_error();
+      print "Error: this application could not be saved in the database.  SQL: $sql<br>".icms::$xoopsDB->error();
       return false;
     }
     if( empty($appid) ){

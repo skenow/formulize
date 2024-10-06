@@ -89,7 +89,7 @@ if(isset($_GET['forceDerivedValueUpdate'])) {
 
 // query modified to include singleentry - July 28, 2005 -- part of switch to new intnerface
 $sql=sprintf("SELECT singleentry,desc_form FROM ".$xoopsDB->prefix("formulize_id")." WHERE id_form='$fid'");
-$res = $xoopsDB->query ( $sql ) or die('SQL Error !<br />'.$sql.'<br />'.mysql_error());
+$res = $xoopsDB->query ( $sql ) or die('SQL Error !<br />'.$sql.'<br />'.icms::$xoopsDB->error());
 //global $nb_fichier;
  
 if ( $res ) {

@@ -78,7 +78,7 @@ foreach($processedValues['forms'] as $property=>$value) {
   $formObject->setVar($property, $value);
 }
 if(!$form_handler->insert($formObject)) {
-  print "Error: could not save the form properly: ".mysql_error();
+  print "Error: could not save the form properly: ".icms::$xoopsDB->error();
 }
 $fid = $formObject->getVar('id_form');
 if($_POST['formulize_admin_key'] == "new") {
@@ -151,7 +151,7 @@ if($_POST['formulize_admin_key'] == "new") {
   $formObject->setVar('defaultform', $defaultFormScreenId);
   $formObject->setVar('defaultlist', $defaultListScreenId);
   if(!$form_handler->insert($formObject)) {
-    print "Error: could not update form object with default screen ids: ".mysql_error();
+    print "Error: could not update form object with default screen ids: ".icms::$xoopsDB->error();
   }
   // add edit permissions for the selected groups
   $gperm_handler = xoops_gethandler('groupperm');
@@ -175,7 +175,7 @@ if($newAppObject) {
     $newAppObject->setVar($property, $value);
   }
   if(!$application_handler->insert($newAppObject)) {
-    print "Error: could not save the new application properly: ".mysql_error();
+    print "Error: could not save the new application properly: ".icms::$xoopsDB->error();
   }
   $selectedAppIds[] = $newAppObject->getVar('appid');
 }
@@ -191,7 +191,7 @@ foreach($selectedAppObjects as $thisAppObject) {
     $thisAppForms[] = $fid;
     $thisAppObject->setVar('forms', serialize($thisAppForms));
     if(!$application_handler->insert($thisAppObject)) {
-      print "Error: could not add the form to one of the applications properly: ".mysql_error();
+      print "Error: could not add the form to one of the applications properly: ".icms::$xoopsDB->error();
     }
   }
 }

@@ -316,7 +316,7 @@ class formulizeFormsHandler {
         }
 
 				if( !$result ){
-					print "Error: this form could not be saved in the database.  SQL: $sql<br>".mysql_error();
+					print "Error: this form could not be saved in the database.  SQL: $sql<br>".icms::$xoopsDB->error();
 					return false;
 				}
 				if( empty($id_form) ){
@@ -559,7 +559,7 @@ class formulizeFormsHandler {
 		$newTableSQL .= ") ENGINE=MyISAM;";
 		// make the table
 		if(!$tableCreationRes = $xoopsDB->queryF($newTableSQL)) {
-			print mysql_error();
+			print icms::$xoopsDB->error();
 			print "\n";
 			print $newTableSQL;
 			return false;
@@ -901,7 +901,7 @@ class formulizeFormsHandler {
 		}
 		$insert_sql .= ")";
 		if(!$result = $this->db->query($insert_sql)) {
-			print "error duplicating form: '$title'<br>SQL: $insert_sql<br>".mysql_error();
+			print "error duplicating form: '$title'<br>SQL: $insert_sql<br>".icms::$xoopsDB->error();
 			return false;
 		}
 
@@ -910,7 +910,7 @@ class formulizeFormsHandler {
 		// replace formhandle of the new form
 		$replaceSQL = "UPDATE ". $this->db->prefix("formulize_id") . " SET form_handle='".icms::$xoopsDB->escape($oldFormHandle."_".$newfid)."' WHERE form_handle=\"replace_with_handle_and_id\"";
 		if(!$result = $this->db->queryF($replaceSQL)) {
-		  print "error setting the form_handle for the new form.<br>".mysql_error();
+		  print "error setting the form_handle for the new form.<br>".icms::$xoopsDB->error();
 		  return false;
 		}		
 	
@@ -953,7 +953,7 @@ class formulizeFormsHandler {
 			}
 			$insert_sql .= ")";
 			if(!$result = $this->db->query($insert_sql)) {
-				print "error duplicating elements in form: '$title'<br>SQL: $insert_sql<br>".mysql_error();
+				print "error duplicating elements in form: '$title'<br>SQL: $insert_sql<br>".icms::$xoopsDB->error();
 				return false;
 			}
 			if($oldNewEleIdMap[$ele['ele_handle']] == "replace_with_ele_id") {
@@ -964,13 +964,13 @@ class formulizeFormsHandler {
 		// replace ele_id flags that need replacing
 		$replaceSQL = "UPDATE ". $this->db->prefix("formulize") . " SET ele_handle=ele_id WHERE ele_handle=\"replace_with_ele_id\"";
 		if(!$result = $this->db->queryF($replaceSQL)) {
-		   print "error setting the ele_handle values for the new form.<br>".mysql_error();
+		   print "error setting the ele_handle values for the new form.<br>".icms::$xoopsDB->error();
 		   return false;
 		}
 
 	  // Need to create the new data table now -- July 1 2007
     if(!$tableCreationResult = $this->createDataTable($newfid, $fid, $oldNewEleIdMap)) { 
-      print "Error: could not make the necessary new datatable for form " . $newfid . ".  Please delete the cloned form and report this error to <a href=\"mailto:formulize@freeformsolutions.ca\">Freeform Solutions</a>.<br>".mysql_error();
+      print "Error: could not make the necessary new datatable for form " . $newfid . ".  Please delete the cloned form and report this error to <a href=\"mailto:formulize@freeformsolutions.ca\">Freeform Solutions</a>.<br>".icms::$xoopsDB->error();
       return false;
     }
         
@@ -980,7 +980,7 @@ class formulizeFormsHandler {
         include_once XOOPS_ROOT_PATH . "/modules/formulize/class/data.php"; // formulize data handler
         $dataHandler = new formulizeDataHandler($newfid);
         if(!$cloneResult = $dataHandler->cloneData($fid, $oldNewEleIdMap)) {
-          print "Error:  could not clone the data from the old form to the new form.  Please delete the cloned form and report this error to <a href=\"mailto:formulize@freeformsolutions.ca\">Freeform Solutions</a>.<br>".mysql_error();
+          print "Error:  could not clone the data from the old form to the new form.  Please delete the cloned form and report this error to <a href=\"mailto:formulize@freeformsolutions.ca\">Freeform Solutions</a>.<br>".icms::$xoopsDB->error();
 	  return false;
         }
     }

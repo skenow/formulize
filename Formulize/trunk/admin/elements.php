@@ -50,7 +50,7 @@ if(!isset($_POST['ele_id'])){
 }
 /* // commented due to title now being identical with id_form
 	$sql=sprintf("SELECT id_form FROM ".$xoopsDB->prefix("formulize_id")." WHERE desc_form='%s'",$title);
-	$res = mysql_query ( $sql ) or die('Erreur SQL !<br>'.$requete.'<br>'.mysql_error());
+	$res = mysql_query ( $sql ) or die('Erreur SQL !<br>'.$requete.'<br>'.icms::$xoopsDB->error());
 
 if ( $res ) {
   while ( $row = mysql_fetch_row ( $res ) ) {

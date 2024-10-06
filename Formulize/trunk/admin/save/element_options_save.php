@@ -227,7 +227,7 @@ foreach($processedValues['elements'] as $property=>$value) {
 }
 
 if(!$ele_id = $element_handler->insert($element)) {
-  print "Error: could not save the options for element: ".mysql_error();
+  print "Error: could not save the options for element: ".icms::$xoopsDB->error();
 }
 
 if($_POST['reload_option_page']) {

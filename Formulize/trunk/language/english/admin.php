@@ -1,5 +1,5 @@
 <?php
-/*mod Language for admin side, by François T*/
+/*mod Language for admin side, by Franï¿½ois T*/
 
 /*mod Language for applications*/
 define("_AM_APP_APPLICATION","Application: ");
@@ -187,7 +187,7 @@ define("_AM_SCREEN_DELETESCREENS","Are you sure you want to delete this screen? 
 
 
 
-/*End mod Language for admin side, by François T*/
+/*End mod Language for admin side, by Franï¿½ois T*/
 
 // Admin
 define("_FORM_RENAME_TEXT", "Rename this form");

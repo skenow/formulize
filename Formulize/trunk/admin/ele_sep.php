@@ -42,7 +42,7 @@ $rows = new XoopsFormText (_AM_ELE_ROWS, 'ele_value[1]', 3, 3, $rows);
 $cols = new XoopsFormText (_AM_ELE_COLS, 'ele_value[2]', 3, 3, $cols);
 $type = new XoopsFormCheckBox (_AM_ELE_TYPE, 'option', null);
 $type->addOption ('centre', ' '._AM_ELE_CTRE.'<br />');
-$type->addOption ('souligné', ' '._AM_ELE_SOUL.'<br />');
+$type->addOption ('soulignï¿½', ' '._AM_ELE_SOUL.'<br />');
 $type->addOption ('italique', ' '._AM_ELE_ITALIQ.'<br />');
 $default = new XoopsFormTextArea(_AM_ELE_DEFAULT, 'ele_value[0]', $value[0], 5, 35);
 

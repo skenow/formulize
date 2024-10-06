@@ -13,10 +13,10 @@ define("_formulize_MSG_FORM", ' Form : ');
 //next two lines added by jwe 7/23/04
 define("_formulize_INFO_RECEIVED", "Your information has been received.");
 define("_formulize_NO_PERMISSION", "You do not have permission to view this form.");
-define("_formulize_MSG_SENT", "Il tuo messaggio è stato inviato con successo!");
+define("_formulize_MSG_SENT", "Il tuo messaggio ï¿½ stato inviato con successo!");
 define("_formulize_MSG_THANK", "<br />Grazie per il tuo commento.");
 define("_formulize_MSG_SUP","<br /> Assicurati che siano stati cancellati i dati");
-define("_formulize_MSG_BIG","Il file da allegare è troppo grande.");
+define("_formulize_MSG_BIG","Il file da allegare ï¿½ troppo grande.");
 define("_formulize_MSG_UNSENT","Per favore allega un file con una dimensione fino a ");
 define("_formulize_MSG_UNTYPE","Tu non puoi allegare questo tipo di file.<br>Gli unici tipi di file autorizzati sono: ");
 

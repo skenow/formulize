@@ -137,7 +137,7 @@ if(!isset($_POST['exportsubmit'])) {
 				$form_handler = xoops_getmodulehandler('forms','formulize');
 				$formObject = $form_handler->get($fid);
 				if(is_object($formObject)) {
-					$formTitle = "'".str_replace(array(" ", "-", "/", "'", "`", "\\", ".", "’", ",", ")", "(", "[", "]"), "_", trans($formObject->getVar('title')))."'";
+					$formTitle = "'".str_replace(array(" ", "-", "/", "'", "`", "\\", ".", "ï¿½", ",", ")", "(", "[", "]"), "_", trans($formObject->getVar('title')))."'";
 				} else {
 					$formTitle = "a_form";
 				}

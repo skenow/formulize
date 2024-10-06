@@ -36,7 +36,7 @@ function MyMenuAdmin($cat_id="") { // modified to accept passing of category nam
 
         echo "<big><b>"._AM_TITLE."</big></b>";
 /* COMMENTED THE ADD ITEM UI SINCE ADDING AN ITEM DOES BAD THINGS.  see note below re: deleting items.  09/03/05 jwe
-        //*********** Menueintrag hinzufügen ******************************************************
+        //*********** Menueintrag hinzufï¿½gen ******************************************************
         echo "<h4 style='text-align:left;'>"._AM_ADDMENUITEM."</h4>
         <form action='menu_index.php' method='post'>
         <table border='0' cellpadding='0' cellspacing='0' valign='top' width='100%'>
@@ -74,7 +74,7 @@ function MyMenuAdmin($cat_id="") { // modified to accept passing of category nam
                 <td class='bg3'><b>"._AM_MARGINBOTTOM."</b></td>
                 <td class='bg1'><input type='text' name='marginbottom' size='12' maxlength='12' value='0px' /></td>
                 </tr>";
-         / * L'autentification est gérée par les formulizes
+         / * L'autentification est gï¿½rï¿½e par les formulizes
                 <tr>
                 <td class='bg3'><b>"._AM_MEMBERSONLY."</b></td>
                 <td class='bg1'>
@@ -180,7 +180,7 @@ echo "<input type='hidden' name='cat_id' value='$cat_id'>
 // END OF MENU CAT UI
 
 
-        //*********** Menueintrag ändern/löschen ******************************************************
+        //*********** Menueintrag ï¿½ndern/lï¿½schen ******************************************************
         echo "<h4 style='text-align:left;'>"._AM_CHANGEMENUITEM."</h4>
         <form action='menu_index.php' method='post'>
         <table border='0' cellpadding='0' cellspacing='0' valign='top' width='100%'>

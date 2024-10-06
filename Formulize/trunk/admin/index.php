@@ -51,7 +51,7 @@ if(!is_numeric($_GET['title'])) {
 	}
 
 	$sql=sprintf("SELECT id_form FROM ".$xoopsDB->prefix("formulize_id")." WHERE desc_form='%s'",$title);
-	$res = mysql_query ( $sql ) or die('Erreur SQL !<br>'.$requete.'<br>'.icms::$xoopsDB->error());
+	$res = icms::$xoopsDB->queryF( $sql ) or die('Erreur SQL !<br>'.$requete.'<br>'.icms::$xoopsDB->error());
 
 	if ( $res ) {
 		  while ( $row = $xoopsDB->fetchRow ( $res ) ) {

@@ -66,10 +66,10 @@ if($formObject->getVar('lockedform')) {
 }
 
 	$sql="SELECT desc_form FROM ".$xoopsDB->prefix("formulize_id")." WHERE id_form = ".$title;
-	$res = mysql_query ( $sql );
+	$res = icms::$xoopsDB->queryF( $sql );
 
 if ( $res ) {
-  while ( $row = mysql_fetch_row ( $res ) ) {
+  while ( $row = icms::$xoopsDB->fetchRow( $res ) ) {
     $desc_form = $row[0];
   }
 }

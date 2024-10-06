@@ -64,7 +64,7 @@ while(\$array = \$xoopsDB->fetchBoth(\$res)) {
   \$field = \$array;
 {$calculation['calculate']}
 }
-\$totalNumberOfRecords = mysql_numrows(\$res);
+\$totalNumberOfRecords = icms::$xoopsDB->getRowsNum(\$res);
 {$calculation['postCalculate']}
 EOD;
 
@@ -122,7 +122,7 @@ foreach(\$res as \$thisRes) {
 	  \$field = \$array;
 {$calculation['calculate']}
   }
-  \$totalNumberOfRecords += mysql_numrows(\$thisRes);
+  \$totalNumberOfRecords += icms::$xoopsDB->getRowsNum(\$thisRes);
 }
 {$calculation['postCalculate']}
 EOD;

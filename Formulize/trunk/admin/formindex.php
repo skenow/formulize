@@ -777,10 +777,10 @@ $form->addElement($list_id_hidden);
 
 	$form_list = new XoopsFormSelect(_formulize_FORM_LIST, 'fs_forms', null, 10, true);
 	$sql="SELECT id_form,desc_form FROM ".$xoopsDB->prefix("formulize_id") . " ORDER BY desc_form";
-	$res = mysql_query ( $sql );
+	$res = icms::$xoopsDB->queryF( $sql );
 	if ( $res ) {
 		$tab = array();
-		while ( $row = mysql_fetch_array ( $res ) ) {
+		while ( $row = icms::$xoopsDB->fetchArray( $res ) ) {
 			$form_list->addOption($row['id_form'], $row['desc_form']);
 		  }
 	}

@@ -71,7 +71,7 @@ class formulizeDataHandler  {
 				}
 				if(isset($map[$field])) { $field = $map[$field]; } // if this field is in the map, then use the value from the map as the field name (this will match the field name in the cloned form)
 				if(!$start) { $insertSQL .= ", "; }
-				$insertSQL .= "`$field` = \"" . mysql_real_escape_string($value) . "\"";
+				$insertSQL .= "`$field` = \"" . icms::$xoopsDB->escape($value) . "\"";
 				$start = false;
 			}
 			if(!$insertResult = $xoopsDB->queryF($insertSQL)) {
@@ -157,7 +157,7 @@ class formulizeDataHandler  {
 			if($field == "entry_id") { continue; }
 			if(!$start) { $sql .= ", "; }
 			$start = 0;
-			$sql .= "`$field` = \"" . mysql_real_escape_string($value) . "\"";
+			$sql .= "`$field` = \"" . icms::$xoopsDB->escape($value) . "\"";
 		}
 		if(!$res = $xoopsDB->query($sql)) {
 			return false;
@@ -400,7 +400,7 @@ class formulizeDataHandler  {
 		global $xoopsDB;
     $form_handler = xoops_getmodulehandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
-		$sql = "SELECT entry_id FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE `". $element->getVar('ele_handle') . "` = \"" . mysql_real_escape_string($value) . "\" ORDER BY entry_id LIMIT 0,1";
+    $sql = "SELECT entry_id FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE `". $element->getVar('ele_handle') . "` = \"" . icms::$xoopsDB->escape($value) . "\" ORDER BY entry_id LIMIT 0,1";
 		if(!$res = $xoopsDB->query($sql)) {
 			return false;
 		}
@@ -417,10 +417,10 @@ class formulizeDataHandler  {
 		global $xoopsDB;
     $form_handler = xoops_getmodulehandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
-		$queryValue = "\"" . mysql_real_escape_string($value) . "\"";
+    $queryValue = "\"" . icms::$xoopsDB->escape($value) . "\"";
 		if($operator == "{LINKEDSEARCH}") {
 			$operator = "LIKE";
-			$queryValue = "\"%," . mysql_real_escape_string($value) . ",%\"";
+			$queryValue = "\"%," . icms::$xoopsDB->escape($value) . ",%\"";
 		}
 		if(is_array($scope_uids) AND count($scope_uids) > 0) {
 			$scopeFilter = $this->_buildScopeFilter($scope_uids);
@@ -724,11 +724,11 @@ class formulizeDataHandler  {
 				$sql .= ", `".$handleElementMap[$id]."`";
 				if($encryptElementMap[$id]) {
 					$value = $value === "{WRITEASNULL}" ? "" : $value;
-					$sqlValues .= ", AES_ENCRYPT('".mysql_real_escape_string($value)."', '".getAESPassword()."')";
+					$sqlValues .= ", AES_ENCRYPT('".icms::$xoopsDB->escape($value)."', '".getAESPassword()."')";
 				} elseif($value === "{WRITEASNULL}") {
 					$sqlValues .= ", NULL";
 				} else {
-					$sqlValues .= ", '".mysql_real_escape_string($value)."'";
+					$sqlValues .= ", '".icms::$xoopsDB->escape($value)."'";
 				}
 			}
 			$creation_uid = $proxyUser ? $proxyUser : $uid;
@@ -747,11 +747,11 @@ class formulizeDataHandler  {
 				}
 				if($encryptElementMap[$id]) {
 					$value = $value === "{WRITEASNULL}" ? "" : $value;
-					$sql .= "`".$handleElementMap[$id]."` = AES_ENCRYPT('".mysql_real_escape_string($value)."', '".getAESPassword()."')";
+					$sql .= "`".$handleElementMap[$id]."` = AES_ENCRYPT('". icms::$xoopsDB->escape($value)."', '".getAESPassword()."')";
 				} elseif($value === "{WRITEASNULL}") {
 					$sql .= "`".$handleElementMap[$id]."` = NULL";
 				} else {
-					$sql .= "`".$handleElementMap[$id]."` = '".mysql_real_escape_string($value)."'";
+					$sql .= "`".$handleElementMap[$id]."` = '". icms::$xoopsDB->escape($value)."'";
 				}
 				$needComma = true;
 			}
@@ -946,7 +946,7 @@ class formulizeDataHandler  {
 			} else {
 				$replacementString = $currentValues[0];
 			}
-			$updateSql[] = "UPDATE ".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle'))." SET `".$element->getVar('ele_handle')."` = '".mysql_real_escape_string($replacementString)."' WHERE entry_id = ".$array['entry_id'];
+			$updateSql[] = "UPDATE ".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle'))." SET `".$element->getVar('ele_handle')."` = '".icms::$xoopsDB->escape($replacementString)."' WHERE entry_id = ".$array['entry_id'];
 		}
 		if(count($updateSql) > 0) { // if we have some SQL generated, then run it.
 			foreach($updateSql as $thisSql) {

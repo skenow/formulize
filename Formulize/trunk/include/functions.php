@@ -68,7 +68,7 @@ function getFormFramework($formframe, $mainform="") {
 
 	if(!empty($mainform)) { // a framework
 		if(!is_numeric($formframe)) {
-			$frameid = q("SELECT frame_id FROM " . $xoopsDB->prefix("formulize_frameworks") . " WHERE frame_name='" . mysql_real_escape_string($formframe) . "'");
+			$frameid = q("SELECT frame_id FROM " . $xoopsDB->prefix("formulize_frameworks") . " WHERE frame_name='" . icms::$xoopsDB->escape($formframe) . "'");
 			$frid = $frameid[0]['frame_id'];
 		} else {
 			$frid = $formframe;
@@ -76,7 +76,7 @@ function getFormFramework($formframe, $mainform="") {
 		if(!is_numeric($mainform)) {
 			// only a deprecated framework form handle would apply in this situation
 			if($GLOBALS['formulize_versionFourOrHigher'] == false) {
-				$formcheck = q("SELECT ff_form_id FROM " . $xoopsDB->prefix("formulize_framework_forms") . " WHERE ff_frame_id='$frid' AND ff_handle='" . mysql_real_escape_string($mainform) . "'");
+				$formcheck = q("SELECT ff_form_id FROM " . $xoopsDB->prefix("formulize_framework_forms") . " WHERE ff_frame_id='$frid' AND ff_handle='" . icms::$xoopsDB->escape($mainform) . "'");
 				if(isset($formcheck[0]['ff_form_id'])) {
 					$fid = $formcheck[0]['ff_form_id'];
 				} else {
@@ -98,7 +98,7 @@ function getFormFramework($formframe, $mainform="") {
 	} else { // a form
 		$frid = "";
 		if(!is_numeric($formframe)) { // if it's a title, convert to the id
-			$formid = q("SELECT id_form FROM " . $xoopsDB->prefix("formulize_id") . " WHERE desc_form = '" . mysql_real_escape_string($formframe) . "'");
+			$formid = q("SELECT id_form FROM " . $xoopsDB->prefix("formulize_id") . " WHERE desc_form = '" . icms::$xoopsDB->escape($formframe) . "'");
 			$fid = $formid[0]['id_form'];
 		} else {
 			$fid = $formframe;
@@ -2034,9 +2034,9 @@ function writeOtherValues($id_req, $fid) {
 		if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
 		$value = $myts->htmlSpecialChars($value);
 		if($value != "" AND $existing_value) { // update
-			$sql = "UPDATE " . $xoopsDB->prefix("formulize_other") . " SET other_text=\"" . mysql_real_escape_string($value) . "\" WHERE id_req='$id_req' AND ele_id='$ele_id'";
+			$sql = "UPDATE " . $xoopsDB->prefix("formulize_other") . " SET other_text=\"" . icms::$xoopsDB->escape($value) . "\" WHERE id_req='$id_req' AND ele_id='$ele_id'";
 		}elseif($value != "" AND !$existing_value) { // add 
-			$sql = "INSERT INTO " . $xoopsDB->prefix("formulize_other") . " (id_req, ele_id, other_text) VALUES (\"$id_req\", \"$ele_id\", \"" . mysql_real_escape_string($value) . "\")";
+			$sql = "INSERT INTO " . $xoopsDB->prefix("formulize_other") . " (id_req, ele_id, other_text) VALUES (\"$id_req\", \"$ele_id\", \"" . icms::$xoopsDB->escape($value) . "\")";
 		}elseif($value == "" AND $existing_value) { // delete
 			$sql = "DELETE FROM " . $xoopsDB->prefix("formulize_other") . " WHERE id_req='$id_req' AND ele_id='$ele_id'";
 		}else { // do nothing (only other combination is....  if(!isset($value) AND !$existing_value) ....ie: nothing passed, and nothing existing in DB
@@ -2230,7 +2230,7 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
                 if(isset($cachedQueryResults[$boxproperties[0]][$boxproperties[1]][$entryBeingFormatted][$handle])) {
                   $id_req = $cachedQueryResults[$boxproperties[0]][$boxproperties[1]][$entryBeingFormatted][$handle];
                 } else {
-                  $element_id_q = q("SELECT ele_id FROM " . $xoopsDB->prefix("formulize") . " WHERE id_form='" . $boxproperties[0] . "' AND ele_handle='" . mysql_real_escape_string($boxproperties[1]) . "' LIMIT 0,1"); // should only be one match anyway, so limit 0,1 ought to be unnecessary
+                  $element_id_q = q("SELECT ele_id FROM " . $xoopsDB->prefix("formulize") . " WHERE id_form='" . $boxproperties[0] . "' AND ele_handle='" . icms::$xoopsDB->escape($boxproperties[1]) . "' LIMIT 0,1"); // should only be one match anyway, so limit 0,1 ought to be unnecessary
 									$formulize_mgr = xoops_getmodulehandler('elements', 'formulize');
                   $target_element =& $formulize_mgr->get($element_id_q[0]['ele_id']);
 									// get the targetEntry by checking in the entry we're processing, for the actual value recorded in the DB for the entry id we're pointing to
@@ -2257,7 +2257,7 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
 		if(isset($cachedUidResults[$matchtext])) {
 			$uids = $cachedUidResults[$matchtext];
 		} else {
-			$uids = q("SELECT uid FROM " . $xoopsDB->prefix("users") . " WHERE $nametype = '" . mysql_real_escape_string($matchtext) . "' $archiveFilter");
+			$uids = q("SELECT uid FROM " . $xoopsDB->prefix("users") . " WHERE $nametype = '" . icms::$xoopsDB->escape($matchtext) . "' $archiveFilter");
 			$cachedUidResults[$matchtext] = $uids;
 		}
 		if(count($uids) == 1) {
@@ -2574,7 +2574,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 	$uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
 
 	// 1.  get all conditions for this fid and event
-	$cons = q("SELECT * FROM " . $xoopsDB->prefix("formulize_notification_conditions") . " WHERE not_cons_fid=".intval($fid)." AND not_cons_event=\"".mysql_real_escape_string($event)."\"");
+	$cons = q("SELECT * FROM " . $xoopsDB->prefix("formulize_notification_conditions") . " WHERE not_cons_fid=".intval($fid)." AND not_cons_event=\"".icms::$xoopsDB->escape($event)."\"");
 	if(count($cons) == 0) { return; }
 
 	if(!$mid) {
@@ -2970,7 +2970,7 @@ function compileNotUsers2($uids_conditions, $uids_complete, $notification_handle
 	$uids_conditions = array_unique($uids_conditions);
 	$uids_real = array_intersect($uids_conditions, $uids_complete);
 	// figure out who is not subscribed to the event, and subscribe them once
-	$subd_uids = q("SELECT not_uid FROM " . $xoopsDB->prefix("xoopsnotifications") . " WHERE not_event=\"".mysql_real_escape_string($event)."\" AND not_category=\"form\" AND not_modid=$mid AND not_itemid=$fid"); 
+	$subd_uids = q("SELECT not_uid FROM " . $xoopsDB->prefix("xoopsnotifications") . " WHERE not_event=\"".icms::$xoopsDB->escape($event)."\" AND not_category=\"form\" AND not_modid=$mid AND not_itemid=$fid"); 
 	$uids_subd = array();
 	foreach($subd_uids as $thisuid) {
 		$uids_subd[] = $thisuid['not_uid'];
@@ -3110,7 +3110,7 @@ print "$prevValue<br><br>";
             if(isset($cachedEntryIds[$boxproperties[0]][$boxproperties[1]][$thisValue])) {
               $foundEntryIds[] = $cachedEntryIds[$boxproperties[0]][$boxproperties[1]][$thisValue];
             } else {
-              $searchForValues[] = mysql_real_escape_string(html_entity_decode($thisValue));
+              $searchForValues[] = icms::$xoopsDB->escape(html_entity_decode($thisValue));
             }
           }
 	  
@@ -3175,7 +3175,7 @@ print "$prevValue<br><br>";
                 $owner = is_numeric($append) ? $append : $uid; // for new entries, a numeric "action" indicates an owner for the entry that is different from the current user, ie: this is a proxy entry
                 // no handling as yet for an array of values, which would be required for replacing the selections in a checkbox series or selectbox series.
                 // radio buttons would also need to be massaged?
-                $sql="INSERT INTO ".$xoopsDB->prefix("formulize_".$elementFormObject->getVar('form_handle'))." (creation_datetime, mod_datetime, creation_uid, mod_uid, `".$element->getVar('ele_handle')."`) VALUES (NOW(), NOW(), \"$owner\", \"$uid\", '".mysql_real_escape_string($value)."')";
+                $sql="INSERT INTO ".$xoopsDB->prefix("formulize_".$elementFormObject->getVar('form_handle'))." (creation_datetime, mod_datetime, creation_uid, mod_uid, `".$element->getVar('ele_handle')."`) VALUES (NOW(), NOW(), \"$owner\", \"$uid\", '".icms::$xoopsDB->escape($value)."')";
                 $needToSetOwner = true;
         } else {
           // not new entry, so update the existing entry
@@ -3214,7 +3214,7 @@ print "$prevValue<br><br>";
           } else { // append == "replace" or all other settings for append
               $valueToWrite = $value;
           }
-          $sql = "UPDATE ".$xoopsDB->prefix("formulize_".$elementFormObject->getVar('form_handle'))." SET `".$element->getVar('ele_handle')."` = '".mysql_real_escape_string($valueToWrite)."' WHERE entry_id=".intval($entry);
+          $sql = "UPDATE ".$xoopsDB->prefix("formulize_".$elementFormObject->getVar('form_handle'))." SET `".$element->getVar('ele_handle')."` = '".icms::$xoopsDB->escape($valueToWrite)."' WHERE entry_id=".intval($entry);
         }
         if($sql) { // run the query
                 //print $sql . "<br>";
@@ -3413,7 +3413,7 @@ function dealWithDeprecatedFormHandles($handle) {
 	global $xoopsDB;
 	static $cachedHandles = array();
 	if(!isset($cachedHandles[$handle])) {
-		$sql = "SELECT ff_form_id FROM ".$xoopsDB->prefix("formulize_framework_forms")." WHERE ff_handle = '".mysql_real_escape_string($handle)."'";
+		$sql = "SELECT ff_form_id FROM ".$xoopsDB->prefix("formulize_framework_forms")." WHERE ff_handle = '".icms::$xoopsDB->escape($handle)."'";
 		if($res = $xoopsDB->query($sql)) {
 			$numRows = $xoopsDB->getRowsNum($res);
 			if($numRows == 0) {
@@ -3752,14 +3752,14 @@ function buildFilter($id, $ele_id, $defaulttext="", $name="", $overrides=array(0
 			//$limitCondition .= isset($limit['operator']) ? "/**/" . $limit['operator'] : "";
 			$limitOperator = isset($limit['operator']) ? $limit['operator'] : " LIKE ";
 			$likebits = (strstr($limitOperator, "LIKE") AND substr($limit['term'], 0, 1) != "%" AND substr($limit['term'], -1) != "%") ? "%" : "";
-			$limitCondition = " WHERE t1`".$limit['ele_id']."` ".$limitOperator." '$likebits".mysql_real_escape_string($limit['term'])."$likebits' ";
+			$limitCondition = " WHERE t1`".$limit['ele_id']."` ".$limitOperator." '$likebits".icms::$xoopsDB->escape($limit['term'])."$likebits' ";
 		} elseif($subfilter) { // for subfilters, we're jumping back to another form to get the values, hence the join...
 			$element_handler = xoops_getmodulehandler('elements', 'formulize');
 			$linkedSourceElementObject = $element_handler->get($linked_ele_id);
 			$linkedSourceElementEleValue = $linkedSourceElementObject->getVar('ele_value');
 			$linkedSourceElementEleValueParts = explode("#*=:*", $linkedSourceElementEleValue[2]); // first part will be the form id of the source form, second part will be the element handle in that form
 			$linkedFormObject = $form_handler->get($linkedSourceElementEleValueParts[0]);
-			$limitCondition = ", ".$xoopsDB->prefix("formulize_".$linkedFormObject->getVar('form_handle'))." as t2 WHERE t1.`$linked_ele_id` LIKE CONCAT('%',t2.entry_id,'%') AND t2.`".$linkedSourceElementEleValueParts[1]."` LIKE '%".mysql_real_escape_string($_POST[$linked_data_id])."%'";
+			$limitCondition = ", ".$xoopsDB->prefix("formulize_".$linkedFormObject->getVar('form_handle'))." as t2 WHERE t1.`$linked_ele_id` LIKE CONCAT('%',t2.entry_id,'%') AND t2.`".$linkedSourceElementEleValueParts[1]."` LIKE '%".icms::$xoopsDB->escape($_POST[$linked_data_id])."%'";
 		}
 		unset($options);
 		$sourceFormObject = $form_handler->get($source_form_id);
@@ -4458,7 +4458,7 @@ function buildConditionsFilterSQL($conditions, $targetFormId, $curlyBracketEntry
 		  if(substr($filterTerms[$filterId],0,1) == "{" AND substr($filterTerms[$filterId],-1)=="}") {
 		    $bracketlessFilterTerm = substr($filterTerms[$filterId],1,-1);
 		    if(isset($_GET[$bracketlessFilterTerm])) {
-		      $filterTerms[$filterId] = mysql_real_escape_string($_GET[$bracketlessFilterTerm]);
+		      $filterTerms[$filterId] = icms::$xoopsDB->escape($_GET[$bracketlessFilterTerm]);
 		    }
 		  }
 		  // convert the $filterElementId to a real id, since it's possible it could find its way in here as a handle...a legacy issue sort of
@@ -4520,7 +4520,7 @@ function _buildConditionsFilterSQL($filterId, $filterOps, $filterTerms, $filterE
 		  $targetSourceHandle = $targetElementEleValueProperties[1]; // get the element handle in the source source form
 		  // now build a comparison value that contains a subquery on the source source form, instead of a literal match to the source form
 		  if(substr($filterTerms[$filterId],0,1) == "{" AND substr($filterTerms[$filterId],-1)=="}") {
-		    $filterTermToUse = " curlybracketform.`".mysql_real_escape_string(substr($filterTerms[$filterId],1,-1))."` ";
+		    $filterTermToUse = " curlybracketform.`".icms::$xoopsDB->escape(substr($filterTerms[$filterId],1,-1))."` ";
 		    $curlyBracketFormFrom = ", ".$xoopsDB->prefix("formulize_".$curlyBracketForm->getVar('form_handle'))." AS curlybracketform "; // set as a single value, we're assuming all { } terms refer to the same form
 		    // figure out if the curlybracketform field is linked and pointing to the same source as the target element is pointing to
 		    // because if it is, then we don't need to do a subquery later, we just compare directly to the $filterTermToUse
@@ -4541,7 +4541,7 @@ function _buildConditionsFilterSQL($filterId, $filterOps, $filterTerms, $filterE
 		    $quotes = "";
 		    $likebits = "";
 		  } else {
-		    $filterTermToUse = mysql_real_escape_string($filterTerms[$filterId]);
+		    $filterTermToUse = icms::$xoopsDB->escape($filterTerms[$filterId]);
 		  }
 		  if(!$conditionsFilterComparisonValue) {
 		    $conditionsFilterComparisonValue = " CONCAT('$origlikebits,',(SELECT ss.entry_id FROM ".$xoopsDB->prefix("formulize_".$targetSourceFormObject->getVar('form_handle'))." AS ss WHERE `$targetSourceHandle` ".$filterOps[$filterId].$quotes.$likebits.$filterTermToUse.$likebits.$quotes."),',$origlikebits') ";
@@ -4555,11 +4555,11 @@ function _buildConditionsFilterSQL($filterId, $filterOps, $filterTerms, $filterE
     $filterTerms[$filterId] = prepareLiteralTextForDB($element_handler->get($filterElementIds[$filterId]), $filterTerms[$filterId], $curlyBracketEntry, $userComparisonId); // prepends checkbox characters and converts yes/nos, {USER}, etc
   }
   if(!$conditionsFilterComparisonValue) {
-	  $conditionsFilterComparisonValue = $quotes.$likebits.mysql_real_escape_string($filterTerms[$filterId]).$likebits.$quotes;
+	  $conditionsFilterComparisonValue = $quotes.$likebits.icms::$xoopsDB->escape($filterTerms[$filterId]).$likebits.$quotes;
   }
   if(substr($filterTerms[$filterId],0,1) == "{" AND substr($filterTerms[$filterId],-1)=="}" AND !$targetElementObject->isLinked) { // if it's a { } term, then assume it's a data handle for a field in the form where the element is being included
 	  if(isset($GLOBALS['formulize_asynchronousFormDataInDatabaseReadyFormat'][substr($filterTerms[$filterId],1,-1)])) {
-		  $conditionsFilterComparisonValue = "'".mysql_real_escape_string($GLOBALS['formulize_asynchronousFormDataInDatabaseReadyFormat'][substr($filterTerms[$filterId],1,-1)])."'";
+		  $conditionsFilterComparisonValue = "'".icms::$xoopsDB->escape($GLOBALS['formulize_asynchronousFormDataInDatabaseReadyFormat'][substr($filterTerms[$filterId],1,-1)])."'";
 	  } else {
 		  $curlyBracketFormFrom = ", ".$xoopsDB->prefix("formulize_".$curlyBracketForm->getVar('form_handle'))." AS curlybracketform "; // set as a single value, we're assuming all { } terms refer to the same form
 		  if($likebits == "%") {

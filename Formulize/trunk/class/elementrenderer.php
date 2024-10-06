@@ -306,7 +306,7 @@ class formulizeElementRenderer{
 						}
 						$pgroupsfilter .= ")";
 					} elseif(count($pgroups) > 0) {
-						$pgroupsfilter = " t2.groupid IN (".mysql_real_escape_string(implode(",",$pgroups)).") AND t2.entry_id=t1.entry_id AND t2.fid=$sourceFid";
+						$pgroupsfilter = " t2.groupid IN (".icms::$xoopsDB->escape(implode(",",$pgroups)).") AND t2.entry_id=t1.entry_id AND t2.fid=$sourceFid";
 					} else {
 						$pgroupsfilter = "";
 					}
@@ -977,7 +977,7 @@ class formulizeElementRenderer{
 				);
 			break;
 			/*
-			 * Hack by Félix<INBOX International>
+			 * Hack by Fï¿½lix<INBOX International>
 			 * Adding colorpicker form element
 			 */
 			case 'colorpick':
@@ -1006,7 +1006,7 @@ class formulizeElementRenderer{
 				} // end of check to see if the default setting is for real
 			break;
 			/*
-			 * End of Hack by Félix<INBOX International>
+			 * End of Hack by Fï¿½lix<INBOX International>
 			 * Adding colorpicker form element
 			 */
 			default:

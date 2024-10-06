@@ -460,7 +460,7 @@ function addform()
 	$title = eregi_replace ('&', "_", $title);
 
 	// updated to handle new params -- jwe 7/25/07 , 7/28/04
-	$sql = sprintf("INSERT INTO %s (desc_form, singleentry, tableform) VALUES ('%s', '%s', '%s')", $xoopsDB->prefix("formulize_id"), $title, $singleentry, mysql_real_escape_string($_POST['tablename']));
+	$sql = sprintf("INSERT INTO %s (desc_form, singleentry, tableform) VALUES ('%s', '%s', '%s')", $xoopsDB->prefix("formulize_id"), $title, $singleentry, icms::$xoopsDB->escape($_POST['tablename']));
 	$xoopsDB->queryF($sql) or $eh->show("error insertion 1 dans addform");
 
 	// need to get the new form id -- added by jwe sept 13 2005
@@ -489,7 +489,7 @@ function addform()
 		// 2. create an array of the information
 		// 3. write it all out into the formulize table
 		
-		$result = $xoopsDB->query("SHOW COLUMNS FROM " . mysql_real_escape_string($_POST['tablename']));
+		$result = $xoopsDB->query("SHOW COLUMNS FROM " . icms::$xoopsDB->escape($_POST['tablename']));
 		static $element_order = 0;
 		$formulize_mgr =& xoops_getmodulehandler('elements');
 		while($row = $xoopsDB->fetchRow($result)) {

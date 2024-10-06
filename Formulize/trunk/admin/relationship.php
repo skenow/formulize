@@ -93,7 +93,7 @@ if($_GET['frid'] != "new") {
 				$source_form_ids[] = $details[0];
 
 				//get the element ID for the source we've just found
-				$sourceq = "SELECT ele_id, ele_caption FROM " . $xoopsDB->prefix("formulize") . " WHERE ele_handle = '" . mysql_real_escape_string($details[1]) . "' AND id_form = '$details[0]'";
+				$sourceq = "SELECT ele_id, ele_caption FROM " . $xoopsDB->prefix("formulize") . " WHERE ele_handle = '" . icms::$xoopsDB->escape($details[1]) . "' AND id_form = '$details[0]'";
 				if($ressourceq = $xoopsDB->query($sourceq)) {
 					$rowsourceq = $xoopsDB->fetchRow($ressourceq);
 					$source_ele_ids[] = $rowsourceq[0];

@@ -100,7 +100,7 @@ class formulizeElementsHandler {
 				return false;
 			}
 		} else {
-			$sql = 'SELECT * FROM '.formulize_TABLE.' WHERE ele_handle="'.mysql_real_escape_string($id).'"';
+			$sql = 'SELECT * FROM '.formulize_TABLE.' WHERE ele_handle="'.icms::$xoopsDB->escape($id).'"';
 			if (!$result = $this->db->query($sql)) {
 				$cachedElements[$id] = false;
 				return false;

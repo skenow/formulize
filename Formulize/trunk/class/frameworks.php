@@ -58,7 +58,7 @@ class formulizeFramework extends XoopsObject {
 					}
 				}
 			}
-			$frame_links_q = q("SELECT * FROM " . $xoopsDB->prefix("formulize_framework_links") . " WHERE fl_frame_id=\"" . mysql_real_escape_string($frid). "\"");
+			$frame_links_q = q("SELECT * FROM " . $xoopsDB->prefix("formulize_framework_links") . " WHERE fl_frame_id=\"" . icms::$xoopsDB->escape($frid). "\"");
 			if(!isset($frame_links_q[0])) {
 				$notAFramework = true;
 			} else {
@@ -180,7 +180,7 @@ class formulizeFrameworkLink extends XoopsObject {
 			$relationship = "";
 			$unified_display = "";
 		} else {		
-			$link_q = q("SELECT * FROM " . $xoopsDB->prefix("formulize_framework_links") . " WHERE fl_id=\"" . mysql_real_escape_string($lid). "\"");
+			$link_q = q("SELECT * FROM " . $xoopsDB->prefix("formulize_framework_links") . " WHERE fl_id=\"" . icms::$xoopsDB->escape($lid). "\"");
 			if(!isset($link_q[0])) {
 				// set empty defaults
   			$lid = "";

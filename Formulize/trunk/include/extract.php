@@ -117,7 +117,7 @@ function prepvalues($value, $field, $entry_id) {
 
   // decrypt encrypted values...pretty inefficient to do this here, one query in the DB per value to decrypt them....but we'd need proper select statements with field names specified in them, instead of *, in order to be able to swap in the AES DECRYPT at the time the data is retrieved in the master query
 	if($elementArray['ele_encrypt']) {		 
-		 $decryptSQL = "SELECT AES_DECRYPT('".mysql_real_escape_string($value)."', '".getAESPassword()."')";
+		 $decryptSQL = "SELECT AES_DECRYPT('".icms::$xoopsDB->escape($value)."', '".getAESPassword()."')";
 		 if($decryptResult = $xoopsDB->query($decryptSQL)) {
 					$decryptRow = $xoopsDB->fetchRow($decryptResult);
 					return $decryptRow[0];
@@ -203,7 +203,7 @@ function prepvalues($value, $field, $entry_id) {
 	if(($type == "radio" OR $type == "checkbox") AND preg_match('/\{OTHER\|+[0-9]+\}/', $value)) {
 		// convert ffcaption to regular and then query for id
 		$realcap = str_replace("`", "'", $ffcaption);
-		$newValueq = go("SELECT other_text FROM " . DBPRE . "formulize_other, " . DBPRE . "formulize WHERE " . DBPRE . "formulize_other.ele_id=" . DBPRE . "formulize.ele_id AND " . DBPRE . "formulize.ele_handle=\"" . mysql_real_escape_string($field) . "\" AND " . DBPRE . "formulize_other.id_req='".intval($entry_id)."' LIMIT 0,1");
+		$newValueq = go("SELECT other_text FROM " . DBPRE . "formulize_other, " . DBPRE . "formulize WHERE " . DBPRE . "formulize_other.ele_id=" . DBPRE . "formulize.ele_id AND " . DBPRE . "formulize.ele_handle=\"" . icms::$xoopsDB->escape($field) . "\" AND " . DBPRE . "formulize_other.id_req='".intval($entry_id)."' LIMIT 0,1");
 		//$value_other = _formulize_OPT_OTHER . $newValueq[0]['other_text'];
     $value_other = $newValueq[0]['other_text']; // removing the "Other: " part...we just want to show what people actually typed...doesn't have to be flagged specifically as an "other" value
 		$value = preg_replace('/\{OTHER\|+[0-9]+\}/', $value_other, $value); 
@@ -304,7 +304,7 @@ function dataExtraction($frame="", $form, $filter, $andor, $scope, $limitStart, 
      
      $limitStart = intval($limitStart);
      $limitSize = intval($limitSize);
-     $sortField = mysql_real_escape_string($sortField);
+     $sortField = icms::$xoopsDB->escape($sortField);
 
      if(isset($_GET['debug'])) { $time_start = microtime_float(); }
      
@@ -692,7 +692,7 @@ function dataExtraction($frame="", $form, $filter, $andor, $scope, $limitStart, 
            $formAlias = "f" . $keys[0];
         }
         foreach($passedElements as $thisPassedElement) {
-          $sqlFilterElements[] = $formAlias . ".`" . mysql_real_escape_string($thisPassedElement) . "`";
+          $sqlFilterElements[] = $formAlias . ".`" . icms::$xoopsDB->escape($thisPassedElement) . "`";
         }
       }
     }
@@ -1131,7 +1131,7 @@ function dataExtraction($frame="", $form, $filter, $andor, $scope, $limitStart, 
 function formulize_getFormIdFromName($nameHandle) {
      static $cachedFormIds = array();
      if(!isset($cachedFormIds[$nameHandle])) {
-          $formIdData = go("SELECT id_form FROM ".DBPRE."formulize_id WHERE desc_form = '".mysql_real_escape_string($nameHandle)."'");
+          $formIdData = go("SELECT id_form FROM ".DBPRE."formulize_id WHERE desc_form = '".icms::$xoopsDB->escape($nameHandle)."'");
           $cachedFormIds[$nameHandle] = $formIdData[0]['id_form'];
      }
      return $cachedFormIds[$nameHandle];
@@ -1234,7 +1234,7 @@ function formulize_parseFilter($filtertemp, $andor, $linkfids, $fid, $frid) {
                     // if this is a user id field, then treat it specially 
                     if(($ifParts[0] == "creation_uid" OR $ifParts[0] == "mod_uid") AND !is_numeric($ifParts[1])) {
                          // subquery the user table for the username or full name
-                         $ifParts[1] = "(SELECT uid FROM " . DBPRE . "users WHERE uname " . $operator . $quotes . $likebits . mysql_real_escape_string($ifParts[1]) . $likebits . $quotes . " OR name " . $operator . $quotes . $likebits . mysql_real_escape_string($ifParts[1]) . $likebits . $quotes . ")";
+                         $ifParts[1] = "(SELECT uid FROM " . DBPRE . "users WHERE uname " . $operator . $quotes . $likebits . icms::$xoopsDB->escape($ifParts[1]) . $likebits . $quotes . " OR name " . $operator . $quotes . $likebits . icms::$xoopsDB->escape($ifParts[1]) . $likebits . $quotes . ")";
                          $quotes = "";
                          $operator = " = ANY ";
                          $likebits = "";
@@ -1242,20 +1242,20 @@ function formulize_parseFilter($filtertemp, $andor, $linkfids, $fid, $frid) {
 												 $operator = " = ";
 												 $quotes = "";
 												 $likebits = "";
-												 $ifParts[1] = mysql_real_escape_string($ifParts[1]);
-                    } else { // need to put mysql_real_escape_string around $ifParts[1] only when it's a date field, since that escaping requirement has been handled already in the subquery for uid filters
-                         $ifParts[1] = mysql_real_escape_string($ifParts[1]);
+												 $ifParts[1] = icms::$xoopsDB->escape($ifParts[1]);
+                    } else { // need to put icms::$xoopsDB->escape around $ifParts[1] only when it's a date field, since that escaping requirement has been handled already in the subquery for uid filters
+                         $ifParts[1] = icms::$xoopsDB->escape($ifParts[1]);
 												 
                     }
                     $newWhereClause = "main.".$ifParts[0]  . $operator . $quotes . $likebits . $ifParts[1] . $likebits . $quotes;
                     $mappedForm = $fid;
                } elseif($ifParts[0] == "creator_email") {
                     $formFieldFilterMap['creator_email'] = true;
-                    $newWhereClause = "usertable.email" . $operator . $quotes . $likebits . mysql_real_escape_string($ifParts[1]) . $likebits . $quotes;
+                    $newWhereClause = "usertable.email" . $operator . $quotes . $likebits . icms::$xoopsDB->escape($ifParts[1]) . $likebits . $quotes;
                     $mappedForm = $fid;
 	       } elseif($ifParts[0] == "entry_id") {
 		    $formFieldFilterMap['entry_id'] = true;
-		    $newWhereClause = "main.entry_id" . $operator . $quotes . $likebits . mysql_real_escape_string($ifParts[1]) . $likebits . $quotes;
+		    $newWhereClause = "main.entry_id" . $operator . $quotes . $likebits . icms::$xoopsDB->escape($ifParts[1]) . $likebits . $quotes;
 		    $mappedForm = $fid;		    
                } else {
                     
@@ -1279,14 +1279,14 @@ function formulize_parseFilter($filtertemp, $andor, $linkfids, $fid, $frid) {
                     // handle 'other' boxes
                     // instead of doing a subquery, this could probably be redone similarly to creator_email and then we would have the "other" value in the raw query result, and then the process in prepValues would not need to requery the other table
                     if($formFieldFilterMap[$mappedForm][$element_id]['hasother']) {
-                         $subquery = "(SELECT id_req FROM " . DBPRE . "formulize_other WHERE ele_id=" . intval($element_id) . " AND other_text " . $operator . $quotes . $likebits . mysql_real_escape_string($ifParts[1]) . $likebits . $quotes . ")";
-                         $newWhereClause = "(($elementPrefix.entry_id = ANY $subquery)OR($queryElement " . $operator . $quotes . $likebits . mysql_real_escape_string($ifParts[1]) . $likebits . $quotes."))"; // need to look in the other box and the main field, and return values that match in either case
+                         $subquery = "(SELECT id_req FROM " . DBPRE . "formulize_other WHERE ele_id=" . intval($element_id) . " AND other_text " . $operator . $quotes . $likebits . icms::$xoopsDB->escape($ifParts[1]) . $likebits . $quotes . ")";
+                         $newWhereClause = "(($elementPrefix.entry_id = ANY $subquery)OR($queryElement " . $operator . $quotes . $likebits . icms::$xoopsDB->escape($ifParts[1]) . $likebits . $quotes."))"; // need to look in the other box and the main field, and return values that match in either case
                     // handle linked selectboxes
                     } elseif($sourceMeta = $formFieldFilterMap[$mappedForm][$element_id]['islinked']) {
 			 
 			 // check if user is searching for blank values, and if so, then query this element directly, rather than looking in the source
 			 if($ifParts[1]==='' OR $operator == ' IS NULL ' OR $operator == ' IS NOT NULL ') {
-			      $newWhereClause = "$queryElement " . $operator . $quotes . $likebits . mysql_real_escape_string($ifParts[1]) . $likebits . $quotes;
+			      $newWhereClause = "$queryElement " . $operator . $quotes . $likebits . icms::$xoopsDB->escape($ifParts[1]) . $likebits . $quotes;
 			 } else {
 			      
 			      // need to check if an alternative value field has been defined for use in lists or data sets and search on that field instead 
@@ -1309,13 +1309,13 @@ function formulize_parseFilter($filtertemp, $andor, $linkfids, $fid, $frid) {
 				 $newWhereClause = "1";
 			      } else {
 				 // Neal's suggestion:  use EXISTS...other forms of subquery using field IN subquery or subquery LIKE field, and a CONCAT in the subquery, failed in various conditions.  IN did not work with multiple selection boxes, and LIKE did not work with search terms too general to return only one match in the source form.  Exists works in all cases.  :-)
-				 $newWhereClause = " EXISTS (SELECT 1 FROM ".DBPRE."formulize_".$sourceFormObject->getVar('form_handle')." AS source WHERE $queryElement LIKE CONCAT('%,',source.entry_id,',%') AND source.`".$sourceMeta[1] . "`". $operator . $quotes . $likebits . mysql_real_escape_string($ifParts[1]) . $likebits . $quotes . ")";
+				 $newWhereClause = " EXISTS (SELECT 1 FROM ".DBPRE."formulize_".$sourceFormObject->getVar('form_handle')." AS source WHERE $queryElement LIKE CONCAT('%,',source.entry_id,',%') AND source.`".$sourceMeta[1] . "`". $operator . $quotes . $likebits . icms::$xoopsDB->escape($ifParts[1]) . $likebits . $quotes . ")";
 			      }
 			 }
                     // usernames/fullnames boxes
                     } elseif($listtype = $formFieldFilterMap[$mappedForm][$element_id]['isnamelist'] AND $ifParts[1] !== "") {
                          if(!is_numeric($ifParts[1])) {
-                              $preSearch = "SELECT uid FROM " . DBPRE . "users WHERE uname " . $operator . $quotes . $likebits . mysql_real_escape_string($ifParts[1]) . $likebits . $quotes . " OR name " . $operator . $quotes . $likebits . mysql_real_escape_string($ifParts[1]) . $likebits . $quotes;  // search name and uname, since often name might be empty these days
+                              $preSearch = "SELECT uid FROM " . DBPRE . "users WHERE uname " . $operator . $quotes . $likebits . icms::$xoopsDB->escape($ifParts[1]) . $likebits . $quotes . " OR name " . $operator . $quotes . $likebits . icms::$xoopsDB->escape($ifParts[1]) . $likebits . $quotes;  // search name and uname, since often name might be empty these days
                          } else {
                               $preSearch = "SELECT uid FROM " . DBPRE . "users WHERE uid ".$operator.$quotes.$likebits.$ifParts[1].$likebits.$quotes;
                          }
@@ -1345,7 +1345,7 @@ function formulize_parseFilter($filtertemp, $andor, $linkfids, $fid, $frid) {
                     // regular whereclause
                     } else {
                          // could/should put better handling in here of multiple value boxes, so = operators actually only look for matches within the individual values??  Is that possible?
-                         $newWhereClause = "$queryElement " . $operator . $quotes . $likebits . mysql_real_escape_string($ifParts[1]) . $likebits . $quotes;
+                         $newWhereClause = "$queryElement " . $operator . $quotes . $likebits . icms::$xoopsDB->escape($ifParts[1]) . $likebits . $quotes;
                     }
                     
                }
@@ -1530,7 +1530,7 @@ function formulize_getElementMetaData($elementOrHandle, $isHandle=false, $fid=0)
           if($fid) {
                $whereClause = "id_form=".intval($fid);
           } else {
-               $whereClause = $isHandle ? "ele_handle = '".mysql_real_escape_string($elementOrHandle)."'" : "ele_id = ".intval($elementOrHandle);
+               $whereClause = $isHandle ? "ele_handle = '".icms::$xoopsDB->escape($elementOrHandle)."'" : "ele_id = ".intval($elementOrHandle);
           }
           $elementValueQ = "SELECT ele_value, ele_type, ele_id, ele_handle, id_form, ele_uitext, ele_caption, ele_colhead, ele_encrypt FROM " . DBPRE . "formulize WHERE $whereClause";
           $evqRes = $xoopsDB->query($elementValueQ);
@@ -1560,7 +1560,7 @@ function formulize_calcDerivedColumns($entry, $metadata, $frid, $fid) {
                foreach($metadata[$formHandle] as $formulaNumber=>$thisMetaData) {
 	  	    foreach($record as $primary_entry_id=>$elements) {
 			 if(($entry[$formHandle][$primary_entry_id][$thisMetaData['handle']][0] == "" OR isset($GLOBALS['formulize_forceDerivedValueUpdate'])) AND !isset($GLOBALS['formulize_doingExport'])) { // if there's nothing already in the DB, then derive it, unless we're being asked specifically to update the derived values, which happens during a save operation.  In that case, always do a derivation regardless of what's in the DB.
-			      $functionName = "derivedValueFormula_".str_replace(array(" ", "-", "/", "'", "`", "\\", ".", "’", ",", ")", "(", "[", "]"), "_", $formHandle)."_".$formulaNumber;
+			      $functionName = "derivedValueFormula_".str_replace(array(" ", "-", "/", "'", "`", "\\", ".", "ï¿½", ",", ")", "(", "[", "]"), "_", $formHandle)."_".$formulaNumber;
 			      // want to turn off the derived value update flag for the actual processing of a value, since the function might have a getData call in it!!
 			      $resetDerviedValueFlag = false;
 			      if(isset($GLOBALS['formulize_forceDerivedValueUpdate'])) {
@@ -1589,7 +1589,7 @@ function formulize_calcDerivedColumns($entry, $metadata, $frid, $fid) {
 
 function formulize_includeDerivedValueFormulas($metadata, $formHandle, $frid, $fid) {
      // open a temporary file
-     $fileName = XOOPS_ROOT_PATH."/cache/formulize_derivedValueFormulas_".str_replace(array(" ", "-", "/", "'", "`", "\\", ".", "’", ",", ")", "(", "[", "]"), "_", $formHandle).".php";
+     $fileName = XOOPS_ROOT_PATH."/cache/formulize_derivedValueFormulas_".str_replace(array(" ", "-", "/", "'", "`", "\\", ".", "ï¿½", ",", ")", "(", "[", "]"), "_", $formHandle).".php";
      $derivedValueFormulaFile = fopen($fileName, "w");
      fwrite($derivedValueFormulaFile, "<?php\n\n");
      $functionsToWrite = "";
@@ -1626,7 +1626,7 @@ function formulize_includeDerivedValueFormulas($metadata, $formHandle, $frid, $f
                }
                $formula = implode("\n", $formulaLines);
           }
-          $functionsToWrite .= "function derivedValueFormula_".str_replace(array(" ", "-", "/", "'", "`", "\\", ".", "’", ",", ")", "(", "[", "]"), "_", $formHandle)."_".$formulaNumber."(\$entry, \$form_id, \$entry_id, \$relationship_id) {\n$formula\nreturn \$value;\n}\n\n";
+          $functionsToWrite .= "function derivedValueFormula_".str_replace(array(" ", "-", "/", "'", "`", "\\", ".", "ï¿½", ",", ")", "(", "[", "]"), "_", $formHandle)."_".$formulaNumber."(\$entry, \$form_id, \$entry_id, \$relationship_id) {\n$formula\nreturn \$value;\n}\n\n";
      }
      fwrite($derivedValueFormulaFile, $functionsToWrite. "?>");
      fclose($derivedValueFormulaFile);
@@ -1682,18 +1682,18 @@ function formulize_convertCapOrColHeadToHandle($frid, $fid, $term) {
           if(isset($results_array[$form_id][$term][$frid])) { return $results_array[$form_id][$term][$frid]; }
           
           // first check if this is a handle
-					//print "hq: SELECT ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND ele_handle = \"".mysql_real_escape_string($term)."\"";
-          $handle_query = go("SELECT ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND ele_handle = \"".mysql_real_escape_string($term)."\"");
+					//print "hq: SELECT ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND ele_handle = \"".icms::$xoopsDB->escape($term)."\"";
+          $handle_query = go("SELECT ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND ele_handle = \"".icms::$xoopsDB->escape($term)."\"");
           if(count($handle_query) > 0) { // if this is a valid handle, then use it
 							 $handle = $term;
           } else {
-							 //print "chq: SELECT ele_id, ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND ele_colhead = \"" . mysql_real_escape_string($term) . "\"";
-               $colhead_query = go("SELECT ele_id, ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND (ele_colhead = \"" . mysql_real_escape_string($term) . "\" OR ele_colhead LIKE '%]".mysql_real_escape_string($term)."[/%')");
+							 //print "chq: SELECT ele_id, ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND ele_colhead = \"" . icms::$xoopsDB->escape($term) . "\"";
+               $colhead_query = go("SELECT ele_id, ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND (ele_colhead = \"" . icms::$xoopsDB->escape($term) . "\" OR ele_colhead LIKE '%]".icms::$xoopsDB->escape($term)."[/%')");
                if(count($colhead_query) > 0) {
 										$handle = $colhead_query[0]['ele_handle'];
                } else {
-										//print "capq: SELECT ele_id, ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND ele_caption = \"" . mysql_real_escape_string($term) . "\"";
-                    $caption_query = go("SELECT ele_id, ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND (ele_caption = \"" . mysql_real_escape_string($term) . "\" OR ele_caption LIKE '%]".mysql_real_escape_string($term)."[/%')");
+										//print "capq: SELECT ele_id, ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND ele_caption = \"" . icms::$xoopsDB->escape($term) . "\"";
+                    $caption_query = go("SELECT ele_id, ele_handle FROM " . DBPRE . "formulize WHERE id_form = " . $form_id . " AND (ele_caption = \"" . icms::$xoopsDB->escape($term) . "\" OR ele_caption LIKE '%]".icms::$xoopsDB->escape($term)."[/%')");
                     if(count($caption_query) > 0 ) {
 												 $handle = $caption_query[0]['ele_handle'];
                     }
@@ -1868,7 +1868,7 @@ function parseTableFormFilter($filter, $andor, $elementsById) {
           $filterParts = explode("/**/", $thisFilter);
           $operator = isset($filterParts[2]) ? $filterParts[2] : "LIKE";
           $likeparts = ($operator == "LIKE" OR $operator == "NOT LIKE") ? "%" : "";
-          $whereClause .= $elementsById[$filterParts[0]]['field'] . " $operator '$likeparts" . mysql_real_escape_string($filterParts[1]) . "$likeparts'";
+          $whereClause .= $elementsById[$filterParts[0]]['field'] . " $operator '$likeparts" . icms::$xoopsDB->escape($filterParts[1]) . "$likeparts'";
      }
      return $whereClause;
 }

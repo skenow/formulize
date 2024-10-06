@@ -107,12 +107,12 @@ else
 		redirect_header("formindex.php", 2, _MD_ERRORTITLE);
 	}
 	$title2 = get_magic_quotes_gpc() ? stripslashes($title2) : $title2;
-	$title2 = mysql_real_escape_string($title2);
+	$title2 = icms::$xoopsDB->escape($title2);
 		
 	$sql = sprintf("UPDATE %s SET desc_form='%s' WHERE id_form='%s'", $xoopsDB->prefix("formulize_id"),$title2, intval($title));
 	$xoopsDB->queryF($sql) or $eh->show("error insertion 1 dans renform");
 	
-	$sql2 = sprintf("UPDATE %s SET itemname='%s',itemurl='%s' WHERE itemname='%s'", $xoopsDB->prefix("formulize_menu"), $title2, XOOPS_URL.'/modules/formulize/index.php?title='.$title2, mysql_real_escape_string($desc_form));
+	$sql2 = sprintf("UPDATE %s SET itemname='%s',itemurl='%s' WHERE itemname='%s'", $xoopsDB->prefix("formulize_menu"), $title2, XOOPS_URL.'/modules/formulize/index.php?title='.$title2, icms::$xoopsDB->escape($desc_form));
 	$xoopsDB->query($sql2) or $eh->show("error insertion 2 dans renform");
 	redirect_header("formindex.php",1,_formulize_FORMMOD);
 }

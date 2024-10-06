@@ -1300,7 +1300,7 @@ jQuery(document).ready(function() {
 		    if( count( $optionValue ) == 2 ) {
 			$optionValue = $optionValue[0];
 		    }
-		    $options[] = is_numeric($optionValue) ? $optionValue : "'".mysql_real_escape_string($optionValue)."'";
+		    $options[] = is_numeric($optionValue) ? $optionValue : "'".icms::$xoopsDB->escape($optionValue)."'";
 		}
 		if(count($options) > 0) {
 		    $filterValue .= implode(", ",$options);
@@ -1311,7 +1311,7 @@ jQuery(document).ready(function() {
 		    $filterValue = " 1 ";
 		}
 	    } else {
-		$filterValue .= is_numeric($_POST[$postName]) ? $_POST[$postName] : mysql_real_escape_string($_POST[$postName]);
+		$filterValue .= is_numeric($_POST[$postName]) ? $_POST[$postName] : icms::$xoopsDB->escape($_POST[$postName]);
 		$filterValue .= $fieldName ? "'" : ""; // close out the ' started above after we figured out the field this filter belongs to
 	    }
 	}

@@ -201,7 +201,7 @@ class formulizeFormsHandler {
 	
 	function getByHandle($handle) {
 		global $xoopsDB;
-		$sql = "SELECT id_form FROM " . $xoopsDB->prefix("formulize_id") . " WHERE form_handle = '".mysql_real_escape_string($handle) . "'";
+		$sql = "SELECT id_form FROM " . $xoopsDB->prefix("formulize_id") . " WHERE form_handle = '".icms::$xoopsDB->escape($handle) . "'";
 		if($res = $xoopsDB->query($sql)) {
 			$array = $xoopsDB->fetchArray($res);
 			return $this->get($array['id_form']);
@@ -335,7 +335,7 @@ class formulizeFormsHandler {
 
 	function createTableFormElements($targetTableName, $fid) {
 		
-		$result = $this->db->query("SHOW COLUMNS FROM " . mysql_real_escape_string($targetTableName));
+		$result = $this->db->query("SHOW COLUMNS FROM " . icms::$xoopsDB->escape($targetTableName));
 		$element_handler = xoops_getmodulehandler('elements', 'formulize');
 		$element_order = 0;
 		while($row = $this->db->fetchRow($result)) {
@@ -386,7 +386,7 @@ class formulizeFormsHandler {
 		}
 		global $xoopsDB;
 		$element_id_condition = $element_id ? " AND ele_id != " . intval($element_id) : "";
-		$sql = "SELECT count(ele_handle) FROM " . $xoopsDB->prefix("formulize") . " WHERE ele_handle = '" . mysql_real_escape_string($handle) . "' $element_id_condition";
+		$sql = "SELECT count(ele_handle) FROM " . $xoopsDB->prefix("formulize") . " WHERE ele_handle = '" . icms::$xoopsDB->escape($handle) . "' $element_id_condition";
 		if(!$res = $xoopsDB->query($sql)) {
 			print "Error: could not verify uniqueness of handle '$handle' in form $fid";
 		} else {
@@ -706,12 +706,12 @@ class formulizeFormsHandler {
 		foreach($filterSettings as $groupid=>$theseSettings) {
 			if(isset($foundGroups[$groupid])) {
 				// add to update query
-				$updateSQL .= "WHEN $groupid THEN '".mysql_real_escape_string(serialize($theseSettings))."' ";
+				$updateSQL .= "WHEN $groupid THEN '".icms::$xoopsDB->escape(serialize($theseSettings))."' ";
 				$runUpdate = true;
 			} else {
 				// add to the insert query
 			  if(!$insertStart) { $insertSQL .= ", "; }
-				$insertSQL .= "(".$fid.", ".$groupid.", '".mysql_real_escape_string(serialize($theseSettings))."')";
+				$insertSQL .= "(".$fid.", ".$groupid.", '".icms::$xoopsDB->escape(serialize($theseSettings))."')";
 				$insertStart = false;
 				$runInsert = true;
 			}
@@ -741,7 +741,7 @@ class formulizeFormsHandler {
 			return false;
 		}
 		global $xoopsDB;
-		$deleteSQL = mysql_real_escape_string("DELETE FROM ".$xoopsDB->prefix("formulize_group_filters")." WHERE fid=$fid AND groupid IN (".implode(", ",$groupids).")");
+		$deleteSQL = icms::$xoopsDB->escape("DELETE FROM ".$xoopsDB->prefix("formulize_group_filters")." WHERE fid=$fid AND groupid IN (".implode(", ",$groupids).")");
 		if(!$xoopsDB->query($deleteSQL)) {
 			return false;
 		} else {
@@ -840,7 +840,7 @@ class formulizeFormsHandler {
 				$number = ereg_replace("[^0-9+-]","", $termToUse);
 				$termToUse = date("Y-m-d",mktime(0, 0, 0, date("m") , date("d")+$number, date("Y")));
 			}
-			$termToUse = (is_numeric($termToUse) AND !strstr(strtoupper($filterSettings[1][$i]), "LIKE")) ? $termToUse : "\"$likeBits".mysql_real_escape_string($termToUse)."$likeBits\"";
+			$termToUse = (is_numeric($termToUse) AND !strstr(strtoupper($filterSettings[1][$i]), "LIKE")) ? $termToUse : "\"$likeBits".icms::$xoopsDB->escape($termToUse)."$likeBits\"";
 			$perGroupFilter .= "$formAlias`".$filterSettings[0][$i]."` ".htmlspecialchars_decode($filterSettings[1][$i]) . " " . $termToUse; // htmlspecialchars_decode is used because &lt;= might be the operator coming out of the DB instead of <=
 		}
 
@@ -908,7 +908,7 @@ class formulizeFormsHandler {
 		$newfid = $this->db->getInsertId();
 		
 		// replace formhandle of the new form
-		$replaceSQL = "UPDATE ". $this->db->prefix("formulize_id") . " SET form_handle='".mysql_real_escape_string($oldFormHandle."_".$newfid)."' WHERE form_handle=\"replace_with_handle_and_id\"";
+		$replaceSQL = "UPDATE ". $this->db->prefix("formulize_id") . " SET form_handle='".icms::$xoopsDB->escape($oldFormHandle."_".$newfid)."' WHERE form_handle=\"replace_with_handle_and_id\"";
 		if(!$result = $this->db->queryF($replaceSQL)) {
 		  print "error setting the form_handle for the new form.<br>".mysql_error();
 		  return false;

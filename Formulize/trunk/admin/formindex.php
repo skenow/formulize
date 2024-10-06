@@ -84,7 +84,7 @@ global $title2, $op, $data;
 	xoops_cp_header();
 
 
-//Sélection des formulizes
+//Sï¿½lection des formulizes
 
 	$sql="SELECT distinct desc_form, id_form, tableform, lockedform FROM ".$xoopsDB->prefix("formulize_id");
 	$res = $xoopsDB->query( $sql );
@@ -1915,7 +1915,7 @@ if(!in_array($xoopsDB->prefix("formulize_entry_owner_groups"), $existingTables))
                         $dataRes = $xoopsDB->query($dataSql);
                         while($dataArray = $xoopsDB->fetchArray($dataRes)) {
                                 if(!isset($formCaptions[$dataArray['id_form']][$dataArray['ele_caption']])) {
-                                        $deleteSql = "DELETE FROM " . $xoopsDB->prefix("formulize_form") . " WHERE id_form=".$dataArray['id_form']." AND ele_caption=\"".mysql_real_escape_string($dataArray['ele_caption'])."\"";
+                                	$deleteSql = "DELETE FROM " . $xoopsDB->prefix("formulize_form") . " WHERE id_form=".$dataArray['id_form']." AND ele_caption=\"".icms::$xoopsDB->escape($dataArray['ele_caption'])."\"";
                                         if(!$result = $xoopsDB->query($deleteSql)) {
                                                 exit("Error patching DB for Formulize 3.1. SQL dump:<br>" . $deletesql . "<br>".mysql_error()."<br>Please contact <a href=mailto:formulize@freeformsolutions.ca>Freeform Solutions</a> for assistance.");
                                         }
@@ -2090,7 +2090,7 @@ function patch22convertdata() {
 			if(get_magic_quotes_gpc()) { $sanArray['ele_value'] = stripslashes($sanArray['ele_value']); }
 			$newvalue = $myts->htmlSpecialChars($sanArray['ele_value']);
 			if($newvalue != $origvalue) {
-				$newsql = "UPDATE " . $xoopsDB->prefix("formulize_form") . " SET ele_value = \"" . mysql_real_escape_string($newvalue) . "\" WHERE ele_id = " . $sanArray['ele_id'];
+				$newsql = "UPDATE " . $xoopsDB->prefix("formulize_form") . " SET ele_value = \"" . icms::$xoopsDB->escape($newvalue) . "\" WHERE ele_id = " . $sanArray['ele_id'];
 				if(!$newres = $xoopsDB->query($newsql)) {
 					exit("Error patching DB for Formulize 2.2. SQL dump:<br>" . $sansql . "<br>".mysql_error()."<br>Could not write data for sanitizing.  Please contact <a href=mailto:formulize@freeformsolutions.ca>Freeform Solutions</a> for assistance.");
 				}
@@ -2272,7 +2272,7 @@ function patch30DataStructure($auto = false) {
 																	continue; // don't write in blank date values, let them get the default NULL value for the field
 																} 
 																
-                                $insertSQL .= ", `" . $captionHandleIndex[$dataArray['ele_caption']] . "`=\"" . mysql_real_escape_string($dataArray['ele_value']) . "\"";
+																$insertSQL .= ", `" . $captionHandleIndex[$dataArray['ele_caption']] . "`=\"" . icms::$xoopsDB->escape($dataArray['ele_value']) . "\"";
                         }
                         if($insertSQL) {
                                 if(!$insertRes = $xoopsDB->query($insertSQL)) {
@@ -2304,7 +2304,7 @@ function patch30DataStructure($auto = false) {
         $elementObject = $element_handler->get($array['ele_id']);
         $ele_value = $elementObject->getVar('ele_value');
         $parts = explode("#*=:*", $ele_value[2]);
-        $sql2 = "SELECT ele_handle FROM " . $xoopsDB->prefix("formulize") . " WHERE ele_caption = '". mysql_real_escape_string($parts[1]) . "' AND id_form=". $parts[0];
+        $sql2 = "SELECT ele_handle FROM " . $xoopsDB->prefix("formulize") . " WHERE ele_caption = '". icms::$xoopsDB->escape($parts[1]) . "' AND id_form=". $parts[0];
 				//print "$sql2<br>";
         if(!$res2 = $xoopsDB->query($sql2)) {
           exit("Error: could not get the handle for a linked selectbox source.  SQL: $sql2<br>".mysql_error()."<br>Please report this error to <a href=\"mailto:formulize@freeformsolutions.ca\">Freeform Solutions</a>.");

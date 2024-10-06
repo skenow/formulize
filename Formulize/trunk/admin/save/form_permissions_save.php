@@ -53,8 +53,8 @@ global $xoopsDB;
 if($_POST['grouplistname']) {
  
   $groupListId = intval($_POST['grouplistid']);
-  $groupListGroups = mysql_real_escape_string(implode(",",$_POST['groups']));
-  $name = mysql_real_escape_string($_POST['grouplistname']);
+  $groupListGroups = icms::$xoopsDB->escape(implode(",",$_POST['groups']));
+  $name = icms::$xoopsDB->escape($_POST['grouplistname']);
   // are we inserting or updating? 
   $newList = $groupListId == 0 ? true : false;
   if(!$newList) {

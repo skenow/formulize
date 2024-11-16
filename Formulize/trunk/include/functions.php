@@ -1628,7 +1628,7 @@ function buildScope($currentView, $member_handler, $gperm_handler, $uid, $groups
 // THIS FUNCTION SENDS TEXT THROUGH THE TRANSLATION ROUTINE IF MARCAN'S MULTILANGUAGE HACK IS INSTALLED
 // THIS FUNCTION IS ALSO AWARE OF THE XLANGUAGE MODULE IF THAT IS INSTALLED.  
 function trans($string) {
-  $myts = MyTextSanitizer::getInstance();
+  $myts = icms_core_Textsanitizer::getInstance();
   if(function_exists('easiestml')) {
     global $easiestml_lang;
     $easiestml_lang = isset($_GET['lang'])?$_GET['lang']:$easiestml_lang;   // this is required when linked with a Drupal install
@@ -1657,7 +1657,7 @@ function getMaxIdReq() {
 function prepDataForWrite($element, $ele) {
 
 	global $myts;
-	if(!$myts) { $myts = MyTextSanitizer::getInstance(); }
+	if(!$myts) { $myts = icms_core_Textsanitizer::getInstance(); }
 
 	$ele_type = $element->getVar('ele_type');
 	$ele_value = $element->getVar('ele_value');
@@ -1670,12 +1670,12 @@ function prepDataForWrite($element, $ele) {
 						$value = $ele; 
 					}
                                         if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
-					$value = $myts->htmlSpecialChars($value);
+                                        $value = icms_core_DataFilter::htmlSpecialChars($value);
 				break;
 				case 'textarea':
 					$value = $ele;
-                                        if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
-					$value = $myts->htmlSpecialChars($value);
+                    if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
+                    $value = icms_core_DataFilter::htmlSpecialChars($value);
 				break;
 				case 'areamodif':
 					$value = $myts->stripSlashesGPC($ele);
@@ -1688,13 +1688,13 @@ function prepDataForWrite($element, $ele) {
 							$GLOBALS['formulize_other'][$ele_id] = checkOther($v['key'], $ele_id);
 							$msg.= $myts->stripSlashesGPC($v['key']).'<br>';
 							if(get_magic_quotes_gpc()) { $v['key'] = stripslashes($v['key']); }
-							$v['key'] = $myts->htmlSpecialChars($v['key']);
+							$v['key'] = icms_core_DataFilter::htmlSpecialChars($v['key']);
 							$value = $v['key'];
 						}
 						$opt_count++;
 					}
           if($ele >= $opt_count) { // if a value was received that was out of range...added by jwe March 2 2008
-            $value = $myts->htmlSpecialChars($_POST['formulize_hoorv_'.$ele_id.'_'.$ele]); // get the out of range value from the hidden values that were passed back
+          	$value = icms_core_DataFilter::htmlSpecialChars($_POST['formulize_hoorv_'.$ele_id.'_'.$ele]); // get the out of range value from the hidden values that were passed back
           }
 				break;
 				case 'yn':
@@ -1710,7 +1710,7 @@ function prepDataForWrite($element, $ele) {
                 $numberOfSelectionsFound++;
 								$GLOBALS['formulize_other'][$ele_id] = checkOther($v['key'], $ele_id);
 								if(get_magic_quotes_gpc()) { $v['key'] = stripslashes($v['key']); }
-								$v['key'] = $myts->htmlSpecialChars($v['key']);
+								$v['key'] = icms_core_DataFilter::htmlSpecialChars($v['key']);
 								$value = $value.'*=+*:'.$v['key'];
 							}
 							$opt_count++;
@@ -1726,7 +1726,7 @@ function prepDataForWrite($element, $ele) {
 
           while($numberOfSelectionsFound < count($ele) AND $opt_count < 1000) { // if a value was received that was out of range...added by jwe March 2 2008...in this case we are assuming that if there are more values passed back than selections found in the valid options for the element, then there are out-of-range values we want to preserve
             if(in_array($opt_count, $ele)) { // keep looking for more values...get them out of the hiddenOutOfRange info
-              $value = $value.'*=+*:'.$myts->htmlSpecialChars($_POST['formulize_hoorv_'.$ele_id.'_'.$opt_count]);
+            	$value = $value.'*=+*:'. icms_core_DataFilter::htmlSpecialChars($_POST['formulize_hoorv_'.$ele_id.'_'.$opt_count]);
               $numberOfSelectionsFound++;
             }
             $opt_count++;
@@ -1808,7 +1808,7 @@ function prepDataForWrite($element, $ele) {
                       //{
                         //print "WE HAVE A MATCH!<BR>"; -- note: nametype should
                         if(get_magic_quotes_gpc()) { $entriesPassedBack[$entrycounterjwe] = stripslashes($entriesPassedBack[$entrycounterjwe]); }
-                        $entriesPassedBack[$entrycounterjwe] = $myts->htmlSpecialChars($entriesPassedBack[$entrycounterjwe]);
+                        $entriesPassedBack[$entrycounterjwe] = icms_core_DataFilter::htmlSpecialChars($entriesPassedBack[$entrycounterjwe]);
                         $value = $value . "*=+*:" . $entriesPassedBack[$entrycounterjwe];
                         $numberOfSelectionsFound++;
                         //print "$value<br><br>";
@@ -1821,7 +1821,7 @@ function prepDataForWrite($element, $ele) {
                     {
                       //print "WE HAVE A MATCH!<BR>";
                       if(get_magic_quotes_gpc()) { $entriesPassedBack[$entrycounterjwe] = stripslashes($entriesPassedBack[$entrycounterjwe]); }
-                      $entriesPassedBack[$entrycounterjwe] = $myts->htmlSpecialChars($entriesPassedBack[$entrycounterjwe]);
+                      $entriesPassedBack[$entrycounterjwe] = icms_core_DataFilter::htmlSpecialChars($entriesPassedBack[$entrycounterjwe]);
                       $value = $entriesPassedBack[$entrycounterjwe];
                       //print "$value<br><br>";
                     }
@@ -1832,14 +1832,14 @@ function prepDataForWrite($element, $ele) {
               if(is_array($ele)) {
                 while($numberOfSelectionsFound < count($ele) AND $entrycounterjwe < 1000) { // if a value was received that was out of range...added by jwe March 2 2008...in this case we are assuming that if there are more values passed back than selections found in the valid options for the element, then there are out-of-range values we want to preserve
                   if(in_array($entrycounterjwe, $ele)) { // keep looking for more values...get them out of the hiddenOutOfRange info
-                    $value = $value.'*=+*:'.$myts->htmlSpecialChars($_POST['formulize_hoorv_'.$ele_id.'_'.$entrycounterjwe]);
+                  	$value = $value.'*=+*:'. icms_core_DataFilter::htmlSpecialChars($_POST['formulize_hoorv_'.$ele_id.'_'.$entrycounterjwe]);
                     $numberOfSelectionsFound++;
                   }
                   $entrycounterjwe++;
                 }
               } else {
                 if($ele > $entrycounterjwe) { // if a value was received that was out of range...added by jwe March 2 2008 (note that unlike with radio buttons, we need to check only for greater than, due to the +1 (starting at 1) that happens with single option selectboxes
-                  $value = $myts->htmlSpecialChars($_POST['formulize_hoorv_'.$ele_id.'_'.$ele]); // get the out of range value from the hidden values that were passed back
+                	$value = icms_core_DataFilter::htmlSpecialChars($_POST['formulize_hoorv_'.$ele_id.'_'.$ele]); // get the out of range value from the hidden values that were passed back
                 }
               }
                 
@@ -2009,7 +2009,7 @@ function writeOtherValues($id_req, $fid) {
 	 * myts == NULL
 	 */
 	if(!$myts){
-		$myts = MyTextSanitizer::getInstance();
+		$myts = icms_core_Textsanitizer::getInstance();
 	}
 	/*
 	 * Hack by F�lix <INBOX Solutions> for sedonde
@@ -2032,7 +2032,7 @@ function writeOtherValues($id_req, $fid) {
 		}
 
 		if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
-		$value = $myts->htmlSpecialChars($value);
+		$value = icms_core_DataFilter::htmlSpecialChars($value);
 		if($value != "" AND $existing_value) { // update
 			$sql = "UPDATE " . $xoopsDB->prefix("formulize_other") . " SET other_text=\"" . icms::$xoopsDB->escape($value) . "\" WHERE id_req='$id_req' AND ele_id='$ele_id'";
 		}elseif($value != "" AND !$existing_value) { // add 
@@ -2174,8 +2174,8 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
 	global $xoopsDB, $myts;
   static $cachedValues = array();
   static $cachedTypes = array();
-	$matchtext = $myts->undoHtmlSpecialChars($matchtext);
-	if($handle == "uid" OR $handle=="proxyid" OR $handle=="creation_date" OR $handle == "mod_date" OR $handle == "creator_email" OR $handle == "creation_uid" OR $handle == "mod_uid" OR $handle == "creation_datetime" OR $handle == "mod_datetime") { return printSmart(trans($myts->htmlSpecialChars($matchtext)), $textWidth); }
+  $matchtext = icms_core_DataFilter::undoHtmlSpecialChars($matchtext);
+  if($handle == "uid" OR $handle=="proxyid" OR $handle=="creation_date" OR $handle == "mod_date" OR $handle == "creator_email" OR $handle == "creation_uid" OR $handle == "mod_uid" OR $handle == "creation_datetime" OR $handle == "mod_datetime") { return printSmart(trans(icms_core_DataFilter::htmlSpecialChars($matchtext)), $textWidth); }
   if(!isset($cachedValues[$handle])) {
     $elementMetaData = formulize_getElementMetaData($handle, true);
     $ele_value = unserialize($elementMetaData['ele_value']);
@@ -2200,7 +2200,7 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
 		$target_fid = $target_element->getVar('id_form');
 		// if user has no perm in target fid, then do not make link!
 		if(!$target_allowed = security_check($target_fid)) {
-			return printSmart(trans($myts->htmlSpecialChars($matchtext)), $textWidth);
+			return printSmart(trans(icms_core_DataFilter::htmlSpecialChars($matchtext)), $textWidth);
 		}
 		$matchtexts = explode(";", $matchtext); // have to breakup the textbox's text since it may contain multiple matches.  Note no space after semicolon spliter, but we trim the results in the foreach loop below.
 		$printText = "";
@@ -2209,9 +2209,9 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
 			$thistext = trim($thistext);
 			if(!$start) { $printText .= ", "; }
 			if($id_req = findMatchingIdReq($target_element, $target_fid, $thistext)) {
-				$printText .= "<a href='" . XOOPS_URL . "/modules/formulize/index.php?fid=$target_fid&ve=$id_req' target='_blank'>" . printSmart(trans($myts->htmlSpecialChars($thistext)), $textWidth) . "</a>";
+				$printText .= "<a href='" . XOOPS_URL . "/modules/formulize/index.php?fid=$target_fid&ve=$id_req' target='_blank'>" . printSmart(trans($icms_core_DataFilter::htmlSpecialChars($thistext)), $textWidth) . "</a>";
 			} else {
-				$printText .= $myts->htmlSpecialChars($thistext);
+				$printText .= icms_core_DataFilter::htmlSpecialChars($thistext);
 			}
 			$start = 0;
 		}
@@ -2224,7 +2224,7 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
 		$target_fid = $boxproperties[0];
 		// if user has no perm in target fid, then do not make link!
 		if(!$target_allowed = security_check($target_fid)) {
-			return printSmart(trans($myts->htmlSpecialChars($matchtext)), $textWidth);
+			return printSmart(trans(icms_core_DataFilter::htmlSpecialChars($matchtext)), $textWidth);
 		}
                 static $cachedQueryResults = array();
                 if(isset($cachedQueryResults[$boxproperties[0]][$boxproperties[1]][$entryBeingFormatted][$handle])) {
@@ -2246,9 +2246,9 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
                   $cachedQueryResults[$boxproperties[0]][$boxproperties[1]][$entryBeingFormatted][$handle] = $id_req;
                 }
 		if($id_req) {
-			return "<a href='" . XOOPS_URL . "/modules/formulize/index.php?fid=$target_fid&ve=$id_req' target='_blank'>" . printSmart(trans($myts->htmlSpecialChars($matchtext)), $textWidth) . "</a>";
+			return "<a href='" . XOOPS_URL . "/modules/formulize/index.php?fid=$target_fid&ve=$id_req' target='_blank'>" . printSmart(trans(icms_core_DataFilter::htmlSpecialChars($matchtext)), $textWidth) . "</a>";
 		} else { // no id_req found
-			return printSmart(trans($myts->htmlSpecialChars($matchtext)), $textWidth);
+			return printSmart(trans(icms_core_DataFilter::htmlSpecialChars($matchtext)), $textWidth);
 		}
 	} elseif($ele_type =='select' AND (isset($ele_value[2]['{USERNAMES}']) OR isset($ele_value[2]['{FULLNAMES}'])) AND $ele_value[7] == 1) {
 		$nametype = isset($ele_value[2]['{USERNAMES}']) ? "uname" : "name";
@@ -2261,12 +2261,12 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
 			$cachedUidResults[$matchtext] = $uids;
 		}
 		if(count($uids) == 1) {
-			return "<a href='" . XOOPS_URL . "/userinfo.php?uid=" . $uids[0]['uid'] . "' target=_blank>" . printSmart(trans($myts->htmlSpecialChars($matchtext)), $textWidth) . "</a>";
+			return "<a href='" . XOOPS_URL . "/userinfo.php?uid=" . $uids[0]['uid'] . "' target=_blank>" . printSmart(trans(icms_core_DataFilter::htmlSpecialChars($matchtext)), $textWidth) . "</a>";
 		} else {
-			return printSmart(trans($myts->htmlSpecialChars($matchtext)), $textWidth);
+			return printSmart(trans(icms_core_DataFilter::htmlSpecialChars($matchtext)), $textWidth);
 		}
 	} elseif($ele_type == 'derived') {
-		return $myts->makeClickable(printSmart(trans($matchtext), $textWidth)); // allow HTML codes in derived values
+		return icms_core_DataFilter::makeClickable(printSmart(trans($matchtext), $textWidth)); // allow HTML codes in derived values
 	} else { // regular element
 	  formulize_benchmark("done formatting, about to print");
 	  return _formatLinksRegularElement($matchtext, $textWidth, $ele_type, $handle, $entryBeingFormatted);
@@ -2281,7 +2281,7 @@ function _formatLinksRegularElement($matchtext, $textWidth, $ele_type, $handle, 
     $matchtext = $elementTypeHandler->formatDataForList($matchtext, $handle, $entryBeingFormatted);
     return $matchtext;
   } else {
-    $rtn = $myts->makeClickable(printSmart(trans($myts->htmlSpecialChars($matchtext)), $textWidth));	    
+  	$rtn = icms_core_DataFilter::makeClickable(printSmart(trans(icms_core_DataFilter::htmlSpecialChars($matchtext)), $textWidth));	    
     return $rtn;
   }
 }
@@ -3038,7 +3038,7 @@ print "$prevValue<br><br>";
 	if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
 
 	global $xoopsUser, $formulize_mgr, $xoopsDB, $myts;
-	if(!is_object($myts)) { $myts = MyTextSanitizer::getInstance(); }
+	if(!is_object($myts)) { $myts = icms_core_Textsanitizer::getInstance(); }
 
 	if(!$formulize_mgr) {
 		$formulize_mgr = icms_getModuleHandler('elements', 'formulize');
@@ -3079,7 +3079,7 @@ print "$prevValue<br><br>";
           $value = strtoupper($value) == strtoupper(_formulize_TEMP_QYES) ? 1 : $value;
           $value = strtoupper($value) == strtoupper(_formulize_TEMP_QNO) ? 2 : $value;
         } else {
-          $value = $myts->htmlSpecialChars($value);
+        	$value = icms_core_DataFilter::htmlSpecialChars($value);
         }
       } else {
         foreach($value as $id=>$thisValue) {
@@ -3087,7 +3087,7 @@ print "$prevValue<br><br>";
             $value[$id] = strtoupper($value[$id]) == strtoupper(_formulize_TEMP_QYES) ? 1 : $value[$id];
             $value[$id] = strtoupper($value[$id]) == strtoupper(_formulize_TEMP_QNO) ? 2 : $value[$id];
           } else {
-            $value[$id] = $myts->htmlSpecialChars($value[$id]);
+          	$value[$id] = icms_core_DataFilter::htmlSpecialChars($value[$id]);
           }
         }
       }

@@ -1757,9 +1757,9 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 				case "text":
 					if(!$entry) {
 						global $myts;
-						if(!$myts){ $myts =& MyTextSanitizer::getInstance(); }
+						if(!$myts){ $myts =& icms_core_Textsanitizer::getInstance(); }
 						$ele_value = $ni->getVar('ele_value');
-						$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), $myts->htmlSpecialChars(getTextboxDefault($ele_value[2], $ni->getVar('id_form'), $entry)));
+						$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), icms_core_DataFilter::htmlSpecialChars(getTextboxDefault($ele_value[2], $ni->getVar('id_form'), $entry)));
 					} else {
 						include_once XOOPS_ROOT_PATH . "/modules/class/data.php";
 						$data_handler = new formulizeDataHandler($ni->getVar('id_form'));
@@ -1769,9 +1769,9 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 				case "textarea":
 					if(!$entry) {
 						global $myts;
-						if(!$myts){ $myts =& MyTextSanitizer::getInstance(); }
+						if(!$myts){ $myts =& icms_core_Textsanitizer::getInstance(); }
 						$ele_value = $ni->getVar('ele_value');
-						$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), $myts->htmlSpecialChars(getTextboxDefault($ele_value[0], $ni->getVar('id_form'), $entry)));
+						$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), icms_core_DataFilter::htmlSpecialChars(getTextboxDefault($ele_value[0], $ni->getVar('id_form'), $entry)));
 					} else {
 						include_once XOOPS_ROOT_PATH . "/modules/class/data.php";
 						$data_handler = new formulizeDataHandler($ni->getVar('id_form'));
@@ -2064,7 +2064,7 @@ function loadValue($prevEntry, $i, $ele_value, $owner_groups, $groups, $entry, $
 	 * myts == NULL
 	 */
 	if(!$myts){
-		$myts =& MyTextSanitizer::getInstance();
+		$myts =& icms_core_Textsanitizer::getInstance();
 	}
 	/*
 	 * Hack by F�lix <INBOX Solutions> for sedonde
@@ -2186,7 +2186,7 @@ function loadValue($prevEntry, $i, $ele_value, $owner_groups, $groups, $entry, $
 						// need to turn the prevEntry got from the DB into something the same as what is in the form specification so defaults show up right
 						// important: this is safe because $value itself is not being sent to the browser!
 						// we're comparing the output of these two lines against what is stored in the form specification, which does not have HTML escaped characters, and has extra slashes.  Assumption is that lack of HTML filtering is okay since only admins and trusted users have access to form creation.  Not good, but acceptable for now.
-						$value = $myts->undoHtmlSpecialChars($value);
+						$value = icms_core_DataFilter::undoHtmlSpecialChars($value);
 						if(get_magic_quotes_gpc()) { $value = addslashes($value); } 
 	
 						$selvalarray = explode("*=+*:", $value);
@@ -2276,11 +2276,11 @@ function compileGrid($ele_value, $title, $element) {
 		case "caption":
 			global $myts;
 			if(!$myts){
-				$myts =& MyTextSanitizer::getInstance();
+				$myts =& icms_core_Textsanitizer::getInstance();
 			}
 			// call the text sanitizer, first try to convert HTML chars, and if there were no conversions, then do a textarea conversion to automatically make links clickable
 			$ele_caption = trans($element->getVar('ele_caption'));
-			$htmlCaption = $myts->undoHtmlSpecialChars($ele_caption);
+			$htmlCaption = icms_core_DataFilter::undoHtmlSpecialChars($ele_caption);
 			if($htmlCaption == $ele_caption) {
 				$ele_caption = $myts->displayTarea($ele_caption);
 			} else {

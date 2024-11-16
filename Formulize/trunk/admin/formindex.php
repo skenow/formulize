@@ -76,7 +76,7 @@ include_once XOOPS_ROOT_PATH."/class/xoopstree.php";
 include_once XOOPS_ROOT_PATH."/class/xoopslists.php";
 include_once XOOPS_ROOT_PATH."/include/xoopscodes.php";
 include_once XOOPS_ROOT_PATH."/class/module.errorhandler.php";
-$myts =& MyTextSanitizer::getInstance();
+$myts =& icms_core_Textsanitizer::getInstance();
 $eh = new ErrorHandler;
 
 global $title2, $op, $data;
@@ -2081,14 +2081,14 @@ function patch22convertdata() {
 		print "Sanitizing form entries.  On a large database, this may take a long time.<br>";
 
 		global $myts;
-		if(!$myts) { $myts =& MyTextSanitizer::getInstance(); }
+		if(!$myts) { $myts =& icms_core_Textsanitizer::getInstance(); }
 
 		$sansql = "SELECT ele_id, ele_value FROM " . $xoopsDB->prefix("formulize_form") . " WHERE ele_type != \"date\" AND  ele_type != \"yn\" AND ele_type != \"areamodif\"";
 		if(!$sanres = $xoopsDB->query($sansql)) { exit("Error patching DB for Formulize 2.2. SQL dump:<br>" . $sansql . "<br>".icms::$xoopsDB->error()."<br>Could not collect all data for sanitizing.  Please contact <a href=mailto:formulize@freeformsolutions.ca>Freeform Solutions</a> for assistance."); }
 		while($sanArray = $xoopsDB->fetchArray($sanres)) {
 			$origvalue = $sanArray['ele_value'];
 			if(get_magic_quotes_gpc()) { $sanArray['ele_value'] = stripslashes($sanArray['ele_value']); }
-			$newvalue = $myts->htmlSpecialChars($sanArray['ele_value']);
+			$newvalue = icms_core_DataFilter::htmlSpecialChars($sanArray['ele_value']);
 			if($newvalue != $origvalue) {
 				$newsql = "UPDATE " . $xoopsDB->prefix("formulize_form") . " SET ele_value = \"" . icms::$xoopsDB->escape($newvalue) . "\" WHERE ele_id = " . $sanArray['ele_id'];
 				if(!$newres = $xoopsDB->query($newsql)) {

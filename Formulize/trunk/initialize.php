@@ -99,7 +99,7 @@ if ( $res ) {
   }
 }
 
-$myts = MyTextSanitizer::getInstance();
+$myts = icms_core_Textsanitizer::getInstance();
 $title = $myts->displayTarea($desc_form);
 if(!isset($formulize_screen_id)) {
   $xoopsTpl->assign('icms_pagetitle', $title);

@@ -48,7 +48,7 @@ class formulizeRankOrderListHandler {
   // ele_id is the element id
   function adminUI($form, $value, $ele_id) {
     
-    $myts =& MyTextSanitizer::getInstance();
+    $myts =& icms_core_Textsanitizer::getInstance();
     
     $options = array();
     $opt_count = 0;

@@ -49,7 +49,7 @@ class formulizeElementRenderer{
 			$isDisabled = true; // disabled all elements if we're on the printable view
 		} 
 		global $xoopsUser, $xoopsModuleConfig, $separ, $myts;
-		$myts =& MyTextSanitizer::getInstance();
+		$myts =& icms_core_Textsanitizer::getInstance();
 		
 		
 		// $form_ele_id contains the ele_id of the current link select box, but we have to remove "ele_" from the front of it.
@@ -85,7 +85,7 @@ class formulizeElementRenderer{
 
 		// call the text sanitizer, first try to convert HTML chars, and if there were no conversions, then do a textarea conversion to automatically make links clickable
 		$ele_caption = trans($ele_caption); 
-		$htmlCaption = htmlspecialchars_decode($myts->undoHtmlSpecialChars($ele_caption)); // do twice, because we need to handle &amp;lt; and other stupid stuff...do first time through XOOPS myts just because it might be doing a couple extra things that are useful...can probably just use PHP's own filter twice, not too big a deal
+		$htmlCaption = htmlspecialchars_decode(icms_core_DataFilter::undoHtmlSpecialChars($ele_caption)); // do twice, because we need to handle &amp;lt; and other stupid stuff...do first time through XOOPS myts just because it might be doing a couple extra things that are useful...can probably just use PHP's own filter twice, not too big a deal
 		if($htmlCaption == $ele_caption) {
         	$ele_caption = $myts->displayTarea($ele_caption);
 		} else {
@@ -677,7 +677,7 @@ class formulizeElementRenderer{
 				if($this->_ele->getVar('ele_delim') != "") {
 					$delimSetting = $this->_ele->getVar('ele_delim');
 				} 
-				$delimSetting =& $myts->undoHtmlSpecialChars($delimSetting);
+				$delimSetting =& icms_core_DataFilter::undoHtmlSpecialChars($delimSetting);
 				if($delimSetting == "br") { $delimSetting = "<br />"; }
 				$hiddenOutOfRangeValuesToWrite = array();
 				switch($delimSetting){
@@ -805,7 +805,7 @@ class formulizeElementRenderer{
 				if($this->_ele->getVar('ele_delim') != "") {
 					$delimSetting = $this->_ele->getVar('ele_delim');
 				} 
-				$delimSetting =& $myts->undoHtmlSpecialChars($delimSetting);
+				$delimSetting =& icms_core_DataFilter::undoHtmlSpecialChars($delimSetting);
 				if($delimSetting == "br") { $delimSetting = "<br />"; }
 				$hiddenOutOfRangeValuesToWrite = array();
 				switch($delimSetting){
@@ -1043,7 +1043,7 @@ class formulizeElementRenderer{
 			$form_ele_new = new xoopsFormLabel($form_ele->getCaption(), $form_ele->render().$previousEntryUIRendered.$elementCue); // reuse caption, put two spaces between element and previous entry UI
 			if($ele_desc != "") {
 				$ele_desc = html_entity_decode($ele_desc,ENT_QUOTES);
-				$ele_desc = $myts->makeClickable($ele_desc);
+				$ele_desc = icms_core_DataFilter::makeClickable($ele_desc);
 				$form_ele_new->setDescription($ele_desc);
 			}
 			$form_ele_new->setName($form_ele_id); // need to set this as the name, in case it is required and then the name will be picked up by any "required" checks that get done and used in the required validation javascript for textboxes

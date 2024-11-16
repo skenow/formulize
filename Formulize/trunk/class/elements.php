@@ -379,11 +379,11 @@ class formulizeElementsHandler {
 			$this->length = 35;
 		}
 		if($this->striphtml !== false) { // want to do this all the time, no matter what, unless the user specifically turns it off, because it's a security precaution
-			$value = $myts->htmlSpecialChars($value, ENT_QUOTES);
+			$value = icms_core_DataFilter::htmlSpecialChars($value, ENT_QUOTES);
 		}
 		$value = printSmart(trans($value),$this->length);
 		if($this->clickable) {
-			$value = $myts->makeClickable($value);
+			$value = icms_core_DataFilter::makeClickable($value);
 		}
 		return $value;
 	}

@@ -107,7 +107,7 @@ if( !empty($_POST) ){
 }
 
 $ele_id = !empty($ele_id) ? intval($ele_id) : 0;
-$myts =& MyTextSanitizer::getInstance();
+$myts =& icms_core_Textsanitizer::getInstance();
 
 $refreshing = (( $_POST['submit'] == _AM_ELE_ADD_OPT_SUBMIT && intval($_POST['addopt']) > 0 ) OR isset($_POST['subformrefresh']) OR isset($_POST['addcon'])) ? true : false;
 

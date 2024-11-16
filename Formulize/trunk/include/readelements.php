@@ -68,7 +68,7 @@ if(!isset($mid)) {
 	$mid = getFormulizeModId();
 }
 
-if(!$myts) { $myts =& MyTextSanitizer::getInstance(); }
+if(!$myts) { $myts =& icms_core_Textsanitizer::getInstance(); }
 
 //$formulize_submittedElementCaptions = array(); // put into global scope and pulled down by readform.php when determining what elements have been submitted, so we don't blank data that is sent this way
 global $xoopsUser;
@@ -419,7 +419,7 @@ function writeUserProfile($data, $uid) {
 			}
     }
 
-    $myts =& MyTextSanitizer::getInstance();
+    $myts =& icms_core_Textsanitizer::getInstance();
     if ($xoopsConfigUser['allow_chgmail'] == 1) {
         $email = '';
         if (!empty($data['email'])) {

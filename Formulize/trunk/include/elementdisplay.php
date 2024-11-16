@@ -253,12 +253,12 @@ function displayElement($formframe="", $ele, $entry="new", $noSave = false, $scr
 				}
 				break;
 		case "text":
-			$myts =& MyTextSanitizer::getInstance();
-			print "<input type=hidden name=de_". $entry . "_" . $element->getVar('ele_id') . " id=de_" . $entry . "_" . $element->getVar('ele_id') . " value='" . $myts->htmlSpecialChars(getTextboxDefault($ele_value[2], $element->getVar('id_form'), $entry)) . "'>\n";
+			$myts =& icms_core_Textsanitizer::getInstance();
+			print "<input type=hidden name=de_". $entry . "_" . $element->getVar('ele_id') . " id=de_" . $entry . "_" . $element->getVar('ele_id') . " value='" . icms_core_DataFilter::htmlSpecialChars(getTextboxDefault($ele_value[2], $element->getVar('id_form'), $entry)) . "'>\n";
 			break;
 		case "textarea":
-			$myts =& MyTextSanitizer::getInstance();
-			print "<input type=hidden name=de_". $entry . "_" . $element->getVar('ele_id') . " id=de_" . $entry . "_" . $element->getVar('ele_id') . " value='" . $myts->htmlSpecialChars(getTextboxDefault($ele_value[0], $element->getVar('id_form'), $entry)) . "'>\n";
+			$myts =& icms_core_Textsanitizer::getInstance();
+			print "<input type=hidden name=de_". $entry . "_" . $element->getVar('ele_id') . " id=de_" . $entry . "_" . $element->getVar('ele_id') . " value='" . $icms_core_DataFilter::htmlSpecialChars(getTextboxDefault($ele_value[0], $element->getVar('id_form'), $entry)) . "'>\n";
 			break;
 		}
 		return "hidden";

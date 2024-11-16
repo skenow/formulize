@@ -735,7 +735,7 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 {
 	global $xoopsDB, $xoopsUser, $xoopsConfig, $myts;		// $xoopsDB is required by q
-    if(!$myts) { $myts =& MyTextSanitizer::getInstance(); }
+    if(!$myts) { $myts =& icms_core_Textsanitizer::getInstance(); }
 
     echo "<b>** Importing</b><br><br>"; 
     /*echo "<b>Importing</b><br>" . 
@@ -1044,7 +1044,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
              						if($foundit) {
              	                                    $element_value .= "*=+*:" . $item_value;
              						} elseif($hasother) {
-             							$other_values[] = "INSERT INTO " . $xoopsDB->prefix("formulize_other") . " (id_req, ele_id, other_text) VALUES (\"$max_id_req\", \"" . $element["ele_id"] . "\", \"" . $myts->htmlSpecialChars(trim($item_value)) . "\")";
+             							$other_values[] = "INSERT INTO " . $xoopsDB->prefix("formulize_other") . " (id_req, ele_id, other_text) VALUES (\"$max_id_req\", \"" . $element["ele_id"] . "\", \"" . icms_core_DataFilter::htmlSpecialChars(trim($item_value)) . "\")";
              							$element_value .= "*=+*:" . $hasother;
              						} elseif(!$validateOverride) {
              							print "ERROR: INVALID TEXT FOUND FOR A CHECKBOX ITEM -- $item_value -- IN ROW:<BR>";
@@ -1077,7 +1077,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 								}										
 							}
 							if(!$foundit AND $hasother) {
-								$other_values[] = "INSERT INTO " . $xoopsDB->prefix("formulize_other") . " (id_req, ele_id, other_text) VALUES (\"$max_id_req\", \"" . $element["ele_id"] . "\", \"" . $myts->htmlSpecialChars(trim($row_value)) . "\")";
+								$other_values[] = "INSERT INTO " . $xoopsDB->prefix("formulize_other") . " (id_req, ele_id, other_text) VALUES (\"$max_id_req\", \"" . $element["ele_id"] . "\", \"" . icms_core_DataFilter::htmlSpecialChars(trim($row_value)) . "\")";
 								$row_value = $hasother;
 							} elseif(!$foundit AND !$validateOverride) {
 								print "ERROR: INVALID TEXT FOUND FOR A RADIO BUTTON ITEM -- $row_value -- IN ROW:<BR>";
@@ -1107,7 +1107,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 	                    }                            
 
 									// record the values for inserting as part of this record
-									$fieldValues[$element['ele_handle']] = $myts->htmlSpecialChars($row_value); // prior to 3.0 we did not do the htmlspecialchars conversion if this was a linked selectbox...don't think that's a necessary exception in 3.0 with new data structure
+	                    $fieldValues[$element['ele_handle']] = icms_core_DataFilter::htmlSpecialChars($row_value); // prior to 3.0 we did not do the htmlspecialchars conversion if this was a linked selectbox...don't think that's a necessary exception in 3.0 with new data structure
 
 	                } // end of if there's a value in the current column
 								} elseif(isset($importSet[7]['usethisentryid']) AND $link == $importSet[7]['usethisentryid']) { // if this is not a valid column, but it is an entry id column, then capture the entry id from the cell
@@ -1217,7 +1217,7 @@ function getElementID($id_form, $ele_caption, $ele_value)
 	static $cachedElementIDs = array();
 	if(!isset($cachedElementIDs[$id_form][$ele_caption][$ele_value])) {
 		global $xoopsDB, $myts;
-		if(!$myts) { $myts =& MyTextSanitizer::getInstance(); }
+		if(!$myts) { $myts =& icms_core_Textsanitizer::getInstance(); }
 	
 	
 	    $sql = "SELECT ele_id FROM " . $xoopsDB->prefix("formulize_form") .  
@@ -1255,7 +1255,7 @@ function getElementOptions($ele_handle, $fid)
 		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($fid);
 		$result = array();
-		if(!$myts) { $myts =& MyTextSanitizer::getInstance(); }
+		if(!$myts) { $myts =& icms_core_Textsanitizer::getInstance(); }
 	
 	    $sql = "SELECT entry_id, `".$ele_handle."` FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle'));
 	
@@ -1263,7 +1263,7 @@ function getElementOptions($ele_handle, $fid)
 		$result = array();
 		$resultIDs = array();
 		while ($item = $xoopsDB->fetchArray($res)) {
-			$result[] = $myts->undoHtmlSpecialChars($item[$ele_handle]);
+			$result[] = icms_core_DataFilter::undoHtmlSpecialChars($item[$ele_handle]);
 			$resultIDs[] = $item['entry_id'];
 		}
 		$cachedElementOptions[$fid][$ele_handle] = array(0=>$result, 1=>$resultIDs);

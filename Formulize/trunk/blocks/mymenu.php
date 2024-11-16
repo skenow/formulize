@@ -22,7 +22,7 @@
 
 function block_formulizeMENU_show() {
         global $xoopsDB, $xoopsUser, $xoopsModule, $myts;
-		    $myts =& MyTextSanitizer::getInstance();
+		    $myts =& icms_core_Textsanitizer::getInstance();
 
         $block = array();
         $groups = array();

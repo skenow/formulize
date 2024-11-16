@@ -241,7 +241,7 @@ function drawRow($thiscat, $thisformid) {
 	global $xoopsDB;
 
 	$result = $xoopsDB->query("SELECT menuid, position, itemname, indent, margintop, marginbottom, itemurl, bold, membersonly, mainmenu, status FROM ".$xoopsDB->prefix("formulize_menu")." WHERE menuid = '$thisformid' ORDER BY position");
-	$myts =& MyTextSanitizer::getInstance();
+	$myts =& icms_core_Textsanitizer::getInstance();
 	while ( list($menuid, $position, $itemname, $indent, $margintop, $marginbottom, $itemurl, $bold, $membersonly, $mainmenu, $status) = $xoopsDB->fetchRow($result) ) {
 	     	$itemname = $myts->makeTboxData4Show($itemname);
             $itemurl = $myts->makeTboxData4Show($itemurl);
@@ -263,7 +263,7 @@ function MyMenuEdit($menuid) {
         xoops_cp_header();
         $result = $xoopsDB->query("SELECT position, itemname, indent, margintop, marginbottom, itemurl, bold, membersonly, mainmenu, status FROM ".$xoopsDB->prefix("formulize_menu")." WHERE menuid=$menuid");
         list($xposition, $itemname, $indent, $margintop, $marginbottom, $itemurl, $bold, $membersonly, $mainmenu, $status) = $xoopsDB->fetchRow($result);
-        $myts =& MyTextSanitizer::getInstance();
+        $myts =& icms_core_Textsanitizer::getInstance();
         $itemname  = $myts->makeTboxData4Edit($itemname);
         $itemurl   = $myts->makeTboxData4Edit($itemurl);
         OpenTable();
@@ -342,7 +342,7 @@ function MyMenuEdit($menuid) {
 
 function MyMenuSave($menuid, $xposition, $itemname, $indent, $margintop, $marginbottom, $itemurl, $bold, $membersonly, $mainmenu, $status, $cat_id, $old_cat) {
         global $xoopsDB;
-        $myts =& MyTextSanitizer::getInstance();
+        $myts =& icms_core_Textsanitizer::getInstance();
    		 	$itemname  = $myts->makeTboxData4Save(trim($itemname));
     		$itemurl   = $myts->makeTboxData4Save(trim($itemurl));
         $xoopsDB->query("UPDATE ".$xoopsDB->prefix("formulize_menu")." SET position=$xposition, status=$status WHERE menuid=$menuid");
@@ -383,7 +383,7 @@ function MyMenuSave($menuid, $xposition, $itemname, $indent, $margintop, $margin
 
 function MyMenuAdd($xposition, $itemname, $indent, $margintop, $marginbottom, $itemurl, $bold, $membersonly, $mainmenu, $status, $cat_id) {
         global $xoopsDB;
-        $myts =& MyTextSanitizer::getInstance();
+        $myts =& icms_core_Textsanitizer::getInstance();
     		$itemname  = $myts->makeTboxData4Save(trim($itemname));
     		$itemurl   = $myts->makeTboxData4Save(trim($itemurl));
         $newid = $xoopsDB->genId($xoopsDB->prefix("formulize_menu")."_menuid_seq");

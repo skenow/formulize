@@ -130,7 +130,7 @@ class formulizeFormScreenHandler extends formulizeScreenHandler {
 		// figure out the form's properties...
 		// if it's more than one entry per user, and we have requested reload blank, then override multi is 0, otherwise 1
 		// if it's one entry per user, and we have requested reload blank, then override multi is 1, otherwise 0
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($screen->getVar('fid'));
 		if($formObject->getVar('single')=="off" AND $reloadblank) { 
 				$overrideMulti = 0;

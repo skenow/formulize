@@ -35,7 +35,7 @@ if(!isset($processedValues)) {
 }
 
 // invoke the necessary objects
-$element_handler = xoops_getmodulehandler('elements','formulize');
+$element_handler = icms_getModuleHandler('elements','formulize');
 if(!$ele_id = intval($_GET['ele_id'])) { // on new element saves, new ele_id can be passed through the URL of this ajax save
   if(!$ele_id = intval($_POST['formulize_admin_key'])) {
     print "Error: could not determine element id when saving display settings";
@@ -45,7 +45,7 @@ if(!$ele_id = intval($_GET['ele_id'])) { // on new element saves, new ele_id can
 $element = $element_handler->get($ele_id);
 $fid = $element->getVar('id_form');
 
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get($fid);
 if($formObject->getVar('lockedform')) {
   return;

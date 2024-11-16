@@ -35,7 +35,7 @@ if(!isset($processedValues)) {
 }
 
 // CHECK IF THE FORM IS LOCKED DOWN AND SCOOT IF SO
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get($_POST['formulize_admin_key']);
 $fid = $formObject->getVar('id_form');
 if($formObject->getVar('lockedform')) {

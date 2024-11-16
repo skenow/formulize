@@ -39,7 +39,7 @@ $aid = intval($_POST['aid']);
 $sid = $_POST['formulize_admin_key'];
 $fid = intval($_POST['formulize_admin_fid']);
 
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get($fid);
 if($formObject->getVar('lockedform')) {
   return;
@@ -55,11 +55,11 @@ $screens = $processedValues['screens'];
 $isNew = ($sid=='new');
 
 if($screens['type'] == 'multiPage') {
-  $screen_handler = xoops_getmodulehandler('multiPageScreen', 'formulize');
+  $screen_handler = icms_getModuleHandler('multiPageScreen', 'formulize');
 } else if($screens['type'] == 'listOfEntries') {
-  $screen_handler = xoops_getmodulehandler('listOfEntriesScreen', 'formulize');
+  $screen_handler = icms_getModuleHandler('listOfEntriesScreen', 'formulize');
 } else if($screens['type'] == 'form') {
-  $screen_handler = xoops_getmodulehandler('formScreen', 'formulize');
+  $screen_handler = icms_getModuleHandler('formScreen', 'formulize');
 }
 
 

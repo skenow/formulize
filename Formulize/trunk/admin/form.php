@@ -34,7 +34,7 @@ global $xoopsDB;
 
 // need to listen for $_GET['aid'] later so we can limit this to just the application that is requested
 $aid = intval($_GET['aid']);
-$application_handler = xoops_getmodulehandler('applications','formulize');
+$application_handler = icms_getModuleHandler('applications','formulize');
 // get a list of all applications
 $allApps = $application_handler->getAllApplications();
 
@@ -48,7 +48,7 @@ if($aid == 0) {
 $elements = array();
 if($_GET['fid'] != "new") {
   $fid = intval($_GET['fid']);
-  $form_handler = xoops_getmodulehandler('forms', 'formulize');
+  $form_handler = icms_getModuleHandler('forms', 'formulize');
   $formObject = $form_handler->get($fid);
   $formName = $formObject->getVar('title');
   $singleentry = $formObject->getVar('single');
@@ -61,7 +61,7 @@ if($_GET['fid'] != "new") {
   $form_handle = $formObject->getVar('form_handle');
   $store_revisions = $formObject->getVar('store_revisions');
   
-  $element_handler = xoops_getmodulehandler('elements', 'formulize');
+  $element_handler = icms_getModuleHandler('elements', 'formulize');
   $elementObjects = $element_handler->getObjects2(null, $fid);
   $elements = array();
   $elementHeadings = array();
@@ -274,7 +274,7 @@ $i = 0;
 foreach($classFiles as $thisFile) {
 	if(substr($thisFile, -11)=="Element.php") {
 		$customType = substr($thisFile, 0, strpos($thisFile, "Element.php"));
-		$customElementHandler = xoops_getmodulehandler($customType."Element", "formulize");
+		$customElementHandler = icms_getModuleHandler($customType."Element", "formulize");
 		$customElementObject = $customElementHandler->create();
 		$customElements[$i]['type'] = $customType;
 		$customElements[$i]['name'] = $customElementObject->name;
@@ -309,7 +309,7 @@ $permissions['hello'] = "Hello Permission World";
 
 // need to get screen data so this can be populated properly
 $screens = array();
-$screen_handler = xoops_getmodulehandler('screen', 'formulize');
+$screen_handler = icms_getModuleHandler('screen', 'formulize');
 $criteria_object = new CriteriaCompo(new Criteria('type','multiPage'));
 $criteria_object->add(new Criteria('type','form'), 'OR');
 $mulitPageAndFormScreens = $screen_handler->getObjects($criteria_object,$fid);
@@ -355,7 +355,7 @@ $i++;
 if($fid != "new") {
   
 	$advanced_calculations = array();
-	$advanced_calculation_handler = xoops_getmodulehandler('advancedCalculation', 'formulize');
+	$advanced_calculation_handler = icms_getModuleHandler('advancedCalculation', 'formulize');
 	$advanced_calculations['advanced_calculations'] = $advanced_calculation_handler->getList($fid);
 	
   if(!$tableform AND !$newtableform) {

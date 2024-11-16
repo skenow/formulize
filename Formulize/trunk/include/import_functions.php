@@ -149,7 +149,7 @@ function importCsvSetup(&$importSet, $id_reqs)
     }*/
     $importSet[4] = $fid;
     
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($fid);
     $importSet[8] = $formObject->getVar('form_handle');
     
@@ -1140,7 +1140,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 							
 							$fields = "";
 							$values = "";
-							$element_handler = xoops_getmodulehandler('elements', 'formulize');
+							$element_handler = icms_getModuleHandler('elements', 'formulize');
 							foreach($fieldValues as $elementHandle=>$fieldValue) {
 									$fields .= ", `".$elementHandle."`";
 									$values .= ", '".icms::$xoopsDB->escape($fieldValue) . "'";
@@ -1252,7 +1252,7 @@ function getElementOptions($ele_handle, $fid)
 	static $cachedElementOptions = array();
 	if(!isset($cachedElementOptions[$fid][$ele_handle])) {
 		global $xoopsDB, $myts;
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($fid);
 		$result = array();
 		if(!$myts) { $myts =& MyTextSanitizer::getInstance(); }

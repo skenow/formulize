@@ -63,7 +63,7 @@ if($ele_allowed) { // only present when a specific page in a multipage is reques
 	$formframe['elements'] = $elements_allowed;
 	// if there's a currentPage, then use that page title from the screen (currentpage is only present if there's a screen id)
 	if($currentPage) {
-		$screen_handler = xoops_getmodulehandler('multiPageScreen', 'formulize');
+		$screen_handler = icms_getModuleHandler('multiPageScreen', 'formulize');
     $multiPageScreen = $screen_handler->get($screenid);
 		$pageTitles = $multiPageScreen->getVar('pagetitles');
 		$titleOverride = $pageTitles[$currentPage-1];
@@ -71,12 +71,12 @@ if($ele_allowed) { // only present when a specific page in a multipage is reques
 }
 
 if( ! is_array( $formframe ) && $screenid && !$ele_allowed) { // no element list passed in, but there is a screen id, so assume a multipage form
-  $screen_handler =& xoops_getmodulehandler('screen', 'formulize');
+  $screen_handler =& icms_getModuleHandler('screen', 'formulize');
   $screen = $screen_handler->get($screenid);
   $screen_type = $screen->getVar('type');
 
   if( $screen_type == 'multiPage' ) {
-    $screen_handler = xoops_getmodulehandler('multiPageScreen', 'formulize');
+    $screen_handler = icms_getModuleHandler('multiPageScreen', 'formulize');
     $multiPageScreen = $screen_handler->get($screenid);
     $conditions = $multiPageScreen->getConditions();
     $pages = $multiPageScreen->getVar('pages');

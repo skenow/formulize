@@ -159,8 +159,8 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 
                 // gather all the available views
                 // setup an option list of all views, as well as one just for the currently selected Framework setting
-                $framework_handler =& xoops_getmodulehandler('frameworks', 'formulize');
-                $form_handler =& xoops_getmodulehandler('forms', 'formulize');
+                $framework_handler =& icms_getModuleHandler('frameworks', 'formulize');
+                $form_handler =& icms_getModuleHandler('forms', 'formulize');
                 $formObj = $form_handler->get($fid, true); // true causes all elements to be included even if they're not visible.
                 $frameworks = $framework_handler->getFrameworksByForm($fid);
                 $selectedFramework = isset($_POST['frid']) ? $_POST['frid'] : $screen->getVar('frid');
@@ -220,7 +220,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
                 $viewentryscreenDefault = $screen->getVar('sid') ? $screen->getVar('viewentryscreen') : "none";
 								$viewentryscreenDefault = $viewentryscreenDefault === 0 ? "none" : $viewentryscreenDefault; // if the legacy value 0 is present, then convert that to "none" so the right value is selected by default in the list
                 // get the available screens
-                $screen_handler = xoops_getmodulehandler('screen', 'formulize');
+                $screen_handler = icms_getModuleHandler('screen', 'formulize');
                 $viewentryscreenOptionsDB = $screen_handler->getObjects(new Criteria("type", "multiPage"), $fid); 
                 $viewentryscreenOptions["none"] = _AM_FORMULIZE_SCREEN_LOE_VIEWENTRYSCREEN_DEFAULT;
                 foreach($viewentryscreenOptionsDB as $thisViewEntryScreenOption) {

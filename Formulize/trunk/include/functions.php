@@ -111,7 +111,7 @@ function getFormFramework($formframe, $mainform="") {
 
 // get the title of a form
 function getFormTitle($fid) {
-	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+	$form_handler = icms_getModuleHandler('forms', 'formulize');
 	$formObject = $form_handler->get($fid);
 	return $formObject->getVar('title');
 }
@@ -432,7 +432,7 @@ print "<br>";*/
 			}
 		}
 		// check to see if the entry matches the user's per group filters, if any
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($fid);
 		if($perGroupFilter = $form_handler->getPerGroupFilterWhereClause($fid)) {
 			global $xoopsDB;
@@ -862,7 +862,7 @@ function deleteMaintenance($id_req, $fid) {
 
 	
 	// remove entries in the formulize_other table
-	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+	$form_handler = icms_getModuleHandler('forms', 'formulize');
 	$formObject = $form_handler->get($fid);
         	
 	$sql3 = "DELETE FROM " . $xoopsDB->prefix("formulize_other") . " WHERE id_req='$id_req' AND ele_id IN (" . implode(",", $formObject->getVar('elements')) . ")"; //limit to id_reqs where the element is from the right form, since the new id_reqs (entry_ids) can be repeated across forms
@@ -1068,7 +1068,7 @@ function checkForLinks($frid, $fids, $fid, $entries, $gperm_handler, $owner_grou
   // $entries has been passed so we do need to gather them...
 
   // add to entries and fids array if one_to_one exists
-  $form_handler = xoops_getmodulehandler('forms', 'formulize');
+  $form_handler = icms_getModuleHandler('forms', 'formulize');
   foreach($one_to_one as $one_fid) {
     $fids[] = $one_fid['fid'];
 		// figure out if these are common value links, or linked selectboxes
@@ -1090,7 +1090,7 @@ function checkForLinks($frid, $fids, $fid, $entries, $gperm_handler, $owner_grou
 			}
 		} else {
 			// figure out which of the two elements is the source of the linked values
-			$element_handler = xoops_getmodulehandler('elements', 'formulize');
+			$element_handler = icms_getModuleHandler('elements', 'formulize');
 			$selfElement = $element_handler->get($one_fid['keyself']);
 			if(is_object($selfElement)) {
 				$selfEleValue = $selfElement->getVar('ele_value');
@@ -1874,7 +1874,7 @@ function prepDataForWrite($element, $ele) {
 				 */
 				default:
 				    if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.php")) {
-						$customTypeHandler = xoops_getmodulehandler($ele_type."Element", 'formulize');
+						$customTypeHandler = icms_getModuleHandler($ele_type."Element", 'formulize');
 						$value = $customTypeHandler->prepareDataForSaving($ele, $element);
 					} 
 			}
@@ -1908,7 +1908,7 @@ function prepareLiteralTextForDB($elementObject, $value, $curlyBracketEntry, $us
       break;
     default:
       if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.php")) {
-	      $customTypeHandler = xoops_getmodulehandler($ele_type."Element", 'formulize');
+	      $customTypeHandler = icms_getModuleHandler($ele_type."Element", 'formulize');
 	      $value = $customTypeHandler->prepareLiteralTextForDB($value, $elementObject);
       } 
   }
@@ -2191,7 +2191,7 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
   }
 	formulize_benchmark("got element info");
 	if(($ele_value[4] > 0 AND $ele_type=='text') OR ($ele_value[3] > 0 AND $ele_type=='textarea')) { // dealing with a textbox where an associated element has been set
-		$formulize_mgr = xoops_getmodulehandler('elements', 'formulize');
+		$formulize_mgr = icms_getModuleHandler('elements', 'formulize');
 		if($ele_type == 'text') {
 			$target_element = $formulize_mgr->get($ele_value[4]);
 		} else {
@@ -2231,7 +2231,7 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
                   $id_req = $cachedQueryResults[$boxproperties[0]][$boxproperties[1]][$entryBeingFormatted][$handle];
                 } else {
                   $element_id_q = q("SELECT ele_id FROM " . $xoopsDB->prefix("formulize") . " WHERE id_form='" . $boxproperties[0] . "' AND ele_handle='" . icms::$xoopsDB->escape($boxproperties[1]) . "' LIMIT 0,1"); // should only be one match anyway, so limit 0,1 ought to be unnecessary
-									$formulize_mgr = xoops_getmodulehandler('elements', 'formulize');
+									$formulize_mgr = icms_getModuleHandler('elements', 'formulize');
                   $target_element =& $formulize_mgr->get($element_id_q[0]['ele_id']);
 									// get the targetEntry by checking in the entry we're processing, for the actual value recorded in the DB for the entry id we're pointing to
 									$elementHandle = $handle;
@@ -2277,7 +2277,7 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
 function _formatLinksRegularElement($matchtext, $textWidth, $ele_type, $handle, $entryBeingFormatted) {
   global $myts;
   if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.php")) {
-    $elementTypeHandler = xoops_getmodulehandler($ele_type."Element", "formulize");
+    $elementTypeHandler = icms_getModuleHandler($ele_type."Element", "formulize");
     $matchtext = $elementTypeHandler->formatDataForList($matchtext, $handle, $entryBeingFormatted);
     return $matchtext;
   } else {
@@ -2348,7 +2348,7 @@ function getTextboxDefault($ele_value, $form_id, $entry_id) {
 				if($res = $xoopsDB->query($sql)) {
 					$array = $xoopsDB->fetchArray($res);
 					if($array['isactive']==1) {
-						$profile_handler = xoops_getmodulehandler('profile', 'profile'); // this line will cause an abort of the page load if it fails, so must check for existence and active status of the module first!
+						$profile_handler = icms_getModuleHandler('profile', 'profile'); // this line will cause an abort of the page load if it fails, so must check for existence and active status of the module first!
 						$profile = $profile_handler->get($xoopsUser->getVar('uid'));
 						$replacementValue = $profile->getVar(strtolower($thisTerm));
 					}
@@ -2442,7 +2442,7 @@ function findLinkedEntries($startForm, $targetForm, $startEntry, $gperm_handler,
     return $entries_to_return;
 	// else we're looking at a classic "shared value" which is really a linked selectbox
 	} else { // linking based on a shared value.  in the case of one to one forms assumption is that the shared value does not appear more than once in either form's field (otherwise this will be a defacto one to many link)
-    $element_handler = xoops_getmodulehandler('elements', 'formulize');
+    $element_handler = icms_getModuleHandler('elements', 'formulize');
     $startElement = $element_handler->get($targetForm['keyother']);
     $startEleValue = $startElement->getVar('ele_value');
     if(strstr($startEleValue[2], "#*=:*")) { // option 2, start form is the linked selectbox
@@ -2529,7 +2529,7 @@ function cloneEntry($entry, $frid, $fid, $copies) {
   }
   
   // all entries have been made.  Now we need to fix up any linked selectboxes
-  $element_handler = xoops_getmodulehandler('elements', 'formulize');
+  $element_handler = icms_getModuleHandler('elements', 'formulize');
   foreach($lsbpairs as $source=>$lsb) {
       $sourceElement = $element_handler->get($source);
       $lsbElement = $element_handler->get($lsb);
@@ -2756,7 +2756,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
               $data = getData("", $fid, $entry); 
             }
             // get all the element IDs for the current form
-            $form_handler = xoops_getmodulehandler('forms', 'formulize');
+            $form_handler = icms_getModuleHandler('forms', 'formulize');
             $formObject = $form_handler->get($fid);
             foreach($formObject->getVar('elementHandles') as $elementHandle) {
               $extra_tags['ELEMENT'.strtoupper($elementHandle)] = html_entity_decode(displayTogether($data[0], $elementHandle, ", "), ENT_QUOTES);
@@ -2939,7 +2939,7 @@ function compileNotUsers($uids_conditions, $thiscon, $uid, $member_handler, $rei
     $entry_ids = explode(",", trim($value, ",")); // the entry ids (in their source form) of the items selected in the linked selectbox, should always be an array of at least one value
     if(count($entry_ids) > 0) {
       // need to get the form that 'not_cons_linkcreator' is linked to
-      $element_handler =& xoops_getmodulehandler('elements', 'formulize');
+      $element_handler =& icms_getModuleHandler('elements', 'formulize');
       $elementObject = $element_handler->get(intval($thiscon['not_cons_linkcreator']));
       $linkProperties = explode("#*=:*", $elementObject->getVar('ele_value')); // key 0 will be the form id that is the source for the values in this linked selectbox
       $data_handler2 = new formulizeDataHandler($linkProperties[0]);
@@ -3041,7 +3041,7 @@ print "$prevValue<br><br>";
 	if(!is_object($myts)) { $myts = MyTextSanitizer::getInstance(); }
 
 	if(!$formulize_mgr) {
-		$formulize_mgr = xoops_getmodulehandler('elements', 'formulize');
+		$formulize_mgr = icms_getModuleHandler('elements', 'formulize');
 	}
 
 	$uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
@@ -3051,7 +3051,7 @@ print "$prevValue<br><br>";
   		$element =& $formulize_mgr->get($ele);
       $element_id = $ele;
   } else {
-      $framework_handler = xoops_getmodulehandler('frameworks', 'formulize');
+      $framework_handler = icms_getModuleHandler('frameworks', 'formulize');
       $frameworkObject = $framework_handler->get($formframe);
 			if(is_object($frameworkObject)) {
 	      $frameworkElementIds = $frameworkObject->getVar('element_ids');
@@ -3092,7 +3092,7 @@ print "$prevValue<br><br>";
         }
       }
 
-      $form_handler = xoops_getmodulehandler('forms', 'formulize');
+      $form_handler = icms_getModuleHandler('forms', 'formulize');
 
     	if($foundit = strstr($ele_value[2], "#*=:*") AND !$lvoverride) { // completely rejig things for a linked selectbox
           $boxproperties = explode("#*=:*", $ele_value[2]);
@@ -3115,7 +3115,7 @@ print "$prevValue<br><br>";
           }
 	  
 					// need to check for link to a link, and change target if that's what we're dealing with
-					$element_handler = xoops_getmodulehandler('elements', 'formulize');
+					$element_handler = icms_getModuleHandler('elements', 'formulize');
 					$sourceElement = $element_handler->get($boxproperties[1]);
 					if(is_object($sourceElement)) {
 						$sourceEleValue = $sourceElement->getVar('ele_value');
@@ -3310,7 +3310,7 @@ function formulize_scandirAndClean($dir, $filter="", $timeWindow=21600) {
 function formulize_writeEntry($values, $entry="new", $action="replace", $proxyUser=false, $forceUpdate=false, $writeOwnerInfo=true) {
   
   // get the form id from the element id of the first value in the values array
-  $element_handler = xoops_getmodulehandler('elements', 'formulize');
+  $element_handler = icms_getModuleHandler('elements', 'formulize');
   $elementObject = $element_handler->get(key($values));
   if(is_object($elementObject)) {
     $data_handler = new formulizeDataHandler($elementObject->getVar('id_form'));
@@ -3363,7 +3363,7 @@ function synchSubformBlankDefaults($fid, $entry) {
         writeElementValue($sfid, $_POST['formulize_subformElementToWrite_'.$sfid], $id_req_to_write, $value_to_write, "replace", "", true); // Last param is override that allows direct writing to linked selectboxes if we have prepped the value first!
 	
 	// need to also enforce any equals conditions that are on the subform element, if any, and assign those values to the entries that were just added
-	$element_handler = xoops_getmodulehandler('elements','formulize');
+	$element_handler = icms_getModuleHandler('elements','formulize');
 	$subformElement = $element_handler->get($GLOBALS['formulize_newSubformBlankElementIds'][$sfid][$id_req_to_write]);
 	$subformEle_Value = $subformElement->getVar('ele_value');
 	$subformConditions = $subformEle_Value[7];
@@ -3395,7 +3395,7 @@ function synchSubformBlankDefaults($fid, $entry) {
 				return $element;
 			}
 		} else {
-			$element_handler =& xoops_getmodulehandler('elements', 'formulize');
+			$element_handler =& icms_getModuleHandler('elements', 'formulize');
 			$element = $element_handler->get($element);
 			if(!is_object($element)) {
 				return false;
@@ -3499,7 +3499,7 @@ function dealWithDeprecatedFrameworkHandles($handles, $frid=false, $returnFormId
 		return $cachedHandles[$frid][serialize($workingHandles)];
 	}
 	
-	$framework_handler = xoops_getmodulehandler('frameworks', 'formulize');
+	$framework_handler = icms_getModuleHandler('frameworks', 'formulize');
 	$frameworkObject = $framework_handler->get($frid);
 	if(is_object($frameworkObject)) {
 		if(count(($frameworkObject->getVar('element_ids'))) > 0) {
@@ -3517,7 +3517,7 @@ function dealWithDeprecatedFrameworkHandles($handles, $frid=false, $returnFormId
 	}
 	
 	$foundHandles = array();
-	$element_handler = xoops_getmodulehandler('elements', 'formulize');
+	$element_handler = icms_getModuleHandler('elements', 'formulize');
 	foreach($workingHandles as $i=>$thisHandle) {
 		if(isset($frameworkHandles[$thisHandle])) {
 			$elementObject = $element_handler->get($frameworkHandles[$thisHandle]);
@@ -3700,7 +3700,7 @@ function buildFilter($id, $ele_id, $defaulttext="", $name="", $overrides=array(0
 	// subfilters are kind of like dynamic limits, where the limit condition is not specified until the parent filter is chosen.
 
 	global $xoopsDB;		// required by q
-	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+	$form_handler = icms_getModuleHandler('forms', 'formulize');
 	$filter = "<SELECT name=\"$id\" id=\"$id\"";
 	if($name == "{listofentries}") {
 		$filter .= " onchange='javascript:showLoading();'"; // list of entries has a special javascript thing
@@ -3754,7 +3754,7 @@ function buildFilter($id, $ele_id, $defaulttext="", $name="", $overrides=array(0
 			$likebits = (strstr($limitOperator, "LIKE") AND substr($limit['term'], 0, 1) != "%" AND substr($limit['term'], -1) != "%") ? "%" : "";
 			$limitCondition = " WHERE t1`".$limit['ele_id']."` ".$limitOperator." '$likebits".icms::$xoopsDB->escape($limit['term'])."$likebits' ";
 		} elseif($subfilter) { // for subfilters, we're jumping back to another form to get the values, hence the join...
-			$element_handler = xoops_getmodulehandler('elements', 'formulize');
+			$element_handler = icms_getModuleHandler('elements', 'formulize');
 			$linkedSourceElementObject = $element_handler->get($linked_ele_id);
 			$linkedSourceElementEleValue = $linkedSourceElementObject->getVar('ele_value');
 			$linkedSourceElementEleValueParts = explode("#*=:*", $linkedSourceElementEleValue[2]); // first part will be the form id of the source form, second part will be the element handle in that form
@@ -3930,7 +3930,7 @@ function _formulize_numberFormat($value, $decimalOverride, $decimals="", $decSep
 // Function to display data from saved view with formatting
 // $calcs is the result of a call to the formulize_getCalcs function
 function printCalcResult($calcs) {
-	$element_handler = xoops_getmodulehandler('elements', 'formulize');
+	$element_handler = icms_getModuleHandler('elements', 'formulize');
 	foreach($calcs as $handle=>$thisCalcData) {
 		$elementObject = $element_handler->get($handle); 
 		$caption = $elementObject->getVar('ele_caption');
@@ -4256,7 +4256,7 @@ function convertTypeToText($type, $ele_value) {
       return "Color picker";
     default:
       // must be a custom element type...
-      $customTypeHandler = xoops_getmodulehandler($type."Element", 'formulize');
+      $customTypeHandler = icms_getModuleHandler($type."Element", 'formulize');
       $customTypeObject = $customTypeHandler->create();
       return $customTypeObject->name;
   }
@@ -4284,7 +4284,7 @@ function recursive_stripslashes($value) {
 function formulize_runAdvancedCalculation( $acid ) {
   //require_once "../../mainfile.php";
   //include_once XOOPS_ROOT_PATH.'/modules/formulize/include/functions.php';
-  $advanced_calculation_handler = xoops_getmodulehandler('advancedCalculation', 'formulize');
+  $advanced_calculation_handler = icms_getModuleHandler('advancedCalculation', 'formulize');
   $advCalcObject = $advanced_calculation_handler->get($acid);
   return $advanced_calculation_handler->calculate($advCalcObject);
 }
@@ -4359,7 +4359,7 @@ function removeNotApplicableRequireds($type, $req=0) {
       return $req;
   }
   if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$type."Element.php")) {
-	$customTypeHandler = xoops_getmodulehandler($type."Element", 'formulize');
+	$customTypeHandler = icms_getModuleHandler($type."Element", 'formulize');
 	$customTypeElement = $customTypeHandler->create();
 	if($customTypeElement->adminCanMakeRequired) {
 	  return $req;
@@ -4445,12 +4445,12 @@ function buildConditionsFilterSQL($conditions, $targetFormId, $curlyBracketEntry
 	  $filterTypes = $conditions[3];
 	  $start = true;
 	  $start_oom = true;
-	  $form_handler = xoops_getmodulehandler('forms', 'formulize');
+	  $form_handler = icms_getModuleHandler('forms', 'formulize');
 	  if(is_numeric($curlyBracketForm)) {
 	    $curlyBracketForm = $form_handler->get($curlyBracketForm);
 	  }
 	  $targetFormObject = $form_handler->get($targetFormId);
-	  $element_handler = xoops_getmodulehandler('elements', 'formulize');
+	  $element_handler = icms_getModuleHandler('elements', 'formulize');
 	  $targetFormElementTypes = $targetFormObject->getVar('elementTypes');
 	  $targetAlias .= $targetAlias ? "." : ""; // add a period to the end of the alias, if there is one, so it will work in the sql statement
 	  for($filterId = 0;$filterId<count($filterElementHandles);$filterId++) {
@@ -4663,7 +4663,7 @@ function getHTMLForList($value, $handle, $entryId, $deDisplay=0, $textWidth=200,
 	  if($handle == "mod_datetime" OR $handle == "creation_datetime" OR $handle == "creator_email") {
 		$cachedFormIds[$handle] = $fid;
 	  } else {
-		  $element_handler = xoops_getmodulehandler('elements', 'formulize');
+		  $element_handler = icms_getModuleHandler('elements', 'formulize');
 		  $elementObject = $element_handler->get($handle);
 		  $cachedFormIds[$handle] = $elementObject->getVar('id_form');
 	  }

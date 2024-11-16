@@ -153,7 +153,7 @@ unset($options); // note this same name is used above, must clear it first.
 // value of the currently set option in the formlink list is what we should use
 $cols = "";
 if($selectedLinkElementId) {
-	$element_handler =& xoops_getmodulehandler('elements');
+	$element_handler =& icms_getModuleHandler('elements');
 	$selectedEle = $element_handler->get($selectedLinkElementId);
 	$cols = getAllColList($selectedEle->getVar('id_form'), "", $groups);
 } elseif($selectedLinkFormId) { // if usernames or fullnames is in effect, we'll have the profile form fid instead

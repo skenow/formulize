@@ -36,7 +36,7 @@ if(!isset($processedValues)) {
 
 // if deletion requested and the user has permission for that
 if(isset($_POST['deleteform']) AND $_POST['deleteform'] > 0 AND $gperm_handler->checkRight("delete_form", intval($_POST['deleteform']), $xoopsUser->getGroups(), getFormulizeModId())) {
-  $form_handler = xoops_getmodulehandler('forms', 'formulize');
+  $form_handler = icms_getModuleHandler('forms', 'formulize');
   $formObject = $form_handler->get($_POST['deleteform']);
   if(!$formObject->getVar('lockedform')) {
     $form_handler->delete(intval($_POST['deleteform']));
@@ -49,13 +49,13 @@ if(isset($_POST['deleteform']) AND $_POST['deleteform'] > 0 AND $gperm_handler->
 if((isset($_POST['cloneform']) AND $_POST['cloneform'] > 0) OR (isset($_POST['cloneformdata']) AND $_POST['cloneformdata'] > 0)) {
   $formToClone = (isset($_POST['cloneform']) AND $_POST['cloneform'] > 0) ? intval($_POST['cloneform']) : intval($_POST['cloneformdata']);
   $cloneData = (isset($_POST['cloneform']) AND $_POST['cloneform'] > 0) ? false : true;
-  $form_handler = xoops_getmodulehandler('forms', 'formulize');
+  $form_handler = icms_getModuleHandler('forms', 'formulize');
   $form_handler->cloneForm($formToClone, $cloneData);
   print "/* evalnow */ reloadWithScrollPosition()";
 }
 
 if(isset($_POST['lockdown']) AND $_POST['lockdown'] > 0 AND $gperm_handler->checkRight("delete_form", intval($_POST['lockdown']), $xoopsUser->getGroups(), getFormulizeModId())) {
- 	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+ 	$form_handler = icms_getModuleHandler('forms', 'formulize');
   $formObject = $form_handler->get($_POST['lockdown']);
   if(!$formObject->getVar('lockedform')) {
     if(!$form_handler->lockForm(intval($_POST['lockdown']))) {

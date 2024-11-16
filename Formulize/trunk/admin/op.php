@@ -48,7 +48,7 @@ function deleteForm($fid) {
 
 	global $xoopsDB, $myts, $eh;
         
-  $form_handler = xoops_getmodulehandler('forms', 'formulize');
+  $form_handler = icms_getModuleHandler('forms', 'formulize');
   $form_handler->dropDataTable($fid);
         
 	$sql = sprintf("DELETE FROM %s WHERE id_form = '%s'", $xoopsDB->prefix("formulize_id"), $fid);

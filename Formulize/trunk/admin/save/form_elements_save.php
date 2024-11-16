@@ -34,7 +34,7 @@ if(!isset($processedValues)) {
   return;
 }
 $fid = intval($_POST['formulize_admin_key']);
-$form_handler = xoops_getmodulehandler('forms','formulize');
+$form_handler = icms_getModuleHandler('forms','formulize');
 $formObject = $form_handler->get($fid);
 
 // Check if the form is locked down
@@ -48,7 +48,7 @@ if(!$gperm_handler->checkRight("edit_form", $fid, $groups, $mid)) {
 }
 
 // invoke the necessary objects
-$element_handler = xoops_getmodulehandler('elements','formulize');
+$element_handler = icms_getModuleHandler('elements','formulize');
 
 // group elements by id
 $processedElements = array();

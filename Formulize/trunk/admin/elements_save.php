@@ -36,7 +36,7 @@
 // code snippet that handles saving of data...called in the normal save operation in admin/elements.php, but also invoked in certain cases when the page reloads but the user should not have left the editing screen yet
 
 if(!$id_form) { return; } // this is set in admin/elements.php which is the only place elements_save.php should be called from
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get(intval($id_form));
 if($formObject->getVar('lockedform')) {
 	redirect_header("formindex.php",3,_NO_PERM);
@@ -74,7 +74,7 @@ if( !empty($ele_id) AND $clone == 0){
     $ele_handle = str_replace("'", "", $ele_handle);
     $ele_handle = str_replace("\"", "", $ele_handle);
 		if($ele_handle) {
-			$form_handler =& xoops_getmodulehandler('forms');
+			$form_handler =& icms_getModuleHandler('forms');
 			$firstUniqueCheck = true;
 			while(!$uniqueCheck = $form_handler->isHandleUnique($ele_handle, $ele_id)) {
 						if($firstUniqueCheck) {
@@ -407,7 +407,7 @@ if( !empty($ele_id) AND $clone == 0){
 			break;
 			default:
 			if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type.".php")) {
-				$elementTypeHandler = xoops_getmodulehandler($ele_type);
+				$elementTypeHandler = icms_getModuleHandler($ele_type);
 				list($value, $uitext) = $elementTypeHandler->adminSave($ele_value);
 			}
 			break;
@@ -447,7 +447,7 @@ if( !empty($ele_id) AND $clone == 0){
 			// don't let ele_handle be blank
 			if($element->getVar('ele_handle') == "") {
             $ele_handle = $ele_id;
-            $form_handler =& xoops_getmodulehandler('forms');
+            $form_handler =& icms_getModuleHandler('forms');
             while(!$uniqueCheck = $form_handler->isHandleUnique($ele_handle, $ele_id)) {
                   $ele_handle = $ele_handle . "_copy";
             }	    
@@ -513,7 +513,7 @@ if( !empty($ele_id) AND $clone == 0){
               }
             }
 			   
-				$form_handler =& xoops_getmodulehandler('forms', 'formulize');
+				$form_handler =& icms_getModuleHandler('forms', 'formulize');
         if(!$insertResult = $form_handler->insertElementField($element, $dataType)) {
           exit("Error: could not add the new element to the data table in the database.");
         }
@@ -525,7 +525,7 @@ if( !empty($ele_id) AND $clone == 0){
 									$dataType = false;
 						}
 						// need to update the name of the field in the data table
-						$form_handler =& xoops_getmodulehandler('forms', 'formulize');
+						$form_handler =& icms_getModuleHandler('forms', 'formulize');
 						if(!$updateResult = $form_handler->updateField($element, $original_handle, $dataType)) {
 									print "Error: could not update the data table field name to match the new data handle";
 						}

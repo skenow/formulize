@@ -545,7 +545,7 @@ function displayFilter($page, $name, $id, $ele_id, $overrides = "")
 // THIS FUNCTION TAKES A SCREEN id AND RETURNS THE $multiPageData array necessary to get the form to display properly
 function readScreenId($id, $fid) {
 	include_once XOOPS_ROOT_PATH . "/modules/formulize/class/multiPageScreen.php";
-	$screen_handler =& xoops_getmodulehandler('multiPageScreen', 'formulize');
+	$screen_handler =& icms_getModuleHandler('multiPageScreen', 'formulize');
 	$screen = $screen_handler->get($id);
 	if(is_object($screen)) {
 		// same parsing operations as in the screen object itself in the render method

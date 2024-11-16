@@ -38,7 +38,7 @@ $fid = intval($_POST['formulize_admin_key']);
 $aid = intval($_POST['formulize_admin_aid']);
 
 // CHECK IF THE FORM IS LOCKED DOWN AND SCOOT IF SO
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get($fid);
 if($formObject->getVar('lockedform')) {
   return;
@@ -62,7 +62,7 @@ if(!$fid = $form_handler->insert($form)) {
 
 // do deletion here
 if($_POST['deletescreen']) {
-  $screen_handler = xoops_getmodulehandler('screen', 'formulize');
+  $screen_handler = icms_getModuleHandler('screen', 'formulize');
   $screen = $screen_handler->get(intval($_POST['deletescreen']));
   if(!$screen_handler->delete($screen->getVar('sid'), $screen->getVar('type'))) {
     print "Error: could not delete screen ".intval($_POST['deletescreen']);

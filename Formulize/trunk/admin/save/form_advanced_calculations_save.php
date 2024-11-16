@@ -38,7 +38,7 @@ $fid = intval($_POST['formulize_admin_key']);
 $aid = intval($_POST['formulize_admin_aid']);
 
 // CHECK IF THE FORM IS LOCKED DOWN AND SCOOT IF SO
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get($fid);
 if($formObject->getVar('lockedform')) {
   return;
@@ -50,7 +50,7 @@ if(!$gperm_handler->checkRight("edit_form", $fid, $groups, $mid)) {
 
 // do cloning here
 if(intval($_POST['cloneadvanced_calculations'])) {
-  $advanced_calculation_handler = xoops_getmodulehandler('advancedCalculation', 'formulize');
+  $advanced_calculation_handler = icms_getModuleHandler('advancedCalculation', 'formulize');
   if(!$advanced_calculation_handler->cloneProcedure(intval($_POST['cloneadvanced_calculations']))) {
     print "Error: could not clone Procedure ".intval($_POST['cloneadvanced_calculations']);
   } else {
@@ -60,7 +60,7 @@ if(intval($_POST['cloneadvanced_calculations'])) {
 
 // do deletion here
 if(intval($_POST['deleteadvanced_calculations'])) {
-  $advanced_calculation_handler = xoops_getmodulehandler('advancedCalculation', 'formulize');
+  $advanced_calculation_handler = icms_getModuleHandler('advancedCalculation', 'formulize');
   if(!$advanced_calculation_handler->delete(intval($_POST['deleteadvanced_calculations']))) {
     print "Error: could not delete Procedure ".intval($_POST['deleteadvanced_calculations']);
   } else {

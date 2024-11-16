@@ -625,7 +625,7 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
         include XOOPS_ROOT_PATH . "/modules/pageworks/index.php";
         return;
       } else {
-				$screen_handler = xoops_getmodulehandler('screen', 'formulize');
+				$screen_handler = icms_getModuleHandler('screen', 'formulize');
 				if($_POST['overridescreen']) {
 					$screenToLoad = intval($_POST['overridescreen']);
 				} else {
@@ -636,7 +636,7 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 				if($viewEntryScreenObject->getVar('type')=="listOfEntries") {
 					exit("You're sending the user to a list of entries screen instead of some kind of form screen, when they're editing an entry.  Check what screen is defined as the screen to use for editing an entry, or what screen id you're using in the viewEntryLink or viewEntryButton functions in the template.");
 				}
-				$viewEntryScreen_handler = xoops_getmodulehandler($viewEntryScreenObject->getVar('type').'Screen', 'formulize');
+				$viewEntryScreen_handler = icms_getModuleHandler($viewEntryScreenObject->getVar('type').'Screen', 'formulize');
   			$displayScreen = $viewEntryScreen_handler->get($viewEntryScreenObject->getVar('sid'));
 				if($displayScreen->getVar('type')=="form") {
 					if($_POST['ventry'] != "single") {
@@ -2055,11 +2055,11 @@ function performCalcs($cols, $calcs, $blanks, $grouping, $frid, $fid)  {
   $oneSideBaseQuery = $GLOBALS['formulize_queryForOneSideCalcs'];
   
   if($frid) {
-    $framework_handler =& xoops_getmodulehandler('frameworks', 'formulize');
+    $framework_handler =& icms_getModuleHandler('frameworks', 'formulize');
     $frameworkObject = $framework_handler->get($frid);
   }
   
-  $form_handler = xoops_getmodulehandler('forms', 'formulize');
+  $form_handler = icms_getModuleHandler('forms', 'formulize');
   
   for($i=0;$i<count($cols);$i++) {
     // convert to element handle from element id
@@ -2551,7 +2551,7 @@ function convertRawValuestoRealValues($value, $handle, $returnFlat=false) {
 	} else {
 		$arrayWasPassedIn = true;
 	}
-	$element_handler = xoops_getmodulehandler('elements', 'formulize');
+	$element_handler = icms_getModuleHandler('elements', 'formulize');
 	$thisElement = $element_handler->get($handle);
 	if(!is_object($thisElement)) {
 		if($arrayWasPassedIn) {
@@ -2675,7 +2675,7 @@ function calcValuePlusText($value, $handle, $col, $calc, $groupingValue) {
 	return $value;
   }
   $id = formulize_getIdFromElementHandle($handle);
-  $element_handler =& xoops_getmodulehandler('elements', 'formulize');
+  $element_handler =& icms_getModuleHandler('elements', 'formulize');
   $element = $element_handler->get($id);
   // check for fullnames/usernames and handle those
   $ele_type = $element->getVar('ele_type');
@@ -4046,8 +4046,8 @@ function processClickedCustomButton($clickedElements, $clickedValues, $clickedAc
 			/*
 			// if you pass in $screen, you could try to do something like this...but it would increase overhead, and really, a more unified way of handling writing custom button data and updating derived values, needs to be created.
 			if($maxIdReq) {
-				$form_handler = xoops_getmodulehandler('forms', 'formulize');
-				$element_handler = xoops_getmodulehandler('elements', 'formulize');
+				$form_handler = icms_getModuleHandler('forms', 'formulize');
+				$element_handler = icms_getModuleHandler('elements', 'formulize');
 				$elementObject = $element_handler->get($clickedElements[0]);
 				$formObject = $form_handler->get($elementObject->getVar('id_form'));
 				if(array_search("derived", $formObject->getVar('elementTypes'))) { // only bother if there is a derived value in the form
@@ -4089,7 +4089,7 @@ function formulize_screenLOEButton($button, $buttonText, $settings, $fid, $frid,
 				break;
       case "advCalcButton":
 				// only if any procedures (advanced calculations) are defined for this form
-				$procedureHandler = xoops_getmodulehandler('advancedCalculation','formulize');
+				$procedureHandler = icms_getModuleHandler('advancedCalculation','formulize');
 				$procList = $procedureHandler->getList($fid);
 				if(is_array($procList) AND count($procList) > 0) {
 				  return "<input type=button class=\"formulize_button\" id=\"formulize_$button\" name=advcalculations value='" . $buttonText . "' onclick=\"javascript:showPop('" . XOOPS_URL . "/modules/formulize/include/pickadvcalcs.php?fid=$fid&frid=$frid&$advcalc_acid');\"></input>";
@@ -4459,7 +4459,7 @@ function formulize_gatherDataSet($settings=array(), $searches, $sort="", $order=
 	
 	
 	if($frid) { // if there's a framework, figure out all the forms in the framework and check if any of them had data saved on this pageload
-		$framework_handler = xoops_getmodulehandler('frameworks', 'formulize');
+		$framework_handler = icms_getModuleHandler('frameworks', 'formulize');
 		$frameworkObject = $framework_handler->get($frid);
 		$readElementsWasRunOnAForm = false;
 		foreach($frameworkObject->getVar('fids') as $thisFid) {

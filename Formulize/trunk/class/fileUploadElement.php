@@ -299,7 +299,7 @@ class formulizeFileUploadElementHandler extends formulizeElementsHandler {
     // ALSO, $GLOBALS['formulize_afterSavingLogicRequired']['elementId'] = type must be declared in the prepareDataForSaving step if further action is required now -- see fileUploadElement.php for an example
     function afterSavingLogic($value, $element_id, $entry_id) {
         // we need to update the folder path so that "_new_" is replaced with the _entryid_ and the file can then be accessible.
-        $element_handler = xoops_getmodulehandler('elements','formulize');
+        $element_handler = icms_getModuleHandler('elements','formulize');
         $elementObject = $element_handler->get($element_id);
         rename(XOOPS_ROOT_PATH."/uploads/formulize_".$elementObject->getVar('id_form')."_new_".$element_id,XOOPS_ROOT_PATH."/uploads/formulize_".$elementObject->getVar('id_form')."_".$entry_id."_".$element_id);
     }

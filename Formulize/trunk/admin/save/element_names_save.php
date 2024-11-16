@@ -38,7 +38,7 @@ global $xoopsDB;
 $ele_type = $_POST['element_type'];
 
 // invoke the necessary objects
-$element_handler = xoops_getmodulehandler('elements','formulize');
+$element_handler = icms_getModuleHandler('elements','formulize');
 if($_POST['formulize_admin_key'] == "new") {
   $element = $element_handler->create();
   $fid = intval($_POST['formulize_form_id']);
@@ -58,7 +58,7 @@ if($_POST['formulize_admin_key'] == "new") {
 
 $element->setVar('ele_order', figureOutOrder($_POST['orderpref'], $element->getVar('ele_order'), $fid));
 
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get($fid);
 if($formObject->getVar('lockedform')) {
   return;

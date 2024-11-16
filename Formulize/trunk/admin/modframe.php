@@ -252,7 +252,7 @@ function modframe($cf)
 	// **************
 
 	// initialize the class that can read the ele_value field
-	$formulize_mgr =& xoops_getmodulehandler('elements');
+	$formulize_mgr =& icms_getModuleHandler('elements');
 
 	// get a list of all the linked select boxes since we need to know if any fields in these two forms are the source for any links
 
@@ -440,7 +440,7 @@ function modframe($cf)
 				$linkoptions .= "<option value='common'>" . _AM_FRAME_COMMONLINK . "</option>\n";
 			} else {
 				// must retrieve the names of the fields, since they won't be in the target and source caps arrays, since those are focused only on the linked fields
-				$element_handler =& xoops_getmodulehandler('elements', 'formulize');
+				$element_handler =& icms_getModuleHandler('elements', 'formulize');
 				$ele1 = $element_handler->get($link['fl_key1']);
 				$ele2 = $element_handler->get($link['fl_key2']);
 				$name1 = $ele1->getVar('ele_colhead') ? printSmart($ele1->getVar('ele_colhead')) : printSmart($ele1->getVar('ele_caption'));

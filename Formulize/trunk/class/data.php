@@ -52,7 +52,7 @@ class formulizeDataHandler  {
 		// 1. get all the data in the source form
 		// 2. loop through it, and swap the old field names for the new ones
 		// 3. write the data with new field names to the new datatable
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $sourceFormObject = $form_handler->get($sourceFid);
 		$sourceDataSQL = "SELECT * FROM " . $xoopsDB->prefix("formulize_".$sourceFormObject->getVar('form_handle'));
 		if(!$sourceDataRes = $xoopsDB->query($sourceDataSQL)) {
@@ -105,7 +105,7 @@ class formulizeDataHandler  {
 				// 3. do SQL with the replace function, to change all the recorded entry_ids to the new ones
 				
 				// figure out current source form
-				$element_handler = xoops_getmodulehandler('elements', 'formulize');
+				$element_handler = icms_getModuleHandler('elements', 'formulize');
 				$elementObject = $element_handler->get($elementId); // gets the element from the old form, that the user just clicked on to make a copy of
 				$ele_value = $elementObject->getVar('ele_value');
 				$boxproperties = explode("#*=:*", $ele_value[2]); // split the linked selectbox properties into target fid and target element handle
@@ -144,7 +144,7 @@ class formulizeDataHandler  {
 			return false;
 		}
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
 		$sql = "SELECT * FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE entry_id = $entry";
 		if(!$res = $xoopsDB->query($sql)) {
@@ -171,7 +171,7 @@ class formulizeDataHandler  {
 		global $xoopsDB;
 		foreach($entryMap[$lsbElement->getVar('id_form')] as $originalEntry=>$newEntries) {
 			foreach($newEntries as $newEntryNum=>$thisEntry) {
-        $form_handler = xoops_getmodulehandler('forms', 'formulize');
+        $form_handler = icms_getModuleHandler('forms', 'formulize');
         $formObject = $form_handler->get($this->fid);
 				$sql = "SELECT `".$lsbElement->getVar('ele_handle') . "` FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE entry_id=$thisEntry";
 				if(!$res = $xoopsDB->query($sql)) {
@@ -206,7 +206,7 @@ class formulizeDataHandler  {
 			$ids[0] = $sentID;
 		}
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
 		$sql = "DELETE FROM " .$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE entry_id = " . implode(" OR entry_id = ", $ids);
 		if(!$deleteSuccess = $xoopsDB->query($sql)) {
@@ -224,7 +224,7 @@ class formulizeDataHandler  {
 		static $cachedEntryExists = array();
 		if(!isset($cachedEntryExists[$this->fid][$id])) {
 			global $xoopsDB;
-      $form_handler = xoops_getmodulehandler('forms', 'formulize');
+      $form_handler = icms_getModuleHandler('forms', 'formulize');
       $formObject = $form_handler->get($this->fid);
 			$sql = "SELECT entry_id FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE entry_id = " . intval($id);
 			$res = $xoopsDB->query($sql);
@@ -248,7 +248,7 @@ class formulizeDataHandler  {
 		static $cachedEntryMeta = array();
 		if(!isset($cachedEntryMeta[$this->fid][$id]) OR $updateCache) {
 			global $xoopsDB;
-      $form_handler = xoops_getmodulehandler('forms', 'formulize');
+      $form_handler = icms_getModuleHandler('forms', 'formulize');
       $formObject = $form_handler->get($this->fid);
 			$sql = "SELECT creation_datetime, mod_datetime, creation_uid, mod_uid FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE entry_id = " . intval($id);
 			if(!$res = $xoopsDB->query($sql)) {
@@ -263,7 +263,7 @@ class formulizeDataHandler  {
 	function getAllUsersForEntries($ids, $scope_uids=array()) {
 		$scopeFilter = $this->_buildScopeFilter($scope_uids);
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
 		$sql = "SELECT creation_uid FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE entry_id IN (" . implode(",", $ids) . ") $scopefilter";
 		if(!$res = $xoopsDB->query($sql)) {
@@ -283,7 +283,7 @@ class formulizeDataHandler  {
 			return false;
 		}
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
 		$sql = "SELECT `". $element->getVar('ele_handle') . "` FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE entry_id = " . intval($id);
 		if(!$res = $xoopsDB->query($sql)) {
@@ -304,7 +304,7 @@ class formulizeDataHandler  {
 			return false;
 		}
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
 		if(is_array($scope_uids) AND count($scope_uids)>0) {
 			$scopeFilter = $this->_buildScopeFilter($scope_uids);
@@ -331,7 +331,7 @@ class formulizeDataHandler  {
 			$uids[0] = $sentID;
 		}
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
 		if(is_array($scope_uids) AND count($scope_uids) > 0) {
 			$scopeFilter = $this->_buildScopeFilter($scope_uids);
@@ -360,7 +360,7 @@ class formulizeDataHandler  {
 		}
 		
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
 		$sql = "SELECT t1.entry_id FROM ". $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " as t1, ". $xoopsDB->prefix("formulize_entry_owner_groups") ." as t2 WHERE t1.entry_id = t2.entry_id AND t2.fid=".$this->fid." AND t2.groupid IN (".implode(",",$group_ids).") ORDER BY t1.entry_id LIMIT 0,1";
 		global $xoopsUser;
@@ -381,7 +381,7 @@ class formulizeDataHandler  {
 		}
 		$scopeFilter = $this->_buildScopeFilter($scope_uids);
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
 		$sql = "SELECT entry_id FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE (creation_uid = " . implode(" OR creation_uid = ", $uids) . ") $scopeFilter ORDER BY entry_id LIMIT 0,1";
 		if(!$res = $xoopsDB->query($sql)) {
@@ -398,7 +398,7 @@ class formulizeDataHandler  {
 			return false;
 		}
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
     $sql = "SELECT entry_id FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE `". $element->getVar('ele_handle') . "` = \"" . icms::$xoopsDB->escape($value) . "\" ORDER BY entry_id LIMIT 0,1";
 		if(!$res = $xoopsDB->query($sql)) {
@@ -415,7 +415,7 @@ class formulizeDataHandler  {
 			return false;
 		}
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
     $queryValue = "\"" . icms::$xoopsDB->escape($value) . "\"";
 		if($operator == "{LINKEDSEARCH}") {
@@ -455,7 +455,7 @@ class formulizeDataHandler  {
 		static $cachedValues = array();
 		$resultArray = array();
 		global $xoopsDB;
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($this->fid);
 		foreach($entries as $entry) {
 			if(!isset($cachedValues[$handle][$entry])) {
@@ -477,7 +477,7 @@ class formulizeDataHandler  {
 		static $cachedValues = array();
 		$resultArray = array();
 		global $xoopsDB;
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($this->fid);
 		if(!isset($cachedValues[$handle])) {
 			if($sort=="ASC") {
@@ -549,7 +549,7 @@ class formulizeDataHandler  {
 			return false;
 		  }
 		  // update the entry's creation and modification user ids
-		  $form_handler = xoops_getmodulehandler('forms', 'formulize');
+		  $form_handler = icms_getModuleHandler('forms', 'formulize');
 		  $formObject = $form_handler->get($this->fid);
 		  for($i=0;$i<count($uids);$i++) { // loop through all the users
 			$uidUpdateSQL = "UPDATE ".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle'))." SET `creation_uid` = ".intval($uids[$i])." WHERE `entry_id` = ".intval($entryids[$i]);
@@ -630,7 +630,7 @@ class formulizeDataHandler  {
 	function writeEntry($entry, $values, $proxyUser=false, $forceUpdate=false, $updateMetadata=true) {
 
 		global $xoopsDB, $xoopsUser;
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($this->fid);
 		static $cachedMaps = array();
 		$mapIDs = true; // assume we're mapping elements based on their IDs, because the values array is based on ids as keys
@@ -814,7 +814,7 @@ class formulizeDataHandler  {
 			return false;
 		}
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
 		// need to add *=+*: to the front of all the options
 		$sql = "UPDATE ".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')). " SET `".$element->getVar('ele_handle')."` = CONCAT(\"*=+*:\", `".$element->getVar('ele_handle')."`)";
@@ -832,7 +832,7 @@ class formulizeDataHandler  {
 			return false;
 		}
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
 		// need to remove *=+*: from the options, and put a comma in there instead, so it's one string and the "out of range" handling will pick it up and show it on screen
 		// replace *=+*: in the field with ", " but only on the part of the string after the first five characters (which will omit the *=+*: that preceeds all items)
@@ -853,7 +853,7 @@ class formulizeDataHandler  {
 		// 2. create a new field to put this data in
 		// 3. run the encrypt/decrypt SQL to populate the new field
 		// 4. drop the old field
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		if(!$form_handler->updateField($element, $elementHandle, false, $elementHandle."qaz")) { // false is no datatype change, last param is the new name
 			return false;
 		}
@@ -910,7 +910,7 @@ class formulizeDataHandler  {
 		$prefix = ($ele_type == "check" OR ($ele_type == "select" AND $ele_value[1])) ? "#*=:*" : ""; // multiple selection possible? if so, setup prefix
 		$newValues = array_keys($newValues);
 		global $xoopsDB;
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->get($this->fid);
 		$sql = "SELECT `entry_id`, `".$element->getVar('ele_handle')."` FROM ".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle'));
 		if(!$res = $xoopsDB->query($sql)) {

@@ -68,7 +68,7 @@ if(!is_numeric($_GET['title'])) {
 }
 
 if(isset($_GET['title'])) { // if we're altering a form, check that it's not locked.
-	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+	$form_handler = icms_getModuleHandler('forms', 'formulize');
 	$formObject = $form_handler->get(intval($id_form));
 	if($formObject->getVar('lockedform')) {
 		redirect_header("formindex.php",3,_NO_PERM);
@@ -323,7 +323,7 @@ include_once XOOPS_ROOT_PATH.'/modules/smartobject/class/smartloader.php';
 include_once(SMARTOBJECT_ROOT_PATH . "class/smartobjectcategory.php");
 
 // Creating the screen handler object
-$formulize_screen_handler =& xoops_getmodulehandler('screen', 'formulize');
+$formulize_screen_handler =& icms_getModuleHandler('screen', 'formulize');
 
 $criteria = new CriteriaCompo();
 
@@ -334,7 +334,7 @@ $objectTable->render();
 */
 
 // Creating the screen handler object
-$formulize_screen_handler =& xoops_getmodulehandler('screen', 'formulize');
+$formulize_screen_handler =& icms_getModuleHandler('screen', 'formulize');
 
 // handle delete events coming from form below
 if($_POST['deletescreenflag']) {
@@ -474,7 +474,7 @@ function addform()
 	if(!isset($_GET['table'])) {
 		
 		// July 2 2007 -- handle creation of data table
-    $form_handler =& xoops_getmodulehandler('forms', 'formulize');
+    $form_handler =& icms_getModuleHandler('forms', 'formulize');
     if(!$tableCreateRes = $form_handler->createDataTable($newfid)) {
       print "Error: could not create data table for new form";
     }
@@ -491,7 +491,7 @@ function addform()
 		
 		$result = $xoopsDB->query("SHOW COLUMNS FROM " . icms::$xoopsDB->escape($_POST['tablename']));
 		static $element_order = 0;
-		$formulize_mgr =& xoops_getmodulehandler('elements');
+		$formulize_mgr =& icms_getModuleHandler('elements');
 		while($row = $xoopsDB->fetchRow($result)) {
 			$element =& $formulize_mgr->create();
 			$element->setVar('ele_caption', str_replace("_", " ", str_replace("'", "`", $row[0]))); // should be no apostrophes in field names, but we better make sure to follow Formulize convention!

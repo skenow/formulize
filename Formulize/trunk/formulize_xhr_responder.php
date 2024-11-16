@@ -67,7 +67,7 @@ switch($op) {
     $element = $_GET['param2'];
     $entry = $_GET['param3'];
     
-    $element_handler = xoops_getmodulehandler('elements', 'formulize');
+    $element_handler = icms_getModuleHandler('elements', 'formulize');
     $elementObject = $element_handler->get($element);
     if(is_object($elementObject)) {
       include_once XOOPS_ROOT_PATH . "/modules/formulize/class/data.php";
@@ -99,7 +99,7 @@ switch($op) {
     $folderName = $_GET['param1'];
     $element_id = $_GET['param2'];
     $entry_id = $_GET['param3'];
-    $element_handler = xoops_getmodulehandler('elements','formulize');
+    $element_handler = icms_getModuleHandler('elements','formulize');
     $elementObject = $element_handler->get($element_id);
     $fid = $elementObject->getVar('id_form');
     include_once XOOPS_ROOT_PATH . "/modules/formulize/class/data.php";
@@ -123,7 +123,7 @@ switch($op) {
     include_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
     include_once XOOPS_ROOT_PATH . "/modules/formulize/include/extract.php";
     include_once XOOPS_ROOT_PATH . "/modules/formulize/class/data.php";
-    $element_handler = xoops_getmodulehandler('elements','formulize');
+    $element_handler = icms_getModuleHandler('elements','formulize');
     $elementObject = $element_handler->get(icms::$xoopsDB->escape($handle));
     $data_handler = new formulizeDataHandler($elementObject->getVar('id_form'));
     $dbValue = $data_handler->getElementValueInEntry($entryId,$handle);
@@ -134,7 +134,7 @@ switch($op) {
     include_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
     include_once XOOPS_ROOT_PATH . "/modules/formulize/include/elementdisplay.php";
     include_once XOOPS_ROOT_PATH . "/modules/formulize/include/extract.php";
-    $element_handler = xoops_getmodulehandler('elements','formulize');
+    $element_handler = icms_getModuleHandler('elements','formulize');
     foreach($_GET as $k=>$v) {
       if($k == 'elementId' OR $k == 'entryId' OR $k == 'fid' ) {
 	${$k} = $v;

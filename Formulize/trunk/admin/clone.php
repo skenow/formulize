@@ -43,8 +43,8 @@ include_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
 
 $fid = intval($_GET['title']);
 
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
-$element_handler = xoops_getmodulehandler('elements', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
+$element_handler = icms_getModuleHandler('elements', 'formulize');
 $formObject = $form_handler->get($fid);
 if(!is_object($formObject)) {
   print "error: could not get information about this form";

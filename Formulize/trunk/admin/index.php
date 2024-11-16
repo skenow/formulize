@@ -67,7 +67,7 @@ if(!is_numeric($_GET['title'])) {
 	$realtitle = $rtarray['desc_form'];
 }
 
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get(intval($id_form));
 if($formObject->getVar('lockedform')) {
 	redirect_header("formindex.php",3,_NO_PERM);

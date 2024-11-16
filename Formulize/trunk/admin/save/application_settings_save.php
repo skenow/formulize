@@ -34,7 +34,7 @@ if(!isset($processedValues)) {
   return;
 }
 
-$application_handler = xoops_getmodulehandler('applications', 'formulize');
+$application_handler = icms_getModuleHandler('applications', 'formulize');
 $appObject = $application_handler->get($_POST['formulize_admin_key']);
 foreach($processedValues['applications'] as $property=>$value) {
   $appObject->setVar($property, $value);

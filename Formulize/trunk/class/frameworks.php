@@ -123,7 +123,7 @@ class formulizeFramework extends XoopsObject {
 			
 			// 1. figure out the form of the $key that was passed
 			// 2. check the form1 and form2 properties of the links to see which side that form is on
-			$element_handler = xoops_getmodulehandler('elements', 'formulize');
+			$element_handler = icms_getModuleHandler('elements', 'formulize');
 			$elementObject = $element_handler->get($key);
 			$targetFid = $elementObject->getVar('id_form');
 			

@@ -41,10 +41,10 @@ $sid = $_POST['formulize_admin_key'];
 $screens = $processedValues['screens'];
 
 
-$screen_handler = xoops_getmodulehandler('listOfEntriesScreen', 'formulize');
+$screen_handler = icms_getModuleHandler('listOfEntriesScreen', 'formulize');
 $screen = $screen_handler->get($sid);
 // CHECK IF THE FORM IS LOCKED DOWN AND SCOOT IF SO
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get($screen->getVar('fid'));
 if($formObject->getVar('lockedform')) {
   return;

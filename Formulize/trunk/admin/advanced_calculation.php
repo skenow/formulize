@@ -35,7 +35,7 @@ include_once XOOPS_ROOT_PATH."/modules/formulize/include/functions.php";
 
 // get application info
 $aid = intval($_GET['aid']);
-$application_handler = xoops_getmodulehandler('applications','formulize');
+$application_handler = icms_getModuleHandler('applications','formulize');
 if($aid == 0) {
 	$appName = "Forms with no app";
 } else {
@@ -45,7 +45,7 @@ if($aid == 0) {
 
 // get form info
 $fid = intval($_GET['fid']);
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 if(!($fid == 0)) {
 	$formObject = $form_handler->get($fid);
 	$formName = $formObject->getVar('title');
@@ -60,7 +60,7 @@ if($acid == 'new') {
   $acid = intval($acid);
 }
 
-$advanced_calculation_handler = xoops_getmodulehandler('advancedCalculation', 'formulize');
+$advanced_calculation_handler = icms_getModuleHandler('advancedCalculation', 'formulize');
 if(!$isNew) {
   $advCalcObject = $advanced_calculation_handler->get($acid);
 }

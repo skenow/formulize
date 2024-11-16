@@ -35,8 +35,8 @@ if(!isset($processedValues)) {
 }
 
 // invoke the necessary objects
-$form_handler = xoops_getmodulehandler('forms','formulize');
-$application_handler = xoops_getmodulehandler('applications','formulize');
+$form_handler = icms_getModuleHandler('forms','formulize');
+$application_handler = icms_getModuleHandler('applications','formulize');
 $newAppObject = false;
 $selectedAppObjects = array();
 if($_POST['formulize_admin_key'] == "new") {
@@ -87,7 +87,7 @@ if($_POST['formulize_admin_key'] == "new") {
   }
   global $xoopsDB;
   // create the default screens for this form
-  $formScreenHandler = xoops_getmodulehandler('formScreen', 'formulize');
+  $formScreenHandler = icms_getModuleHandler('formScreen', 'formulize');
   $defaultFormScreen = $formScreenHandler->create();
   $defaultFormScreen->setVar('displayheading', 1);
   $defaultFormScreen->setVar('reloadblank', 0);
@@ -101,7 +101,7 @@ if($_POST['formulize_admin_key'] == "new") {
   if(!$defaultFormScreenId = $formScreenHandler->insert($defaultFormScreen)) {
     print "Error: could not create default form screen";
   }
-  $listScreenHandler = xoops_getmodulehandler('listOfEntriesScreen', 'formulize');
+  $listScreenHandler = icms_getModuleHandler('listOfEntriesScreen', 'formulize');
   $screen = $listScreenHandler->create();
   // View
   $screen->setVar('defaultview','all');

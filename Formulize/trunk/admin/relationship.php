@@ -33,7 +33,7 @@ include_once XOOPS_ROOT_PATH."/modules/formulize/include/functions.php";
 
 // need to listen for $_GET['aid'] later so we can limit this to just the application that is requested
 $aid = intval($_GET['aid']);
-$application_handler = xoops_getmodulehandler('applications','formulize');
+$application_handler = icms_getModuleHandler('applications','formulize');
 if($aid == 0) {
 	$appName = "Forms with no app"; 
 } else {
@@ -56,7 +56,7 @@ $elements = array();
 
 if($_GET['frid'] != "new") {
   $frid = intval($_GET['frid']);
-  $framework_handler = xoops_getmodulehandler('frameworks', 'formulize');
+  $framework_handler = icms_getModuleHandler('frameworks', 'formulize');
   $relationshipObject = $framework_handler->get($frid);
   $relationshipName = $relationshipObject->getVar('name');
 
@@ -66,7 +66,7 @@ if($_GET['frid'] != "new") {
 	// **************
 
 	// initialize the class that can read the ele_value field
-	$formulize_mgr =& xoops_getmodulehandler('elements');
+	$formulize_mgr =& icms_getModuleHandler('elements');
 
 	// get a list of all the linked select boxes since we need to know if any fields in these two forms are the source for any links
 	$getlinksq = "SELECT id_form, ele_caption, ele_id, ele_handle FROM " . $xoopsDB->prefix("formulize") . " WHERE ele_type=\"select\" AND ele_value LIKE '%#*=:*%' ORDER BY id_form";
@@ -169,7 +169,7 @@ if($_GET['frid'] != "new") {
     $loi = 1;
 		if($links[$li]['common'] == 1) {
 			// must retrieve the names of the fields, since they won't be in the target and source caps arrays, since those are focused only on the linked fields
-			$element_handler =& xoops_getmodulehandler('elements', 'formulize');
+			$element_handler =& icms_getModuleHandler('elements', 'formulize');
 			$ele1 = $element_handler->get($links[$li]['key1']);
 			$ele2 = $element_handler->get($links[$li]['key2']);
 			if(is_object($ele1)) {

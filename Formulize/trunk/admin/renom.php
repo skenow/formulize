@@ -59,7 +59,7 @@ if(!isset($_POST['op'])){
 	$op = $_POST['op'];
 }
 
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get(intval($title));
 if($formObject->getVar('lockedform')) {
 	redirect_header("formindex.php",3,_NO_PERM);

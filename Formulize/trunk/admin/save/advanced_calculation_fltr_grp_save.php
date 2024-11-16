@@ -46,11 +46,11 @@ $index = $_POST['formulize_admin_index'];
 $advcalc = $processedValues['advcalc'];
 
 // load an existing item
-$advanced_calculation_handler = xoops_getmodulehandler('advancedCalculation', 'formulize');
+$advanced_calculation_handler = icms_getModuleHandler('advancedCalculation', 'formulize');
 $advCalcObject = $advanced_calculation_handler->get($acid);
 
 // CHECK IF THE FORM IS LOCKED DOWN AND SCOOT IF SO
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get($advCalcObject->getVar('fid'));
 if($formObject->getVar('lockedform')) {
   return;

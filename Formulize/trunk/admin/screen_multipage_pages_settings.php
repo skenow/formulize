@@ -45,7 +45,7 @@ $xoopsTpl =& $xoTheme->template;
 
 $pageIndex = intval($_GET['page']);
 $sid = intval($_GET['sid']);
-$screen_handler = xoops_getmodulehandler('multiPageScreen', 'formulize');
+$screen_handler = icms_getModuleHandler('multiPageScreen', 'formulize');
 $screen = $screen_handler->get($sid);
 if(!is_object($screen)) {
   return "Error: could not load information for the specified page";
@@ -61,7 +61,7 @@ $options = multiPageScreen_addToOptionsList($fid, array());
 // added March 20 2008, by jwe
 $frid = $screen->getVar("frid");
 if($frid) {
-		$framework_handler =& xoops_getModuleHandler('frameworks', 'formulize');
+		$framework_handler =& icms_getModuleHandler('frameworks', 'formulize');
 		$frameworkObject = $framework_handler->get($frid);
 		foreach($frameworkObject->getVar("links") as $thisLinkObject) {
 				if($thisLinkObject->getVar("unifiedDisplay") AND $thisLinkObject->getVar("relationship") == 1) {

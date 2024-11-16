@@ -35,7 +35,7 @@ if(!isset($processedValues)) {
 }
 
 // invoke the necessary objects
-$element_handler = xoops_getmodulehandler('elements','formulize');
+$element_handler = icms_getModuleHandler('elements','formulize');
 if(!$ele_id = intval($_GET['ele_id'])) { // on new element saves, new ele_id can be passed through the URL of this ajax save
   if(!$ele_id = intval($_POST['formulize_admin_key'])) {
     print "Error: could not determine element id when saving options";
@@ -46,7 +46,7 @@ $element = $element_handler->get($ele_id);
 $ele_type = $element->getVar('ele_type');
 $fid = $element->getVar('id_form');
 
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get($fid);
 if($formObject->getVar('lockedform')) {
   return;
@@ -197,7 +197,7 @@ if($ele_type == "select") {
 }
 
 if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.php")) {
-  $customTypeHandler = xoops_getmodulehandler($ele_type."Element", 'formulize');
+  $customTypeHandler = icms_getModuleHandler($ele_type."Element", 'formulize');
   $changed = $customTypeHandler->adminSave($element, $processedValues['elements']['ele_value']); // cannot use getVar to retrieve ele_value from element, due to limitation of the base object class, when dealing with set values that are arrays and not being gathered directly from the database (it wants to unserialize them instead of treating them as literals)
   if($changed) {
     $_POST['reload_option_page'] = true; // force a reload, since the developer probably changed something the user did in the form, so we should reload to show the effect of this change

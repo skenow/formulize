@@ -50,7 +50,7 @@ if($acid == 'new') {
 $advCalc = $processedValues['advcalc'];
 
 // create a new item, or load an existing item
-$advanced_calculation_handler = xoops_getmodulehandler('advancedCalculation', 'formulize');
+$advanced_calculation_handler = icms_getModuleHandler('advancedCalculation', 'formulize');
 if($isNew) {
   $advCalcObject = $advanced_calculation_handler->create();
   $advCalcObject->setVar('steptitles',array(0=>'New step'));

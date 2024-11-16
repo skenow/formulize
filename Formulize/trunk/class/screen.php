@@ -129,7 +129,7 @@ class formulizeScreenHandler {
 		$form->addElement(new xoopsFormText(_AM_FORMULIZE_SCREEN_TITLE, 'title', 30, 255, $title));
 		
 		// get the frameworks that this form is involved in
-		$framework_handler =& xoops_getmodulehandler('frameworks', 'formulize');
+		$framework_handler =& icms_getModuleHandler('frameworks', 'formulize');
 		$frameworks = $framework_handler->getFrameworksByForm($fid);
 		$options[0] = _AM_FORMULIZE_USE_NO_FRAMEWORK;
 		foreach($frameworks as $thisFramework) {

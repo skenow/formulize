@@ -45,7 +45,7 @@ $acid = intval($acid);
 $advCalc = $processedValues['advcalc'];
 
 // load an existing item
-$advanced_calculation_handler = xoops_getmodulehandler('advancedCalculation', 'formulize');
+$advanced_calculation_handler = icms_getModuleHandler('advancedCalculation', 'formulize');
 $advCalcObject = $advanced_calculation_handler->get($acid);
 
 // check if the user has permission to edit the form

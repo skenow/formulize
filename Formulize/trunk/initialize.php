@@ -76,7 +76,7 @@ if(isset($formulize_screen_id) AND is_numeric($formulize_screen_id)) {
 } else {
 	$sid="";
 }
-$screen_handler =& xoops_getmodulehandler('screen', 'formulize');
+$screen_handler =& icms_getModuleHandler('screen', 'formulize');
 if($sid) {
 	$thisscreen1 = $screen_handler->get($sid); // first get basic screen object to determine type
 	$fid = is_object($thisscreen1) ? $thisscreen1->getVar('fid') : 0;
@@ -132,12 +132,12 @@ $screen = false;
 if($sid) {
 	if(is_object($thisscreen1)) {
 		unset($screen_handler); // reset handler to that type of screen
-		$screen_handler =& xoops_getmodulehandler($thisscreen1->getVar('type').'Screen', 'formulize');
+		$screen_handler =& icms_getModuleHandler($thisscreen1->getVar('type').'Screen', 'formulize');
 		$screen = $screen_handler->get($sid); // get the full screen object
 		
 		if($_POST['ventry'] AND $screen->getVar('type') == 'listOfEntries' AND $screen->getVar("viewentryscreen") != "none" AND $screen->getVar("viewentryscreen") AND !strstr($screen->getVar("viewentryscreen"), "p")) { // if the user is viewing an entry off a list, then check what screen gets used to display entries instead, since that's what we're doing (but only if there is a screen specified, and it's not a pageworks page)
 			// do all this to set the Frid properly. That's it. Otherwise, no change. Frid affects behaviour in readelements.php
-			$base_screen_handler = xoops_getmodulehandler('screen', 'formulize');
+			$base_screen_handler = icms_getModuleHandler('screen', 'formulize');
 			$viewEntryScreenObject = $base_screen_handler->get(intval($screen->getVar('viewentryscreen')));
 			$frid = $viewEntryScreenObject->getVar('frid');
 		} else {
@@ -206,14 +206,14 @@ if(!$rendered) {
       		displayForm($frid, $entry, $fid, "", "{NOBUTTON}"); // if it's a single and they don't have group or global scope, OR if an entry was specified in particular
       	}
       } elseif(isset($fid) AND is_numeric($fid)) {
-				$form_handler = xoops_getmodulehandler('forms', 'formulize');
+				$form_handler = icms_getModuleHandler('forms', 'formulize');
 				$formObject = $form_handler->get($fid);
 				$defaultFormScreen = $formObject->getVar('defaultform');
 				$defaultListScreen = $formObject->getVar('defaultlist');
       	if(((!$singleentry AND $xoopsUser) OR $view_globalscope OR ($view_groupscope AND $singleentry != "group")) AND !$entry AND (!isset($_GET['iform']) OR $_GET['iform'] != "e") AND !isset($_GET['showform'])) { // if it's multientry and there's a xoopsUser, or the user has globalscope, or the user has groupscope and it's not a one-per-group form, and after all that, no entry has been requested, then show the list (note that anonymous users default to the form view...to provide them lists of their own entries....well you can't, but groupscope and globalscope will show them all entries by anons or by everyone) ..... unless there is an override in the URL that is meant to force the form itself to display .... iform is "interactive form", devised by Feratech.
 					if($defaultListScreen AND !$formulize_masterUIOverride) {
 					  $basescreenObject = $screen_handler->get($defaultListScreen);
-						$finalscreen_handler = xoops_getmodulehandler($basescreenObject->getVar('type').'Screen', 'formulize');
+						$finalscreen_handler = icms_getModuleHandler($basescreenObject->getVar('type').'Screen', 'formulize');
 						$finalscreenObject = $finalscreen_handler->get($defaultListScreen);
 						$frid = $finalscreenObject->getVar('frid');
 						// this will only be included once, but we need to do it after the fid and frid for the current page load have been determined!!
@@ -228,7 +228,7 @@ if(!$rendered) {
       	} else { // otherwise, show the form
 					if($defaultFormScreen AND !$formulize_masterUIOverride) {
 					  $basescreenObject = $screen_handler->get($defaultFormScreen);
-						$finalscreen_handler = xoops_getmodulehandler($basescreenObject->getVar('type').'Screen', 'formulize');
+						$finalscreen_handler = icms_getModuleHandler($basescreenObject->getVar('type').'Screen', 'formulize');
 						$finalscreenObject = $finalscreen_handler->get($defaultFormScreen);
 						$frid = $finalscreenObject->getVar('frid');
 						// this will only be included once, but we need to do it after the fid and frid for the current page load have been determined!!

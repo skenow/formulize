@@ -40,9 +40,9 @@ $frid = $_POST['formulize_admin_key'];
 
 if($frid == "new") {
 	// create the framework first
-	$framework_handler = xoops_getmodulehandler('frameworks', 'formulize');
+	$framework_handler = icms_getModuleHandler('frameworks', 'formulize');
 	$frameworkObject = $framework_handler->create();
-	$form_handler = xoops_getmodulehandler('forms','formulize');
+	$form_handler = icms_getModuleHandler('forms','formulize');
 	$form1Object = $form_handler->get($processedValues['relationships']['fid1']);
 	$form2Object = $form_handler->get($processedValues['relationships']['fid2']);
 	$frameworkObject->setVar('name',printSmart($form1Object->getVar('title'))." + ".printSmart($form2Object->getVar('title')));
@@ -141,7 +141,7 @@ function updateframe($cf) {
 		}
 		
 		if(substr($key, 0, 4) == "name") {
-		  $relationship_handler = xoops_getmodulehandler('frameworks', 'formulize');
+		  $relationship_handler = icms_getModuleHandler('frameworks', 'formulize');
 		  $relationship = $relationship_handler->get($cf);
 		  $relationship->setVar('name', $value);
 		  if(!$relationship_handler->insert($relationship)) {

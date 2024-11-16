@@ -408,7 +408,7 @@ function cloneFormulize($title, $clonedata) {
 	}
     
         // Need to create the new data table now -- July 1 2007
-        $formHandler =& xoops_getmodulehandler('forms', 'formulize');
+        $formHandler =& icms_getModuleHandler('forms', 'formulize');
         if(!$tableCreationResult = $formHandler->createDataTable($newfid, $fid, $oldNewEleIdMap)) { 
                 print "Error: could not make the necessary new datatable for form " . $newfid . ".  Please delete the cloned form and report this error to <a href=\"mailto:formulize@freeformsolutions.ca\">Freeform Solutions</a>.<br>".icms::$xoopsDB->error();
         }
@@ -510,7 +510,7 @@ function lockform() {
 	if(!$gperm_handler->checkRight("delete_form", intval($_GET['title']), $groups, $module_id)) {
 		redirect_header("formindex.php",3,_NO_PERM);
 	}
-	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+	$form_handler = icms_getModuleHandler('forms', 'formulize');
 	if(!$form_handler->lockForm(intval($_GET['title']))) {
 		redirect_header("formindex.php",3,_formulize_FORMLOCK_FAILED);
 	} else {
@@ -546,7 +546,7 @@ function delform()
 	$sql = sprintf("DELETE FROM %s WHERE id_form = '%u'", $xoopsDB->prefix("formulize_form"), $title);
 	$xoopsDB->queryF($sql) or $eh->show("error supression 4 dans delform");
 */
-        $form_handler = xoops_getmodulehandler('forms', 'formulize');
+        $form_handler = icms_getModuleHandler('forms', 'formulize');
         $form_handler->dropDataTable($title);
         
 	$sql = sprintf("DELETE FROM %s WHERE desc_form = '%s'", $xoopsDB->prefix("formulize_id"), $data[$title]);
@@ -989,7 +989,7 @@ function drawformperms($form_list, $formulize_perms, $perm_desc, $group_id="all"
 
 	global $xoopsDB, $module_id;
 	$gperm_handler =& xoops_gethandler('groupperm');
-	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+	$form_handler = icms_getModuleHandler('forms', 'formulize');
 	
 
       print "</td><td class=$class valign=top>";
@@ -1043,7 +1043,7 @@ function drawformperms($form_list, $formulize_perms, $perm_desc, $group_id="all"
 					print "<p><b>"._AM_PER_GROUP_FILTER_INTRO."</b><br>";
 					// need to get the current filter settings for this group on this form, if any
 					if(!isset($form_handler)) {
-						$form_handler = xoops_getmodulehandler('forms', 'formulize');
+						$form_handler = icms_getModuleHandler('forms', 'formulize');
 					}
 					$formObject = $form_handler->get($form_id);
 					$filterSettings = $formObject->getVar('filterSettings');
@@ -1083,7 +1083,7 @@ function updateperms() {
 	$formulize_perms = getFormulizePerms();
 	$module_id = $xoopsModule->getVar('mid');
 	$gperm_handler = &xoops_gethandler('groupperm');
-	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+	$form_handler = icms_getModuleHandler('forms', 'formulize');
 
 	foreach($_POST as $k=>$v) {
 		if(strstr($k, "hidden_group_")) { // find list of groups
@@ -1502,7 +1502,7 @@ function patch31() {
 				// 3. switch each one to accept NULL and default to NULL
 				// 4. if it's a date field, switch its type to date
 				// 5. update 0000-00-00 to NULL for dates
-				$form_handler = xoops_getmodulehandler('forms', 'formulize');
+				$form_handler = icms_getModuleHandler('forms', 'formulize');
 				$allFids = $form_handler->getAllForms(true); // true means get all elements, even ones that are not displayed to any groups
 				foreach($allFids as $thisFid) {
 					if($thisFid->getVar('tableform') != "") { continue; } // don't do table forms obviously!
@@ -1949,8 +1949,8 @@ function formulize_createDerivedValueFieldsInDB() {
   // 1. gather a list of all the derived elements, including their form ids (so we can reference the tables), and handles (so we know what the field should be called)
   // 2. foreach table, get a list of columns, and if the field name is not represented, then create it
   global $xoopsDB;
-  $form_handler =& xoops_getmodulehandler('forms', 'formulize');
-  $element_handler =& xoops_getmodulehandler('elements', 'formulize');
+  $form_handler =& icms_getModuleHandler('forms', 'formulize');
+  $element_handler =& icms_getModuleHandler('elements', 'formulize');
   $sql = "SELECT id_form, ele_handle, ele_id FROM ".$xoopsDB->prefix("formulize")." WHERE ele_type = 'derived' ORDER BY id_form";
   if($result = $xoopsDB->query($sql)) {
     $fieldMap = array();
@@ -2165,7 +2165,7 @@ function patch30DataStructure($auto = false) {
                 
                 include_once XOOPS_ROOT_PATH . "/modules/formulize/class/forms.php";
                 include_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
-                $formHandler =& xoops_getmodulehandler('forms', 'formulize');
+                $formHandler =& icms_getModuleHandler('forms', 'formulize');
                 $allFormObjects = $formHandler->getAllForms(true); // true flag causes all elements to be included in objects, not just elements that are being displayed, which are ignored in every other situation
                 foreach($allFormObjects as $formObjectId=>$thisFormObject) {
 												if($thisFormObject->getVar('tableform')) { continue; } // only process actual Formulize forms
@@ -2299,7 +2299,7 @@ function patch30DataStructure($auto = false) {
       if(!$res = $xoopsDB->query($sql)) {
         exit("Error: cound not get the element ids of the linked selectboxes.  SQL: $sql<br>".icms::$xoopsDB->error()."<br>Please report this error to <a href=\"mailto:formulize@freeformsolutions.ca\">Freeform Solutions</a>.");
       }
-      $element_handler =& xoops_getmodulehandler('elements', 'formulize');
+      $element_handler =& icms_getModuleHandler('elements', 'formulize');
       while($array = $xoopsDB->fetchArray($res)) {
         $elementObject = $element_handler->get($array['ele_id']);
         $ele_value = $elementObject->getVar('ele_value');

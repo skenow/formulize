@@ -36,18 +36,18 @@ $aid = intval($_GET['aid']);
 if($aid == 0) {
 	$appName = "Forms with no app"; 
 } else {
-  $application_handler = xoops_getmodulehandler('applications','formulize');
+  $application_handler = icms_getModuleHandler('applications','formulize');
 	$appObject = $application_handler->get($aid);
 	$appName = $appObject->getVar('name');
 }
 $elements = array();
 if($_GET['fid'] != "new") {
   $fid = intval($_GET['fid']);
-  $form_handler = xoops_getmodulehandler('forms', 'formulize');
+  $form_handler = icms_getModuleHandler('forms', 'formulize');
   $formObject = $form_handler->get($fid);
   $formName = $formObject->getVar('title');
   $singleentry = $formObject->getVar('single');
-  //$screen_handler = xoops_getmodulehandler('screen', 'formulize');
+  //$screen_handler = icms_getModuleHandler('screen', 'formulize');
 } else {
   $fid = $_GET['fid'];
 }
@@ -78,18 +78,18 @@ if($_GET['sid'] == "new") {
   $settings['useToken'] = 1;
   $screenName = "New screen";
 } else {
-  $screen_handler = xoops_getmodulehandler('screen', 'formulize');
+  $screen_handler = icms_getModuleHandler('screen', 'formulize');
   $screen = $screen_handler->get($sid);
   $settings['type'] = $screen->getVar('type');
   $settings['frid'] = $screen->getVar('frid');
   $settings['useToken'] = $screen->getVar('useToken');
 
   if($settings['type'] == 'listOfEntries') {
-    $screen_handler = xoops_getmodulehandler('listOfEntriesScreen', 'formulize');
+    $screen_handler = icms_getModuleHandler('listOfEntriesScreen', 'formulize');
   } else if($settings['type'] == 'form') {
-    $screen_handler = xoops_getmodulehandler('formScreen', 'formulize');
+    $screen_handler = icms_getModuleHandler('formScreen', 'formulize');
   } else if($settings['type'] == 'multiPage') {
-    $screen_handler = xoops_getmodulehandler('multiPageScreen', 'formulize');
+    $screen_handler = icms_getModuleHandler('multiPageScreen', 'formulize');
   }
 
   $screen = $screen_handler->get($sid);
@@ -109,8 +109,8 @@ if($_GET['sid'] != "new" && $settings['type'] == 'listOfEntries') {
   // view data
   // gather all the available views
   // setup an option list of all views, as well as one just for the currently selected Framework setting
-  $framework_handler =& xoops_getmodulehandler('frameworks', 'formulize');
-  $form_handler =& xoops_getmodulehandler('forms', 'formulize');
+  $framework_handler =& icms_getModuleHandler('frameworks', 'formulize');
+  $form_handler =& icms_getModuleHandler('forms', 'formulize');
   $formObj = $form_handler->get($fid, true); // true causes all elements to be included even if they're not visible.
   $frameworks = $framework_handler->getFrameworksByForm($fid);
   $selectedFramework = $settings['frid'];
@@ -137,7 +137,7 @@ if($_GET['sid'] != "new" && $settings['type'] == 'listOfEntries') {
   $limitViewOptions += $defaultViewOptions;
   unset($limitViewOptions['blank']);
   // get the available screens
-  $screen_handler = xoops_getmodulehandler('screen', 'formulize');
+  $screen_handler = icms_getModuleHandler('screen', 'formulize');
   $criteria_object = new CriteriaCompo(new Criteria('type','multiPage'));
   $criteria_object->add(new Criteria('type','form'), 'OR');
   $viewentryscreenOptionsDB = $screen_handler->getObjects($criteria_object, $fid); 
@@ -287,7 +287,7 @@ if($_GET['sid'] != "new" && $settings['type'] == 'multiPage') {
   // parallel entry options for showing previous entries in another form (or entries of some other defined type, but previous entries are what this was made for)
   // Previous entries are meant to be in another form.  To begin with, that form must have the same captions as this form does, but later on there will be some broader capabilities to specify the parallel elements.
   $fe_paraentryform = new xoopsFormSelect(_AM_FORMULIZE_SCREEN_PARAENTRYFORM, 'paraentryform', $screen->getVar('paraentryform'), 1, false);
-  $formHandler =& xoops_getmodulehandler('forms');
+  $formHandler =& icms_getModuleHandler('forms');
   $allFormObjects = $formHandler->getAllForms();
   $allFormOptions = array();
   foreach($allFormObjects as $thisFormObject) {
@@ -302,7 +302,7 @@ if($_GET['sid'] != "new" && $settings['type'] == 'multiPage') {
 	// added March 20 2008, by jwe
 	$frid = $screen->getVar("frid");
 	if($frid) {
-			$framework_handler =& xoops_getModuleHandler('frameworks');
+			$framework_handler =& icms_getModuleHandler('frameworks');
 			$frameworkObject = $framework_handler->get($frid);
 			foreach($frameworkObject->getVar("links") as $thisLinkObject) {
 					if($thisLinkObject->getVar("unifiedDisplay") AND $thisLinkObject->getVar("relationship") == 1) {

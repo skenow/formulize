@@ -352,12 +352,12 @@ function _formulize_returnElement($ele, $formframe="") {
 	}
 	if(!$element) {
 		if(!$formulize_mgr) {
-			$formulize_mgr =& xoops_getmodulehandler('elements', 'formulize');
+			$formulize_mgr =& icms_getModuleHandler('elements', 'formulize');
 		}
 		if(is_numeric($ele)) {
 			$element =& $formulize_mgr->get($ele);
 		} else {
-			$framework_handler = xoops_getmodulehandler('frameworks', 'formulize');
+			$framework_handler = icms_getModuleHandler('frameworks', 'formulize');
 			$frameworkObject = $framework_handler->get($formframe);
 			if(is_object($frameworkObject)) {
 				$frameworkElementIds = $frameworkObject->getVar('element_ids');

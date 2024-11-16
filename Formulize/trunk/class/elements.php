@@ -112,7 +112,7 @@ class formulizeElementsHandler {
 			$array = $this->db->fetchArray($result);
 			$ele_type = $array['ele_type'];
 			if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.php")) {
-				$customTypeHandler = xoops_getmodulehandler($ele_type."Element", 'formulize');
+				$customTypeHandler = icms_getModuleHandler($ele_type."Element", 'formulize');
 				$element = $customTypeHandler->create();
 			} else {
 				$element = new formulizeformulize();
@@ -233,7 +233,7 @@ class formulizeElementsHandler {
 			}
 		}
 		if($ele_handle === "") {
-			$form_handler =& xoops_getmodulehandler('forms', 'formulize');
+			$form_handler =& icms_getModuleHandler('forms', 'formulize');
 			$ele_handle = $ele_id;
       while(!$uniqueCheck = $form_handler->isHandleUnique($ele_handle, $ele_id)) {
         $ele_handle = $ele_handle . "_copy";
@@ -273,7 +273,7 @@ class formulizeElementsHandler {
 		if( strtoupper(get_class($this)) != strtoupper('formulizeelementshandler')) {
 			return false;
 		}
-		$form_handler =& xoops_getmodulehandler('forms', 'formulize');
+		$form_handler =& icms_getModuleHandler('forms', 'formulize');
 		if(!$deleteResult = $form_handler->deleteElementField($element->getVar('ele_id'))) {
 			print "Error: could not drop field from data table";
 			return false;
@@ -311,7 +311,7 @@ class formulizeElementsHandler {
 			// instantiate the right kind of element, depending on the type
 			$ele_type = $myrow['ele_type'];
 			if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.php")) {
-				$customTypeHandler = xoops_getmodulehandler($ele_type."Element", 'formulize');
+				$customTypeHandler = icms_getModuleHandler($ele_type."Element", 'formulize');
 				$elements = $customTypeHandler->create();
 			} else {
 				$elements = new formulizeformulize();

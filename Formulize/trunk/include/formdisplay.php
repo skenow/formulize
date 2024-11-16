@@ -243,7 +243,7 @@ function getEntryValues($entry, $formulize_mgr, $groups, $fid, $elements="", $mi
 		//$viewquery = q("SELECT ele_caption, ele_value FROM " . $xoopsDB->prefix("formulize_form") . " WHERE id_req=$entry $element_query");
 		// NEED TO CHECK THE FORM FOR ENCRYPTED ELEMENTS, AND ADD THEM AFTER THE * WITH SPECIAL ALIASES. tHEN IN THE LOOP, LOOK FOR THE ALIASES, AND SKIP PROCESSING THOSE ELEMENTS NORMALLY, BUT IF WHEN PROCESSING A NORMAL ELEMENT, IT IS IN THE LIST OF ENCRYPTED ELEMENTS, THEN GET THE ALIASED, DECRYPTED VALUE INSTEAD OF THE NORMAL ONE
 		// NEED TO ADD RETRIEVING ENCRYPTED ELEMENT LIST FROM FORM OBJECT
-		$form_handler =& xoops_getmodulehandler('forms', 'formulize');
+		$form_handler =& icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($fid);
 		$formHandles = $formObject->getVar('elementHandles');
 		$formCaptions = $formObject->getVar('elementCaptions');
@@ -486,7 +486,7 @@ if(!is_numeric($titleOverride) AND $titleOverride != "" AND $titleOverride != "a
 	}
  
 	// need to handle submission of entries 
-	$formulize_mgr =& xoops_getmodulehandler('elements', 'formulize');
+	$formulize_mgr =& icms_getModuleHandler('elements', 'formulize');
 
 	$info_received_msg = 0;
 	$info_continue = 0;
@@ -631,7 +631,7 @@ if(!is_numeric($titleOverride) AND $titleOverride != "" AND $titleOverride != "a
 			// do this after the security check, hence its placement here
 			static $oneToOneLinksMade = false;
 			if(!$oneToOneLinksMade AND count($fids)> 1 AND isset($GLOBALS['formulize_newEntryIds'][$this_fid])) {
-				$frameworkHandler = xoops_getmodulehandler('frameworks', 'formulize');
+				$frameworkHandler = icms_getModuleHandler('frameworks', 'formulize');
 				$frameworkObject = $frameworkHandler->get($frid);
 				foreach($frameworkObject->getVar('links') as $thisLink) {
 					if($thisLink->getVar('relationship') == 1) { // 1 signifies one to one relationships
@@ -649,7 +649,7 @@ if(!is_numeric($titleOverride) AND $titleOverride != "" AND $titleOverride != "a
 							}
 						} else {
 							// figure out which one is on which side of the linked selectbox
-							$element_handler = xoops_getmodulehandler('elements', 'formulize');
+							$element_handler = icms_getModuleHandler('elements', 'formulize');
 							$linkedElement1 = $element_handler->get($key1);
 							$linkedElement1EleValue = $linkedElement1->getVar('ele_value');
 							if(strstr($linkedElement1EleValue[2], "#*=:*")) {
@@ -1181,7 +1181,7 @@ function drawSubLinks($sfid, $sub_entries, $uid, $groups, $member_handler, $frid
 
 	global $xoopsDB, $nosubforms;
 	$GLOBALS['framework'] = $frid;
-	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+	$form_handler = icms_getModuleHandler('forms', 'formulize');
 
 	// limit the sub_entries array to just the entries that match the conditions, if any
 	if(is_array($subformConditions)) {
@@ -1241,7 +1241,7 @@ function drawSubLinks($sfid, $sub_entries, $uid, $groups, $member_handler, $frid
           $creation_user_touse = "";
         }
         $subEntWritten = writeElementValue($_POST['target_sub'], $element_to_write, "new", $value_to_write, $creation_user_touse, "", true); // Last param is override that allows direct writing to linked selectboxes if we have prepped the value first!
-	$element_handler = xoops_getmodulehandler('elements', 'formulize');
+	$element_handler = icms_getModuleHandler('elements', 'formulize');
 				if(!isset($elementsForDefaults)) {
 					$criteria = new CriteriaCompo();
 					$criteria->add(new Criteria('ele_type', 'text'), 'OR');
@@ -2250,7 +2250,7 @@ function loadValue($prevEntry, $i, $ele_value, $owner_groups, $groups, $entry, $
 					break;
 				default:
 					if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$type."Element.php")) {
-						$customTypeHandler = xoops_getmodulehandler($type."Element", 'formulize');
+						$customTypeHandler = icms_getModuleHandler($type."Element", 'formulize');
 						return $customTypeHandler->loadValue($value, $ele_value, $i);
 					} 
 			} // end switch
@@ -2597,7 +2597,7 @@ global $xoopsUser;
 $uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
 
 // need to setup governing elements array...which is inverse of the conditional elements
-$element_handler = xoops_getmodulehandler('elements','formulize');
+$element_handler = icms_getModuleHandler('elements','formulize');
 $governingElements = array();
 foreach($conditionalElements as $handle=>$theseGoverningElements) {
 	foreach($theseGoverningElements as $thisGoverningElement) {
@@ -2778,7 +2778,7 @@ function compileGoverningLinkedSelectBoxSourceConditionElements($governingElemen
 	// if so, check if there are conditions on the lsb
 	// check if the terms include any { } elements and grab those
 	$handleParts = explode("_",$handle); // de, fid, entry, elementId
-	$element_handler = xoops_getmodulehandler('elements','formulize');
+	$element_handler = icms_getModuleHandler('elements','formulize');
 	$elementObject = $element_handler->get($handleParts[3]);
 	if($elementObject->isLinked) {
 		$ele_value = $elementObject->getVar('ele_value');

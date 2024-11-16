@@ -41,7 +41,7 @@ $sid = $_POST['formulize_admin_key'];
 $screens = $processedValues['screens'];
 
 
-$screen_handler = xoops_getmodulehandler('listOfEntriesScreen', 'formulize');
+$screen_handler = icms_getModuleHandler('listOfEntriesScreen', 'formulize');
 $screen = $screen_handler->get($sid);
 
 // check if the user has permission to edit the form

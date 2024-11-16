@@ -38,8 +38,8 @@ require(XOOPS_ROOT_PATH."/header.php");
 
 global $xoopsDB;
 
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
-$application_handler = xoops_getmodulehandler('applications', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
+$application_handler = icms_getModuleHandler('applications', 'formulize');
 include_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
 $allowedForms = allowedForms();
 

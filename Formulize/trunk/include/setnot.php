@@ -385,19 +385,19 @@ if(!$noNots) {
 		} elseif($thisnot['not_cons_elementuids'] > 0) {
 			$text .= _formulize_DE_SETNOT_WHO_ELEMENTUIDS;
 			// figure out the element name
-			if(!$element_handler) { $element_handler = xoops_getmodulehandler('elements', 'formulize'); }
+			if(!$element_handler) { $element_handler = icms_getModuleHandler('elements', 'formulize'); }
 			$elementObject = $element_handler->get($thisnot['not_cons_elementuids']);
 			$text .= $elementObject->getVar('ele_colhead') ? printSmart(trans($elementObject->getVar('ele_colhead'))) : printSmart(trans($elementObject->getVar('ele_caption'))); 
 		} elseif($thisnot['not_cons_linkcreator'] > 0) {
 			$text .= _formulize_DE_SETNOT_WHO_LINKCREATOR;
 			// figure out the element name
-			if(!$element_handler) { $element_handler = xoops_getmodulehandler('elements', 'formulize'); }
+			if(!$element_handler) { $element_handler = icms_getModuleHandler('elements', 'formulize'); }
 			$elementObject = $element_handler->get($thisnot['not_cons_linkcreator']);
 			$text .= $elementObject->getVar('ele_colhead') ? printSmart(trans($elementObject->getVar('ele_colhead'))) : printSmart(trans($elementObject->getVar('ele_caption'))); 
 		} elseif($thisnot['not_cons_elementemail'] > 0) {
 			$text .= _formulize_DE_SETNOT_WHO_ELEMENTEMAIL;
 			// figure out the element name
-			if(!$element_handler) { $element_handler = xoops_getmodulehandler('elements', 'formulize'); }
+			if(!$element_handler) { $element_handler = icms_getModuleHandler('elements', 'formulize'); }
 			$elementObject = $element_handler->get($thisnot['not_cons_elementemail']);
 			$text .= $elementObject->getVar('ele_colhead') ? printSmart(trans($elementObject->getVar('ele_colhead'))) : printSmart(trans($elementObject->getVar('ele_caption'))); 
 		}

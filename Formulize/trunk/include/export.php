@@ -134,7 +134,7 @@ if(!isset($_POST['exportsubmit'])) {
 			if($_GET['type']=="update") {
 				$fileForUser = str_replace(XOOPS_URL."/modules/formulize/export/","",$filename);
 			} else {
-				$form_handler = xoops_getmodulehandler('forms','formulize');
+				$form_handler = icms_getModuleHandler('forms','formulize');
 				$formObject = $form_handler->get($fid);
 				if(is_object($formObject)) {
 					$formTitle = "'".str_replace(array(" ", "-", "/", "'", "`", "\\", ".", "�", ",", ")", "(", "[", "]"), "_", trans($formObject->getVar('title')))."'";

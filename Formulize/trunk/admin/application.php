@@ -31,9 +31,9 @@
 
 // need to listen for $_GET['aid'] later so we can limit this to just the application that is requested
 $aid = intval($_GET['aid']);
-$framework_handler = xoops_getmodulehandler('frameworks', 'formulize');
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
-$application_handler = xoops_getmodulehandler('applications','formulize');
+$framework_handler = icms_getModuleHandler('frameworks', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
+$application_handler = icms_getModuleHandler('applications','formulize');
 if($aid == 0) {
 	$appName = "Forms with no app";
 	$appDesc = "";
@@ -51,7 +51,7 @@ if($aid == 0) {
 		$allForms[$thisFormObject->getVar('id_form')]['id'] = $thisFormObject->getVar('id_form'); // settings tab uses id
 	}
 }
-$screen_handler = xoops_getmodulehandler('screen', 'formulize');
+$screen_handler = icms_getModuleHandler('screen', 'formulize');
 $gperm_handler = xoops_gethandler('groupperm');
 global $xoopsUser;
 foreach($formObjects as $thisFormObject) {
@@ -99,7 +99,7 @@ foreach($allRelationships as $thisRelationship) {
 	$relationships[$i]['name'] = $thisRelationship->getVar('name');
 	$relationships[$i]['content']['frid'] = $frid;
 
-  $framework_handler = xoops_getmodulehandler('frameworks', 'formulize');
+  $framework_handler = icms_getModuleHandler('frameworks', 'formulize');
   $relationshipObject = $framework_handler->get($frid);
   $relationshipLinks = $relationshipObject->getVar('links');
   $li = 1;

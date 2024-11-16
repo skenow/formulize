@@ -38,7 +38,7 @@ $entry_id = intval($_GET['entry_id']);
 $element_id = intval($_GET['element']);
 
 include_once XOOPS_ROOT_PATH ."/modules/formulize/class/elements.php"; // fileUploadElement extends this so needs it included before we instantiate the handler
-$element_handler = xoops_getmodulehandler('fileUploadElement','formulize');
+$element_handler = icms_getModuleHandler('fileUploadElement','formulize');
 $elementObject = $element_handler->get($element_id);
 $fid = $elementObject->getVar('id_form');
 

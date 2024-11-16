@@ -77,7 +77,7 @@ $uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
 $uid = isset($GLOBALS['userprofile_uid']) ? $GLOBALS['userprofile_uid'] : $uid; // if the userprofile form is in play and a new user has been set, then use that uid
 
 if(!$element_handler) {
-	$element_handler =& xoops_getmodulehandler('elements', 'formulize');
+	$element_handler =& icms_getModuleHandler('elements', 'formulize');
 }
 
 $formulize_up = array(); // container for user profile info
@@ -188,7 +188,7 @@ foreach($formulize_elementData as $elementFid=>$entryData) { // for every form w
 	$add_proxy_entries = $gperm_handler->checkRight("add_proxy_entries", $elementFid, $groups, $mid);
 	$update_own_entry = $gperm_handler->checkRight("update_own_entry", $elementFid, $groups, $mid);
 	$update_other_entries = $gperm_handler->checkRight("update_other_entries", $elementFid, $groups, $mid);
-	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+	$form_handler = icms_getModuleHandler('forms', 'formulize');
 	$formulize_formObject = $form_handler->get($elementFid);
 	$oneEntryPerGroupForm = $formulize_formObject->getVar('single') == "group" ? true : false;
 
@@ -258,7 +258,7 @@ if(isset($updateOwnerFid) AND $gperm_handler->checkRight("update_entry_ownership
 
 
 // update the derived values for all forms that we saved data for, now that we've saved all the data from all the forms
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $mainFormHasDerived = false;
 if($fid) {
 	$mainFormObject = $form_handler->get($fid);
@@ -303,7 +303,7 @@ foreach($formulize_allWrittenEntryIds as $allWrittenFid=>$entries) {
 	
 	// check for things that we should be updating based on the framework in effect for any override screen that has been declared
 	if($_POST['overridescreen'] AND $derivedValueFound) {
-		$override_screen_handler = xoops_getmodulehandler('screen', 'formulize');
+		$override_screen_handler = icms_getModuleHandler('screen', 'formulize');
 		$overrideScreenObject = $override_screen_handler->get($_POST['overridescreen']);
 		$overrideFrid = $overrideScreenObject->getVar('frid');
 		$overrideFid = $overrideScreenObject->getVar('fid');
@@ -358,13 +358,13 @@ return $formulize_allWrittenEntryIds;
 // entry_id is the entry id that was just written to the database
 function afterSavingLogic($values,$entry_id) {
 	if(isset($GLOBALS['formulize_afterSavingLogicRequired'])) { // elements must declare at the prepDataForWrite stage if they have after saving logic required
-		$element_handler = xoops_getmodulehandler('elements','formulize');
+		$element_handler = icms_getModuleHandler('elements','formulize');
 		foreach($GLOBALS['formulize_afterSavingLogicRequired'] as $elementId=>$thisAfterSavingRequestType) {
 			$elementObject = $element_handler->get($elementId);
 			$elementHandle = $elementObject->getVar('ele_handle');
 			// if the entry that was just written was one that included the element type that we need after saving logic for, then go for it
 			if(isset($values[$elementHandle])) {
-				$elementTypeHandler = xoops_getmodulehandler($thisAfterSavingRequestType."Element", "formulize");
+				$elementTypeHandler = icms_getModuleHandler($thisAfterSavingRequestType."Element", "formulize");
 				$elementTypeHandler->afterSavingLogic($values[$elementHandle],$elementId,$entry_id);
 			}
 		}

@@ -45,10 +45,10 @@ $index = $_POST['formulize_admin_index'];
 
 $screens = $processedValues['screens'];
 
-$screen_handler = xoops_getmodulehandler('multiPageScreen', 'formulize');
+$screen_handler = icms_getModuleHandler('multiPageScreen', 'formulize');
 $screen = $screen_handler->get($sid);
 // CHECK IF THE FORM IS LOCKED DOWN AND SCOOT IF SO
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get($screen->getVar('fid'));
 if($formObject->getVar('lockedform')) {
   return;

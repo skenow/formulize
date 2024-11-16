@@ -29,9 +29,9 @@
 
 // this function shows the new admin homepage in F4
 
-$application_handler = xoops_getmodulehandler('applications', 'formulize');
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
-$screen_handler = xoops_getmodulehandler('screen','formulize');
+$application_handler = icms_getModuleHandler('applications', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
+$screen_handler = icms_getModuleHandler('screen','formulize');
 $gperm_handler = xoops_gethandler('groupperm');
 $appObjects = $application_handler->getAllApplications();
 $apps = array();

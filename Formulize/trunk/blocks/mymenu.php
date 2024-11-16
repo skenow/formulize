@@ -38,8 +38,8 @@ function block_formulizeMENU_show() {
   $id_form = ((isset($_POST['fid'])) AND is_numeric($_POST['fid'])) ? intval($_POST['fid']) : $id_form ;
 
 	$allowedForms = allowedForms();
-  $application_handler = xoops_getmodulehandler('applications', 'formulize');
-	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+  $application_handler = icms_getModuleHandler('applications', 'formulize');
+	$form_handler = icms_getModuleHandler('forms', 'formulize');
 	$allApplications = $application_handler->getAllApplications();
 	$menuTexts = array();
 	$i = 0;

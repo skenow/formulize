@@ -36,7 +36,7 @@ if(!isset($processedValues)) {
 }
 
 if($_POST['deleteframework']) {
-  $framework_handler = xoops_getmodulehandler('frameworks','formulize');
+  $framework_handler = icms_getModuleHandler('frameworks','formulize');
   $frameworkObject = $framework_handler->get($_POST['deleteframework']);
   if(!$framework_handler->delete($frameworkObject)) {
     print "Error: could not delete the requested relationship.";

@@ -33,9 +33,9 @@ include_once XOOPS_ROOT_PATH."/modules/formulize/include/functions.php";
 
 // need to listen for $_GET['aid'] later so we can limit this to just the application that is requested
 $aid = intval($_GET['aid']);
-$application_handler = xoops_getmodulehandler('applications','formulize');
-$form_handler = xoops_getmodulehandler('forms','formulize');
-$element_handler = xoops_getmodulehandler('elements', 'formulize');
+$application_handler = icms_getModuleHandler('applications','formulize');
+$form_handler = icms_getModuleHandler('forms','formulize');
+$element_handler = icms_getModuleHandler('elements', 'formulize');
 $config_handler = $config_handler =& xoops_gethandler('config');
 $formulizeConfig =& $config_handler->getConfigsByCat(0, getFormulizeModId());
 
@@ -417,7 +417,7 @@ $options['ele_value'] = $ele_value;
 // if this is a custom element, then get any additional values that we need to send to the template
 $customValues = array();
 if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.php")) {
-	$customTypeHandler = xoops_getmodulehandler($ele_type."Element", 'formulize');
+	$customTypeHandler = icms_getModuleHandler($ele_type."Element", 'formulize');
 	$customValues = $customTypeHandler->adminPrepare($elementObject);
 }
 
@@ -474,7 +474,7 @@ function createDataTypeUI($ele_type, $element,$id_form,$ele_encrypt) {
     // check if there's a special class file for this element type, and if so, instantiate an element object of that kind, so we can check if it needs a datatype UI or not
     $customTypeNeedsUI = false;
     if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.php")) {
-	$customTypeHandler = xoops_getmodulehandler($ele_type."Element", 'formulize');
+	$customTypeHandler = icms_getModuleHandler($ele_type."Element", 'formulize');
 	$customTypeObject = $customTypeHandler->create();
 	$customTypeNeedsUI = $customTypeObject->needsDataType;
     }
@@ -484,7 +484,7 @@ function createDataTypeUI($ele_type, $element,$id_form,$ele_encrypt) {
       if($element) {
               // get the current type...
               global $xoopsDB;
-	      $form_handler = xoops_getmodulehandler('forms', 'formulize');
+	      $form_handler = icms_getModuleHandler('forms', 'formulize');
               $formObject = $form_handler->get($id_form);
               $elementDataSQL = "SHOW COLUMNS FROM ".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle'))." LIKE '".$element->getVar('ele_handle')."'";
               $elementDataRes = $xoopsDB->queryF($elementDataSQL);

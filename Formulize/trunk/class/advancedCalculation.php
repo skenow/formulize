@@ -579,7 +579,7 @@ class formulizeAdvancedCalculationHandler {
 
 	// setup the filters
 	$packedFormFilters = $this->setFilterVariables($filtersAndGroupings, $acid);
-	$form_handler = xoops_getmodulehandler('forms', 'formulize');
+	$form_handler = icms_getModuleHandler('forms', 'formulize');
 	$filterNames = array();
 	foreach($packedFormFilters as $formId=>$formFilters) {
 	    if($formId) { // form id 0 in packedFormFilters is the non-form filters, such as startDate, etc
@@ -1270,8 +1270,8 @@ jQuery(document).ready(function() {
     // 3. make variables as text ready for use in SQL, including right table aliases, etc
 
     $packedFormFilters = array();
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
-    $element_handler = xoops_getmodulehandler('elements', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
+    $element_handler = icms_getModuleHandler('elements', 'formulize');
     foreach($filtersAndGroupings as $thisFilter) {
       if($thisFilter['is_filter']) {
         $fieldName = "";
@@ -1333,7 +1333,7 @@ jQuery(document).ready(function() {
 
 // THIS FUNCTION RETURNS THE NECESSARY SQL, INSIDE ' AND ( ) ' TO 
 function groupScopeFilter($handle, $alias="") {
-    $form_handler = xoops_getmodulehandler('forms', 'formulize');
+    $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->getByHandle($handle);
     $scopeFilter = "";
     if(is_object($formObject)) {

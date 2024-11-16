@@ -112,7 +112,7 @@ class formulizeElementRenderer{
 			}
 		}
 		
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($id_form);
 	
 		switch ($e){
@@ -367,7 +367,7 @@ class formulizeElementRenderer{
 					}
 					
 					if(!isset($cachedSourceValuesQ[$sourceValuesQ])) {
-						$element_handler = xoops_getmodulehandler('elements', 'formulize');
+						$element_handler = icms_getModuleHandler('elements', 'formulize');
 						$sourceElementObject = $element_handler->get($boxproperties[1]);
 						if($sourceElementObject->isLinked) {
 							// need to jump one more level back to get value that this value is pointing at
@@ -1011,7 +1011,7 @@ class formulizeElementRenderer{
 			 */
 			default:
 				if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$e."Element.php")) {
-					$elementTypeHandler = xoops_getmodulehandler($e."Element", "formulize");
+					$elementTypeHandler = icms_getModuleHandler($e."Element", "formulize");
 					$form_ele = $elementTypeHandler->render($ele_value, $ele_caption, $form_ele_id, $isDisabled, $this->_ele, $entry); // $ele_value as passed in here, $caption, name that we use for the element in the markup, flag for whether it's disabled or not, element object, entry id number that this element belongs to
 					if(!$isDisabled AND ($this->_ele->getVar('ele_req') OR $this->_ele->alwaysValidateInputs)) { // if it's not disabled, and either a declared required element according to the webmaster, or the element type itself always forces validation...
 						$form_ele->customValidationCode = $elementTypeHandler->generateValidationCode($ele_caption, $form_ele_id, $this->_ele);
@@ -1132,7 +1132,7 @@ class formulizeElementRenderer{
 				$replacementTerm = display($entryData, $term);
 				if($replacementTerm !== "") {
 					// get the uitext value if necessary
-					$element_handler = xoops_getmodulehandler('elements', 'formulize');
+					$element_handler = icms_getModuleHandler('elements', 'formulize');
 					$elementObject = $element_handler->get($term);
 					$replacementTerm = formulize_swapUIText($replacementTerm, $elementObject->getVar('ele_uitext'));
 				} else {
@@ -1262,7 +1262,7 @@ class formulizeElementRenderer{
 		// 2. grab the previous value from the $entry/entries
 		// 3. create the dropdown list with these values, including javascript
 		
-		$formHandler =& xoops_getmodulehandler('forms', 'formulize');
+		$formHandler =& icms_getModuleHandler('forms', 'formulize');
 		$currentForm = $formHandler->get($screen->getVar('fid'));
 		$previousForm = $formHandler->get($screen->getVar('paraentryform'));
 		$currentCaptions = $currentForm->getVar('elementCaptions');

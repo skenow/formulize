@@ -142,7 +142,7 @@ function prepvalues($value, $field, $entry_id) {
 	       list($sourceMeta[1]) = convertElementIdsToElementHandles(array($source_ele_value[10]), $sourceMeta[0]);
 	  }
 	  
-					$form_handler = xoops_getmodulehandler('forms', 'formulize');
+					$form_handler = icms_getModuleHandler('forms', 'formulize');
 					$sourceFormObject = $form_handler->get($sourceMeta[0]);
 					// check if this is a link to a link
 					if($second_source_ele_value = formulize_isLinkedSelectBox($sourceMeta[1], true)) {
@@ -210,7 +210,7 @@ function prepvalues($value, $field, $entry_id) {
 	}
 
 	  if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$type."Element.php")) {
-	       $elementTypeHandler = xoops_getmodulehandler($type."Element", "formulize");
+	       $elementTypeHandler = icms_getModuleHandler($type."Element", "formulize");
 	       $preppedValue = $elementTypeHandler->prepareDataForDataset($value, $field, $entry_id);
 	       if(!is_array($preppedValue)) {
 		    return array($preppedValue);
@@ -334,7 +334,7 @@ function dataExtraction($frame="", $form, $filter, $andor, $scope, $limitStart, 
 		     exit("selected form does not exist in framework"); 
 	   }
 
-	  $form_handler = xoops_getmodulehandler('forms', 'formulize');
+	  $form_handler = icms_getModuleHandler('forms', 'formulize');
 	  $formObject = $form_handler->get($fid);
        
 	     if($frid AND !$mainFormOnly) {
@@ -506,7 +506,7 @@ function dataExtraction($frame="", $form, $filter, $andor, $scope, $limitStart, 
 					$perGroupFilter = "";
 					$perGroupFiltersPerForms = array(); // used with exists clauses and other per-form situations
 					if($xoopsDB) {
-							 $form_handler = xoops_getmodulehandler('forms', 'formulize');
+							 $form_handler = icms_getModuleHandler('forms', 'formulize');
 							 $perGroupFilter = $form_handler->getPerGroupFilterWhereClause($fid, "main");
 							 $perGroupFiltersPerForms[$fid] = $perGroupFilter;
 							 if($frid) {
@@ -1157,7 +1157,7 @@ function formulize_parseFilter($filtertemp, $andor, $linkfids, $fid, $frid) {
           $filter = $filtertemp;
      }
      
-     $form_handler = xoops_getmodulehandler('forms', 'formulize');
+     $form_handler = icms_getModuleHandler('forms', 'formulize');
      
      global $myts;
      $numSeachExps = 0;
@@ -1299,7 +1299,7 @@ function formulize_parseFilter($filtertemp, $andor, $linkfids, $fid, $frid) {
 				 // invoke the per group filter that applies to the form that we are pointing to...if XOOPS is in effect (ie: we're not included directly in other code as per Formulize 1)
 				 global $xoopsDB;
 				 if($xoopsDB) {
-				   $form_handler = xoops_getmodulehandler('forms', 'formulize');
+				   $form_handler = icms_getModuleHandler('forms', 'formulize');
 				   $otherpgfCount = count($otherPerGroupFilterJoins) + 1;
 				   $otherPerGroupFilterWhereClause[] = $form_handler->getPerGroupFilterWhereClause($sourceMeta[0], "otherpgf".$otherpgfCount);
 				   $tempOtherPGFJoin = " LEFT JOIN ".DBPRE."formulize_".$sourceFormObject->getVar('form_handle')." AS otherpgf".$otherpgfCount." ON ";
@@ -1649,7 +1649,7 @@ function formulize_convertCapOrColHeadToHandle($frid, $fid, $term) {
      
 		 if(strstr($term, "\$formName") AND $xoopsDB) { 		 // setup the name of the form and replace that value in the term, only when $xoopsDB is in effect, ie: full XOOPS stack
 					if(!isset($formNames[$fid])) {
-					  $form_handler = xoops_getmodulehandler('forms', 'formulize');
+					  $form_handler = icms_getModuleHandler('forms', 'formulize');
 					  $formObject = $form_handler->get($fid);
 						$formNames[$fid] = $formObject->getVar('title');
 					}
@@ -1672,7 +1672,7 @@ function formulize_convertCapOrColHeadToHandle($frid, $fid, $term) {
           if(isset($framework_results[$frid])) {
                $formList = $framework_results[$frid];
           } else {
-               $framework_handler = xoops_getmodulehandler('frameworks', 'formulize');
+               $framework_handler = icms_getModuleHandler('frameworks', 'formulize');
 							 $frameworkObject = $framework_handler->get($frid);
 							 $formList = $frameworkObject->getVar('fids');
 							 $framework_results[$frid] = $formList;

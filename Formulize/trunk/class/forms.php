@@ -243,7 +243,7 @@ class formulizeFormsHandler {
 
 	function getFormsByApplication($application_object_or_id, $returnIds=false) {
 		if(is_numeric($application_object_or_id) AND $application_object_or_id > 0) {
-			$application_handler = xoops_getmodulehandler('applications','formulize');
+			$application_handler = icms_getModuleHandler('applications','formulize');
 			$application_object_or_id = $application_handler->get($application_object_or_id);
 		}
 		$fids = array();
@@ -336,7 +336,7 @@ class formulizeFormsHandler {
 	function createTableFormElements($targetTableName, $fid) {
 		
 		$result = $this->db->query("SHOW COLUMNS FROM " . icms::$xoopsDB->escape($targetTableName));
-		$element_handler = xoops_getmodulehandler('elements', 'formulize');
+		$element_handler = icms_getModuleHandler('elements', 'formulize');
 		$element_order = 0;
 		while($row = $this->db->fetchRow($result)) {
 			$element =& $element_handler->create();
@@ -500,7 +500,7 @@ class formulizeFormsHandler {
 		} else {
 			$revisionTableName = "";
 		}
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$clonedFormObject = $form_handler->get($clonedForm);
 		$elementTypes = $formObject->getVar('elementTypes');
 		global $xoopsDB;
@@ -579,7 +579,7 @@ class formulizeFormsHandler {
 		} elseif(!is_numeric($fid)) {
 			return false;
 		} else {
-			$form_handler = xoops_getmodulehandler('forms', 'formulize');
+			$form_handler = icms_getModuleHandler('forms', 'formulize');
 			$formObject = $form_handler->get($fid);
 			$form_handle = $formObject->getVar('form_handle');
 		}
@@ -610,7 +610,7 @@ class formulizeFormsHandler {
 			return false;
 		}
 		global $xoopsDB;
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($element->getVar('id_form'));
 		$deleteFieldSQL = "ALTER TABLE " . $xoopsDB->prefix("formulize_" . $formObject->getVar('form_handle')) . " DROP `" . $element->getVar('ele_handle') . "`";
 		if(!$deleteFieldRes = $xoopsDB->queryF($deleteFieldSQL)) {
@@ -633,7 +633,7 @@ class formulizeFormsHandler {
 			return false;
 		}
 		global $xoopsDB;
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($element->getVar('id_form'));
 		$dataType = $dataType ? $dataType : "text";
 		$insertFieldSQL = "ALTER TABLE " . $xoopsDB->prefix("formulize_" . $formObject->getVar('form_handle')) . " ADD `" . $element->getVar('ele_handle') . "` $dataType NULL default NULL";
@@ -657,7 +657,7 @@ class formulizeFormsHandler {
 			return false;
 		}
 		global $xoopsDB;
-		$form_handler = xoops_getmodulehandler('forms', 'formulize');
+		$form_handler = icms_getModuleHandler('forms', 'formulize');
 		$formObject = $form_handler->get($element->getVar('id_form'));
 		if(!$dataType) {
 			// first get its current state:

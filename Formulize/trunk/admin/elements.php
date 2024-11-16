@@ -60,7 +60,7 @@ if ( $res ) {
 */
 
 $id_form = $title;
-$form_handler = xoops_getmodulehandler('forms', 'formulize');
+$form_handler = icms_getModuleHandler('forms', 'formulize');
 $formObject = $form_handler->get(intval($id_form));
 if($formObject->getVar('lockedform')) {
 	redirect_header("formindex.php",3,_NO_PERM);
@@ -315,7 +315,7 @@ switch($op){
 				break;
 			default:
 				if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type.".php")) {
-					$elementTypeHandler = xoops_getmodulehandler($ele_type);
+					$elementTypeHandler = icms_getModuleHandler($ele_type);
 					$form = $elementTypeHandler->adminUI($form, $value, $ele_id); // form is the form object, $value is the element-specific values that we have loaded, $ele_id is the element id
 				}
 				break;

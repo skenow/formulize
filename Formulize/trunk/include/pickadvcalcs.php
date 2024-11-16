@@ -82,7 +82,7 @@ if( !$scheck = security_check( $fid, "", $uid, "", $groups, $mid, $gperm_handler
 
 
 // build advanced calculation list
-$advanced_calculation_handler = xoops_getmodulehandler('advancedCalculation', 'formulize');
+$advanced_calculation_handler = icms_getModuleHandler('advancedCalculation', 'formulize');
 $list = $advanced_calculation_handler->getList($fid);
 ?>
 <html>
@@ -159,7 +159,7 @@ foreach( $list as $index => $value ) {
             <br/>
             <?php print $value['description'];
 if( $acid == $value['acid'] ) {
-  $procedures_handler = xoops_getmodulehandler('advancedCalculation', 'formulize');
+  $procedures_handler = icms_getModuleHandler('advancedCalculation', 'formulize');
   $allFiltersAndGroupings = $procedures_handler->getAllFiltersAndGroupings($acid);
 ?>
 <br><br>

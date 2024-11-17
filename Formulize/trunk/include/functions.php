@@ -1678,7 +1678,7 @@ function prepDataForWrite($element, $ele) {
                     $value = icms_core_DataFilter::htmlSpecialChars($value);
 				break;
 				case 'areamodif':
-					$value = $myts->stripSlashesGPC($ele);
+					$value = icms_core_DataFilter::stripSlashesGPC($ele);
 				break;
 				case 'radio':
 					$value = '';
@@ -1686,7 +1686,7 @@ function prepDataForWrite($element, $ele) {
 					while( $v = each($ele_value) ){
 						if( $opt_count == $ele ){
 							$GLOBALS['formulize_other'][$ele_id] = checkOther($v['key'], $ele_id);
-							$msg.= $myts->stripSlashesGPC($v['key']).'<br>';
+							$msg.= icms_core_DataFilter::stripSlashesGPC($v['key']).'<br>';
 							if(get_magic_quotes_gpc()) { $v['key'] = stripslashes($v['key']); }
 							$v['key'] = icms_core_DataFilter::htmlSpecialChars($v['key']);
 							$value = $v['key'];
@@ -1859,7 +1859,7 @@ function prepDataForWrite($element, $ele) {
 					$value = ''.$ele;
 				break;
 				case 'sep':
-					$value = $myts->stripSlashesGPC($ele);
+					$value = icms_core_DataFilter::stripSlashesGPC($ele);
 				break;
 				/*
 				 * Hack by F�lix<INBOX International>

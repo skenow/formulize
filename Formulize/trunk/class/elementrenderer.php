@@ -538,7 +538,7 @@ class formulizeElementRenderer{
 							$selected = $i['value'];
 						} elseif($i['key'] === "{OWNERGROUPS}") { // do nothing with this piece of metadata that gets set in loadValue, since it's used above
 						} else { // regular selection list....
-							$options[$opt_count] = $myts->stripSlashesGPC($i['key']);
+							$options[$opt_count] = icms_core_DataFilter::stripSlashesGPC($i['key']);
 							if(strstr($i['key'], _formulize_OUTOFRANGE_DATA)) {
 								$hiddenOutOfRangeValuesToWrite[$opt_count] = str_replace(_formulize_OUTOFRANGE_DATA, "", $i['key']); // if this is an out of range value, grab the actual value so we can stick it in a hidden element later
 							}
@@ -667,7 +667,7 @@ class formulizeElementRenderer{
 				$disabledOutputText = array();
 				$opt_count = 1;
 				while( $i = each($ele_value) ){
-					$options[$opt_count] = $myts->stripSlashesGPC($i['key']);
+					$options[$opt_count] = icms_core_DataFilter::stripSlashesGPC($i['key']);
 					if( $i['value'] > 0 ){
 						$selected[] = $opt_count;
 						$disabledHiddenValue[] = "<input type=hidden name=\"".$form_ele_id."[]\" value=\"$opt_count\">";
@@ -789,12 +789,12 @@ class formulizeElementRenderer{
 				while( $i = each($ele_value) ){
 					switch ($e){
 						case 'radio':
-							$options[$opt_count] = $myts->stripSlashesGPC($i['key']);
+							$options[$opt_count] = icms_core_DataFilter::stripSlashesGPC($i['key']);
               $options[$opt_count] = $myts->displayTarea($options[$opt_count]);
 						break;
 						case 'yn':
 							$options[$opt_count] = constant($i['key']);
-							$options[$opt_count] = $myts->stripSlashesGPC($options[$opt_count]);
+							$options[$opt_count] = icms_core_DataFilter::stripSlashesGPC($options[$opt_count]);
 						break;
 					}
 					if( $i['value'] > 0 ){

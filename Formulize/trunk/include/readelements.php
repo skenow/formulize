@@ -423,7 +423,7 @@ function writeUserProfile($data, $uid) {
     if ($xoopsConfigUser['allow_chgmail'] == 1) {
         $email = '';
         if (!empty($data['email'])) {
-            $email = $myts->stripSlashesGPC(trim($data['email']));
+        	$email = icms_core_DataFilter::stripSlashesGPC(trim($data['email']));
         }
         if ($email == '' || !checkEmail($email)) {
             $errors[] = _US_INVALIDMAIL;
@@ -432,14 +432,14 @@ function writeUserProfile($data, $uid) {
     $password = '';
     $vpass = '';
     if (!empty($data['password'])) {
-     	  $password = $myts->stripSlashesGPC(trim($data['password']));
+    	$password = icms_core_DataFilter::stripSlashesGPC(trim($data['password']));
     }
     if ($password != '') {
      	  if (strlen($password) < $xoopsConfigUser['minpass']) {
            	$errors[] = sprintf(_US_PWDTOOSHORT,$xoopsConfigUser['minpass']);
         }
         if (!empty($data['vpass'])) { 
-     	      $vpass = $myts->stripSlashesGPC(trim($data['vpass']));
+        	$vpass = icms_core_DataFilter::stripSlashesGPC(trim($data['vpass']));
         }
      	  if ($password != $vpass) {
             $errors[] = _US_PASSNOTSAME;

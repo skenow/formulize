@@ -37,7 +37,7 @@
 class formulizeRankOrderListHandler {
   var $db;
   var $needsDataType;
-  function formulizeRankOrderListHandler(&$db) {
+  function __construct(&$db) {
     $this->db =& $db;
     $this->needsDataType = true;
     $this->needsjQuery = true;
@@ -75,9 +75,9 @@ class formulizeRankOrderListHandler {
     
       if(empty($addopt) AND empty($ele_id)) {
         $addopt = 2;
-      } 
-      for( $i=0; $i<$addopt; $i++ ){ 
-        $options[] = new xoopsFormText('', 'ele_value['.$opt_count.']', 40, 255, ''); 
+      }
+      for( $i=0; $i<$addopt; $i++ ){
+        $options[] = new xoopsFormText('', 'ele_value['.$opt_count.']', 40, 255, '');
         $opt_count++;
       }
       // these two lines part of the jwe added code
@@ -122,7 +122,7 @@ class formulizeRankOrderListHandler {
     if(!isset($GLOBALS['formulize_sortable_style_included'])) {
       print "<style>
       .sortableitem {
-        width: 200px; background-color: white; border: 1px solid black; margin-top: 2px; margin-bottom: 2px; padding: 2px;        
+        width: 200px; background-color: white; border: 1px solid black; margin-top: 2px; margin-bottom: 2px; padding: 2px;
       }
       </style>";
       $GLOBALS['formulize_sortable_style_included'] = true;

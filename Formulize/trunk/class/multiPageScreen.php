@@ -40,7 +40,7 @@ include_once XOOPS_ROOT_PATH.'/modules/formulize/include/functions.php';
 
 class formulizeMultiPageScreen extends formulizeScreen {
 
-	function formulizeMultiPageScreen() {
+	function __construct() {
 		$this->formulizeScreen();
 		$this->initVar("introtext", XOBJ_DTYPE_TXTAREA);
 		$this->initVar("toptemplate", XOBJ_DTYPE_TXTAREA);  	// added by Gordon Woodmansey (bgw) 2012-08-29
@@ -49,12 +49,12 @@ class formulizeMultiPageScreen extends formulizeScreen {
 		$this->initVar("thankstext", XOBJ_DTYPE_TXTAREA);
 		$this->initVar("donedest", XOBJ_DTYPE_TXTBOX, NULL, false, 255);
 		$this->initVar("buttontext", XOBJ_DTYPE_TXTBOX, NULL, false, 255);
-		$this->initVar("finishisdone", XOBJ_DTYPE_INT);	
+		$this->initVar("finishisdone", XOBJ_DTYPE_INT);
 		$this->initVar("pages", XOBJ_DTYPE_ARRAY);
 		$this->initVar("pagetitles", XOBJ_DTYPE_ARRAY);
 		$this->initVar("conditions", XOBJ_DTYPE_ARRAY);
 		$this->initVar("printall", XOBJ_DTYPE_INT); //nmc - 2007.03.24
-    $this->initVar("paraentryform", XOBJ_DTYPE_INT); 
+    $this->initVar("paraentryform", XOBJ_DTYPE_INT);
     $this->initVar("paraentryrelationship", XOBJ_DTYPE_INT);
     $this->initVar("dobr", XOBJ_DTYPE_INT, 1, false);
     $this->initVar("dohtml", XOBJ_DTYPE_INT, 1, false);
@@ -84,7 +84,7 @@ class formulizeMultiPageScreen extends formulizeScreen {
 
 class formulizeMultiPageScreenHandler extends formulizeScreenHandler {
 	var $db;
-	function formulizeMultiPageScreenHandler(&$db) {
+	function __construct(&$db) {
 		$this->db =& $db;
 	}
 	function &getInstance(&$db) {
@@ -106,7 +106,7 @@ class formulizeMultiPageScreenHandler extends formulizeScreenHandler {
 		$screen->assignVar('sid', $sid);
 		// standard flags used by xoopsobject class
     
-		// note: conditions is not written to the DB yet, since we're not gathering that info from the UI	
+		// note: conditions is not written to the DB yet, since we're not gathering that info from the UI
 		if (!$update) {
                  $sql = sprintf("INSERT INTO %s (sid, introtext, thankstext, toptemplate, elementtemplate, bottomtemplate, donedest, buttontext, finishisdone, pages, pagetitles, conditions, printall, paraentryform, paraentryrelationship) VALUES (%u, %s, %s, %s, %s, %s, %s, %s, %u, %s, %s, %s, %u, %u, %u)", $this->db->prefix('formulize_screen_multipage'), $screen->getVar('sid'), $this->db->quoteString($screen->getVar('introtext', "e")), $this->db->quoteString($screen->getVar('thankstext', "e")), $this->db->quoteString($screen->getVar('toptemplate')), $this->db->quoteString($screen->getVar('elementtemplate')), $this->db->quoteString($screen->getVar('bottomtemplate')), $this->db->quoteString($screen->getVar('donedest')), $this->db->quoteString($screen->getVar('buttontext')), $screen->getVar('finishisdone'), $this->db->quoteString(serialize($screen->getVar('pages'))), $this->db->quoteString(serialize($screen->getVar('pagetitles'))), $this->db->quoteString(serialize($screen->getVar('conditions'))), $screen->getVar('printall'), $screen->getVar('paraentryform'), $screen->getVar('paraentryrelationship')); //nmc 2007.03.24 added 'printall' & fixed pagetitles
              } else {
@@ -153,7 +153,7 @@ class formulizeMultiPageScreenHandler extends formulizeScreenHandler {
 		ksort($pages); // make sure the arrays are sorted by key, ie: page number
 		ksort($pagetitles);
 		array_unshift($pages, ""); // displayFormPages looks for the page array to start with [1] and not [0], for readability when manually using the API, so we bump up all the numbers by one by adding something to the front of the array
-		array_unshift($pagetitles, ""); 
+		array_unshift($pagetitles, "");
 		$pages['titles'] = $pagetitles;
 		unset($pages[0]); // get rid of the part we just unshifted, so the page count is correct
 		unset($pagetitles[0]);
@@ -218,7 +218,7 @@ function drawPageUI($pageNumber, $pageTitle, $elements, $conditions, $form, $opt
         $form->addElement(new xoopsFormHidden('pageops'.$pageNumber.'[]', $conditions['details']['ops'][$conIndex]));
         $form->addElement(new xoopsFormHidden('pageterms'.$pageNumber.'[]', $conditions['details']['terms'][$conIndex]));
         $conditionlist .= $options[$conditions['details']['elements'][$conIndex]] . " " . $conditions['details']['ops'][$conIndex] . " " . $conditions['details']['terms'][$conIndex] . "<br />";
-    } 
+    }
     // setup the operator boxes...
     $opterm = new xoopsFormElementTray('', "&nbsp;&nbsp;");
     $element = new xoopsFormSelect('', 'pageelements'.$pageNumber.'[]');

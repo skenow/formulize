@@ -34,7 +34,7 @@ class formulizePermHandler  {
 	var $fid; // the form this Perm Handler object is attached to
 
 	// $fid must be an id
-	function formulizePermHandler($fid){
+	function __construct($fid){
 		$this->fid = intval($fid);
 	}
 	
@@ -131,7 +131,7 @@ class formulizePermHandler  {
 			global $xoopsDB;
 			$sql = "SELECT t1.view_groupid, t2.name FROM ".$xoopsDB->prefix("formulize_groupscope_settings")." as t1, ".$xoopsDB->prefix("groups")." as t2 WHERE t1.groupid=".intval($gid)." AND t1.fid = ".$this->fid." AND t1.view_groupid=t2.groupid";
 			if($res = $xoopsDB->query($sql)) {
-        if($xoopsDB->getRowsNum($res) != 0) {			
+        if($xoopsDB->getRowsNum($res) != 0) {
 					while($array = $xoopsDB->fetchArray($res)) {
 						$cachedGroupScopeInfo[$this->fid][$gid]['group_ids'][$array['view_groupid']] = $array['view_groupid'];
 						$cachedGroupScopeInfo[$this->fid][$gid]['group_names'][$array['view_groupid']] = $array['name'];
@@ -160,7 +160,7 @@ class formulizePermHandler  {
 		$res = $xoopsDB->query($sql);
 		$foundGids = array();
 		while($array = $xoopsDB->fetchArray($res)) {
-			$foundGids[] = $array['groupid'];			
+			$foundGids[] = $array['groupid'];
 		}
 		return $foundGids;
 	}

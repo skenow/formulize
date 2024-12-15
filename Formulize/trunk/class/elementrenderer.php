@@ -38,7 +38,7 @@ include_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
 class formulizeElementRenderer{
 	var $_ele;
 
-	function formulizeElementRenderer(&$element){
+	function __construct(&$element){
 		$this->_ele =& $element;
 	}
 
@@ -47,7 +47,7 @@ class formulizeElementRenderer{
 	function constructElement($form_ele_id, $ele_value, $entry, $isDisabled=false, $screen=null){
 		if (strstr(getCurrentURL(),"printview.php")) {
 			$isDisabled = true; // disabled all elements if we're on the printable view
-		} 
+		}
 		global $xoopsUser, $xoopsModuleConfig, $separ, $myts;
 		$myts =& icms_core_Textsanitizer::getInstance();
 		
@@ -84,7 +84,7 @@ class formulizeElementRenderer{
 
 
 		// call the text sanitizer, first try to convert HTML chars, and if there were no conversions, then do a textarea conversion to automatically make links clickable
-		$ele_caption = trans($ele_caption); 
+		$ele_caption = trans($ele_caption);
 		$htmlCaption = htmlspecialchars_decode(icms_core_DataFilter::undoHtmlSpecialChars($ele_caption)); // do twice, because we need to handle &amp;lt; and other stupid stuff...do first time through XOOPS myts just because it might be doing a couple extra things that are useful...can probably just use PHP's own filter twice, not too big a deal
 		if($htmlCaption == $ele_caption) {
         	$ele_caption = $myts->displayTarea($ele_caption);
@@ -161,8 +161,8 @@ class formulizeElementRenderer{
 					$ele_value[1],	//	max width
 					$ele_value[2]	  //	default value
 					);
-				} else {															// nmc 2007.03.24 - added 
-					$form_ele = new XoopsFormLabel ($ele_caption, $ele_value[2]);	// nmc 2007.03.24 - added 
+				} else {															// nmc 2007.03.24 - added
+					$form_ele = new XoopsFormLabel ($ele_caption, $ele_value[2]);	// nmc 2007.03.24 - added
 				}
 
 				// if required unique option is set, create validation javascript that will ask the database if the value is unique or not
@@ -189,7 +189,7 @@ class formulizeElementRenderer{
 					$xhr_entry_to_send = is_numeric($entry) ? $entry : 0;
 					$form_ele->customValidationCode[] = "formulize_xhr_params[2] = ".$xhr_entry_to_send.";\n";
 					$form_ele->customValidationCode[] = "formulize_xhr_send('check_for_unique_value', formulize_xhr_params);\n";
-					$form_ele->customValidationCode[] = "return false;\n"; 
+					$form_ele->customValidationCode[] = "return false;\n";
 					$form_ele->customValidationCode[] = "}\n";
 					
 				}
@@ -200,7 +200,7 @@ class formulizeElementRenderer{
 				$ele_value[0] = stripslashes($ele_value[0]);
 //        $ele_value[0] = $myts->displayTarea($ele_value[0]); // commented by jwe 12/14/04 so that info displayed for viewing in a form box does not contain HTML formatting
 				$ele_value[0] = getTextboxDefault($ele_value[0], $id_form, $entry);
-				if (!strstr(getCurrentURL(),"printview.php")) { 				// nmc 2007.03.24 - added 
+				if (!strstr(getCurrentURL(),"printview.php")) { 				// nmc 2007.03.24 - added
 					$form_ele = new XoopsFormTextArea(
 						$ele_caption,
 						$form_ele_id,
@@ -208,8 +208,8 @@ class formulizeElementRenderer{
 						$ele_value[1],	//	rows
 						$ele_value[2]	  //	cols
 					);
-				} else {															// nmc 2007.03.24 - added 
-					$form_ele = new XoopsFormLabel ($ele_caption, str_replace("\n", "<br>", $ele_value[0]));	// nmc 2007.03.24 - added 
+				} else {															// nmc 2007.03.24 - added
+					$form_ele = new XoopsFormLabel ($ele_caption, str_replace("\n", "<br>", $ele_value[0]));	// nmc 2007.03.24 - added
 				}
 			break;
 			case 'areamodif':
@@ -266,7 +266,7 @@ class formulizeElementRenderer{
 							if($ele_value[4]) { // limit by user's groups
 								foreach($groups as $gid) { // want to loop so we can get rid of reg users group simply
 									if($gid == XOOPS_GROUP_USERS) { continue; }
-									if(in_array($gid, $scopegroups)) { 
+									if(in_array($gid, $scopegroups)) {
 										$pgroups[] = $gid;
 									}
 								}
@@ -296,7 +296,7 @@ class formulizeElementRenderer{
 					// NEW WAY: if a specific group(s) was specified, and no match with the current user was found, then we return an empty list
 					array_unique($pgroups); // remove duplicate groups from the list
 					
-					if($ele_value[6] AND count($pgroups) > 0) {  
+					if($ele_value[6] AND count($pgroups) > 0) {
 						$pgroupsfilter = " (";
 						$start = true;
 						foreach($pgroups as $thisPgroup) {
@@ -342,9 +342,9 @@ class formulizeElementRenderer{
 					}
 
 					if($pgroupsfilter) { // if there is a groups filter, then join to the group ownership table
-						$sourceValuesQ = "SELECT t1.entry_id, t1.`".$sourceHandle."` FROM ".$xoopsDB->prefix("formulize_".$sourceFormObject->getVar('form_handle'))." AS t1, ".$xoopsDB->prefix("formulize_entry_owner_groups")." AS t2 $parentFormFrom WHERE $pgroupsfilter $conditionsfilter $conditionsfilter_oom $restrictSQL GROUP BY t1.entry_id $sortOrderClause";				
+						$sourceValuesQ = "SELECT t1.entry_id, t1.`".$sourceHandle."` FROM ".$xoopsDB->prefix("formulize_".$sourceFormObject->getVar('form_handle'))." AS t1, ".$xoopsDB->prefix("formulize_entry_owner_groups")." AS t2 $parentFormFrom WHERE $pgroupsfilter $conditionsfilter $conditionsfilter_oom $restrictSQL GROUP BY t1.entry_id $sortOrderClause";
 					} else { // otherwise just query the source table
-						$sourceValuesQ = "SELECT t1.entry_id, t1.`".$sourceHandle."` FROM ".$xoopsDB->prefix("formulize_".$sourceFormObject->getVar('form_handle'))." AS t1 $parentFormFrom WHERE t1.entry_id>0 $conditionsfilter $conditionsfilter_oom $restrictSQL GROUP BY t1.entry_id $sortOrderClause";					
+						$sourceValuesQ = "SELECT t1.entry_id, t1.`".$sourceHandle."` FROM ".$xoopsDB->prefix("formulize_".$sourceFormObject->getVar('form_handle'))." AS t1 $parentFormFrom WHERE t1.entry_id>0 $conditionsfilter $conditionsfilter_oom $restrictSQL GROUP BY t1.entry_id $sortOrderClause";
 					}
 					//print "$sourceValuesQ<br><br>";
 					if(!$isDisabled) {
@@ -407,7 +407,7 @@ class formulizeElementRenderer{
 							fclose($cachedLinkedOptions);
 							$cachedSourceValuesAutocompleteFile[$sourceValuesQ] = $cachedLinkedOptionsFileName;
 							$cachedSourceValuesAutocompleteLength[$sourceValuesQ] = $maxLength;
-						} 
+						}
 					}
 					
 					// if we're rendering an autocomplete box
@@ -453,7 +453,7 @@ class formulizeElementRenderer{
 					}
 					/* ALTERED - 20100318 - freeform - jeff/julian - stop */
 					
-				} 
+				}
 				else // or if we don't have a link...
 				{
 					$selected = array();
@@ -510,7 +510,7 @@ class formulizeElementRenderer{
 														$pgroups[] = $gid;
 													}
 												}
-												if(count($pgroups) > 0) { 
+												if(count($pgroups) > 0) {
 													unset($groups);
 													$groups = $pgroups;
 												} else {
@@ -527,7 +527,7 @@ class formulizeElementRenderer{
 										foreach($allgroupsq as $thisgid) {
 											$groups[] = $thisgid['groupid'];
 										}
-									} 
+									}
 								}
 							}
 							$namelist = gatherNames($groups, $nametype, $ele_value[6], $ele_value[5]);
@@ -640,7 +640,7 @@ class formulizeElementRenderer{
 					$eltmsg = str_replace('"', '\"', stripslashes( $eltmsg ) );
           if($ele_value[8] == 1) {
 						$form_ele->customValidationCode[] = "\nif ( myform.{$eltname}.value == '' ) {\n window.alert(\"{$eltmsg}\");\n myform.{$eltname}_user.focus();\n return false;\n }\n";
-          } elseif($ele_value[0] == 1) { 
+          } elseif($ele_value[0] == 1) {
 						$form_ele->customValidationCode[] = "\nif ( myform.{$eltname}.options[0].selected ) {\n window.alert(\"{$eltmsg}\");\n myform.{$eltname}.focus();\n return false;\n }\n";
 					} elseif($ele_value[0] > 1) {
 						$form_ele->customValidationCode[] = "selection = false;\n";
@@ -676,7 +676,7 @@ class formulizeElementRenderer{
 				}
 				if($this->_ele->getVar('ele_delim') != "") {
 					$delimSetting = $this->_ele->getVar('ele_delim');
-				} 
+				}
 				$delimSetting =& icms_core_DataFilter::undoHtmlSpecialChars($delimSetting);
 				if($delimSetting == "br") { $delimSetting = "<br />"; }
 				$hiddenOutOfRangeValuesToWrite = array();
@@ -804,7 +804,7 @@ class formulizeElementRenderer{
 				}
 				if($this->_ele->getVar('ele_delim') != "") {
 					$delimSetting = $this->_ele->getVar('ele_delim');
-				} 
+				}
 				$delimSetting =& icms_core_DataFilter::undoHtmlSpecialChars($delimSetting);
 				if($delimSetting == "br") { $delimSetting = "<br />"; }
 				$hiddenOutOfRangeValuesToWrite = array();
@@ -1029,7 +1029,7 @@ class formulizeElementRenderer{
 		}
 		if(is_object($form_ele) AND !$isDisabled) {
 			if($previousEntryUI) {
-				$previousEntryUIRendered = "&nbsp;&nbsp;" . $previousEntryUI->render();				
+				$previousEntryUIRendered = "&nbsp;&nbsp;" . $previousEntryUI->render();
 			} else {
 				$previousEntryUIRendered = "";
 			}
@@ -1255,7 +1255,7 @@ class formulizeElementRenderer{
 				return "";
 			}
 		}
-		$entries = $cachedEntries[$screen->getVar('sid')]; 
+		$entries = $cachedEntries[$screen->getVar('sid')];
 		
 		// big assumption below is corresponding captions.  In future there will be more ad hoc ways of describing which elements align to which other ones.
 		// 1. figure out the corresponding element ID based on matching captions

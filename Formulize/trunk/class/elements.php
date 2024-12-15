@@ -42,7 +42,7 @@ class formulizeformulize extends XoopsObject {
 	
 	var $isLinked;
 	
-	function formulizeformulize(){
+	function __construct(){
 		$this->XoopsObject();
 	//	key, data_type, value, req, max, opt
 		$this->initVar("id_form", XOBJ_DTYPE_INT, NULL, false);
@@ -60,7 +60,7 @@ class formulizeformulize extends XoopsObject {
 		$this->initVar("ele_delim", XOBJ_DTYPE_TXTBOX, NULL, true, 255);
 		$this->initVar("ele_forcehidden", XOBJ_DTYPE_INT);
 		$this->initVar("ele_private", XOBJ_DTYPE_INT);
- 		// changed - start - August 19 2005 - jpc 		
+ 		// changed - start - August 19 2005 - jpc
 		//$this->initVar("ele_display", XOBJ_DTYPE_INT);
 		$this->initVar("ele_display", XOBJ_DTYPE_TXTBOX);
 		// changed - end - August 19 2005 - jpc
@@ -74,7 +74,7 @@ class formulizeformulize extends XoopsObject {
 
 class formulizeElementsHandler {
 	var $db;
-	function formulizeElementsHandler(&$db) {
+	function __construct(&$db) {
 		$this->db =& $db;
 	}
 	function &getInstance(&$db) {
@@ -92,7 +92,7 @@ class formulizeElementsHandler {
 		static $cachedElements = array();
 		if(isset($cachedElements[$id])) {
 			return $cachedElements[$id];
-		}	
+		}
 		if ($id > 0 AND is_numeric($id)) {
 			$sql = 'SELECT * FROM '.formulize_TABLE.' WHERE ele_id='.$id;
 			if (!$result = $this->db->query($sql)) {
@@ -124,7 +124,7 @@ class formulizeElementsHandler {
 				if(!is_array($ele_value[2])) {
 					$element->isLinked = strstr($ele_value[2], "#*=:*") ? true : false;
 				}
-			} 
+			}
 			$cachedElements[$id] = $element;
 			return $element;
 		}
@@ -168,7 +168,7 @@ class formulizeElementsHandler {
 				$ele_private,
 				$ele_encrypt,
 				$this->db->quoteString($ele_filtersettings)
-			);            
+			);
             // changed - end - August 19 2005 - jpc
 			}else{
             // changed - start - August 19 2005 - jpc
@@ -229,7 +229,7 @@ class formulizeElementsHandler {
 			$element->setVar('ele_id', $ele_id);
 			if(!$element->getVar('ele_handle')) { // set the handle same as the element id on new elements, as long as the handle wasn't actually passed in with the element
 				$element->setVar('ele_handle', $ele_id);
-				$this->insert($element); 
+				$this->insert($element);
 			}
 		}
 		if($ele_handle === "") {
@@ -237,8 +237,8 @@ class formulizeElementsHandler {
 			$ele_handle = $ele_id;
       while(!$uniqueCheck = $form_handler->isHandleUnique($ele_handle, $ele_id)) {
         $ele_handle = $ele_handle . "_copy";
-      }	    
-			$element->setVar('ele_handle', $ele_handle); 
+      }
+			$element->setVar('ele_handle', $ele_handle);
 			$this->insert($element);
 		}
 		return $ele_id;
@@ -289,7 +289,7 @@ class formulizeElementsHandler {
 		$sql = 'SELECT * FROM '.formulize_TABLE.' WHERE id_form='.$id_form;
 
 
-		if( isset($criteria)) { 
+		if( isset($criteria)) {
 			$sql .= $criteria->render() ? ' AND ('.$criteria->render().')' : '';
 			if( $criteria->getSort() != '' ){
 				$criteriaByClause = ' ORDER BY '.$criteria->getSort().' '.$criteria->getOrder();
@@ -337,7 +337,7 @@ class formulizeElementsHandler {
 	
     function getCount($criteria = null){
 		$sql = 'SELECT COUNT(*) FROM '.formulize_TABLE;
-		if( isset($criteria) ) { 
+		if( isset($criteria) ) {
 			$sql .= ' '.$criteria->renderWhere();
 		}
 		$result = $this->db->query($sql);
@@ -351,7 +351,7 @@ class formulizeElementsHandler {
     function deleteAll($criteria = null){
     	global $xoopsDB;
 		$sql = 'DELETE FROM '.formulize_TABLE;
-		if( isset($criteria) ) { 
+		if( isset($criteria) ) {
 			$sql .= ' '.$criteria->renderWhere();
 		}
 		if( !$result = $this->db->query($sql) ){

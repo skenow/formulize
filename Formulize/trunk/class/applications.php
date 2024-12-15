@@ -33,7 +33,7 @@ global $xoopsDB;
 
 class formulizeApplication extends XoopsObject {
   
-  function formulizeApplication() {
+	function __construct() {
     $this->XoopsObject();
     $this->initVar("appid", XOBJ_DTYPE_INT, NULL, false);
     $this->initVar("name", XOBJ_DTYPE_TXTBOX, NULL, false, 255);
@@ -45,7 +45,7 @@ class formulizeApplication extends XoopsObject {
 
 class formulizeApplicationsHandler {
   var $db;
-	function formulizeApplicationsHandler(&$db) {
+  function __construct(&$db) {
 		$this->db =& $db;
 	}
   
@@ -104,11 +104,11 @@ class formulizeApplicationsHandler {
       if($fid > 0) {
         $sql = 'SELECT * FROM '.$xoopsDB->prefix("formulize_applications").' as t1, '.$xoopsDB->prefix("formulize_application_form_link").' as t2 WHERE t1.appid = t2.appid AND t2.fid = '.$fid.' ORDER BY t1.name';
       } else {
-        $sql = 'SELECT * FROM '.$xoopsDB->prefix("formulize_applications").' ORDER BY name';  
+        $sql = 'SELECT * FROM '.$xoopsDB->prefix("formulize_applications").' ORDER BY name';
       }
     }
     // query the DB for the ids we're supposed to
-    if ($result = $this->db->query($sql)) { 
+    if ($result = $this->db->query($sql)) {
       while($resultArray = $this->db->fetchArray($result)) {
         $newApp = new formulizeApplication();
         $newApp->assignVars($resultArray);

@@ -65,8 +65,7 @@ class csstidy_print
      * @access private
      * @version 1.0
      */
-    function csstidy_print(&$css)
-    {
+    function __construct(&$css) {
         $this->parser    =& $css;
         $this->css       =& $css->css;
         $this->template  =& $css->template;
@@ -328,7 +327,7 @@ class csstidy_print
     }
 
     /**
-     * Get the size of either input or output CSS in KB 
+     * Get the size of either input or output CSS in KB
      * @param string $loc default is "output"
      * @access public
      * @return integer

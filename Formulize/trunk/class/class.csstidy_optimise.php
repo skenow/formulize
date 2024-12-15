@@ -44,7 +44,7 @@ class csstidy_optimise
      * @access private
      * @version 1.0
      */
-    function csstidy_optimise(&$css)
+	function __construct(&$css)
     {
         $this->parser    =& $css;
         $this->css       =& $css->css;
@@ -193,7 +193,7 @@ class csstidy_optimise
                 $this->parser->log('Fixed invalid number: Changed "'.$this->sub_value.'" to "'.$temp.'"','Warning');
             } else {
                 $this->parser->log('Optimised number: Changed "'.$this->sub_value.'" to "'.$temp.'"','Information');
-            }            
+            }
             $this->sub_value = $temp;
         }
         if($this->parser->get_cfg('compress_colors'))
@@ -205,14 +205,14 @@ class csstidy_optimise
                     $this->parser->log('Fixed invalid color name: Changed "'.$this->sub_value.'" to "'.$temp.'"','Warning');
                 } else {
                     $this->parser->log('Optimised color: Changed "'.$this->sub_value.'" to "'.$temp.'"','Information');
-                }                
+                }
                 $this->sub_value = $temp;
             }
         }
     }
     
     /**
-     * Compresses shorthand values. Example: margin:1px 1px 1px 1px -> margin:1px 
+     * Compresses shorthand values. Example: margin:1px 1px 1px 1px -> margin:1px
      * @param string $value
      * @access public
      * @return string
@@ -353,7 +353,7 @@ class csstidy_optimise
             case '#008080': return 'teal';
             case '#c0c0c0': return 'silver';
             case '#808080': return 'gray';
-            case '#f00': return 'red';	
+            case '#f00': return 'red';
         }
 
         return $color;
@@ -527,7 +527,7 @@ class csstidy_optimise
             for($i=0;$i<4;$i++)
             {
                 $return[$shorthands[$property][$i]] = $values[0].$important;
-            }	
+            }
         }
         
         return $return;
@@ -589,7 +589,7 @@ class csstidy_optimise
     }
 
     /**
-     * Merges Shorthand properties again, the opposite of dissolve_4value_shorthands() 
+     * Merges Shorthand properties again, the opposite of dissolve_4value_shorthands()
      * @param array $array
      * @return array
      * @version 1.2
@@ -622,7 +622,7 @@ class csstidy_optimise
                     }
                     unset($return[$value[$i]]);
                 }
-                $return[$key] = csstidy_optimise::shorthand(trim($return[$key].$important));		
+                $return[$key] = csstidy_optimise::shorthand(trim($return[$key].$important));
             }
         }
         return $return;
@@ -711,7 +711,7 @@ class csstidy_optimise
             }
             else $return[$bg_prop] = $default_value.$important;
         }
-        return $return;	
+        return $return;
     }
 
     /**
@@ -768,7 +768,7 @@ class csstidy_optimise
                 $temp = csstidy_optimise::explode_ws(',',$cur_value);
 
                 if(isset($temp[$i]))
-                {					
+                {
                     if($bg_property == 'background-size')
                     {
                         $new_bg_value .= '('.$temp[$i].') ';
@@ -777,7 +777,7 @@ class csstidy_optimise
                     {
                         $new_bg_value .= $temp[$i].' ';
                     }
-                }			
+                }
             }
             
             $new_bg_value = trim($new_bg_value);

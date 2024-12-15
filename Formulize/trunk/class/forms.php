@@ -36,7 +36,7 @@ require_once XOOPS_ROOT_PATH.'/kernel/object.php';
 include_once XOOPS_ROOT_PATH.'/modules/formulize/include/functions.php';
 
 class formulizeForm extends XoopsObject {
-	function formulizeForm($id_form="", $includeAllElements=false){
+	function __construct($id_form="", $includeAllElements=false){
 
 		// validate $id_form
 		global $xoopsDB;
@@ -173,7 +173,7 @@ class formulizeForm extends XoopsObject {
 
 class formulizeFormsHandler {
 	var $db;
-	function formulizeFormsHandler(&$db) {
+	function __construct(&$db) {
 		$this->db =& $db;
 	}
 	function &getInstance(&$db) {
@@ -326,7 +326,7 @@ class formulizeFormsHandler {
 				
 				if( $form_handle == "" ){ // only occurs when forms have no handles specified by the user, which is probably only new forms, because non-new forms would default to the fid (but for new forms, fid is not known yet when insert is called)
 					$formObject->setVar('form_handle', $id_form);
-					$this->insert($formObject, $force); 
+					$this->insert($formObject, $force);
 				}
 				
 				return $id_form;
@@ -340,7 +340,7 @@ class formulizeFormsHandler {
 		$element_order = 0;
 		while($row = $this->db->fetchRow($result)) {
 			$element =& $element_handler->create();
-			$element->setVar('ele_caption', str_replace("_", " ", $row[0])); 
+			$element->setVar('ele_caption', str_replace("_", " ", $row[0]));
 			$element->setVar('ele_desc', "");
 			$element->setVar('ele_colhead', "");
 			$element->setVar('ele_req', 0);
@@ -356,7 +356,7 @@ class formulizeFormsHandler {
 			$element->setVar('ele_type', 'textarea');
 			if( !$element_handler->insert($element) ){
 				return false;
-			}	
+			}
 			unset($element);
 		}
 		$handleUpdateSQL = "UPDATE ".$this->db->prefix("formulize")." SET ele_handle=ele_id WHERE id_form=".intval($fid);
@@ -510,7 +510,7 @@ class formulizeFormsHandler {
 			$newTableSQL .= "`revision_id` bigint(7) unsigned NOT NULL auto_increment,";
 			$newTableSQL .= "`entry_id` int(7) unsigned NOT NULL,";
 		} else {
-			$newTableSQL .= "`entry_id` int(7) unsigned NOT NULL auto_increment,";	
+			$newTableSQL .= "`entry_id` int(7) unsigned NOT NULL auto_increment,";
 		}
 		$newTableSQL .= "`creation_datetime` Datetime NULL default NULL, ";
 		$newTableSQL .= "`mod_datetime` Datetime NULL default NULL, ";
@@ -553,7 +553,7 @@ class formulizeFormsHandler {
 			$newTableSQL .= "PRIMARY KEY (`revision_id`),";
 			$newTableSQL .= "INDEX i_entry_id (entry_id),";
 		} else {
-			$newTableSQL .= "PRIMARY KEY (`entry_id`),";	
+			$newTableSQL .= "PRIMARY KEY (`entry_id`),";
 		}
 		$newTableSQL .= "INDEX i_creation_uid (creation_uid)";
 		$newTableSQL .= ") ENGINE=MyISAM;";
@@ -593,7 +593,7 @@ class formulizeFormsHandler {
 			$dropSQL = "DROP TABLE " . $xoopsDB->prefix("formulize_" . $form_handle."_revisions");
 			if(!$dropRes = $xoopsDB->queryF($dropSQL)) {
 				print "Error: could not remove the revisions table for form $fid";
-			}	
+			}
 		}
 		// remove the entry owner groups info for that form
 		$ownershipSQL = "DELETE FROM " . $xoopsDB->prefix("formulize_entry_owner_groups") . " WHERE fid=$fid";
@@ -669,12 +669,12 @@ class formulizeFormsHandler {
 			$dataType = $fieldStateData['Type'];
 		}
 		$newName = $newName ? $newName : $element->getVar('ele_handle');
-		$updateFieldSQL = "ALTER TABLE " . $xoopsDB->prefix("formulize_" . $formObject->getVar('form_handle')) . " CHANGE `$oldName` `$newName` ". $dataType; 
+		$updateFieldSQL = "ALTER TABLE " . $xoopsDB->prefix("formulize_" . $formObject->getVar('form_handle')) . " CHANGE `$oldName` `$newName` ". $dataType;
 		if(!$updateFieldRes = $xoopsDB->queryF($updateFieldSQL)) {
 		  return false;
 		}
 		if($this->revisionsTableExists($element->getVar('id_form'))) {
-			$updateFieldSQL = "ALTER TABLE " . $xoopsDB->prefix("formulize_" . $formObject->getVar('form_handle')."_revisions") . " CHANGE `$oldName` `$newName` ". $dataType; 
+			$updateFieldSQL = "ALTER TABLE " . $xoopsDB->prefix("formulize_" . $formObject->getVar('form_handle')."_revisions") . " CHANGE `$oldName` `$newName` ". $dataType;
 			if(!$updateFieldRes = $xoopsDB->queryF($updateFieldSQL)) {
 			  print "Error: could not update the field name for $oldName in form ".$formObject->getVar('form_handle');
 			  return false;
@@ -835,7 +835,7 @@ class formulizeFormsHandler {
 			}
 
 			$likeBits = (strstr(strtoupper($filterSettings[1][$i]), "LIKE") AND substr($filterSettings[2][$i], 0, 1) != "%" AND substr($filterSettings[2][$i], -1) != "%") ? "%" : "";
-			$termToUse = str_replace("{USER}", $uid, $filterSettings[2][$i]); 
+			$termToUse = str_replace("{USER}", $uid, $filterSettings[2][$i]);
 			if (ereg_replace("[^A-Z{}]","", $termToUse) === "{TODAY}") {
 				$number = ereg_replace("[^0-9+-]","", $termToUse);
 				$termToUse = date("Y-m-d",mktime(0, 0, 0, date("m") , date("d")+$number, date("Y")));
@@ -912,7 +912,7 @@ class formulizeFormsHandler {
 		if(!$result = $this->db->queryF($replaceSQL)) {
 		  print "error setting the form_handle for the new form.<br>".icms::$xoopsDB->error();
 		  return false;
-		}		
+		}
 	
 		$getelements = q("SELECT * FROM " . $this->db->prefix("formulize") . " WHERE id_form = $fid");
 		$oldNewEleIdMap = array();
@@ -969,7 +969,7 @@ class formulizeFormsHandler {
 		}
 
 	  // Need to create the new data table now -- July 1 2007
-    if(!$tableCreationResult = $this->createDataTable($newfid, $fid, $oldNewEleIdMap)) { 
+    if(!$tableCreationResult = $this->createDataTable($newfid, $fid, $oldNewEleIdMap)) {
       print "Error: could not make the necessary new datatable for form " . $newfid . ".  Please delete the cloned form and report this error to <a href=\"mailto:formulize@freeformsolutions.ca\">Freeform Solutions</a>.<br>".icms::$xoopsDB->error();
       return false;
     }

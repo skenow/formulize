@@ -36,7 +36,7 @@ require_once XOOPS_ROOT_PATH.'/kernel/object.php';
 include_once XOOPS_ROOT_PATH.'/modules/formulize/include/functions.php';
 
 class formulizeFramework extends XoopsObject {
-	function formulizeFramework($frid=""){
+	function __construct($frid=""){
 
 		// validate $id_form
 		global $xoopsDB;
@@ -109,7 +109,7 @@ class formulizeFramework extends XoopsObject {
 		$ret[] = 0; // frid
 		$ret[] = array(); //fids
 		$ret[] = ""; // name
-		$ret[] = array(); // handles 
+		$ret[] = array(); // handles
 		$ret[] = array(); // element_ids
 		$ret[] = array(); // links
 		$ret[] = array(); // formHandles
@@ -164,7 +164,7 @@ class formulizeFramework extends XoopsObject {
 }
 
 class formulizeFrameworkLink extends XoopsObject {
-	function formulizeFrameworkLink($lid=""){
+	function __construct($lid=""){
 		
 		// validate $lid
 		global $xoopsDB;
@@ -179,7 +179,7 @@ class formulizeFrameworkLink extends XoopsObject {
 			$common = "";
 			$relationship = "";
 			$unified_display = "";
-		} else {		
+		} else {
 			$link_q = q("SELECT * FROM " . $xoopsDB->prefix("formulize_framework_links") . " WHERE fl_id=\"" . icms::$xoopsDB->escape($lid). "\"");
 			if(!isset($link_q[0])) {
 				// set empty defaults
@@ -224,7 +224,7 @@ class formulizeFrameworkLink extends XoopsObject {
 
 class formulizeFrameworksHandler {
 	var $db;
-	function formulizeFrameworksHandler(&$db) {
+	function __construct(&$db) {
 		$this->db =& $db;
 	}
 	function &getInstance(&$db) {

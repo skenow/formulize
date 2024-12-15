@@ -40,7 +40,7 @@ class formulizeDataHandler  {
 	var $fid; // the form this Data Handler object is attached to
 
 	// $fid must be an id
-	function formulizeDataHandler($fid){
+	function __construct($fid){
 		$this->fid = intval($fid);
 	}
 	
@@ -117,7 +117,7 @@ class formulizeDataHandler  {
 				$newElement = $element_handler->get($map[$elementObject->getVar('ele_handle')]);
 				$newEleValue = $newElement->getVar('ele_value');
 				$newEleValue[2] = $targetForm."#*=:*".$targetHandleMap[$boxproperties[1]]; // change the element pointer
-				$newElement->setVar('ele_value', $newEleValue);				
+				$newElement->setVar('ele_value', $newEleValue);
 				if(!$element_handler->insert($newElement)) { // update the element properties in the database
 					print "Error: could not relink linked selectbox element ".$map[$elementObject->getVar('ele_handle')]." to the selected new target form.<br>";
 					return false;
@@ -429,7 +429,7 @@ class formulizeDataHandler  {
 			$scopeFilter = $this->_buildScopeFilter("", $scope_groups);
 			$sql = "SELECT t1.entry_id FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " AS t1, " . $xoopsDB->prefix("formulize_entry_owner_groups") . " AS t2 WHERE t1.`". $element->getVar('ele_handle') . "` $operator $queryValue $scopeFilter GROUP BY t1.entry_id ORDER BY t1.entry_id";
 		} else {
-			$sql = "SELECT entry_id FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE `". $element->getVar('ele_handle') . "` $operator $queryValue GROUP BY entry_id ORDER BY entry_id";			
+			$sql = "SELECT entry_id FROM " . $xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')) . " WHERE `". $element->getVar('ele_handle') . "` $operator $queryValue GROUP BY entry_id ORDER BY entry_id";
 		}
 		if(!$res = $xoopsDB->query($sql)) {
 			return false;
@@ -466,7 +466,7 @@ class formulizeDataHandler  {
 				} else {
 					$cachedValues[$handle][$entry] = false;
 				}
-			} 
+			}
 			$resultArray[] = $cachedValues[$handle][$entry];
 		}
 		return $resultArray;
@@ -488,12 +488,12 @@ class formulizeDataHandler  {
 			$sql = "SELECT `$handle`, `entry_id` FROM ".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')).$sort;
 			if($res = $xoopsDB->query($sql)) {
 				while($array = $xoopsDB->fetchArray($res)) {
-					$cachedValues[$handle][$array['entry_id']] = $array[$handle];	
+					$cachedValues[$handle][$array['entry_id']] = $array[$handle];
 				}
 			} else {
 				$cachedValues[$handle] = false;
 			}
-		} 
+		}
 		return $cachedValues[$handle];
 	}
 		
@@ -557,7 +557,7 @@ class formulizeDataHandler  {
 				return false;
 			}
 		  }
-		} 
+		}
 		$start = true;
 		$ownerInsertSQLArray = array();
 		$ownerInsertSQLBase = "INSERT INTO " . $xoopsDB->prefix("formulize_entry_owner_groups") . " (`fid`, `entry_id`, `groupid`) VALUES ";
@@ -576,7 +576,7 @@ class formulizeDataHandler  {
 				$ownerGroups[] = XOOPS_GROUP_ANONYMOUS;
 			}
 			foreach($ownerGroups as $index=>$thisGroup) { // add this user's groups and this entry id to the insert statement
-				if(!$start) { 
+				if(!$start) {
 					$ownerInsertSQLCurrent .= ", "; // add a comma between successive inserts
 				}
 				$start = false;
@@ -589,7 +589,7 @@ class formulizeDataHandler  {
 			}
 		}
 		if(!$start) {
-			$ownerInsertSQLArray[] = $ownerInsertSQLCurrent;	
+			$ownerInsertSQLArray[] = $ownerInsertSQLCurrent;
 		}
 		foreach($ownerInsertSQLArray as $ownerInsertSQL) {
 			if(!$ownerInsertRes = $xoopsDB->queryF($ownerInsertSQL)) {
@@ -617,7 +617,7 @@ class formulizeDataHandler  {
 				$cachedEntryOwnerGroups[$this->fid][$entry_id]=$groupArray;
 			} else {
 				$cachedEntryOwnerGroups[$this->fid][$entry_id]=false;
-			}	
+			}
 		}
 		return $cachedEntryOwnerGroups[$this->fid][$entry_id];
 		
@@ -711,7 +711,7 @@ class formulizeDataHandler  {
 					} else {
 						exit("Error: count not determine max value for use in element $seqElement.  SQL:<br>$maxSQL<br>");
 					}
-				}	
+				}
 			}
 		}
 
@@ -740,7 +740,7 @@ class formulizeDataHandler  {
 			if($updateMetadata) {
 				$sql .= "mod_datetime=NOW(), mod_uid=".intval($uid);
 				$needComma = true;
-			} 
+			}
 			foreach($values as $id=>$value) { // note, id might be handle or element id...this is why we choose how we're going to map the info above (at one time, it had to be element id, hence the name)
 				if($needComma) {
 					$sql .= ", ";
@@ -838,7 +838,7 @@ class formulizeDataHandler  {
 		// replace *=+*: in the field with ", " but only on the part of the string after the first five characters (which will omit the *=+*: that preceeds all items)
     $sql = "UPDATE ".$xoopsDB->prefix("formulize_".$formObject->getVar('form_handle')). " SET `".$element->getVar('ele_handle')."` = REPLACE(RIGHT(`".$element->getVar('ele_handle')."`, CHAR_LENGTH(`".$element->getVar('ele_handle')."`)-5), \"*=+*:\", \", \")";
 		if(!$res = $xoopsDB->queryF($sql)) {
-			return false; 
+			return false;
 		}
 		return true;
 	}
@@ -862,7 +862,7 @@ class formulizeDataHandler  {
 			$aesFunction = 'AES_DECRYPT';
 		} else {
 			$dataType = 'blob';
-			$aesFunction = 'AES_ENCRYPT';			
+			$aesFunction = 'AES_ENCRYPT';
 		}
 		global $xoopsDB;
 		$formObject = $form_handler->get($element->getVar('id_form'));
@@ -923,14 +923,14 @@ class formulizeDataHandler  {
 			if($prefix) {
 				$currentValues = explode($prefix, ltrim($array[$element->getVar('ele_handle')], $prefix)); // since prefix is at the beginning of the string, we need to remove it before doing the explode
 			} else {
-				$currentValues = array(0=>$array[$element->getVar('ele_handle')]);				
+				$currentValues = array(0=>$array[$element->getVar('ele_handle')]);
 			}
 			for($i=0;$i<count($newValues);$i++) {
 				if($newValues[$i] === $oldValues[$i]) { // ignore values that haven't changed
 					continue;
 				}
 				$foundIndex = array();
-				$key = array_search($oldValues[$i], $currentValues); 
+				$key = array_search($oldValues[$i], $currentValues);
 				if($key !== false AND !isset($foundIndex[$key])) { // if we find one of the old values in the current values, then swap in the new value it should have
 					// need to check that the match wasn't a 0 or on a string, etc...cannot use strict matching in array_search since that screws up all matches since the values don't really have their correct type owing to having been spun through lots of functions by now
 					if(!is_numeric($currentValues[$key]) AND $oldValues[$i] == '0') { continue; }

@@ -39,7 +39,7 @@ include_once XOOPS_ROOT_PATH.'/modules/formulize/include/functions.php';
 
 class formulizeAdvancedCalculation extends xoopsObject {
 
-	function formulizeAdvancedCalculation() {
+	function __construct() {
 		$this->initVar('acid', XOBJ_DTYPE_INT, '', true);
 		$this->initVar('fid', XOBJ_DTYPE_INT, '', true);
 		$this->initVar('name', XOBJ_DTYPE_TXTBOX, NULL, false, 255);
@@ -134,7 +134,7 @@ EOD;
 
 class formulizeAdvancedCalculationHandler {
   var $db;
-  	function formulizeAdvancedCalculationHandler(&$db) {
+  function __construct(&$db) {
 		$this->db =& $db;
 	}
   
@@ -211,7 +211,7 @@ class formulizeAdvancedCalculationHandler {
       $isError = true;
     }
     return $isError ? false : true;
-  } 
+  }
   
   function cloneProcedure($acid) {
     global $xoopsDB;
@@ -301,7 +301,7 @@ class formulizeAdvancedCalculationHandler {
     $groups = $xoopsUser->getGroups();
     if(in_array(XOOPS_GROUP_ADMIN, $groups)) {
 	return false;
-    }    
+    }
     if( file_exists( $fileName ) AND !isset($_GET['formulize_bypassCachedResults']) ) {
       // cached version found
       $cachedVersion = unserialize( file_get_contents( $fileName ) );
@@ -541,7 +541,7 @@ class formulizeAdvancedCalculationHandler {
 	    if(strstr($activeOption, "|")) {
 		$activeOptionParts = explode("|", $activeOption);
 		$activeOption = $activeOptionParts[0];
-	    } 
+	    }
 	    $activeGroupings[$groups[$item[0]]] = array('metadata'=>$filtersAndGroupings[$groups[$item[0]]], 'value'=>$activeOption);
 	    $activeGroupings[$groups[$item[0]]]['metadata']['title'] = $filtersAndGroupingsTitles[$groups[$item[0]]];
 	  } else {
@@ -613,7 +613,7 @@ class formulizeAdvancedCalculationHandler {
 		$user_defined_input = str_replace("timerOn();","",$user_defined_input);
 	    }
     
-	    reportProceduresTime("Start of Procedure");    
+	    reportProceduresTime("Start of Procedure");
 	    eval($user_defined_input);
 	    
 	    reportProceduresTime("Finished processing the input instructions");
@@ -625,7 +625,7 @@ class formulizeAdvancedCalculationHandler {
 		$code = $advCalcObject->genBasic( $step );
 	      }
 	      eval($code);
-	      reportProceduresTime("Finished processing step '".$steptitles[$stepKey]."'", $totalNumberOfRecords);  
+	      reportProceduresTime("Finished processing step '".$steptitles[$stepKey]."'", $totalNumberOfRecords);
 	    }
     
 	    eval($user_defined_output);
@@ -784,7 +784,7 @@ class formulizeAdvancedCalculationHandler {
 		$groupCombinations[$thisAgeGroup] = array();
 	      }
 	    }
-	}	
+	}
 
     } elseif( $fltr_grp['type']['kind'] == 2 AND $_POST[ $acid."_".$fltr_grp['handle'] ] == '' AND $_POST[ $acid."_".$fltr_grp['handle'] ] !== 0 ) { // Select
       foreach( $fltr_grp['type']['options'] as $option ) {
@@ -895,7 +895,7 @@ class formulizeAdvancedCalculationHandler {
 		if($quarter == 0) { // first calendar quarter is considered fourth quarter of previous year
 		    $quarter = 4;
 		    $year--;
-		} 
+		}
 	    }
 	    return "Q$quarter $year";
 	    break;
@@ -1009,7 +1009,7 @@ class formulizeAdvancedCalculationHandler {
     $kind = $fltr_grp["type"]["kind"];
     $form = $fltr_grp["form"];
 
-    $elementUnderlyingField = $form ? "element".$form : "no-underlying-element"; 
+    $elementUnderlyingField = $form ? "element".$form : "no-underlying-element";
 
     if( $kind == 1 ) {
       // first param is caption, we can skip that because the front end person will embed this somewhere with a caption of their own attached
@@ -1141,7 +1141,7 @@ class formulizeAdvancedCalculationHandler {
   function _getFilterOptionsCheckboxStatus($fltr_grp, $index, $elementName) {
     $value = 0; // default to nothing selected, unless we pick up something below...
     if(isset($_POST[$elementName][$index])) { // if selections for this filter were sent from the form...
-        $value = $_POST[$elementName][$index];    
+        $value = $_POST[$elementName][$index];
     } elseif(isset($_GET[$elementName][$index])) { // or if they were set in the URL...
         $value = $_GET[$elementName][$index];
     } elseif(count($_POST)==0 AND !isset($_GET[$elementName])) { // if no form submission at all and nothing set in the URL, gather defaults
@@ -1189,7 +1189,7 @@ class formulizeAdvancedCalculationHandler {
     } else {
       $checked = '';
     }
-    $elementUnderlyingField = $fltr_grp["form"] ? "element".$fltr_grp["form"] : "no-underlying-element"; 
+    $elementUnderlyingField = $fltr_grp["form"] ? "element".$fltr_grp["form"] : "no-underlying-element";
     $html = '<input type="checkbox" id="' . $elementArrayName . '" class="'. $elementUnderlyingField . ' ' .  $elementName . '_'.$fltr_grp_index.'" name="' . $elementArrayName . '" value="' . $fltr_grp_index . '"' . $checked . '>';
 
     // for checkboxes, add some jquery so we can autoselect the grouping option if the user selects more than one choice
@@ -1207,7 +1207,7 @@ jQuery(document).ready(function() {
     });
 });
 
-</script>\n\n    
+</script>\n\n
 ";
 	$html .= $jQuery;
     }
@@ -1331,7 +1331,7 @@ jQuery(document).ready(function() {
   
 }
 
-// THIS FUNCTION RETURNS THE NECESSARY SQL, INSIDE ' AND ( ) ' TO 
+// THIS FUNCTION RETURNS THE NECESSARY SQL, INSIDE ' AND ( ) ' TO
 function groupScopeFilter($handle, $alias="") {
     $form_handler = icms_getModuleHandler('forms', 'formulize');
     $formObject = $form_handler->getByHandle($handle);
@@ -1347,14 +1347,14 @@ function groupScopeFilter($handle, $alias="") {
 	}
         $scopeFilter = " EXISTS(SELECT 1 FROM ".$xoopsDB->prefix("formulize_entry_owner_groups")." AS scope WHERE (scope.entry_id=".$alias."entry_id AND scope.fid=".intval($fid).") AND (scope.groupid = ".implode(" OR scope.groupid = ", $groups).")) ";
     }
-    return $scopeFilter; 
+    return $scopeFilter;
 }
 
 //This function displays the processing time since the last time it was called, with a label for the current unit that was just completed
 //Optionally, a number can be passed representing the number of event/items/actions/loop iterations that have happened since the last time this was called, which will cause an average time to be displayed as well as elapsed time
 function reportProceduresTime($label, $averageOverThisNumber=0) {
     if(!isset($GLOBALS['formulize_procedureTimerOn'])) { return; }
-    static $time; 
+    static $time;
     static $totalTime;
     if(!$time) {
 	$time = round(microtime(true),8);
@@ -1414,7 +1414,7 @@ function createProceduresTable($array, $permTableName = "") {
 	    $fieldType = "datetime NULL default NULL";
 	    $indexList[] = "INDEX i_".$fieldName." ($fieldName)";
 	} else {
-	    $fieldType = "text NULL default NULL";	    
+	    $fieldType = "text NULL default NULL";
 	}
 	$sql .= "`$fieldName` $fieldType,";
 	$fieldList[]  = $fieldName;

@@ -40,7 +40,7 @@ include_once XOOPS_ROOT_PATH.'/modules/formulize/include/functions.php';
 
 class formulizeListOfEntriesScreen extends formulizeScreen {
 
-	function formulizeListOfEntriesScreen() {
+	function __construct() {
 		$this->formulizeScreen();
                 $this->initVar("dobr", XOBJ_DTYPE_INT, 1, false);
                 $this->initVar("dohtml", XOBJ_DTYPE_INT, 1, false);
@@ -69,7 +69,7 @@ class formulizeListOfEntriesScreen extends formulizeScreen {
                 $this->initVar("usesave", XOBJ_DTYPE_TXTBOX, NULL, false, 255);
                 $this->initVar("usedeleteview", XOBJ_DTYPE_TXTBOX, NULL, false, 255);
                 $this->initVar("useheadings", XOBJ_DTYPE_INT);
-                $this->initVar("usesearch", XOBJ_DTYPE_INT); 
+                $this->initVar("usesearch", XOBJ_DTYPE_INT);
                 $this->initVar("usecheckboxes", XOBJ_DTYPE_INT); // 0 is default, 1 is all, 2 is none
                 $this->initVar("useviewentrylinks", XOBJ_DTYPE_INT);
                 $this->initVar("usescrollbox", XOBJ_DTYPE_INT);
@@ -80,7 +80,7 @@ class formulizeListOfEntriesScreen extends formulizeScreen {
                 $this->initVar("desavetext", XOBJ_DTYPE_TXTBOX, NULL, false, 255);
                 $this->initVar("columnwidth", XOBJ_DTYPE_INT);
                 $this->initVar("textwidth", XOBJ_DTYPE_INT);
-                $this->initVar("customactions", XOBJ_DTYPE_ARRAY); 
+                $this->initVar("customactions", XOBJ_DTYPE_ARRAY);
                 // CUSTOM ACTIONS
                 // multidimensional array, can have multiple actions and then multiple effects within each action
                 // array[actionid][handle]
@@ -104,7 +104,7 @@ class formulizeListOfEntriesScreen extends formulizeScreen {
 
 class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 	var $db;
-	function formulizeListOfEntriesScreenHandler(&$db) {
+	function __construct(&$db) {
 		$this->db =& $db;
 	}
 	function &getInstance(&$db) {
@@ -221,7 +221,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 								$viewentryscreenDefault = $viewentryscreenDefault === 0 ? "none" : $viewentryscreenDefault; // if the legacy value 0 is present, then convert that to "none" so the right value is selected by default in the list
                 // get the available screens
                 $screen_handler = icms_getModuleHandler('screen', 'formulize');
-                $viewentryscreenOptionsDB = $screen_handler->getObjects(new Criteria("type", "multiPage"), $fid); 
+                $viewentryscreenOptionsDB = $screen_handler->getObjects(new Criteria("type", "multiPage"), $fid);
                 $viewentryscreenOptions["none"] = _AM_FORMULIZE_SCREEN_LOE_VIEWENTRYSCREEN_DEFAULT;
                 foreach($viewentryscreenOptionsDB as $thisViewEntryScreenOption) {
                     $viewentryscreenOptions[$thisViewEntryScreenOption->getVar('sid')] = printSmart(trans($thisViewEntryScreenOption->getVar('title')), 100);
@@ -534,8 +534,8 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
                 $vars['usesave'] = $_POST['usesave'];
                 $vars['usedeleteview'] = $_POST['usedeleteview'];
                 $vars['useheadings'] = $_POST['useheadings'];
-                $vars['usesearch'] = $_POST['usesearch']; 
-                $vars['usecheckboxes'] = $_POST['usecheckboxes']; 
+                $vars['usesearch'] = $_POST['usesearch'];
+                $vars['usecheckboxes'] = $_POST['usecheckboxes'];
                 $vars['useviewentrylinks'] = $_POST['useviewentrylinks'];
                 $vars['usescrollbox'] = $_POST['usescrollbox'];
                 $vars['usesearchcalcmsgs'] = $_POST['usesearchcalcmsgs'];
@@ -741,7 +741,7 @@ function addCustomButtonEffect($caid, $effectid, $thisCustomAction, $allFids, $e
 	} elseif(isset($_POST['applyto_'.$caid]) AND substr($_POST['applyto_'.$caid], 0, 4) == "new_") {
 	    $thisEffectFid = substr($_POST['applyto_'.$caid], 4);
 	} elseif(strstr($applyToDefault, "new_per_selected_")) {
-	    $thisEffectFid = substr($applyToDefault, 17);            
+	    $thisEffectFid = substr($applyToDefault, 17);
 	} elseif(strstr($applyToDefault, "new_")) {
 	    $thisEffectFid = substr($applyToDefault, 4);
 	} else {

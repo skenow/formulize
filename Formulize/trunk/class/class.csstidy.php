@@ -135,7 +135,7 @@ var $settings = array();
  * - instr = in string (started at " or ' or ( )
  * - ic = in comment (ignore everything)
  * - at = in @-block
- * 
+ *
  * @var string
  * @access private
  */
@@ -251,8 +251,7 @@ var $line = 1;
  * @access private
  * @version 1.2
  */
-function csstidy()
-{	
+function __construct() {
 	$this->settings['remove_bslash'] = true;
 	$this->settings['compress_colors'] = true;
 	$this->settings['compress_font-weight'] = true;
@@ -275,7 +274,7 @@ function csstidy()
 
 /**
  * Get the value of a setting.
- * @param string $setting 
+ * @param string $setting
  * @access public
  * @return mixed
  * @version 1.0
@@ -394,7 +393,7 @@ function _unicode(&$string, &$i)
 }
 
 /**
- * Loads a new template 
+ * Loads a new template
  * @param string $content either filename (if $from_file == true), content of a template file, "high_compression", "highest_compression", "low_compression", or "default"
  * @param bool $from_file uses $content as filename if true
  * @access public
@@ -424,7 +423,7 @@ function load_template($content, $from_file=true)
 }
 
 /**
- * Starts parsing from URL 
+ * Starts parsing from URL
  * @param string $url
  * @access public
  * @version 1.0
@@ -449,7 +448,7 @@ function is_token(&$string, $i)
 
 
 /**
- * Parses CSS in $string. The code is saved as array in $this->css 
+ * Parses CSS in $string. The code is saved as array in $this->css
  * @param string $string the CSS code
  * @access public
  * @return bool
@@ -574,7 +573,7 @@ function parse($string) {
                     $this->selector = '';
                     $this->sel_separate = array();
                 }
-                elseif($string{$i} == ',') 
+                elseif($string{$i} == ',')
                 {
                     $this->selector = trim($this->selector).',';
                     $this->sel_separate[] = strlen($this->selector);
@@ -707,7 +706,7 @@ function parse($string) {
                     if($this->sub_value != '') {
                         $this->sub_value_arr[] = $this->sub_value;
                         $this->sub_value = '';
-                    }                
+                    }
                         
                     $this->value = implode(' ',$this->sub_value_arr);
 
@@ -745,7 +744,7 @@ function parse($string) {
                     $this->status = 'is';
                     $this->invalid_at = false;
                     $this->selector = '';
-                }	
+                }
             }
             elseif(!$pn)
             {
@@ -860,7 +859,7 @@ function explode_selectors()
  * @return bool
  * @version 1.02
  */
-function escaped(&$string,$pos) 
+function escaped(&$string,$pos)
 {
 	return !(@($string{$pos-1} != '\\') || csstidy::escaped($string,$pos-1));
 }
@@ -875,7 +874,7 @@ function escaped(&$string,$pos)
  * @version 1.2
  */
 function css_add_property($media,$selector,$property,$new_val)
-{   
+{
     if($this->get_cfg('preserve_css') || trim($new_val) == '') {
         return;
     }

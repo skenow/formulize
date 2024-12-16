@@ -160,7 +160,7 @@ if( $_POST['op'] != 'upform' && $op != 'addform'){
 		<tr><td class="head" ><center>'._FORM_TITLE.'</center></td>
 		<td class="even"><input maxlength="255" size="30" id="newtitle" name="newtitle" type="text"></td></tr>';
 
-	}		
+	}
 
 	if(!isset($_GET['table'])) {
 		// new singleentry ui
@@ -171,15 +171,15 @@ if( $_POST['op'] != 'upform' && $op != 'addform'){
 		
 		$multiflag = 0;
 		echo '<input type=radio name=singleentry value=group' ;
-		if($title !='' && $singleentry == 'group') { 
-			echo ' CHECKED'; 
+		if($title !='' && $singleentry == 'group') {
+			echo ' CHECKED';
 			$multiflag = 1;
 		}
 		echo '>'._FORM_SINGLE_GROUP.'<br>';
 		
 		echo '<input type=radio name=singleentry value=on' ;
-		if($title !='' && $singleentry == 'on') { 
-			echo ' CHECKED'; 
+		if($title !='' && $singleentry == 'on') {
+			echo ' CHECKED';
 			$multiflag = 1;
 		}
 		echo '>'._FORM_SINGLE_ON.'<br>';
@@ -188,7 +188,7 @@ if( $_POST['op'] != 'upform' && $op != 'addform'){
 		if($title !='' && $multiflag==0) { echo ' CHECKED'; }
 		echo '>'._FORM_SINGLE_MULTI;
 	
-		echo '</td>'; 
+		echo '</td>';
 	
 		echo '</tr>';
 	}elseif($title == '') {
@@ -209,28 +209,28 @@ echo '<tr>
 		$headlistarray = explode("*=+*:", $headerlist);
 		//print_r($headlistarray);
 		//print"88";
-	}	
+	}
 
 	echo '<select name="headerlist[]" size="10" multiple>';
 	if(!isset($_GET['table'])) {
 		echo "<option value=creation_uid";
-		if($title != '' && (in_array('creation_uid', $headlistarray) OR in_array('uid', $headlistarray))) {echo " SELECTED";}  
+		if($title != '' && (in_array('creation_uid', $headlistarray) OR in_array('uid', $headlistarray))) {echo " SELECTED";}
 		echo ">" . _formulize_DE_CALC_CREATOR . "</option>";
 	
 		echo "<option value=mod_uid";
-		if($title != '' && (in_array('mod_uid', $headlistarray) OR in_array('proxyid', $headlistarray))) {echo " SELECTED";}  
+		if($title != '' && (in_array('mod_uid', $headlistarray) OR in_array('proxyid', $headlistarray))) {echo " SELECTED";}
 		echo ">" . _formulize_DE_CALC_MODIFIER. "</option>";
 	
 		echo "<option value=creation_datetime";
-		if($title != '' && (in_array('creation_datetime', $headlistarray) OR in_array('creation_date', $headlistarray))) {echo " SELECTED";}  
+		if($title != '' && (in_array('creation_datetime', $headlistarray) OR in_array('creation_date', $headlistarray))) {echo " SELECTED";}
 		echo ">" . _formulize_DE_CALC_CREATEDATE . "</option>";
 	
 		echo "<option value=mod_datetime";
-		if($title != '' && (in_array('mod_datetime', $headlistarray) OR in_array('mod_date', $headlistarray))) {echo " SELECTED";}  
+		if($title != '' && (in_array('mod_datetime', $headlistarray) OR in_array('mod_date', $headlistarray))) {echo " SELECTED";}
 		echo ">" . _formulize_DE_CALC_MODDATE . "</option>";
 					
 					echo "<option value=creator_email";
-		if($title != '' && in_array('creator_email', $headlistarray)) {echo " SELECTED";}  
+		if($title != '' && in_array('creator_email', $headlistarray)) {echo " SELECTED";}
 		echo ">" . _formulize_DE_CALC_CREATOR_EMAIL . "</option>";
 	}
 
@@ -249,8 +249,8 @@ echo '<tr>
 		while ( $rowjwe = $xoopsDB->fetchRow ( $resjwe ) ) {
 			echo "<option value=\"" . $rowjwe[1] . "\"";
 			// check id and caption, since legacy systems will be using the caption
-			// caption will not match if a form has recently been translated to another language, but once the headerlist is specified from scratch now, it will always be remembered since ids are now stored 
-			if($title != '' && (in_array($rowjwe[1], $headlistarray) OR in_array($rowjwe[0], $headlistarray))) {echo " SELECTED";}  
+			// caption will not match if a form has recently been translated to another language, but once the headerlist is specified from scratch now, it will always be remembered since ids are now stored
+			if($title != '' && (in_array($rowjwe[1], $headlistarray) OR in_array($rowjwe[0], $headlistarray))) {echo " SELECTED";}
 			echo '>';
 			if($rowjwe[2] != "") {
 				echo printSmart(htmlspecialchars(trans($rowjwe[2])));
@@ -291,11 +291,11 @@ echo '</table>
 	</table>
 	';
 }
-	if ($title != '' AND !isset($_GET['table'])) { 	
+	if ($title != '' AND !isset($_GET['table'])) {
 		$hidden_op = new XoopsFormHidden('op', 'upform');
 		echo $hidden_op->render();
 	}
-if(($title != '' AND !isset($_GET['table'])) OR $title == '') {	
+if(($title != '' AND !isset($_GET['table'])) OR $title == '') {
 	echo '</form>';
 }
 
@@ -318,7 +318,7 @@ if(isset($_GET['table'])) {
 
 // Future use of smartobject planned...
 /*
-// Include SmartObject framework 
+// Include SmartObject framework
 include_once XOOPS_ROOT_PATH.'/modules/smartobject/class/smartloader.php';
 include_once(SMARTOBJECT_ROOT_PATH . "class/smartobjectcategory.php");
 
@@ -404,10 +404,10 @@ print "</table></center></form>\n";
 	// navigation elements for bottom of page -- jwe 01/06/05
 	echo '<center><table><tr>';
 	
-	if($title != '' AND !isset($_GET['table'])) { 
+	if($title != '' AND !isset($_GET['table'])) {
 		echo '<td valign=top><center><a href="../admin/index.php?title='.$title.'">' . _AM_EDIT_ELEMENTS . ' <br><img src="../images/kedit.png"></a></center></td>';
 		echo '<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-	}		
+	}
 	
 	echo '<td valign=top><center><a href="../admin/formindex.php">' . _AM_GOTO_MAIN . ' <br><img src="../images/formulize.gif" height=35></a></center></td>';
 	echo '</tr></table></center>';
@@ -453,11 +453,11 @@ function addform()
 	}
 	
 	$title = stripslashes($title);
-	$title = eregi_replace ("'", "`", $title);
-	$title = eregi_replace ("&quot;", "`", $title);
-	$title = eregi_replace ("&#039;", "`", $title);
-	$title = eregi_replace ('"', "`", $title);
-	$title = eregi_replace ('&', "_", $title);
+	$title = str_replace ("'", "`", $title);
+	$title = str_replace ("&quot;", "`", $title);
+	$title = str_replace ("&#039;", "`", $title);
+	$title = str_replace ('"', "`", $title);
+	$title = str_replace ('&', "_", $title);
 
 	// updated to handle new params -- jwe 7/25/07 , 7/28/04
 	$sql = sprintf("INSERT INTO %s (desc_form, singleentry, tableform) VALUES ('%s', '%s', '%s')", $xoopsDB->prefix("formulize_id"), $title, $singleentry, icms::$xoopsDB->escape($_POST['tablename']));
@@ -512,7 +512,7 @@ function addform()
 			if( !$formulize_mgr->insert($element) ){
 				xoops_cp_header();
 				echo $element->getHtmlErrors();
-			}	
+			}
 			unset($element);
 		}
 		$handleUpdateSQL = "UPDATE ".$xoopsDB->prefix("formulize")." SET ele_handle=ele_id WHERE id_form=".intval($newfid);

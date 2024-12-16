@@ -69,7 +69,7 @@ if($_POST['element_delimit']) {
   }
 }
 if($ele_type == "date" AND $processedValues['elements']['ele_value'][0] != "YYYY-mm-dd" AND $processedValues['elements']['ele_value'][0] != "") {
-	if(ereg_replace("[^A-Z{}]","", $processedValues['elements']['ele_value'][0]) === "{TODAY}") {
+	if(preg_replace("[^A-Z{}]","", $processedValues['elements']['ele_value'][0]) === "{TODAY}") {
 	  $processedValues['elements']['ele_value'][0] = $processedValues['elements']['ele_value'][0];
 	} else {
 	  $processedValues['elements']['ele_value'][0] = date("Y-m-d", strtotime($processedValues['elements']['ele_value'][0]));
@@ -166,7 +166,7 @@ if($ele_type == "select") {
   
   $conditionsDeleteParts = explode("_", $_POST['optionsconditionsdelete']);
   $deleteTarget = $conditionsDeleteParts[1];
-  if($_POST['optionsconditionsdelete']) { 
+  if($_POST['optionsconditionsdelete']) {
     // go through the passed filter settings starting from the one we need to remove, and shunt the rest down one space
     // need to do this in a loop, because unsetting and key-sorting will maintain the key associations of the remaining high values above the one that was deleted
     $originalCount = count($_POST[$filter_key."_elements"]);
@@ -184,7 +184,7 @@ if($ele_type == "select") {
         unset($_POST[$filter_key."_terms"][$i]);
         unset($_POST[$filter_key."_types"][$i]);
       }
-    }	
+    }
   }
   if(count($_POST[$filter_key."_elements"]) > 0){
     $processedValues['elements']['ele_value'][5][0] = $_POST[$filter_key."_elements"];

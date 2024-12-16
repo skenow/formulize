@@ -88,12 +88,12 @@ function getFormFramework($formframe, $mainform="") {
 		} else {
 			$fid = $mainform;
 		}
-		if (!$fid) { 
+		if (!$fid) {
 			print "Form Name: " . $form . "<br>";
 			print "Form id: " . $fid . "<br>";
 			print "Frame Name: " . $frame . "<br>";
 			print "Frame id: " . $frid . "<br>";
-			exit("selected form does not exist in framework"); 
+			exit("selected form does not exist in framework");
 		}
 	} else { // a form
 		$frid = "";
@@ -180,9 +180,9 @@ function gatherNames($groups, $nametype, $requireAllGroups=false, $filter=false)
     }
     unset($found_names);
     $found_names = $real_found_names;
-  } 
+  }
   
-  natcasesort($found_names);	
+  natcasesort($found_names);
 	return $found_names;
 
 // recoded above to use $member_handler, and that will intelligently take archived users into account if the Freeform archive patch is in effect.
@@ -201,7 +201,7 @@ function gatherNames($groups, $nametype, $requireAllGroups=false, $filter=false)
 	$names = q("SELECT $nametype, uid FROM " . $xoopsDB->prefix("users") . " WHERE $filter ORDER BY $nametype");
 	foreach($names as $name) {
 		$found_names[$name['uid']] = $name[$nametype];
-	} 
+	}
 	return($found_names);
 */
 }
@@ -211,7 +211,7 @@ function getCurrentURL() {
 	static $url = "";
 	if($url) { return $url; }
 	$url_parts = parse_url(XOOPS_URL);
-	$url = $url_parts['scheme'] . "://" . $_SERVER['HTTP_HOST']; 
+	$url = $url_parts['scheme'] . "://" . $_SERVER['HTTP_HOST'];
 	$url = isset($url_parts['port']) ? $url . ":" . $url_parts['port'] : $url;
 	$url .= str_replace("&amp;", "&", htmlSpecialChars(strip_tags($_SERVER['REQUEST_URI'])));  // strip html tags, convert special chars to htmlchar equivalents, then convert back ampersand htmlchars to regular ampersands, so the URL doesn't bust on certain servers
 	return $url;
@@ -384,7 +384,7 @@ function security_check($fid, $entry="", $uid="", $owner="", $groups="", $mid=""
 			if($owner != $uid) {
 				$view_groupscope = $gperm_handler->checkRight("view_groupscope", $fid, $groups, $mid);
 				// if no view_groupscope, then check to see if the settings for the form are "one entry per group" in which case override the groupscope setting
-				if(!$view_groupscope) { 
+				if(!$view_groupscope) {
 					global $xoopsDB;
 					$smq = q("SELECT singleentry FROM " . $xoopsDB->prefix("formulize_id") . " WHERE id_form=$fid");
 					if($smq[0]['singleentry'] == "group") { $view_groupscope = true; }
@@ -426,8 +426,8 @@ print "<br>";*/
 							$viewgroups = explode(",", $thisview['sv_currentview']);
 							if(array_intersect($data_handler->getEntryOwnerGroups($entry), $viewgroups)) { return true; }
 						}
-					}					
-					return false;					
+					}
+					return false;
 				}
 			}
 		}
@@ -492,7 +492,7 @@ function q($query, $keyfield="", $keyfieldOnly = false) {
 
 
 // THIS FUNCTION RETURNS AN ARRAY OF THE CATEGORY NAMES WHERE THE CATEGORY IDS ARE THE KEYS -- added April 25/05
-function fetchCats() { 
+function fetchCats() {
 
 	global $xoopsDB;
 
@@ -543,7 +543,7 @@ function getHeaderList ($fid, $needids=false, $convertIdsToElementHandles=false)
 	if($result = $xoopsDB->query($hlq)) {
 		while ($row = $xoopsDB->fetchRow($result)) {
 			if($somethingLeft = str_replace("*=+*:", "", $row[0])) { // check to see if there is actually any real data specified in this string, make sure it's not all separators.
-				$headerlist = explode("*=+*:", $row[0]); 
+				$headerlist = explode("*=+*:", $row[0]);
 				array_shift($headerlist);
 			}
 		}
@@ -556,27 +556,27 @@ function getHeaderList ($fid, $needids=false, $convertIdsToElementHandles=false)
 								if($thisheaderid == "uid" OR $thisheaderid == "creation_uid") {
 									$metaHeaderlist[] = _formulize_DE_CALC_CREATOR;
 									unset($headerlist[$headerid]);
-									continue; 
+									continue;
 								}
 								if($thisheaderid == "proxyid" OR $thisheaderid == "mod_uid") {
 									$metaHeaderlist[] = _formulize_DE_CALC_MODIFIER;
 									unset($headerlist[$headerid]);
-									continue; 
+									continue;
 								}
 								if($thisheaderid == "creation_date" OR $thisheaderid == "creation_datetime") {
 									$metaHeaderlist[] = _formulize_DE_CALC_CREATEDATE;
 									unset($headerlist[$headerid]);
-									continue; 
+									continue;
 								}
 								if($thisheaderid == "mod_date" OR $thisheaderid == "mod_datetime") {
 									$metaHeaderlist[] = _formulize_DE_CALC_MODDATE;
 									unset($headerlist[$headerid]);
-									continue; 
+									continue;
 								}
 								if($thisheaderid == "creator_email") {
 									$metaHeaderlist[] = _formulize_DE_CALC_CREATOR_EMAIL;
 									unset($headerlist[$headerid]);
-									continue; 
+									continue;
 								}
       				if($start) {
       					$where_clause = "ele_id='$thisheaderid'";
@@ -592,7 +592,7 @@ function getHeaderList ($fid, $needids=false, $convertIdsToElementHandles=false)
 								$headerlist = $metaHeaderlist;
 								while ($row = $xoopsDB->fetchArray($rescaptionq)) {
 									if($row['ele_colhead'] != "") {
-										$headerlist[] = $row['ele_colhead'];						
+										$headerlist[] = $row['ele_colhead'];
 									} else {
 										$headerlist[] = $row['ele_caption'];
 									}
@@ -618,7 +618,7 @@ function getHeaderList ($fid, $needids=false, $convertIdsToElementHandles=false)
 			if($needids) {
 				$tempheaderlist = $headerlist;
 				unset($headerlist);
-				$headerlist = convertHeadersToIds($tempheaderlist, $fid); 
+				$headerlist = convertHeadersToIds($tempheaderlist, $fid);
 			}
 		}
 	}
@@ -633,17 +633,17 @@ function getHeaderList ($fid, $needids=false, $convertIdsToElementHandles=false)
 					$headerlist[] = $row['ele_id'];
 				} else {
 					if($row['ele_colhead'] != "") {
-						$headerlist[] = $row['ele_colhead'];						
+						$headerlist[] = $row['ele_colhead'];
 					} else {
 						$headerlist[] = $row['ele_caption'];
 					}
 				}
 			}
 		}
-	} 
+	}
 
-	if(count($headerlist) == 0) { 
-		// IF there are no required fields THEN ... go with first three fields 
+	if(count($headerlist) == 0) {
+		// IF there are no required fields THEN ... go with first three fields
 		$firstfq = "SELECT ele_caption, ele_colhead, ele_id FROM " . $xoopsDB->prefix("formulize") . " WHERE id_form='$fid' AND (ele_type != \"ib\" AND ele_type != \"areamodif\" AND ele_type != \"subform\" AND ele_type != \"grid\") ORDER BY ele_order ASC LIMIT 3";
 		if($result = $xoopsDB->query($firstfq)) {
 			while ($row = $xoopsDB->fetchArray($result)) {
@@ -651,7 +651,7 @@ function getHeaderList ($fid, $needids=false, $convertIdsToElementHandles=false)
 					$headerlist[] = $row['ele_id'];
 				} else {
 					if($row['ele_colhead'] != "") {
-						$headerlist[] = $row['ele_colhead'];						
+						$headerlist[] = $row['ele_colhead'];
 					} else {
 						$headerlist[] = $row['ele_caption'];
 					}
@@ -683,7 +683,7 @@ function getHeaderList ($fid, $needids=false, $convertIdsToElementHandles=false)
     }
   }
 	return $headerlist;
-} 
+}
 
 // gets the ele_ids of the headerlist for a form
 // now only used when opening a legacy report from 1.6 or older, or when reading a headerlist that is based on the old non-ID based system
@@ -707,7 +707,7 @@ function allowedCats($cats, $allowedForms) {
 
 
 			$allowedCats[$catid] = $catname;
-		}  		
+		}
 	}
 	return $allowedCats;
 }
@@ -789,18 +789,18 @@ function fetchFormsInCat($thisid, $allowedForms="") {
 			}
 		} else {
 			$flatFormArray = q("SELECT id_form_array FROM " . $xoopsDB->prefix("formulize_menu_cats") . " WHERE cat_id='$thisid'");
-			$formsInCat1 = explode(",", trim($flatFormArray[0]['id_form_array'], ","));  		
+			$formsInCat1 = explode(",", trim($flatFormArray[0]['id_form_array'], ","));
 		}
 
 		// exclude inactive forms, and sort
 		foreach($formsInCat1 as $thisform) {
 			$status_q = q("SELECT menuid, position FROM " . $xoopsDB->prefix("formulize_menu") . " WHERE menuid='$thisform' AND status=1");
 			if(count($status_q)>0 AND in_array($thisform, $allowedForms)) { // only include active forms that the user is allowed to see
-				$formpos[] = $status_q[0]['position']; 
-				$formsInCat[] = $thisform; 
-			}			
+				$formpos[] = $status_q[0]['position'];
+				$formsInCat[] = $thisform;
+			}
 		}
-		array_multisort($formpos, $formsInCat);				
+		array_multisort($formpos, $formsInCat);
 
 	return $formsInCat;
 }
@@ -894,7 +894,7 @@ function deleteEntry($id_req, $frid="", $fid, $gperm_handler="", $member_handler
 	global $xoopsDB;
 	$deletedEntries = array();
 
-	if($frid) { // if a framework is passed, then delete all sub entry items found in a unified display relationship with the base entry, in addition to the base entry itself.  
+	if($frid) { // if a framework is passed, then delete all sub entry items found in a unified display relationship with the base entry, in addition to the base entry itself.
 		$fids[0] = $fid;
 		$entries[$fid][0] = $id_req;
 		if(!$owner) { $owner = getEntryOwner($id_req, $fid); }
@@ -906,16 +906,16 @@ function deleteEntry($id_req, $frid="", $fid, $gperm_handler="", $member_handler
 		$linkresults = checkForLinks($frid, $fids, $fid, $entries, $gperm_handler, $owner_groups, $mid, $member_handler, $owner);
 		foreach($linkresults['entries'] as $thisfid=>$ents) {
 			foreach($ents as $ent) {
-				if($ent) { 
-					deleteIdReq($ent, $thisfid); 
+				if($ent) {
+					deleteIdReq($ent, $thisfid);
 					$deletedEntries[$thisfid][] = $ent;
 				}
 			}
 		}
 		foreach($linkresults['sub_entries'] as $thisfid=>$ents) {
 			foreach($ents as $ent) {
-				if($ent) { 
-					deleteIdReq($ent, $thisfid); 
+				if($ent) {
+					deleteIdReq($ent, $thisfid);
 					$deletedEntries[$thisfid][] = $ent;
 				}
 
@@ -967,7 +967,7 @@ function makeUidFilter($users) {
 			$start = 0;
 		} else {
 			$uq .= " OR uid=$user";
-		}			
+		}
 	}
 	return $uq;*/
 }
@@ -1173,7 +1173,7 @@ function prepExport($headers, $cols, $data, $fdchoice, $custdel="", $title, $tem
 	// export of calculations added August 22 2006
 	// come up with a filename and then return it
 	// rest of logic in entriesdisplay.php will take the filename and create a file with the calculations in it once they are performed
-	if($fdchoice == "calcs") { 
+	if($fdchoice == "calcs") {
 		$tempfold = microtime(true);
 		$exfilename = _formulize_DE_XF . $tempfold . ".html";
 		return XOOPS_URL . "/modules/formulize/export/$exfilename";
@@ -1194,8 +1194,8 @@ function prepExport($headers, $cols, $data, $fdchoice, $custdel="", $title, $tem
 		unset($headers);
 		$headers = getHeaders($cols, true); // array of element handles, boolean for if the cols are handles (or ids, which is the default assumption)
 	}
-	if($fdchoice == "comma") 
-	{ 
+	if($fdchoice == "comma")
+	{
 		$fd = ",";
 		$fxt = ".csv";
 	}
@@ -1297,7 +1297,7 @@ function prepExport($headers, $cols, $data, $fdchoice, $custdel="", $title, $tem
 		} elseif($_POST['metachoice'] == 1) {
 			$csvfile .= "\"$c_name\"" . $fd . "\"$c_date\"" . $fd . "\"$m_name\"" . $fd . "\"$m_date\"";
       $lineStarted = true;
-		} 
+		}
 		
 		// write in data
 		foreach($cols as $col) {
@@ -1331,7 +1331,7 @@ function prepExport($headers, $cols, $data, $fdchoice, $custdel="", $title, $tem
 	fclose ($exportfile);
 
   // garbage collection...delete files older than 6 hours
-	formulize_scandirAndClean(XOOPS_ROOT_PATH."/modules/formulize/export/", _formulize_DE_XF); 
+	formulize_scandirAndClean(XOOPS_ROOT_PATH."/modules/formulize/export/", _formulize_DE_XF);
 
 	// write id_reqs and tempfold to the DB if we're making an update template
 	if($template == "update") {
@@ -1401,12 +1401,12 @@ function getMetaData($entry, $member_handler, $fid="", $useOldCode=false) {
       $meta_to_return['created'] = "???";
     }
     if($creator = $member_handler->getUser($meta_to_return['created_by_uid'])) {
-      $meta_to_return['created_by'] = $creator->getVar('name') ? $creator->getVar('name') : $creator->getVar('uname');  
+      $meta_to_return['created_by'] = $creator->getVar('name') ? $creator->getVar('name') : $creator->getVar('uname');
     } else {
       $meta_to_return['created_by'] = _FORM_ANON_USER;
     }
     if($modder = $member_handler->getUser($meta_to_return['last_update_by_uid'])) {
-      $meta_to_return['last_update_by'] = $modder->getVar('name') ? $modder->getVar('name') : $modder->getVar('uname');  
+      $meta_to_return['last_update_by'] = $modder->getVar('name') ? $modder->getVar('name') : $modder->getVar('uname');
     } else {
       $meta_to_return['last_update_by'] = _FORM_ANON_USER;
     }
@@ -1441,10 +1441,10 @@ function getAllColList($fid, $frid="", $groups="", $includeBreaks=false) {
 			$gq .= " OR ele_display LIKE '%,$thisgroup,%'";
 		}
 		$gq .= ")";
-	} 
+	}
 
 	// reset groups to be based off user object (and this instantiates it if it weren't present before)
-	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);		
+	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 
 	// if current user does NOT have view_private_elements permission, then set a query to exclude those elements
 	$pq = "";
@@ -1467,13 +1467,13 @@ function getAllColList($fid, $frid="", $groups="", $includeBreaks=false) {
 		$sub_fids = $check_results['sub_fids'];
 		$uid = $xoopsUser ? $xoopsUser->getVar('uid') : "0";
 		foreach($fids as $this_fid) {
-			if(security_check($this_fid, "", $uid, "", $groups, $mid, $gperm_handler)) { 
+			if(security_check($this_fid, "", $uid, "", $groups, $mid, $gperm_handler)) {
 				$c = q("SELECT ele_id, ele_caption, ele_colhead, ele_handle FROM " . $xoopsDB->prefix("formulize") . " WHERE id_form='$this_fid' $gq $pq $incbreaks AND ele_type != \"subform\" AND ele_type != \"grid\" ORDER BY ele_order");
 				$cols[$this_fid] = $c;
-			} 
+			}
 		}
 		foreach($sub_fids as $this_fid) {
-			if(security_check($this_fid, "", $uid, "", $groups, $mid, $gperm_handler)) { 
+			if(security_check($this_fid, "", $uid, "", $groups, $mid, $gperm_handler)) {
 				$c = q("SELECT ele_id, ele_caption, ele_colhead, ele_handle FROM " . $xoopsDB->prefix("formulize") . " WHERE id_form='$this_fid' $gq $pq $incbreaks AND ele_type != \"subform\" AND ele_type != \"grid\" ORDER BY ele_order");
 				$cols[$this_fid] = $c;
 			}
@@ -1497,21 +1497,21 @@ function writableQuery($items, $mod="") {
 				$items['as_' . $i] = "<a href=\"\" alt=\"" . trans($temp_text) . "\" title=\"" . trans($temp_text) . "\" onclick=\"javascript:return false;\">" . printSmart(trans($temp_text), "20") ."</a>";
 			} else {
 				$items['as_' . $i] = trans($temp_text);
-			}			
-		} elseif($items['as_' . $i] == "==") { 
-			$items['as_' . $i]="="; 
+			}
+		} elseif($items['as_' . $i] == "==") {
+			$items['as_' . $i]="=";
 		} elseif($items['as_' . $i] == "!=") {
-			 $items['as_' . $i]=" NOT "; 
-		} elseif($items['as_' . $i] == "NOT") { 
-			$items['as_' . $i]=" NOT "; 
+			 $items['as_' . $i]=" NOT ";
+		} elseif($items['as_' . $i] == "NOT") {
+			$items['as_' . $i]=" NOT ";
 		} elseif($items['as_' . $i] == "AND") {
 			$items['as_' . $i]=" AND ";
 		} elseif($items['as_' . $i] == "OR") {
-			$items['as_' . $i]=" OR "; 
+			$items['as_' . $i]=" OR ";
 		} elseif($items['as_' . $i] == "LIKE") {
-			$items['as_' . $i]=" LIKE "; 
+			$items['as_' . $i]=" LIKE ";
 		} elseif($items['as_' . $i] == "NOT LIKE") {
-			$items['as_' . $i]=" NOT LIKE "; 
+			$items['as_' . $i]=" NOT LIKE ";
 		} elseif ($items['as_' . $i] == "{USER}" AND $mod != 1) {
 			global $xoopsUser;
 			$term = $xoopsUser->getVar('name');
@@ -1519,8 +1519,8 @@ function writableQuery($items, $mod="") {
 			$items['as_' . $i] = $term;
 		} elseif ($items['as_' . $i] == "{BLANK}" AND $mod != 1) {
 			$items['as_' . $i] = "\" \"";
- 		} elseif (ereg_replace("[^A-Z{}]","", $items['as_' . $i]) == "{TODAY}" AND $mod != 1) {
-			$number = ereg_replace("[^0-9+-]","", $items['as_' . $i]);
+ 		} elseif (preg_replace("[^A-Z{}]","", $items['as_' . $i]) == "{TODAY}" AND $mod != 1) {
+			$number = preg_replace("[^0-9+-]","", $items['as_' . $i]);
 			$items['as_' . $i] = date("Y-m-d",mktime(0, 0, 0, date("m") , date("d")+$number, date("Y")));
 //		lines below commented and replaced with the above check by dpicella which accounts for + and - numbers after {TODAY, ie: {TODAY-14}
 //		} elseif ($items['as_' . $i] == "{TODAY}" AND $mod != 1) {
@@ -1531,7 +1531,7 @@ function writableQuery($items, $mod="") {
 
 		if(strlen($item_to_write)>20 AND !$temp_text) {
 			$item_to_write = "<a href=\"\" alt=\"" . $items['as_' . $i] . "\" title=\"" . $items['as_' . $i] . "\" onclick=\"javascript:return false;\">" . printSmart($item_to_write, "20") ."</a>";
-		}			
+		}
 
 		$qstring .= $item_to_write;
 	}
@@ -1556,7 +1556,7 @@ function getCalcHandleText($handle, $forceColhead=false) {
 	} elseif(is_numeric($handle)) {
 		$caption = q("SELECT ele_caption, ele_colhead FROM " . $xoopsDB->prefix("formulize"). " WHERE ele_id = '$handle'");
 		if($forceColhead AND $caption[0]['ele_colhead'] != "") {
-			return $caption[0]['ele_colhead'];			
+			return $caption[0]['ele_colhead'];
 		} else {
 			return $caption[0]['ele_caption'];
 		}
@@ -1583,7 +1583,7 @@ function buildScope($currentView, $member_handler, $gperm_handler, $uid, $groups
 	            $grouplist = array_intersect($groups, $grouplist);
 		}
 		if(count($grouplist)==0) { // safeguard against empty or invalid grouplists
-		  	//if(!isset($all_users[0])) { 
+		  	//if(!isset($all_users[0])) {
 			$all_users[] = "";
 			$scope = makeUidFilter($all_users);
 		} else {
@@ -1597,7 +1597,7 @@ function buildScope($currentView, $member_handler, $gperm_handler, $uid, $groups
 		} else {
 		  $currentView = "mine";
 		}
-	} 
+	}
 	// do this second last, just in case currentview =all was passed in but not valid and defaulted back to group
 	if($currentView == "group") {
 		if(!$hasGroupScope = $gperm_handler->checkRight("view_groupscope", $fid, $groups, $mid)) {
@@ -1610,7 +1610,7 @@ function buildScope($currentView, $member_handler, $gperm_handler, $uid, $groups
 			$scopeGroups = array_intersect($groupsWithAccess, $groups);
 		  }
 		  if(count($scopeGroups)==0) { // safeguard against empty or invalid grouplists
-		  	//if(!isset($all_users[0])) { 
+		  	//if(!isset($all_users[0])) {
 			$all_users[] = $uid;
 			$scope = makeUidFilter($all_users);
 		  } else {
@@ -1626,7 +1626,7 @@ function buildScope($currentView, $member_handler, $gperm_handler, $uid, $groups
 }
 
 // THIS FUNCTION SENDS TEXT THROUGH THE TRANSLATION ROUTINE IF MARCAN'S MULTILANGUAGE HACK IS INSTALLED
-// THIS FUNCTION IS ALSO AWARE OF THE XLANGUAGE MODULE IF THAT IS INSTALLED.  
+// THIS FUNCTION IS ALSO AWARE OF THE XLANGUAGE MODULE IF THAT IS INSTALLED.
 function trans($string) {
   $myts = icms_core_Textsanitizer::getInstance();
   if(function_exists('easiestml')) {
@@ -1665,9 +1665,9 @@ function prepDataForWrite($element, $ele) {
 		switch($ele_type){
 				case 'text':
 					if($ele_value[3]) { // if $ele_value[3] is 1 (default is 0) then treat this as a numerical field
-						$value = ereg_replace ('[^0-9.-]+', '', $ele);
+						$value = preg_replace ('[^0-9.-]+', '', $ele);
 					} else {
-						$value = $ele; 
+						$value = $ele;
 					}
                                         if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
                                         $value = icms_core_DataFilter::htmlSpecialChars($value);
@@ -1721,7 +1721,7 @@ function prepDataForWrite($element, $ele) {
 								$v['key'] = $myts->htmlSpecialChars($v['key']);
 								$value = $value.'*=+*:'.$v['key'];
 							}
-						}	*/					
+						}	*/
 					}
 
           while($numberOfSelectionsFound < count($ele) AND $opt_count < 1000) { // if a value was received that was out of range...added by jwe March 2 2008...in this case we are assuming that if there are more values passed back than selections found in the valid options for the element, then there are out-of-range values we want to preserve
@@ -1758,8 +1758,8 @@ function prepDataForWrite($element, $ele) {
 						}	else {
 							$value = "";
 						}
-//						print "<br>VALUE: $value";	
-						break;			
+//						print "<br>VALUE: $value";
+						break;
 					}
 					else
 					{
@@ -1800,10 +1800,10 @@ function prepDataForWrite($element, $ele) {
 							{
 	      					if(is_array($ele)) {
                     //foreach($ele as $whattheuserselected) // note this loop within a loop should not be necessary...we do not need to check all the submitted values from the form once for each possible value in the form!
-                    if(in_array($masterentlistjwe, $ele)) 
+                    if(in_array($masterentlistjwe, $ele))
                     {
                       // if the user selected an entry found in the master list of all possible entries...
-                      //print "internal loop $entrycounterjwe<br>userselected: $whattheuserselected<br>selectbox contained: $masterentlistjwe<br><br>";	
+                      //print "internal loop $entrycounterjwe<br>userselected: $whattheuserselected<br>selectbox contained: $masterentlistjwe<br><br>";
                       //if($whattheuserselected == $masterentlistjwe) // this check is encompassed above with the in_array check
                       //{
                         //print "WE HAVE A MATCH!<BR>"; -- note: nametype should
@@ -1816,7 +1816,7 @@ function prepDataForWrite($element, $ele) {
                     }
                     $entrycounterjwe++;
                   } else {
-                    //print "internal loop $entrycounterjwe<br>userselected: $ele<br>selectbox contained: $masterentlistjwe<br><br>";	
+                    //print "internal loop $entrycounterjwe<br>userselected: $ele<br>selectbox contained: $masterentlistjwe<br><br>";
                     if($ele == ($masterentlistjwe+1)) // plus 1 because single entry select boxes start their option lists at 1.
                     {
                       //print "WE HAVE A MATCH!<BR>";
@@ -1851,8 +1851,8 @@ function prepDataForWrite($element, $ele) {
 				break;
 				case 'date':
 					// code below commented/added by jwe 10/23/04 to convert dates into the proper standard format
-					if($ele != "YYYY-mm-dd" AND $ele != "") { 
-						$ele = date("Y-m-d", strtotime($ele)); 
+					if($ele != "YYYY-mm-dd" AND $ele != "") {
+						$ele = date("Y-m-d", strtotime($ele));
 					} else {
 						$ele = "{WRITEASNULL}"; // forget about this date element and go on to the next element in the form
 					}
@@ -1876,7 +1876,7 @@ function prepDataForWrite($element, $ele) {
 				    if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.php")) {
 						$customTypeHandler = icms_getModuleHandler($ele_type."Element", 'formulize');
 						$value = $customTypeHandler->prepareDataForSaving($ele, $element);
-					} 
+					}
 			}
 
 	return $value;
@@ -1890,7 +1890,7 @@ function prepDataForWrite($element, $ele) {
 function prepareLiteralTextForDB($elementObject, $value, $curlyBracketEntry, $userComparisonId = "") {
   global $xoopsUser;
   if($userComparisonId === "") {
-    $userComparisonId = $xoopsUser ? $xoopsUser->getVar('uid') : 0;  
+    $userComparisonId = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
   }
   $ele_type = $elementObject->getVar('ele_type');
   switch($ele_type) {
@@ -1910,7 +1910,7 @@ function prepareLiteralTextForDB($elementObject, $value, $curlyBracketEntry, $us
       if(file_exists(XOOPS_ROOT_PATH."/modules/formulize/class/".$ele_type."Element.php")) {
 	      $customTypeHandler = icms_getModuleHandler($ele_type."Element", 'formulize');
 	      $value = $customTypeHandler->prepareLiteralTextForDB($value, $elementObject);
-      } 
+      }
   }
   if($value == "{USER}") {
     if($curlyBracketEntry != "new") {
@@ -1968,7 +1968,7 @@ function getSingle($fid, $uid, $groups, $member_handler, $gperm_handler, $mid) {
 		} elseif($smq[0]['singleentry'] == "group") { // get the first entry belonging to anyone in their groups, excluding any groups that do not have add_own_entry permission
 			$formulize_permHandler = new formulizePermHandler($fid);
 			$intersect_groups = $formulize_permHandler->getGroupScopeGroupIds($groups); // use specified groups if any are available
-			if($intersect_groups === false) {			
+			if($intersect_groups === false) {
 				$groupsWithAccess = $gperm_handler->getGroupIds("view_form", $fid, $mid);
 				$intersect_groups = array_intersect($groups, $groupsWithAccess);
 			}
@@ -2000,7 +2000,7 @@ function checkOther($key, $id){
 }
 
 // THIS FUNCTION TAKES THE 'Other' VALUES USERS MAY HAVE WRITTEN INTO THE FORM, AND SAVES THEM TO THE db IN THEIR OWN TABLE
-// The other values are generated by the prepDataForWrite function, so it has to be called prior to this one 
+// The other values are generated by the prepDataForWrite function, so it has to be called prior to this one
 // ADDED JWE - JUNE 1 2006
 function writeOtherValues($id_req, $fid) {
 	global $xoopsDB, $myts;
@@ -2022,10 +2022,10 @@ function writeOtherValues($id_req, $fid) {
 		// filter out any ele_ids that are not part of this form, since when a framework is used, the formulize_other array would contain ele_ids from multiple forms
 		if(!in_array($ele_id, $thisForm->getVar('elements'))) { continue; }
 		// determine the current status of that element
-		$sql = "SELECT * FROM " . $xoopsDB->prefix("formulize_other") . " WHERE ele_id='$ele_id' AND id_req='$id_req' LIMIT 0,1"; 
+		$sql = "SELECT * FROM " . $xoopsDB->prefix("formulize_other") . " WHERE ele_id='$ele_id' AND id_req='$id_req' LIMIT 0,1";
 		$result = $xoopsDB->query($sql);
 		$array = $xoopsDB->fetchArray($result);
-		if(isset($array['other_id'])) { 
+		if(isset($array['other_id'])) {
 			$existing_value = true;
 		} else {
 			$existing_value = false;
@@ -2035,7 +2035,7 @@ function writeOtherValues($id_req, $fid) {
 		$value = icms_core_DataFilter::htmlSpecialChars($value);
 		if($value != "" AND $existing_value) { // update
 			$sql = "UPDATE " . $xoopsDB->prefix("formulize_other") . " SET other_text=\"" . icms::$xoopsDB->escape($value) . "\" WHERE id_req='$id_req' AND ele_id='$ele_id'";
-		}elseif($value != "" AND !$existing_value) { // add 
+		}elseif($value != "" AND !$existing_value) { // add
 			$sql = "INSERT INTO " . $xoopsDB->prefix("formulize_other") . " (id_req, ele_id, other_text) VALUES (\"$id_req\", \"$ele_id\", \"" . icms::$xoopsDB->escape($value) . "\")";
 		}elseif($value == "" AND $existing_value) { // delete
 			$sql = "DELETE FROM " . $xoopsDB->prefix("formulize_other") . " WHERE id_req='$id_req' AND ele_id='$ele_id'";
@@ -2140,11 +2140,11 @@ function createFieldList($val, $textbox=false, $limitToForm=false, $name="", $fi
     return $formlink;
   }
 
-} 
+}
 
 // THIS FUNCTION TAKES AN ELEMENT OBJECT, AND A VALUE AND SEARCHES IN THE ELEMENT'S FORM FOR THE FIRST ID_REQ THAT MATCHES THE VALUE
 // Used by the new textbox link option to find a matching entry, so that it can be linked in the list of entries screen.
-// Matches must be exact!  
+// Matches must be exact!
 // Returns the id_req that matches the value, or false if nothing found
 function findMatchingIdReq($element, $fid, $value) {
 
@@ -2180,7 +2180,7 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
     $elementMetaData = formulize_getElementMetaData($handle, true);
     $ele_value = unserialize($elementMetaData['ele_value']);
     $ele_type = $elementMetaData['ele_type'];
-    if(!$ele_value) { return _formatLinksRegularElement($matchtext, $textWidth, $ele_type, $handle, $entryBeingFormatted); } 
+    if(!$ele_value) { return _formatLinksRegularElement($matchtext, $textWidth, $ele_type, $handle, $entryBeingFormatted); }
     if(!isset($ele_value[4])) { $ele_value[4] = 0; }
     if(!isset($ele_value[3])) { $ele_value[3] = 0; }
     $cachedValues[$handle] = $ele_value;
@@ -2220,7 +2220,7 @@ function formatLinks($matchtext, $handle, $textWidth=35, $entryBeingFormatted) {
 		$boxproperties = explode("#*=:*", $ele_value[2]);
 		// NOTE:
 		// boxproperties[0] is form_id
-		// [1] is handle of linked field 
+		// [1] is handle of linked field
 		$target_fid = $boxproperties[0];
 		// if user has no perm in target fid, then do not make link!
 		if(!$target_allowed = security_check($target_fid)) {
@@ -2281,7 +2281,7 @@ function _formatLinksRegularElement($matchtext, $textWidth, $ele_type, $handle, 
     $matchtext = $elementTypeHandler->formatDataForList($matchtext, $handle, $entryBeingFormatted);
     return $matchtext;
   } else {
-  	$rtn = icms_core_DataFilter::makeClickable(printSmart(trans(icms_core_DataFilter::htmlSpecialChars($matchtext)), $textWidth));	    
+  	$rtn = icms_core_DataFilter::makeClickable(printSmart(trans(icms_core_DataFilter::htmlSpecialChars($matchtext)), $textWidth));
     return $rtn;
   }
 }
@@ -2389,7 +2389,7 @@ function findLinkedEntries($startForm, $targetForm, $startEntry, $gperm_handler,
 	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 	$owner = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
 	if($global_scope = $gperm_handler->checkRight("view_globalscope", $targetForm['fid'], $groups, $mid)) {
-    $all_users = ""; 
+    $all_users = "";
     $all_groups = "";
 	} elseif($group_scope = $gperm_handler->checkRight("view_groupscope", $targetForm['fid'], $groups, $mid)) {
 		$formulize_permHandler = new formulizePermHandler($fid);
@@ -2397,13 +2397,13 @@ function findLinkedEntries($startForm, $targetForm, $startEntry, $gperm_handler,
 		if($all_groups === false) {
 				$groupsWithAccess = $gperm_handler->getGroupIds("view_form", $targetForm['fid'], $mid);
         $all_groups = array_intersect($groups, $groupsWithAccess);
-		} 
+		}
     $all_users = "";
 		$uq = makeUidFilter($all_users);
 	} else {
     $all_users = array(0=>$owner);
     $all_groups = "";
-	} 
+	}
 
 	global $xoopsDB;
 	//targetForm is a special array containing the keys as specified in the framework, and the target form
@@ -2595,7 +2595,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 	$groups_group = $gperm_handler->getGroupIds("view_groupscope", $fid, $mid);
 	$group_user_ids = formulize_getUsersByGroups($groups_group, $member_handler);
 	
-	// get groups with view_form, 
+	// get groups with view_form,
 	$groups_view = $gperm_handler->getGroupIds("view_form", $fid, $mid);
 	
 	$notification_handler =& xoops_gethandler('notification');
@@ -2627,7 +2627,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 		// take the intersection of groups with view form perm and the owner's groups (ie: the owner's groups that have view_form perm)
 		$owner_groups_with_view = array_intersect($groups_view, $groups);
 		// get users in the owners-groups-that-have-view_form-perm
-		$owner_groups_user_ids = formulize_getUsersByGroups($owner_groups_with_view, $member_handler); 
+		$owner_groups_user_ids = formulize_getUsersByGroups($owner_groups_with_view, $member_handler);
 		// get the intersection of users in the owners-groups-that-have-view_form-perm and groups with groupscope
 		$group_uids = array_intersect($group_user_ids, $owner_groups_user_ids);
 
@@ -2642,7 +2642,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
       $uids_complete = array_unique(array_merge((array)$group_uids, $uids_complete));
     } elseif(count($global_uids) > 0) {
       $uids_complete = array_unique(array_merge((array)$global_uids, $uids_complete));
-    } 
+    }
 
 		$uids_conditions = array();
 		$saved_conditions = array();
@@ -2676,7 +2676,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 				if(isset($blankFilters['and'])) {
 				  foreach($blankFilters['and'] as $thisAndFilter) {
 				    $filter .= "][".$thisAndFilter;
-				  }  
+				  }
 				}
 				if(isset($blankFilters['or'])) {
 				  $filter = array(0=>array(0=>"and",1=>$filter), 1=>array(0=>"or",1=>implode("][",$blankFilters['or'])));
@@ -2727,7 +2727,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 		} else {
 			$extra_tags['VIEWURL'] = XOOPS_URL."/modules/formulize/index.php?fid=$fid&ve=$entry";
 		}
-		$extra_tags['ENTRYID'] = $entry;			
+		$extra_tags['ENTRYID'] = $entry;
 
 		if(count($uids_real) > 0) {
 			if(in_array(-1, $uids_real)) {
@@ -2753,7 +2753,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 			// Only do this getData call if we don't already have data from the database...$data[0] == "" will probably never be true in Formulize 3.0 and higher, but will evaluate as expected, with a warning about [0] being an invalid offset or something like that
             if((is_array($data) AND $data[0] == "") OR $data == "") {
               include_once XOOPS_ROOT_PATH . "/modules/formulize/include/extract.php";
-              $data = getData("", $fid, $entry); 
+              $data = getData("", $fid, $entry);
             }
             // get all the element IDs for the current form
             $form_handler = icms_getModuleHandler('forms', 'formulize');
@@ -2790,17 +2790,17 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 			$oldsubject = $not_config['event'][$evid]['mail_subject'];
 			$oldtemp = $not_config['event'][$evid]['mail_template'];
 	       		// rewrite the notification with the subject and template we want, then reset
-	      		$GLOBALS['formulize_notificationTemplateOverride'] = $thiscon['not_cons_template'] == "" 
-	               	    ? $not_config['event'][$evid]['mail_template'] 
+	      		$GLOBALS['formulize_notificationTemplateOverride'] = $thiscon['not_cons_template'] == ""
+	               	    ? $not_config['event'][$evid]['mail_template']
 		            : $thiscon['not_cons_template'];
-		        $GLOBALS['formulize_notificationSubjectOverride'] = $thiscon['not_cons_subject'] == "" 
-		            ? $not_config['event'][$evid]['mail_subject'] 
+		        $GLOBALS['formulize_notificationSubjectOverride'] = $thiscon['not_cons_subject'] == ""
+		            ? $not_config['event'][$evid]['mail_subject']
 		            : $thiscon['not_cons_subject'];
-		        $not_config['event'][$evid]['mail_template'] = $thiscon['not_cons_template'] == "" 
-		            ? $not_config['event'][$evid]['mail_template'] 
+		        $not_config['event'][$evid]['mail_template'] = $thiscon['not_cons_template'] == ""
+		            ? $not_config['event'][$evid]['mail_template']
 		            : $thiscon['not_cons_template'];
-		        $not_config['event'][$evid]['mail_subject'] = $thiscon['not_cons_subject'] == "" 
-		            ? $not_config['event'][$evid]['mail_subject'] 
+		        $not_config['event'][$evid]['mail_subject'] = $thiscon['not_cons_subject'] == ""
+		            ? $not_config['event'][$evid]['mail_subject']
 		            : $thiscon['not_cons_subject'];
 		        // loop through the variables and do replacements in the subject, if any
 		        if (strstr($not_config['event'][$evid]['mail_subject'], "{ELEMENT")) {
@@ -2857,7 +2857,7 @@ function sendNotificationToEmail($email, $event, $tags, $subject, $template) {
     $templateDir = XOOPS_ROOT_PATH."/modules/formulize/language/english/mail_template/";
     include_once XOOPS_ROOT_PATH."/modules/formulize/language/english/modinfo.php";
   }
- if (empty($template)) { 
+ if (empty($template)) {
   switch($event) {
     case("new_entry"):
       $template = 'form_newentry.tpl';
@@ -2918,7 +2918,7 @@ function compileNotUsers($uids_conditions, $thiscon, $uid, $member_handler, $rei
 	} elseif($thiscon['not_cons_curuser'] > 0) {
 		$uids_conditions[] = $uid;
 	} elseif($thiscon['not_cons_groupid'] > 0) {
-		$uids_temp = $member_handler->getUsersByGroup($thiscon['not_cons_groupid']);				
+		$uids_temp = $member_handler->getUsersByGroup($thiscon['not_cons_groupid']);
 		$uids_conditions = array_merge((array)$uids_temp, $uids_conditions);
 		unset($uids_temp);
 	} elseif($thiscon['not_cons_creator'] > 0) {
@@ -2970,17 +2970,17 @@ function compileNotUsers2($uids_conditions, $uids_complete, $notification_handle
 	$uids_conditions = array_unique($uids_conditions);
 	$uids_real = array_intersect($uids_conditions, $uids_complete);
 	// figure out who is not subscribed to the event, and subscribe them once
-	$subd_uids = q("SELECT not_uid FROM " . $xoopsDB->prefix("xoopsnotifications") . " WHERE not_event=\"".icms::$xoopsDB->escape($event)."\" AND not_category=\"form\" AND not_modid=$mid AND not_itemid=$fid"); 
+	$subd_uids = q("SELECT not_uid FROM " . $xoopsDB->prefix("xoopsnotifications") . " WHERE not_event=\"".icms::$xoopsDB->escape($event)."\" AND not_category=\"form\" AND not_modid=$mid AND not_itemid=$fid");
 	$uids_subd = array();
 	foreach($subd_uids as $thisuid) {
 		$uids_subd[] = $thisuid['not_uid'];
-	}		
+	}
 	$uids_not_subd = array_diff($uids_real, $uids_subd);
 	foreach($uids_not_subd as $thisuid) {
 		if($thisuid <= 0) { continue; }
 		$notification_handler->subscribe("form", $fid, $event, XOOPS_NOTIFICATION_MODE_SENDONCETHENDELETE, $mid, $thisuid);
 	}
-	return $uids_real;	
+	return $uids_real;
 }
 
 // this function takes a series of columns and gets the headers for them
@@ -3005,7 +3005,7 @@ function getHeaders($cols, $colsIsElementHandles = false) {
 			} else {
 				$whereClause = "ele_id = '$col'";
 			}
-			$temp_cap = q("SELECT ele_caption, ele_colhead FROM " . $xoopsDB->prefix("formulize") . " WHERE $whereClause"); 
+			$temp_cap = q("SELECT ele_caption, ele_colhead FROM " . $xoopsDB->prefix("formulize") . " WHERE $whereClause");
 			if($temp_cap[0]['ele_colhead'] != "") {
 				$headers[] = $temp_cap[0]['ele_colhead'];
 			} else {
@@ -3191,7 +3191,7 @@ print "$prevValue<br><br>";
             switch($element->getVar('ele_type')) {
                     case "checkbox":
                             $valueToWrite = $prevValue[0]['ele_value'] . "*=+*:" . $value;
-                            break;	
+                            break;
                     case "select":
                             if($ele_value[1]) { // multiple selections possible
                                     $valueToWrite = $prevValue[0]['ele_value'] . "*=+*:" . $value;
@@ -3204,13 +3204,13 @@ print "$prevValue<br><br>";
                     case "radio": // cannot append to radios
                             $valueToWrite = $value;
                             break;
-                    case "text": 
+                    case "text":
                     case "textarea":
                             $valueToWrite = $prevValue[0]['ele_value'] . $value;
                             break;
                     default:
                             exit("Error: unknown type of element used in a call to displayButton");
-            }	
+            }
           } else { // append == "replace" or all other settings for append
               $valueToWrite = $value;
           }
@@ -3333,7 +3333,7 @@ function formulize_writeEntry($values, $entry="new", $action="replace", $proxyUs
   } else {
     exit("Error: invalid element in the value array: ".key($values).".");
   }
-} 
+}
 
 
 //  THIS FUNCTION SYNCHS ENTRIES WRITTEN IN BLANK DEFAULTS IN A SUBFORM, WITH THE PARENT FORM.  GETS EXECUTED IN FORMDISPLAY.PHP AND FORMDISPLAYPAGES.PHP AFTER A FORM SUBMISSION
@@ -3371,10 +3371,10 @@ function synchSubformBlankDefaults($fid, $entry) {
 		foreach($subformConditions[1] as $i=>$thisOp) {
 			if($thisOp == "=" AND $subformConditions[3][$i] != "oom") {
 				$conditionElementObject = $element_handler->get($subformConditions[0][$i]);
-				$filterValues[$subformConditions[0][$i]] = prepareLiteralTextForDB($conditionElementObject, $subformConditions[2][$i]); 
+				$filterValues[$subformConditions[0][$i]] = prepareLiteralTextForDB($conditionElementObject, $subformConditions[2][$i]);
 			}
 		}
-		formulize_writeEntry($filterValues,$id_req_to_write);	
+		formulize_writeEntry($filterValues,$id_req_to_write);
 	}
 	
 	
@@ -3384,7 +3384,7 @@ function synchSubformBlankDefaults($fid, $entry) {
 	}
   unset($GLOBALS['formulize_subformCreateEntry']); // unset so this function only runs once
   return $ids_to_return;
-}  
+}
 
 // internal function that retrieves an element object if necessary
 	function _getElementObject($element) {
@@ -3402,7 +3402,7 @@ function synchSubformBlankDefaults($fid, $entry) {
 			}	else {
 				return $element;
 			}
-		} 
+		}
 	}
 
 // This function takes a string and checks to see if it's a framework form handle, and if so, returns the ID, otherwise returns the string as is
@@ -3429,7 +3429,7 @@ function dealWithDeprecatedFormHandles($handle) {
 					$form_id = $array['ff_form_id'];
 					if(!isset($prevFormId)) {
 						$prevFormId = $form_id; // initialize prev value if we're on the first run through
-					} 
+					}
 					if($prevFormId != $form_id) {
 						exit("Error: could not determine the form id from this ambiguous framework form handle: $handle.  If you update your API code so it uses form IDs instead of deprecated framework form handles, then this problem should go away.");
 					}
@@ -3457,7 +3457,7 @@ function dealWithDeprecatedFrameworkHandles($handles, $frid=false, $returnFormId
 	  }
 	}
 	
-	$workingHandles = array();	
+	$workingHandles = array();
 	if(is_array($handles)) {
 		$workingHandles = $handles;
 	} else {
@@ -3573,7 +3573,7 @@ function convertAllHandlesAndIds($handles, $frid, $reverse=false, $ids=false, $f
 	static $cachedElementIds = array();
 	static $cachedElementHandlesFromElementIds = array();
 	
-	if(!is_array($handles)) { 
+	if(!is_array($handles)) {
 		$temp = $handles;
 		unset($handles);
 		$handles[0] = $temp;
@@ -3605,21 +3605,21 @@ function convertAllHandlesAndIds($handles, $frid, $reverse=false, $ids=false, $f
 
 		$cachedElementIds[$frid] = $cachedElementHandles[$frid];
 		if($fid) {
-			$cachedElementHandlesFromElementIds[$fid] = $cachedElementHandles[$frid];	
+			$cachedElementHandlesFromElementIds[$fid] = $cachedElementHandles[$frid];
 		}
 		
 		// now get all the rest of the handles
 		if($fid) {
 			$idHandleQuery = q("SELECT ele_handle, ele_id FROM ".$xoopsDB->prefix("formulize") . " WHERE id_form=".intval($fid));
 		} else {
-			$idHandleQuery = q("SELECT t2.ele_handle, t1.fe_handle, t2.ele_id FROM " . $xoopsDB->prefix("formulize_framework_elements") . " as t1, " . $xoopsDB->prefix("formulize") . " as t2 WHERE t1.fe_frame_id='$frid' AND t1.fe_element_id=t2.ele_id");						
+			$idHandleQuery = q("SELECT t2.ele_handle, t1.fe_handle, t2.ele_id FROM " . $xoopsDB->prefix("formulize_framework_elements") . " as t1, " . $xoopsDB->prefix("formulize") . " as t2 WHERE t1.fe_frame_id='$frid' AND t1.fe_element_id=t2.ele_id");
 		}
 		foreach($idHandleQuery as $thisIdRow) {
 			if($fid) {
 				$cachedElementHandlesFromElementIds[$fid][$thisIdRow['ele_id']] = $thisIdRow['ele_handle'];
 			} else {
 				$cachedElementHandles[$frid][$thisIdRow['fe_handle']] = $thisIdRow['ele_handle'];
-				$cachedElementIds[$frid][$thisIdRow['ele_id']] = $thisIdRow['fe_handle'];	
+				$cachedElementIds[$frid][$thisIdRow['ele_id']] = $thisIdRow['fe_handle'];
 			}
 			
 			// populate the to return array, to save us going through all the handles again, since we're doing that right now
@@ -3631,21 +3631,21 @@ function convertAllHandlesAndIds($handles, $frid, $reverse=false, $ids=false, $f
 				}
 			} elseif($ids) {
 				$foundKey = array_search($thisIdRow['ele_id'],$handles); // handles could be an array of ids
-				if($foundKey !== false) { 
-					$to_return[$foundKey] = $thisIdRow['fe_handle'];	
+				if($foundKey !== false) {
+					$to_return[$foundKey] = $thisIdRow['fe_handle'];
 				}
 			} else {
 				if($reverse) { // element handles to framework handles
 					$foundKey = array_search($thisIdRow['ele_handle'],$handles);
 					if($foundKey !== false) {
-						$to_return[$foundKey] = $thisIdRow['fe_handle'];	
+						$to_return[$foundKey] = $thisIdRow['fe_handle'];
 					}
 				} else { // framework handles to element handles
 					$foundKey = array_search($thisIdRow['fe_handle'],$handles); // if this is a handle we're being asked for
-					if($foundKey !== false) { 
+					if($foundKey !== false) {
 						$to_return[$foundKey] = $thisIdRow['ele_handle'];
 					}
-				}	
+				}
 			}
 		}
     ksort($to_return); // to_return is built with the keys from $handles, but in an arbitrary order depending on the order the elements were returned in the DB query above, so we need to put them into the correct order here to correspond with $handles
@@ -3664,7 +3664,7 @@ function convertAllHandlesAndIds($handles, $frid, $reverse=false, $ids=false, $f
 					$to_return[] = $cachedElementHandles[$frid][$handle];		// handle is a framework handle, so return corresponding element handle from array
 				}
 			}
-		}	
+		}
 	}
 	return $to_return;
 }
@@ -3674,12 +3674,12 @@ function convertAllHandlesAndIds($handles, $frid, $reverse=false, $ids=false, $f
 // The dropdown list is made up of the options for the specified ele_id
 // If the dropdown list is a linked selectbox, the values can be optionally limited by the "limit" params, based on values in another field in each entry that underlies the link
 // ie: build a filter with the names of all activity entries, but limit it to activity entries where the date of the activity is 2007
-function buildFilter($id, $ele_id, $defaulttext="", $name="", $overrides=array(0=>""), $subfilter=false, $linked_ele_id = 0, $linked_data_id=0, $limit=false) { 
+function buildFilter($id, $ele_id, $defaulttext="", $name="", $overrides=array(0=>""), $subfilter=false, $linked_ele_id = 0, $linked_data_id=0, $limit=false) {
 
 	// Changes made to allow the linking of one filter to another. This is acheieved as follows:
 	// 1. Create a formulize form for managing the Main Filter List (form M)
-	// 2. Create a formulize form for managing the Sub Filter list (form S), which includes a linked element to the data in form M, 
-	//    so that relation between the Main Filter & Sub Filter data can be specified 
+	// 2. Create a formulize form for managing the Sub Filter list (form S), which includes a linked element to the data in form M,
+	//    so that relation between the Main Filter & Sub Filter data can be specified
 	// 3. Create a formulize form for the data that the Main & SubFilter act upon (form D)
 	///
 	// In such a case, the parameters have the following meaning:
@@ -3709,9 +3709,9 @@ function buildFilter($id, $ele_id, $defaulttext="", $name="", $overrides=array(0
 	}
 	$filter .= ">\n";
 	
-	if ($subfilter AND !(isset($_POST[$linked_data_id])) AND !(isset($_GET[$linked_data_id])))  { 
+	if ($subfilter AND !(isset($_POST[$linked_data_id])) AND !(isset($_GET[$linked_data_id])))  {
 		// If its a subfilter and the main filter is unselected, then put in 'Please select from above options first
-		$filter .= "<option value=\"none\">Please select a primary filter first</option>\n"; 
+		$filter .= "<option value=\"none\">Please select a primary filter first</option>\n";
 		}
 	else {
 		// Either it is not a subfilter, or it is a subfilter with the linked values set
@@ -3804,7 +3804,7 @@ function buildFilter($id, $ele_id, $defaulttext="", $name="", $overrides=array(0
 							$pgroups[] = $gid;
 						}
 					}
-					if(count($pgroups) > 0) { 
+					if(count($pgroups) > 0) {
 						unset($groups);
 						$groups = $pgroups;
       				} else {
@@ -3820,7 +3820,7 @@ function buildFilter($id, $ele_id, $defaulttext="", $name="", $overrides=array(0
 					$allgroupsq = q("SELECT groupid FROM " . $xoopsDB->prefix("groups") . " WHERE groupid != " . XOOPS_GROUP_USERS);
 					foreach($allgroupsq as $thisgid) {
 						$groups[] = $thisgid['groupid'];
-					} 
+					}
 				}
 			}
 			$options = array();
@@ -3836,7 +3836,7 @@ function buildFilter($id, $ele_id, $defaulttext="", $name="", $overrides=array(0
     $counter = 0;
     foreach($options as $option=>$option_value) {
       if(is_array($overrides) AND isset($overrides[$option])) {
-          $selected = ($_POST[$id] == $option OR $_GET[$id] == $option) ? "selected" : ""; 
+          $selected = ($_POST[$id] == $option OR $_GET[$id] == $option) ? "selected" : "";
           $filter .= "<option value=\"" . $overrides[$option][1] . "\" $selected>" . $overrides[$option][0] . "</option>\n";
       } else {
         if(preg_match('/\{OTHER\|+[0-9]+\}/', $option)) { $option = str_replace(":", "", _formulize_OPT_OTHER); }
@@ -3905,10 +3905,10 @@ function _formulize_numberFormat($value, $decimalOverride, $decimals="", $decSep
 		$decimals = isset($formulizeConfig['number_decimals']) ? $formulizeConfig['number_decimals'] : 0; // or else use the module pref, and if there isn't one, use 0
 	}
 	if($decsep == "" AND !$decSepExists) {
-		$decsep = isset($formulizeConfig['number_decimalsep']) ? $formulizeConfig['number_decimalsep'] : "."; 
+		$decsep = isset($formulizeConfig['number_decimalsep']) ? $formulizeConfig['number_decimalsep'] : ".";
 	}
 	if($sep == "" AND !$sepExists) {
-		$sep = isset($formulizeConfig['number_sep']) ? $formulizeConfig['number_sep'] : ","; 
+		$sep = isset($formulizeConfig['number_sep']) ? $formulizeConfig['number_sep'] : ",";
 	}
 	if($prefix == "" AND !$prefixExists) {
 		$prefix = isset($formulizeConfig['number_prefix']) ? $formulizeConfig['number_prefix'] : ""; // if no prefix actually is specified for the element, then use module pref if one is set, otherwise use ""
@@ -3932,7 +3932,7 @@ function _formulize_numberFormat($value, $decimalOverride, $decimals="", $decSep
 function printCalcResult($calcs) {
 	$element_handler = icms_getModuleHandler('elements', 'formulize');
 	foreach($calcs as $handle=>$thisCalcData) {
-		$elementObject = $element_handler->get($handle); 
+		$elementObject = $element_handler->get($handle);
 		$caption = $elementObject->getVar('ele_caption');
 		print "<h3>$caption</h3>\n";
 		foreach($thisCalcData as $type=>$results) {
@@ -3941,7 +3941,7 @@ function printCalcResult($calcs) {
 					print "<p><b>Grouped By: ".implode(",",$result['grouping'])."</b></p>\n";
 					print $result['result'];
 				}
-			}	 
+			}
 			else {
 				print $results[0]['result'];
 			}
@@ -4139,7 +4139,7 @@ function formulize_createFilterUI($filterSettings, $filterName, $formWithSourceE
        ${$oldTypesName}[$i] = $defaultTypeIfNoFilterTypeGiven;
      }
    }
- } 
+ }
 
   // setup needed variables for the all or oom ui
  // > match all of these
@@ -4314,7 +4314,7 @@ function formulize_includeEval($code, $execute=false, $globals=array(), $filterN
     $fileHandle = fopen($fileName,"w");
     fwrite($fileHandle,"<?php \n global $".implode(", $",$globals).";\n");
     foreach($codeParts as $thisCode) {
-      fwrite($fileHandle,$thisCode);  
+      fwrite($fileHandle,$thisCode);
     }
     fclose($fileHandle);
     include $fileName;
@@ -4343,7 +4343,7 @@ function formulize_addProcedureChoicesToPost($choices) {
 				$_POST[ $temp_pair[0] ] = $temp_pair[1];
 			}
 		}
-	} 
+	}
 }
 
 // used in the admin UI
@@ -4393,7 +4393,7 @@ function parseSubmittedConditions($filter_key, $delete_key, $processedValues, $e
   
   $conditionsDeleteParts = explode("_", $_POST[$delete_key]);
   $deleteTarget = $conditionsDeleteParts[1];
-  if($_POST[$delete_key]) { 
+  if($_POST[$delete_key]) {
     // go through the passed filter settings starting from the one we need to remove, and shunt the rest down one space
     // need to do this in a loop, because unsetting and key-sorting will maintain the key associations of the remaining high values above the one that was deleted
     $originalCount = count($_POST[$filter_key."_elements"]);
@@ -4411,7 +4411,7 @@ function parseSubmittedConditions($filter_key, $delete_key, $processedValues, $e
         unset($_POST[$filter_key."_terms"][$i]);
         unset($_POST[$filter_key."_types"][$i]);
       }
-    }	
+    }
   }
   if(count($_POST[$filter_key."_elements"]) > 0){
     $processedValues['elements']['ele_value'][$ele_value_position][0] = $_POST[$filter_key."_elements"];
@@ -4475,21 +4475,21 @@ function buildConditionsFilterSQL($conditions, $targetFormId, $curlyBracketEntry
 			  }
 			  list($conditionsFilterComparisonValue, $thisCurlyBracketFormFrom) =  _buildConditionsFilterSQL($filterId, $filterOps, $filterTerms, $filterElementIds, $targetFormElementTypes, $curlyBracketEntry, $userComparisonId, $curlyBracketForm, $element_handler, $form_handler);
 			  $conditionsfilter .= "$targetAlias`".$filterElementHandles[$filterId]."` ".$filterOps[$filterId]." ".$conditionsFilterComparisonValue;
-		  } else { 
+		  } else {
 			  if($start_oom) {
 				  $conditionsfilter_oom = " AND (";
 				  $start_oom = false;
 			  } else {
 				  $conditionsfilter_oom .= " OR ";
 			  }
-			  list($conditionsFilterComparisonValue, $thisCurlyBracketFormFrom) =  _buildConditionsFilterSQL($filterId, $filterOps, $filterTerms, $filterElementIds, $targetFormElementTypes, $curlyBracketEntry, $userComparisonId, $curlyBracketForm, $element_handler, $form_handler);			  
+			  list($conditionsFilterComparisonValue, $thisCurlyBracketFormFrom) =  _buildConditionsFilterSQL($filterId, $filterOps, $filterTerms, $filterElementIds, $targetFormElementTypes, $curlyBracketEntry, $userComparisonId, $curlyBracketForm, $element_handler, $form_handler);
 			  $conditionsfilter_oom .= "$targetAlias`".$filterElementHandles[$filterId]."` ".$filterOps[$filterId]." ".$conditionsFilterComparisonValue;
 		  }
 		  $curlyBracketFormFrom = $thisCurlyBracketFormFrom ? $thisCurlyBracketFormFrom : $curlyBracketFormFrom; // if something was returned, use it, otherwise, stick with what we've got
 	  }
 	  $conditionsfilter .= $conditionsfilter ? ")" : "";
 	  $conditionsfilter_oom .= $conditionsfilter_oom ? ")" : "";
-  } 
+  }
 
   return array($conditionsfilter, $conditionsfilter_oom, $curlyBracketFormFrom);
 }
@@ -4581,11 +4581,11 @@ function initialize_formulize_xhr() {
 		formulize_xhr = new XMLHttpRequest();
 	} else if (window.ActiveXObject) {
 		try {
-			formuilze_xhr = 
+			formuilze_xhr =
 				new ActiveXObject("Msxml2.XMLHTTP");
 		} catch (ex) {
 			try {
-				formulize_xhr = 
+				formulize_xhr =
 				 new ActiveXObject("Microsoft.XMLHTTP");
 			} catch (ex) {
 			}
@@ -4631,9 +4631,9 @@ function formulize_xhr_send(op,params) {
   formulize_xhr.open("GET", '<?php print XOOPS_URL . "/modules/formulize/formulize_xhr_responder.php?"; ?>'+params_for_uri+'op='+op+'&uid=<?php print $xoopsUser ? $xoopsUser->getVar('uid') : 0; ?>', true);
   formulize_xhr.setRequestHeader( "If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT" );
   formulize_xhr.onreadystatechange = function() {
-	//alert(formulize_xhr.readyState); 
+	//alert(formulize_xhr.readyState);
 	if(formulize_xhr.readyState == 4) {
-		//alert(formulize_xhr.responseText); 
+		//alert(formulize_xhr.responseText);
 		formulize_xhr_return(op,params,formulize_xhr.responseText);
 	}
   }
@@ -4669,7 +4669,7 @@ function getHTMLForList($value, $handle, $entryId, $deDisplay=0, $textWidth=200,
 	  }
 	}
 	$fid = $cachedFormIds[$handle];
-	foreach($value as $valueId=>$v) { 
+	foreach($value as $valueId=>$v) {
 		if(is_numeric($v)) { // Added by Steph, April 11, 2011
 			$elstyle = 'style="text-align: right;"';
 		}
@@ -4724,9 +4724,9 @@ function renderTemplate($template, $templateVariables) {
 	${$name} = $value;
       }
 	
-      // now eval and returns as string 
+      // now eval and returns as string
       ob_start();
-      $evalSuccess = eval(html_entity_decode($template)); 
+      $evalSuccess = eval(html_entity_decode($template));
       $evalResult = ob_get_clean();
       if ($evalSuccess  === false) {
 	  return "<p>"._AM_FORMULIZE_SCREEN_LOE_TEMPLATE_ERROR."</p>";

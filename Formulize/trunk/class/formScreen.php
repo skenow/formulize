@@ -33,7 +33,6 @@ if (!defined("XOOPS_ROOT_PATH")) {
 	die("XOOPS root path not defined");
 }
 
-require_once XOOPS_ROOT_PATH . '/kernel/object.php';
 require_once XOOPS_ROOT_PATH . '/modules/formulize/class/screen.php';
 include_once XOOPS_ROOT_PATH . '/modules/formulize/include/functions.php';
 

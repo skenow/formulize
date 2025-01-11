@@ -284,7 +284,7 @@ echo '</table>
 	<table class="outer" cellspacing="1" width="100%">
 	';
 
-	$submit = new XoopsFormButton('', 'submit', _SUBMIT, 'submit');
+	$submit = new icms_form_elements_Button('', 'submit', _SUBMIT, 'submit');
 	echo '
 			<td class="foot" colspan="7">'.$submit->render().'
 		</tr>
@@ -292,7 +292,7 @@ echo '</table>
 	';
 }
 	if ($title != '' AND !isset($_GET['table'])) {
-		$hidden_op = new XoopsFormHidden('op', 'upform');
+		$hidden_op = new icms_form_elements_Hidden('op', 'upform');
 		echo $hidden_op->render();
 	}
 if(($title != '' AND !isset($_GET['table'])) OR $title == '') {

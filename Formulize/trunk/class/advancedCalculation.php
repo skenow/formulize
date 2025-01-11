@@ -52,18 +52,18 @@ class formulizeAdvancedCalculation extends icms_core_Object {
 
 	function genBasic($calculation) {
 		$code = <<<EOD
-		\$totalNumberOfRecords = 0;
-		\$sql = "{$calculation['sql']}";
-		\$res = \$xoopsDB->queryF(\$sql);
-		{$calculation['preCalculate']}
-		while(\$array = \$xoopsDB->fetchBoth(\$res)) {
-		  \$row = \$array;
-		  \$field = \$array;
-		{$calculation['calculate']}
-		}
-		\$totalNumberOfRecords = icms::$xoopsDB->getRowsNum(\$res);
-		{$calculation['postCalculate']}
-		EOD;
+	\$totalNumberOfRecords = 0;
+	\$sql = "{$calculation['sql']}";
+	\$res = icms::\$xoopsDB->queryF(\$sql);
+	{$calculation['preCalculate']}
+	while(\$array = icms::\$xoopsDB->fetchBoth(\$res)) {
+	  \$row = \$array;
+	  \$field = \$array;
+	{$calculation['calculate']}
+	}
+	\$totalNumberOfRecords = icms::\$xoopsDB->getRowsNum(\$res);
+	{$calculation['postCalculate']}
+EOD;
 
 		return $code;
 	}
@@ -90,39 +90,39 @@ class formulizeAdvancedCalculation extends icms_core_Object {
 		// print $foreachExpression . '<hr>' . $foreachCriteria . '<hr>' . $foreachMatch . '<hr>';
 
 		$code = <<<EOD
-		\$totalNumberOfRecords = 0;
-		\$sqlBase = "{$foreachSqlPre}";
-		\$sql = \$sqlBase . "(";
-		\$start = true;
-		\$chunk = 0;
-		\$res = array();
-		foreach({$foreachCriteria}) {
-		  if(strlen(\$sql) > 500000) {
-				\$sql .= ")";
-		    \$res[\$chunk] = \$xoopsDB->queryF(\$sql);
-		    \$chunk++;
-		    \$start = true;
-		    \$sql = \$sqlBase  . "(";
-		  }
-		  if(!\$start) {
-		    \$sql .= " {$foreachMatch} ";
-		  }
-		  \$sql .= " {$foreachSqlItem} ";
-		  \$start = false;
-		}
-		\$sql .= ")";
-		\$res[\$chunk] = \$xoopsDB->queryF(\$sql);
-		{$calculation['preCalculate']}
-		foreach(\$res as \$thisRes) {
-		  while(\$array = \$xoopsDB->fetchBoth(\$thisRes)) {
-			  \$row = \$array;
-			  \$field = \$array;
-		{$calculation['calculate']}
-		  }
-		  \$totalNumberOfRecords += icms::$xoopsDB->getRowsNum(\$thisRes);
-		}
-		{$calculation['postCalculate']}
-		EOD;
+	\$totalNumberOfRecords = 0;
+	\$sqlBase = "{$foreachSqlPre}";
+	\$sql = \$sqlBase . "(";
+	\$start = true;
+	\$chunk = 0;
+	\$res = array();
+	foreach({$foreachCriteria}) {
+	  if(strlen(\$sql) > 500000) {
+			\$sql .= ")";
+	    \$res[\$chunk] = icms::\$xoopsDB->queryF(\$sql);
+	    \$chunk++;
+	    \$start = true;
+	    \$sql = \$sqlBase  . "(";
+	  }
+	  if(!\$start) {
+	    \$sql .= " {$foreachMatch} ";
+	  }
+	  \$sql .= " {$foreachSqlItem} ";
+	  \$start = false;
+	}
+	\$sql .= ")";
+	\$res[\$chunk] = icms::\$xoopsDB->queryF(\$sql);
+	{$calculation['preCalculate']}
+	foreach(\$res as \$thisRes) {
+	  while(\$array = icms::\$xoopsDB->fetchBoth(\$thisRes)) {
+		  \$row = \$array;
+		  \$field = \$array;
+	{$calculation['calculate']}
+	  }
+	  \$totalNumberOfRecords += icms::\$xoopsDB->getRowsNum(\$thisRes);
+	}
+	{$calculation['postCalculate']}
+EOD;
 
 		return $code;
 	}
@@ -142,9 +142,8 @@ class formulizeAdvancedCalculationHandler {
 	function get($id) {
 		static $cachedResults = array();
 		if (!isset($cachedResults[$id])) {
-			global $xoopsDB;
 			$newAdvCalc = null;
-			$sql = 'SELECT * FROM ' . $xoopsDB->prefix("formulize_advanced_calculations") . ' WHERE acid=' . $id . ';';
+			$sql = 'SELECT * FROM ' . icms::$xoopsDB->prefix("formulize_advanced_calculations") . ' WHERE acid=' . $id . ';';
 			if ($result = $this->db->query($sql)) {
 				$resultArray = $this->db->fetchArray($result);
 				$newAdvCalc = $this->create();
@@ -200,10 +199,9 @@ class formulizeAdvancedCalculationHandler {
 		} elseif (!is_numeric($acid)) {
 			return false;
 		}
-		global $xoopsDB;
 		$isError = false;
-		$sql = "DELETE FROM " . $xoopsDB->prefix("formulize_advanced_calculations") . " WHERE acid=$acid";
-		if (!$xoopsDB->query($sql)) {
+		$sql = "DELETE FROM " . icms::$xoopsDB->prefix("formulize_advanced_calculations") . " WHERE acid=$acid";
+		if (!icms::$xoopsDB->query($sql)) {
 			print "Error: could not complete the deletion of application " . $acid;
 			$isError = true;
 		}
@@ -211,9 +209,8 @@ class formulizeAdvancedCalculationHandler {
 	}
 
 	function cloneProcedure($acid) {
-		global $xoopsDB;
-		$sql = "INSERT INTO " . $xoopsDB->prefix("formulize_advanced_calculations") . " (fid, name, description, input, output, steps, steptitles, fltr_grps, fltr_grptitles ) SELECT fid, CONCAT(name,' - copy'), description, input, output, steps, steptitles, fltr_grps, fltr_grptitles FROM " . $xoopsDB->prefix("formulize_advanced_calculations") . " WHERE acid=" . intval($acid);
-		if (!$res = $xoopsDB->queryF($sql)) {
+		$sql = "INSERT INTO " . icms::$xoopsDB->prefix("formulize_advanced_calculations") . " (fid, name, description, input, output, steps, steptitles, fltr_grps, fltr_grptitles ) SELECT fid, CONCAT(name,' - copy'), description, input, output, steps, steptitles, fltr_grps, fltr_grptitles FROM " . icms::$xoopsDB->prefix("formulize_advanced_calculations") . " WHERE acid=" . intval($acid);
+		if (!$res = icms::$xoopsDB->queryF($sql)) {
 			print "Error: cloning procedure SQL failed. " . icms::$xoopsDB->error() . "<br>SQL:<br>$sql";
 			return false;
 		} else {
@@ -222,8 +219,7 @@ class formulizeAdvancedCalculationHandler {
 	}
 
 	function getList($fid) {
-		global $xoopsDB;
-		$sql = "SELECT acid, name, description FROM " . $xoopsDB->prefix("formulize_advanced_calculations") . " WHERE fid=$fid";
+		$sql = "SELECT acid, name, description FROM " . icms::$xoopsDB->prefix("formulize_advanced_calculations") . " WHERE fid=$fid";
 		$result = $this->db->query($sql);
 		if (!$result) {
 			print "Error: could not complete getting a list of advanced calculations" . $fid;
@@ -307,7 +303,7 @@ class formulizeAdvancedCalculationHandler {
 	}
 
 	function calculate($advCalcObject, $debugFlag = false) {
-		global $xoopsDB, $xoopsUser;
+		global $xoopsUser;
 		if (!is_object($advCalcObject)) {
 			$advCalcObject = $this->get($advCalcObject);
 		}
@@ -944,10 +940,9 @@ class formulizeAdvancedCalculationHandler {
 
 	// this function removes temp tables created by the createProceduresTable on this pageload
 	function destroyTables() {
-		global $xoopsDB;
 		if (isset($GLOBALS['formulize_procedures_tablenames'])) {
 			$sql = "DROP TABLE `" . implode("`, `", $GLOBALS['formulize_procedures_tablenames']) . "`;";
-			if (!$res = $xoopsDB->queryF($sql)) {
+			if (!$res = icms::$xoopsDB->queryF($sql)) {
 				print "Error: could not drop the temporary tables created by this procedure.<br>" . icms::$xoopsDB->error() . "<br>$sql";
 			}
 			unset($GLOBALS['formulize_procedures_tablenames']);
@@ -1317,15 +1312,15 @@ function groupScopeFilter($handle, $alias = "") {
 	$formObject = $form_handler->getByHandle($handle);
 	$scopeFilter = "";
 	if (is_object($formObject)) {
-		global $xoopsUser, $xoopsDB;
+		global $xoopsUser;
 		$fid = $formObject->getVar('id_form');
-		$alias = $alias ? $alias . "." : $xoopsDB->prefix($handle) . ".";
+		$alias = $alias ? $alias . "." : icms::$xoopsDB->prefix($handle) . ".";
 		$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
 		$regUsersKey = array_search(2, $groups);
 		if ($regUsersKey !== false) { // if registered users is found in the group list, then remove it
 			unset($groups[$regUsersKey]);
 		}
-		$scopeFilter = " EXISTS(SELECT 1 FROM " . $xoopsDB->prefix("formulize_entry_owner_groups") . " AS scope WHERE (scope.entry_id=" . $alias . "entry_id AND scope.fid=" . intval($fid) . ") AND (scope.groupid = " . implode(" OR scope.groupid = ", $groups) . ")) ";
+		$scopeFilter = " EXISTS(SELECT 1 FROM " . icms::$xoopsDB->prefix("formulize_entry_owner_groups") . " AS scope WHERE (scope.entry_id=" . $alias . "entry_id AND scope.fid=" . intval($fid) . ") AND (scope.groupid = " . implode(" OR scope.groupid = ", $groups) . ")) ";
 	}
 	return $scopeFilter;
 }
@@ -1402,9 +1397,8 @@ function createProceduresTable($array, $permTableName = "") {
 	}
 	$sql .= implode(",", $indexList);
 	$sql .= ") ENGINE=MyISAM;";
-	global $xoopsDB;
 	// print "$sql<br>";
-	if (!$res = $xoopsDB->queryF($sql)) {
+	if (!$res = icms::$xoopsDB->queryF($sql)) {
 		print "Error: could not create table for the Procedure.<br>" . icms::$xoopsDB->error() . "<br>$sql";
 	} elseif (!$permTableName) {
 		$GLOBALS['formulize_procedures_tablenames'][] = $tablename;
@@ -1416,7 +1410,7 @@ function createProceduresTable($array, $permTableName = "") {
 		if (strlen($sql) > 50000) {
 			// need to do the interim query here because of the length of the query
 			// print "$sql<br>";
-			if (!$res = $xoopsDB->queryF($sql)) {
+			if (!$res = icms::$xoopsDB->queryF($sql)) {
 				print "Error: could not insert values into the table for the Procedure.<br>" . icms::$xoopsDB->error() . "<br>$sql";
 			}
 			$start = true;
@@ -1467,7 +1461,7 @@ function createProceduresTable($array, $permTableName = "") {
 		$start = false;
 	}
 
-	if (!$res = $xoopsDB->queryF($sql)) {
+	if (!$res = icms::$xoopsDB->queryF($sql)) {
 		print "Error: could not insert values into the table for the Procedure.<br>" . icms::$xoopsDB->error() . "<br>$sql";
 	}
 

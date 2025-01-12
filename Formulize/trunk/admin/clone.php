@@ -80,7 +80,7 @@ if(!is_object($formObject)) {
   
     // print out our options if any
     
-    xoops_cp_header();
+    icms_cp_header();
     
     print "<h1>"._AM_FORMULIZE_CLONING_TITLE."</h1>\n";
     print "<h2>"._AM_FORMULIZE_CLONING_FOUND_ELEMENTS."</h2>";
@@ -103,7 +103,7 @@ if(!is_object($formObject)) {
     
   
     include 'footer.php';
-    xoops_cp_footer();
+    icms_cp_footer();
   
   } else {
     // no link options found, so just redirect to the clonedata URL

@@ -115,7 +115,7 @@ include_once XOOPS_ROOT_PATH."/class/module.errorhandler.php";
 $myts =& icms_core_Textsanitizer::getInstance();
 $eh = new ErrorHandler;
 
-	xoops_cp_header();
+	icms_cp_header();
 
 if( $_POST['op'] != 'upform' && $op != 'addform'){
 
@@ -510,7 +510,7 @@ function addform()
       $element->setVar('ele_disabled', 0);
 			$element->setVar('ele_type', 'textarea');
 			if( !$formulize_mgr->insert($element) ){
-				xoops_cp_header();
+				icms_cp_header();
 				echo $element->getHtmlErrors();
 			}
 			unset($element);
@@ -539,7 +539,7 @@ case "addform":
 
 
 include 'footer.php';
-xoops_cp_footer();
+icms_cp_footer();
 
 ?>
 

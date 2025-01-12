@@ -31,7 +31,7 @@ include_once "../include/functions.php";
 
 function MyMenuAdmin($cat_id="") { // modified to accept passing of category names APRIL 25/05
         global $xoopsDB, $xoopsConfig, $xoopsModule;
-        xoops_cp_header();
+        icms_cp_header();
         OpenTable();
 
         echo "<big><b>"._AM_TITLE."</big></b>";
@@ -260,7 +260,7 @@ function drawRow($thiscat, $thisformid) {
 
 function MyMenuEdit($menuid) {
         global $xoopsDB, $xoopsConfig, $xoopsModule;
-        xoops_cp_header();
+        icms_cp_header();
         $result = $xoopsDB->query("SELECT position, itemname, indent, margintop, marginbottom, itemurl, bold, membersonly, mainmenu, status FROM ".$xoopsDB->prefix("formulize_menu")." WHERE menuid=$menuid");
         list($xposition, $itemname, $indent, $margintop, $marginbottom, $itemurl, $bold, $membersonly, $mainmenu, $status) = $xoopsDB->fetchRow($result);
         $myts =& icms_core_Textsanitizer::getInstance();
@@ -415,7 +415,7 @@ function menuCatUpdate($cat_id, $cat_name, $new_cat="") {
                 redirect_header("menu_index.php?op=MyMenuAdmin",1,_AM_DBUPDATED);
                 exit();
         } else {
-                xoops_cp_header();
+                icms_cp_header();
                 OpenTable();
                 $result = $xoopsDB->query("SELECT position, itemname, indent, margintop, marginbottom, itemurl, bold, membersonly, mainmenu, status FROM ".$xoopsDB->prefix("formulize_menu")." WHERE menuid=$menuid");
                 list($position, $itemname, $indent, $margintop, $marginbottom, $itemurl, $bold, $membersonly, $mainmenu, $status) = $xoopsDB->fetchRow($result);
@@ -509,5 +509,5 @@ switch($op) {
                 MyMenuAdmin();
                 break;
 }
-xoops_cp_footer();
+icms_cp_footer();
 ?>

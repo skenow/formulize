@@ -81,7 +81,7 @@ $eh = new ErrorHandler;
 
 global $title2, $op, $data;
 
-	xoops_cp_header();
+	icms_cp_header();
 
 
 //S�lection des formulizes
@@ -2411,7 +2411,7 @@ case "patch30datastructure":
 print "<p>version 4.0 SVN (trunk)</p>";
 
 include 'footer.php';
-    xoops_cp_footer();
+    icms_cp_footer();
 
 ?>
 

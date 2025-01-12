@@ -29,7 +29,7 @@
 
 // initialize the ImpressCMS admin page template
 include_once("admin_header.php");
-xoops_cp_header();
+icms_cp_header();
 
 // include necessary Formulize files/functions
 include_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
@@ -75,7 +75,7 @@ if(isset($_GET['op'])) {
 $adminPage = array();
 switch($_GET['page']) {
   case "application":
-    include "application.php"; 
+    include "application.php";
     break;
   case "form":
     include "form.php";
@@ -124,6 +124,4 @@ $xoopsTpl->assign('accordion_active', $accordion_active);
 $xoopsTpl->display("db:admin/ui.html");
 
 include 'footer.php';
-xoops_cp_footer();
-
-
+icms_cp_footer();

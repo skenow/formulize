@@ -134,7 +134,7 @@ switch($op){
 			$element->setVar('ele_value', $new_ele_value);
 			$element->setVar('ele_type', "textarea");
 			if( !$formulize_mgr->insert($element, true) ){ // true causes a forced insert (necessary when there is no POST)
-				xoops_cp_header();
+				icms_cp_header();
 				echo $element->getHtmlErrors();
 			} else {
 				redirect_header("index.php?title=$title", 3, _AM_ELE_CONVERTED_TO_TEXTAREA);
@@ -149,7 +149,7 @@ switch($op){
 			$element->setVar('ele_value', $new_ele_value);
 			$element->setVar('ele_type', "text");
 			if( !$formulize_mgr->insert($element, true) ){ // true causes a forced insert (necessary when there is no POST)
-				xoops_cp_header();
+				icms_cp_header();
 				echo $element->getHtmlErrors();
 			} else {
 				redirect_header("index.php?title=$title", 3, _AM_ELE_CONVERTED_TO_TEXTBOX);
@@ -157,7 +157,7 @@ switch($op){
 		} elseif($ele_type=="radio") {
 			$element->setVar('ele_type', "checkbox"); // just need to change type, ele_value format is the same
 			if( !$formulize_mgr->insert($element, true) ){ // true causes a forced insert (necessary when there is no POST)
-				xoops_cp_header();
+				icms_cp_header();
 				echo $element->getHtmlErrors();
 			} else {
 				include_once XOOPS_ROOT_PATH . "/modules/formulize/class/data.php";
@@ -171,7 +171,7 @@ switch($op){
 		} elseif($ele_type=="checkbox") {
 			$element->setVar('ele_type', "radio");  // just need to change type, ele_value format is the same
 			if( !$formulize_mgr->insert($element, true) ){ // true causes a forced insert (necessary when there is no POST)
-				xoops_cp_header();
+				icms_cp_header();
 				echo $element->getHtmlErrors();
 			} else {
 				include_once XOOPS_ROOT_PATH . "/modules/formulize/class/data.php";
@@ -187,7 +187,7 @@ switch($op){
 		}
 		break;
 	case 'edit':
-		xoops_cp_header();
+		icms_cp_header();
 		if( !empty($ele_id) ){
       if(!isset($element)) {
         $element = $formulize_mgr->get($ele_id);
@@ -541,7 +541,7 @@ switch($op){
 			redirect_header("index.php?title=$title", 0, _AM_ELE_SELECT_NONE);
 		}
 		if( empty($_POST['ok']) ){
-			xoops_cp_header();
+			icms_cp_header();
 			xoops_confirm(array('op' => 'delete', 'ele_id' => $ele_id, 'ok' => 1), 'elements.php?title='.$title.'', _AM_ELE_CONFIRM_DELETE);
 		}else{
 			$element =& $formulize_mgr->get($ele_id);
@@ -559,7 +559,7 @@ switch($op){
 			redirect_header("index.php?title=$title", 1, _AM_DBUPDATED);
 	break;
 /*	default:
-		xoops_cp_header();
+		icms_cp_header();
 	//	OpenTable();
 		echo "<h4>"._AM_ELE_CREATE."</h4>
 		<ul>
@@ -575,7 +575,7 @@ switch($op){
 	break;*/
 }
 include 'footer.php';
-xoops_cp_footer();
+icms_cp_footer();
 
 
 function addOption($id1, $id2, $text, $type='check', $checked=null){

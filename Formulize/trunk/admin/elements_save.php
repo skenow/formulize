@@ -439,7 +439,7 @@ if( !empty($ele_id) AND $clone == 0){
 		$element->setVar('id_form', $id_form);
        
 		if( !$formulize_mgr->insert($element) ){
-			xoops_cp_header();
+			icms_cp_header();
 			echo $element->getHtmlErrors();
 		}else{
 			
@@ -453,7 +453,7 @@ if( !empty($ele_id) AND $clone == 0){
             }	    
 						$element->setVar('ele_handle', $ele_handle); 
 						if( !$formulize_mgr->insert($element) ){
-									xoops_cp_header();
+									icms_cp_header();
 									echo $element->getHtmlErrors();
 						}
 			}

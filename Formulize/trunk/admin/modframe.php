@@ -39,7 +39,7 @@ if ( file_exists("../language/".$xoopsConfig['language']."/main.php") ) {
 	include "../language/english/main.php";
 }
 
-xoops_cp_header();
+icms_cp_header();
 
 $cf = $_GET['cf'];
 if(!$cf)
@@ -865,7 +865,7 @@ switch ($op) {
 
 
 include 'footer.php';
-xoops_cp_footer();
+icms_cp_footer();
 
 
 

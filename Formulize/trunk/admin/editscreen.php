@@ -62,7 +62,7 @@ if(is_numeric(intval($sid)) AND $sid>0) {
 }
 
 
-xoops_cp_header();
+icms_cp_header();
 
 if(isset($_POST['oneditscreen'])) {
 	// save the contents of the form 
@@ -79,6 +79,6 @@ $form = $screen_handler->editForm($screen, $fid);
 $form->addElement(new xoopsFormButton('', 'savescreen', _AM_FORMULIZE_SCREEN_SAVE, 'submit'));
 print $form->render();
 
-xoops_cp_footer();
+icms_cp_footer();
 
 ?>

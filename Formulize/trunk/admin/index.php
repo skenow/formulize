@@ -75,7 +75,7 @@ if($formObject->getVar('lockedform')) {
 
 
 if( $_POST['op'] != 'save' ){
-	xoops_cp_header();
+	icms_cp_header();
 
       // javascript for confirming conversion of elements -- added July 1 2006
       print "<script type='text/javascript'>\n";
@@ -274,7 +274,7 @@ if( $_POST['op'] != 'save' ){
 	echo $hidden_op->render();
 	echo '</form>';
 }else{
-        xoops_cp_header();
+        icms_cp_header();
 	extract($_POST);
 	$error = '';
 	foreach( $ele_id as $id ){
@@ -299,7 +299,7 @@ if( $_POST['op'] != 'save' ){
 	if( empty($error) ){
 		redirect_header("index.php?title=$title", 0, _AM_SAVING_CHANGES);
 	}else{
-		xoops_cp_header();
+		icms_cp_header();
 		echo error;
 	}
 }
@@ -315,7 +315,7 @@ if( $_POST['op'] != 'save' ){
 
 
 include 'footer.php';
-xoops_cp_footer();
+icms_cp_footer();
 
 function readableType($type){
   switch($type){

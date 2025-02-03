@@ -31,7 +31,7 @@ global $xoopsDB;
 class formulizeApplication extends icms_core_Object {
 
 	function __construct() {
-		parent::_construct();
+		parent::__construct();
 		$this->initVar("appid", XOBJ_DTYPE_INT, NULL, false);
 		$this->initVar("name", XOBJ_DTYPE_TXTBOX, NULL, false, 255);
 		$this->initVar("description", XOBJ_DTYPE_TXTAREA);

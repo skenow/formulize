@@ -496,19 +496,6 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 	}
 
 	function saveForm(&$screen, $fid) {
-		// get rid of magic quotes if necessary
-		if (get_magic_quotes_gpc()) {
-			$valueIsArray = false;
-			foreach ($_POST as $k => $v) {
-				if (is_array($v)) {
-					foreach ($v as $subK => $subV) {
-						$_POST[$k][$subK] = stripslashes($subV);
-					}
-				} else {
-					$_POST[$k] = stripslashes($v);
-				}
-			}
-		}
 		$vars['type'] = 'listOfEntries';
 		$vars['title'] = $_POST['title'];
 		$vars['fid'] = $_POST['fid'];

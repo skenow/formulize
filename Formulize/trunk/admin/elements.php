@@ -68,40 +68,10 @@ if($formObject->getVar('lockedform')) {
 
 if( !empty($_POST) ){
 	foreach( $_POST as $k => $v ){
-		if(get_magic_quotes_gpc()) {
-			if(is_array($v)) {
-				foreach($v as $vk=>$vv) {
-					if(is_array($vv)) {
-						foreach($vv as $vvk=>$vvv) {
-							$v[$vk][$vvk] = stripslashes($vvv);	
-						}
-					} else {
-						$v[$vk] = stripslashes($vv);	
-					}
-				}
-			} else {
-				$v = stripslashes($v);
-			}
-		}
 		${$k} = $v;
 	}
 }elseif( !empty($_GET) ){
 	foreach( $_GET as $k => $v ){
-		if(get_magic_quotes_gpc()) {
-			if(is_array($v)) {
-				foreach($v as $vk=>$vv) {
-					if(is_array($vv)) {
-						foreach($vv as $vvk=>$vvv) {
-							$v[$vk][$vvk] = stripslashes($vvv);	
-						}
-					} else {
-						$v[$vk] = stripslashes($vv);	
-					}
-				}
-			} else {
-				$v = stripslashes($v);
-			}
-		}
 		${$k} = $v;
 	}
 }
@@ -213,7 +183,7 @@ switch($op){
 			// no longer make cloned captions have the word copy at the end, since we add it when saving if the caption is not unique
 			// $ele_caption = $clone ? sprintf(_AM_COPIED, $element->getVar('ele_caption', 'f')) : $element->getVar('ele_caption', 'f');
 			$ele_caption = $element->getVar('ele_caption', 'f');
-			if ($ele_type=='sep' && substr(0, 7, $ele_caption)=='{SEPAR}') { 
+			if ($ele_type=='sep' && substr(0, 7, $ele_caption)=='{SEPAR}') {
 				$ele_caption = new XoopsFormText(_AM_ELE_CAPTION, 'ele_caption', 50, 4096, '{SEPAR}'.$ele_caption); }
 			else { $ele_caption = new XoopsFormText(_AM_ELE_CAPTION, 'ele_caption', 50, 4096, $ele_caption); }
       $value = $element->getVar('ele_value');
@@ -222,7 +192,7 @@ switch($op){
 			$ele_handle_default = $element->getVar('ele_handle', 'f');
 			// merge in the uitext if there is any -- aug 25 2007
 			$uitext = $element->getVar('ele_uitext');
-			if(is_array($uitext) AND count($uitext) > 0) { 
+			if(is_array($uitext) AND count($uitext) > 0) {
 				if($ele_type == "select") {
 					$value[2] = formulize_mergeUIText($value[2], $uitext);
 				} else {
@@ -242,7 +212,7 @@ switch($op){
 			$ele_handle_default = $clone ? "" : $ele_handle_default;
 			$ele_handle = new XoopsFormText(_AM_ELE_HANDLE, 'ele_handle', 50, 50, $ele_handle_default);
 			$ele_handle->setDescription(_AM_ELE_HANDLE_HELP);
-			$form->addElement($ele_handle); 
+			$form->addElement($ele_handle);
 		
 			// descriptive text added June 6 2006 -- jwe
 			if($ele_type != "ib") {
@@ -346,21 +316,21 @@ switch($op){
         else
         {
 			$ele_display = new XoopsFormSelect(_AM_ELE_DISPLAY, 'ele_display', $display, 10, true);
-        } 
+        }
 		$ele_display->setDescription(_AM_FORM_DISPLAY_EXTRA);
 	
 
 	    $fs_member_handler =& xoops_gethandler('member');
 	    $fs_xoops_groups =& $fs_member_handler->getGroups();
 
-        $ele_display->addOption("all", _AM_FORM_DISPLAY_ALLGROUPS);     
-        $ele_display->addOption("none", _AM_FORM_DISPLAY_NOGROUPS);     
+        $ele_display->addOption("all", _AM_FORM_DISPLAY_ALLGROUPS);
+        $ele_display->addOption("none", _AM_FORM_DISPLAY_NOGROUPS);
 
 
 			$fs_count = count($fs_xoops_groups);
-			for($i = 0; $i < $fs_count; $i++) 
+			for($i = 0; $i < $fs_count; $i++)
 			{
-					$ele_display->addOption($fs_xoops_groups[$i]->getVar('groupid'), $fs_xoops_groups[$i]->getVar('name'));     
+					$ele_display->addOption($fs_xoops_groups[$i]->getVar('groupid'), $fs_xoops_groups[$i]->getVar('name'));
 			}
 						$form->addElement($ele_display);
 
@@ -382,16 +352,16 @@ switch($op){
 						else
 						{
 					$ele_disabled = new XoopsFormSelect(_AM_ELE_DISABLED, 'ele_disabled', $disabled, 10, true);
-						} 
+						}
 				$ele_disabled->setDescription(_AM_FORM_DISABLED_EXTRA);
 		
-						$ele_disabled->addOption("all", _AM_FORM_DISABLED_ALLGROUPS);     
-						$ele_disabled->addOption("none", _AM_FORM_DISABLED_NOGROUPS);     
+						$ele_disabled->addOption("all", _AM_FORM_DISABLED_ALLGROUPS);
+						$ele_disabled->addOption("none", _AM_FORM_DISABLED_NOGROUPS);
 		
 					$fs_count = count($fs_xoops_groups);
-					for($i = 0; $i < $fs_count; $i++) 
+					for($i = 0; $i < $fs_count; $i++)
 					{
-							$ele_disabled->addOption($fs_xoops_groups[$i]->getVar('groupid'), $fs_xoops_groups[$i]->getVar('name'));     
+							$ele_disabled->addOption($fs_xoops_groups[$i]->getVar('groupid'), $fs_xoops_groups[$i]->getVar('name'));
 					}
 						
 								
@@ -429,7 +399,7 @@ switch($op){
 		$form->addElement($encrypt);
 		
 		
-		// data type controls ... added May 31 2009, jwe 
+		// data type controls ... added May 31 2009, jwe
     // only do it for existing elements where the datatype choice is relevant
 		// do not do it for encrypted elements
 		if(($ele_type == "text" OR $ele_type == "textarea" OR $ele_type == "select" OR $ele_type == "radio" OR $ele_type == "checkbox" OR $ele_type == "derived" OR (isset($elementTypeHandler) AND $elementTypeHandler->needsDataType)) AND !$encryptState) {
@@ -548,7 +518,7 @@ switch($op){
       $ele_type = $element->getVar('ele_type');
 			$formulize_mgr->delete($element);
       if($ele_type != "areamodif" AND $ele_type != "ib" AND $ele_type != "sep" AND $ele_type != "subform" AND $ele_type != "grid") {
-        $formulize_mgr->deleteData($element); //added aug 14 2005 by jwe  
+        $formulize_mgr->deleteData($element); //added aug 14 2005 by jwe
       }
 			redirect_header("index.php?title=$title", 0, _AM_DBUPDATED);
 		}

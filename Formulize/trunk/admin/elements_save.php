@@ -61,7 +61,7 @@ if( !empty($ele_id) AND $clone == 0){
       $newFieldNeeded = $databaseElement ? true : false; // some fields don't exist in the database
 		}
 
-    $ele_caption = get_magic_quotes_gpc() ? stripslashes($ele_caption) : $ele_caption;
+    $ele_caption = $ele_caption;
 		//$ele_caption = formulize_verifyUniqueCaption($ele_caption, $ele_id, $id_form);
 		
 		$element->setVar('ele_caption', $ele_caption);
@@ -83,7 +83,7 @@ if( !empty($ele_id) AND $clone == 0){
 						} else {
 									$ele_handle = $ele_handle . "_copy";
 						}
-			}			
+			}
 		}
 		$element->setVar('ele_handle', $ele_handle);
 		$req = !empty($ele_req) ? 1 : 0;
@@ -128,7 +128,7 @@ if( !empty($ele_id) AND $clone == 0){
 		$_POST["elementfilter_ops"][] = $_POST["new_elementfilter_oom_op"];
 		$_POST["elementfilter_terms"][] = $_POST["new_elementfilter_oom_term"];
 		$_POST["elementfilter_types"][] = "oom";
-	   } 
+	   }
 	   $elementFilterSettings[0] = $_POST["elementfilter_elements"];
 	   $elementFilterSettings[1] = $_POST["elementfilter_ops"];
 	   $elementFilterSettings[2] = $_POST["elementfilter_terms"];
@@ -143,11 +143,11 @@ if( !empty($ele_id) AND $clone == 0){
 		//$display = !empty($ele_display) ? 1 : 0;
 		if($ele_display[0] == "all")
         {
-			$display = 1;        
+			$display = 1;
         }
         else if($ele_display[0] == "none" || $ele_display[1] == "none")
         {
-			$display = 0;        
+			$display = 0;
         }
         else
         {
@@ -160,9 +160,9 @@ if( !empty($ele_id) AND $clone == 0){
 		$element->setVar('ele_display', $display);
                 
                 if($ele_disabled[0] == "all"){
-			$disabled = 1;        
+			$disabled = 1;
                 } else if($ele_disabled[0] == "none" || $ele_disabled[1] == "none"){
-			$disabled = 0;        
+			$disabled = 0;
                 } else {
 			$disabled = "," . implode(",", $ele_disabled) . ",";
                 }
@@ -285,8 +285,8 @@ if( !empty($ele_id) AND $clone == 0){
 			break;
 			case 'date':
 				$value = array();
-				if($ele_value != "YYYY-mm-dd" AND $ele_value != "") { 
-					$ele_value = date("Y-m-d", strtotime($ele_value)); 
+				if($ele_value != "YYYY-mm-dd" AND $ele_value != "") {
+					$ele_value = date("Y-m-d", strtotime($ele_value));
 				} else {
 					$ele_value = "";
 				}
@@ -331,7 +331,7 @@ if( !empty($ele_id) AND $clone == 0){
               $_POST['terms'][] = $_POST['new_term'];
             }
 
-            $value[5] = array(0=>$_POST['elements'], 1=>$_POST['ops'], 2=>$_POST['terms']); 
+            $value[5] = array(0=>$_POST['elements'], 1=>$_POST['ops'], 2=>$_POST['terms']);
           } else {
             $value[5] = "";
           }
@@ -348,7 +348,7 @@ if( !empty($ele_id) AND $clone == 0){
 					$array_link = $xoopsDB->fetchArray($res_link);
 					$value[2] = $array_link['id_form'] . "#*=:*" . $array_link['ele_handle'];
          
-				} 
+				}
 				else
 				{
 				$v2 = array();
@@ -377,25 +377,24 @@ if( !empty($ele_id) AND $clone == 0){
 				$value[0] = $_POST['subform'];
 				$value[1] = $_POST['subformelements'] ? implode(",",$_POST['subformelements']) : "";
         $value[2] = intval($_POST['subformblanks']);
-				$value[3] = intval($_POST['showviewbuttons']); 
+				$value[3] = intval($_POST['showviewbuttons']);
 			break;
 			// grid added January 19 2007
 			case 'grid':
 				foreach($ele_value as $key=>$val) {
-					$value[$key] = get_magic_quotes_gpc() ? stripslashes($val) : $val;
+					$value[$key] = $val;
 				}
 			break;
 			// derived added March 27 2007
 			case 'derived':
-				$ele_value[0] = get_magic_quotes_gpc() ? stripslashes($ele_value[0]) : $ele_value[0];
 				$value[0] = $ele_value[0];
 				// Added for number formatting values 2008-10-31 kw
 				$value[1] = $ele_value[1];
 				$value[2] = $ele_value[2];
 				$value[3] = $ele_value[3];
-				$value[4] = $ele_value[4];	
+				$value[4] = $ele_value[4];
 			break;
-			case 'upload': 
+			case 'upload':
 				$value = array();
 				$v2 = array();
 				$value[] = $ele_value[0];
@@ -450,8 +449,8 @@ if( !empty($ele_id) AND $clone == 0){
             $form_handler =& icms_getModuleHandler('forms');
             while(!$uniqueCheck = $form_handler->isHandleUnique($ele_handle, $ele_id)) {
                   $ele_handle = $ele_handle . "_copy";
-            }	    
-						$element->setVar('ele_handle', $ele_handle); 
+            }
+						$element->setVar('ele_handle', $ele_handle);
 						if( !$formulize_mgr->insert($element) ){
 									icms_cp_header();
 									echo $element->getHtmlErrors();
@@ -500,7 +499,7 @@ if( !empty($ele_id) AND $clone == 0){
                                             $datadecimals = 20;
                                       }
                                       $datadigits = $datadecimals < 10 ? 11 : $datadecimals + 1; // digits must be larger than the decimal value, but a minimum of 11
-                                      $dataType = "decimal($datadigits,$datadecimals)"; 
+                                      $dataType = "decimal($datadigits,$datadecimals)";
                                 } else {
                                       $dataType = 'int(10)'; // value in () is just the visible number of digits to use in a mysql console display
                                 }
@@ -558,14 +557,14 @@ function getRequestedDataType() {
 												break;
 									case 'varchar':
 												if(!$varcharsize = intval($_POST['element_datatype_varcharsize'])) {
-														$varcharsize = 255;  
+														$varcharsize = 255;
 												}
 												$varcharsize = $varcharsize > 255 ? 255 : $varcharsize;
 												$dataType = "varchar($varcharsize)";
 												break;
 									case 'char':
 												if(!$charsize = intval($_POST['element_datatype_charsize'])) {
-														$charsize = 255;  
+														$charsize = 255;
 												}
 												$charsize = $charsize > 255 ? 255 : $charsize;
 												$dataType = "char($charsize)";

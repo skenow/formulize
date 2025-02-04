@@ -1669,12 +1669,10 @@ function prepDataForWrite($element, $ele) {
 					} else {
 						$value = $ele;
 					}
-                                        if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
-                                        $value = icms_core_DataFilter::htmlSpecialChars($value);
+                    $value = icms_core_DataFilter::htmlSpecialChars($value);
 				break;
 				case 'textarea':
 					$value = $ele;
-                    if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
                     $value = icms_core_DataFilter::htmlSpecialChars($value);
 				break;
 				case 'areamodif':
@@ -1687,7 +1685,6 @@ function prepDataForWrite($element, $ele) {
 						if( $opt_count == $ele ){
 							$GLOBALS['formulize_other'][$ele_id] = checkOther($v['key'], $ele_id);
 							$msg.= icms_core_DataFilter::stripSlashesGPC($v['key']).'<br>';
-							if(get_magic_quotes_gpc()) { $v['key'] = stripslashes($v['key']); }
 							$v['key'] = icms_core_DataFilter::htmlSpecialChars($v['key']);
 							$value = $v['key'];
 						}
@@ -1709,19 +1706,11 @@ function prepDataForWrite($element, $ele) {
 							if( in_array($opt_count, $ele) ){
                 $numberOfSelectionsFound++;
 								$GLOBALS['formulize_other'][$ele_id] = checkOther($v['key'], $ele_id);
-								if(get_magic_quotes_gpc()) { $v['key'] = stripslashes($v['key']); }
 								$v['key'] = icms_core_DataFilter::htmlSpecialChars($v['key']);
 								$value = $value.'*=+*:'.$v['key'];
 							}
 							$opt_count++;
-						}/*else{ // single value passed back...under what circumstances would this ever get triggered??  Isn't $ele always an array for a checkbox series, even when a single value is checked?  jwe March 2 2008
-							if( !empty($ele) ){
-								$GLOBALS['formulize_other'][$ele_id] = checkOther($v['key'], $ele_id);
-								if(get_magic_quotes_gpc()) { $v['key'] = stripslashes($v['key']); }
-								$v['key'] = $myts->htmlSpecialChars($v['key']);
-								$value = $value.'*=+*:'.$v['key'];
-							}
-						}	*/
+						}
 					}
 
           while($numberOfSelectionsFound < count($ele) AND $opt_count < 1000) { // if a value was received that was out of range...added by jwe March 2 2008...in this case we are assuming that if there are more values passed back than selections found in the valid options for the element, then there are out-of-range values we want to preserve
@@ -1807,7 +1796,6 @@ function prepDataForWrite($element, $ele) {
                       //if($whattheuserselected == $masterentlistjwe) // this check is encompassed above with the in_array check
                       //{
                         //print "WE HAVE A MATCH!<BR>"; -- note: nametype should
-                        if(get_magic_quotes_gpc()) { $entriesPassedBack[$entrycounterjwe] = stripslashes($entriesPassedBack[$entrycounterjwe]); }
                         $entriesPassedBack[$entrycounterjwe] = icms_core_DataFilter::htmlSpecialChars($entriesPassedBack[$entrycounterjwe]);
                         $value = $value . "*=+*:" . $entriesPassedBack[$entrycounterjwe];
                         $numberOfSelectionsFound++;
@@ -1820,7 +1808,6 @@ function prepDataForWrite($element, $ele) {
                     if($ele == ($masterentlistjwe+1)) // plus 1 because single entry select boxes start their option lists at 1.
                     {
                       //print "WE HAVE A MATCH!<BR>";
-                      if(get_magic_quotes_gpc()) { $entriesPassedBack[$entrycounterjwe] = stripslashes($entriesPassedBack[$entrycounterjwe]); }
                       $entriesPassedBack[$entrycounterjwe] = icms_core_DataFilter::htmlSpecialChars($entriesPassedBack[$entrycounterjwe]);
                       $value = $entriesPassedBack[$entrycounterjwe];
                       //print "$value<br><br>";
@@ -2031,7 +2018,6 @@ function writeOtherValues($id_req, $fid) {
 			$existing_value = false;
 		}
 
-		if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
 		$value = icms_core_DataFilter::htmlSpecialChars($value);
 		if($value != "" AND $existing_value) { // update
 			$sql = "UPDATE " . $xoopsDB->prefix("formulize_other") . " SET other_text=\"" . icms::$xoopsDB->escape($value) . "\" WHERE id_req='$id_req' AND ele_id='$ele_id'";
@@ -3034,8 +3020,6 @@ print "$prevValue<br><br>";
 */
 
         //require_once XOOPS_ROOT_PATH . "/modules/formulize/include/extract.php";
-
-	if(get_magic_quotes_gpc()) { $value = stripslashes($value); }
 
 	global $xoopsUser, $formulize_mgr, $xoopsDB, $myts;
 	if(!is_object($myts)) { $myts = icms_core_Textsanitizer::getInstance(); }
@@ -4264,12 +4248,6 @@ function convertTypeToText($type, $ele_value) {
 }
 
 function recursive_stripslashes($value) {
-	if(!get_magic_quotes_gpc()){
-		return $value;
-	}
-	$value = is_array($value) ?
-                array_map('recursive_stripslashes', $value) :
-                stripslashes($value);
   return $value;
 }
 

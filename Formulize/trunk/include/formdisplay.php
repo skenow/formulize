@@ -2187,7 +2187,6 @@ function loadValue($prevEntry, $i, $ele_value, $owner_groups, $groups, $entry, $
 						// important: this is safe because $value itself is not being sent to the browser!
 						// we're comparing the output of these two lines against what is stored in the form specification, which does not have HTML escaped characters, and has extra slashes.  Assumption is that lack of HTML filtering is okay since only admins and trusted users have access to form creation.  Not good, but acceptable for now.
 						$value = icms_core_DataFilter::undoHtmlSpecialChars($value);
-						if(get_magic_quotes_gpc()) { $value = addslashes($value); }
 	
 						$selvalarray = explode("*=+*:", $value);
 						$numberOfSelectedValues = strstr($value, "*=+*:") ? count($selvalarray)-1 : 1; // if this is a multiple selection value, then count the array values, minus 1 since there will be one leading separator on the string.  Otherwise, it's a single value element so the number of selections is 1.

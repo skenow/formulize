@@ -33,7 +33,7 @@
 // internal is an array consisting of:
 //	[0] file id
 //	[1] (array) column headings
-//	[2] formulize form id 
+//	[2] formulize form id
 //	[3] formulize form elements
 //	[4] (array) column headings to formulize form elements
 //      [8] formulize form handle
@@ -78,15 +78,15 @@ function importCsv($csv_name, $id_reqs, $regfid, $validateOverride)
     }
     else
     {
-        echo "<br><b>csv not imported!</b>"; 
+        echo "<br><b>csv not imported!</b>";
         if(!empty($errors))
         {
-            echo "<ol>"; 
+            echo "<ol>";
             foreach($errors as $error)
             {
-                echo $error; 
-            }        
-            echo "</ol>"; 
+                echo $error;
+            }
+            echo "</ol>";
         }
     }
     }// end of if metadata columns not present
@@ -94,7 +94,7 @@ function importCsv($csv_name, $id_reqs, $regfid, $validateOverride)
     //importCsvCleanup($importSet);
 
     echo "<br><br>";
-	echo "<b><a href=\"\" onclick=\"javascript:history.back(-1);return false;\">" . _formulize_DE_IMPORT_BACK . "</a></b></div>"; 
+	echo "<b><a href=\"\" onclick=\"javascript:history.back(-1);return false;\">" . _formulize_DE_IMPORT_BACK . "</a></b></div>";
 }
 
 
@@ -117,14 +117,14 @@ function importCsvSetup(&$importSet, $id_reqs)
     if(!($importSet[1] = fopen($importSet[0][1], "r")))
     {
         exit("<b>STOPPED</b> csv file <i>" . $importSet[0][0] . "</i> not found.");
-    }            
+    }
 
     // 2. get the first row containing form name
     // 3. get the second row containing column names
     if(feof($importSet[1]))
     {
         exit("<b>STOPPED</b> <i>column names</i> not found.");
-    }            
+    }
     else
     {
         //$importSet[2] = fgetcsv($importSet[1], 4096);
@@ -137,12 +137,12 @@ function importCsvSetup(&$importSet, $id_reqs)
     }
 
     // 4. get the form id
-    /*$form_idq = q("SELECT id_form FROM " . $xoopsDB->prefix("formulize_id") . 
+    /*$form_idq = q("SELECT id_form FROM " . $xoopsDB->prefix("formulize_id") .
         " WHERE desc_form='" . $importSet[2] . "'");
     if($form_idq == null)
     {
         exit("<br><b>STOPPED</b> formulize form <i>" . $importSet[2] . "</i> not found.");
-    }            
+    }
     else
     {
         $importSet[4] = $form_idq[0]["id_form"];
@@ -155,14 +155,14 @@ function importCsvSetup(&$importSet, $id_reqs)
     
     // 5. get the form column ids and process linked elements
 	if($importSet[4])
-    {    
-        $form_elementsq = q("SELECT * FROM " . $xoopsDB->prefix("formulize") . 
+    {
+        $form_elementsq = q("SELECT * FROM " . $xoopsDB->prefix("formulize") .
         	" WHERE id_form='" . $importSet[4] . "'");
 				
         if($form_elementsq == null)
         {
             exit("<br><b>STOPPED</b> formulize form <i>" . $importSet[2] . "</i> elements not found.");
-        }            
+        }
         else
         {
             $importSet[5] = array($form_elementsq, array());
@@ -232,10 +232,10 @@ function importCsvSetup(&$importSet, $id_reqs)
 									    //echo "linked select<br>";
 					    $parts = explode("#*=:*", $options);
     
-					    /*echo "form: " . $parts[0] . 
+					    /*echo "form: " . $parts[0] .
 						"<br>element: " . $parts[1];*/
 					
-					    $sql = "SELECT * FROM " . $xoopsDB->prefix("formulize") . 
+					    $sql = "SELECT * FROM " . $xoopsDB->prefix("formulize") .
 						" WHERE id_form='" . $parts[0] . "'" .
 					    " AND ele_handle='" . icms::$xoopsDB->escape($parts[1]) . "'";
 									    $form_elementlinkq = q($sql);
@@ -247,21 +247,21 @@ function importCsvSetup(&$importSet, $id_reqs)
 						//var_dump($form_elementlinkq);
 						$importSet[5][1][$column] = array(
 						$parts[0], $parts[1], $form_elementlinkq[0]);
-					    }            
+					    }
 					}
 				    }
                             	break;
-						}                        
-                        break;                            
+						}
+                        break;
                     }
 				}
 
                 $mapped[] = $mapIndex;
 
-            }                        
+            }
 
-            $importSet[6] = $mapped; 
-        }                        
+            $importSet[6] = $mapped;
+        }
 	}
 }
 
@@ -300,7 +300,7 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
             {
                 print "<p>Warning: column <b>" . $importSet[3][$link] . "</b> was not found in form.</p>";
 								$GLOBALS['formulize_ignoreColumnsOnImport'][$link] = true;
-            }                    
+            }
         }
 	}
 
@@ -319,7 +319,7 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
         {
             $rowCount++;
             
-            //var_dump($row);        
+            //var_dump($row);
                     
             $links = count($importSet[6]);
             for($link = 0; $link < $links; $link++)
@@ -329,7 +329,7 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 							}
 							
 							if($link == ($link-1)) {
-								$cell_value = str_replace(chr(19).chr(16), "", $row[$link]);								
+								$cell_value = str_replace(chr(19).chr(16), "", $row[$link]);
 							} else {
 								$cell_value = $row[$link];
 							}
@@ -348,19 +348,19 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 						}
 					} elseif(is_array($id_reqs) AND $link == $importSet[7]['idreqs']) {
 						$errors[] = "<li>line " . $rowCount . ",<br> <b>No ID number specified</b></li>";
-					} 
+					}
 				}
 				
 				// need to respect required setting
 				if(isset($element['ele_req'])) {
 					if($element['ele_req']) {
-						$errors[] = "<li>line " . $rowCount . 
+						$errors[] = "<li>line " . $rowCount .
 	                                        ", column " . $importSet[3][$link] .
 	                                        ",<br> <b>This column requires a value</b> (cell was blank)</li>";
 					}
 				}
 				
-			} else { 
+			} else {
 				// check columns not present in form...
 	                if($importSet[6][$link] == -1)
 	                {
@@ -369,9 +369,9 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 	                        $uid = getUserId($cell_value);
                             if($uid == 0)
 	                        {
-	                            $errors[] = "<li>line " . $rowCount . 
+	                            $errors[] = "<li>line " . $rowCount .
 	                                ", column " . $importSet[3][$link] .
-	                                ",<br> <b>user not found</b>: " . $cell_value . "</li>"; 
+	                                ",<br> <b>user not found</b>: " . $cell_value . "</li>";
 	                        }
 	                    }
 
@@ -417,8 +417,8 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 
 	                                if($ele_value[1])
 	                                {
-                                        // Multiple options                                
-                                        //echo "Multiple options<br>";                                
+                                        // Multiple options
+                                        //echo "Multiple options<br>";
 
 	                                    $items = explode("\n", $cell_value);
 							//$all_valid_options = getElementOptions($linkElement[0], $linkElement[1]);
@@ -428,7 +428,7 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 	                                        $item_value = trim($item);
 
 
-								if(!in_array($item_value, $all_valid_options)) 
+								if(!in_array($item_value, $all_valid_options))
 	                                        {
 
 								  $foundit = false;
@@ -439,38 +439,38 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
          									}
          								}
 	     								if(!$foundit) {
-       	                                            $errors[] = "<li>line " . $rowCount . 
+       	                                            $errors[] = "<li>line " . $rowCount .
        	                                                ", column " . $importSet[3][$link] .
-       	                                                ",<br> <b>found</b>: " . $item_value .  
-       	                                                ", <b>was expecting</b>: " . stripslashes(implode(", ", $all_valid_options)) . "</li>"; 
+       	                                                ",<br> <b>found</b>: " . $item_value .
+       	                                                ", <b>was expecting</b>: " . stripslashes(implode(", ", $all_valid_options)) . "</li>";
 									}
 	                                        }
-	                                    }                                        
+	                                    }
 	                                }
 	                                else
 	                                {
                                         // Single option
-                                        //echo "Single option<br>";                                
+                                        //echo "Single option<br>";
 							//$all_valid_options = getElementOptions($linkElement[0], $linkElement[1]);
 							list($all_valid_options, $all_valid_options_ids) = getElementOptions($linkElement[2]['ele_handle'], $linkElement[2]['id_form']);
-						  	if(!in_array($cell_value, $all_valid_options)) 
+						  	if(!in_array($cell_value, $all_valid_options))
 	                                        {
          								foreach($all_valid_options as $thisoption) {
          									if(trim($cell_value) == stripslashes(trim(trans($thisoption)))) { // stripslashes is necessary only because the data contains slashes in the database (which it should not, so this should be removed when that is fixed)
 											break 2;
          									}
          								}
-                                                      	$errors[] = "<li>line " . $rowCount . 
+                                                      	$errors[] = "<li>line " . $rowCount .
                                                             ", column " . $importSet[3][$link] .
-                                                            ",<br> <b>found</b>: " . $cell_value . 
-                                                            ", <b>was expecting</b>: " . stripslashes(implode(", ", $all_valid_options)) . "</li>"; 
+                                                            ",<br> <b>found</b>: " . $cell_value .
+                                                            ", <b>was expecting</b>: " . stripslashes(implode(", ", $all_valid_options)) . "</li>";
                                         }
 	                                }
                                 }
 								elseif(!strstr($cell_value, ",") AND (!is_numeric($cell_value) OR $cell_value < 10000000))
                                 {
 									// Not-Linked element
-                                    //echo "Not-Linked element<br>";                                
+                                    //echo "Not-Linked element<br>";
 
 	                                $ele_value = unserialize($element["ele_value"]);
 
@@ -494,20 +494,20 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 								foreach($items as $item) {
 									if(is_numeric($item)) {
 										if(!isset($fullnamelist[$item])) {
-											$errors[] = "<li>line " . $rowCount . 
+											$errors[] = "<li>line " . $rowCount .
 												", column " . $importSet[3][$link] .
-												",<br> <b>User Id</b>: " . $item . 
+												",<br> <b>User Id</b>: " . $item .
 												" <b>is not a valid id for a user</b></li>";
 										}
 									} else {
 										$uids = array_keys ($fullnamelist, $item);
 										if(count($uids) == 0) {
-											$errors[] = "<li>line " . $rowCount . 
+											$errors[] = "<li>line " . $rowCount .
 												", column " . $importSet[3][$link] .
-												",<br> <b>Name</b>: " . $item . 
+												",<br> <b>Name</b>: " . $item .
 												" <b>is not a valid name for a user</b></li>";
 											break;
-										}	
+										}
 									}
 								}
 								break;
@@ -518,8 +518,8 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 
 	                                if($ele_value[1])
 	                                {
-                                        // Multiple options                                
-                                        //echo "Multiple options<br>";                                
+                                        // Multiple options
+                                        //echo "Multiple options<br>";
 
 	                                	$options = $ele_value[2];
                                         
@@ -534,7 +534,6 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 		      	                          {
          								$foundit = false;
          								foreach($options as $thisoption=>$default_value) {
-										if(get_magic_quotes_gpc()) { $thisoption = stripslashes($thisoption); }
          									if(trim($item_value) == trim(trans($thisoption))) {
          										$foundit = true;
 											break;
@@ -542,24 +541,20 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
          								}
          								if(!$foundit) {
         
-         	                                            for(reset($options); $key = key($options); next($options))
-         	                                            {
-										if(get_magic_quotes_gpc()) { $key = stripslashes($key); }
+         	                                            for(reset($options); $key = key($options); next($options)){
          	                                                $result[] = $key;
          	                                            }
          	                                            
-         	                                            $errors[] = "<li>line " . $rowCount . 
+         	                                            $errors[] = "<li>line " . $rowCount .
          	                                                ", column " . $importSet[3][$link] .
-         	                                                ",<br> <b>found</b>: " . $item_value . 
-         	                                                ", <b>was expecting</b>: " . implode(", ", $result) . "</li>"; 
-									}
+         	                                                ",<br> <b>found</b>: " . $item_value .
+         	                                                ", <b>was expecting</b>: " . implode(", ", $result) . "</li>";
+										}
 	                                        }
-	                                    }                                        
-	                                }
-	                                else
-	                                {
+	                                    }
+	                                } else {
                                         // Single option
-                                        //echo "Single option<br>";                                
+                                        //echo "Single option<br>";
 
 							                              $options = $ele_value[2];
                                             if(!in_array($cell_value, $options, true)) // last option causes strict matching by type, June 29, 2006
@@ -567,7 +562,6 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 
             						// then do a check against the translated options -- added June 29, 2006
             						foreach($options as $thisoption=>$default_value) {
-									if(get_magic_quotes_gpc()) { $thisoption = stripslashes($thisoption); }
             							if(trim($cell_value) == trim(trans($thisoption))) {
             								break 2;
             							}
@@ -575,18 +569,17 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
                                            
 	                                        for(reset($options); $key = key($options); next($options))
 	                                        {
-								if(get_magic_quotes_gpc()) { $key = stripslashes($key); }
 	                                            $result[] = $key;
 	                                        }
                                             
-                                            $errors[] = "<li>line " . $rowCount . 
+                                            $errors[] = "<li>line " . $rowCount .
                                                 ", column " . $importSet[3][$link] .
-                                                ",<br> <b>found</b>: " . $cell_value . 
-                                                ", <b>was expecting</b>: " . implode(", ", $result) . "</li>"; 
+                                                ",<br> <b>found</b>: " . $cell_value .
+                                                ", <b>was expecting</b>: " . implode(", ", $result) . "</li>";
                                         }
 	                                }
                                 }
-	                            break;                    
+	                            break;
 
 	                        case "checkbox":
 	                            $options = unserialize($element["ele_value"]);
@@ -603,7 +596,6 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 								$foundit = false;
 								$hasother = false;
 								foreach($options as $thisoption=>$default_value) {
-									if(get_magic_quotes_gpc()) { $thisoption = stripslashes($thisoption); }
 									if(trim($item_value) == trim(trans($thisoption))) {
 										$foundit = true;
 									}
@@ -613,7 +605,6 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
                                                       $keys_output = "";
                                                       for(reset($options); $key = key($options); next($options))
                                                       {
-	             						    if(get_magic_quotes_gpc()) { $key = stripslashes($key); }
                                                           if($keys_output != "")
                                                           {
                                                               $keys_output .= ", ";
@@ -621,14 +612,14 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
                                                           $keys_output .= $key;
                                                       }
 
-                                                      $errors[] = "<li>line " . $rowCount . 
+                                                      $errors[] = "<li>line " . $rowCount .
                                                           ", column " . $importSet[3][$link] .
-                                                          ",<br> <b>found</b>: " . $item_value . 
+                                                          ",<br> <b>found</b>: " . $item_value .
                                                           ", <b>was expecting</b>: { " . $keys_output . " }</li>";
 								}
                                        }
 					}
-	                            break;                    
+	                            break;
 
 	                        case "radio":
 	                            $options = unserialize($element["ele_value"]);
@@ -642,7 +633,6 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 						$foundit = false;
 						$hasother = false;
 						foreach($options as $thisoption=>$default_value) {
-							if(get_magic_quotes_gpc()) { $thisoption = stripslashes($thisoption); }
 							if(trim($cell_value) == trim(trans($thisoption))) {
 								$foundit = true;
 							}
@@ -653,7 +643,6 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 	                                    $keys_output = "";
       	                              for(reset($options); $key = key($options); next($options))
             	                        {
-							    if(get_magic_quotes_gpc()) { $key = stripslashes($key); }
                   	                      if($keys_output != "")
                         	                {
                               	              $keys_output .= ", ";
@@ -661,22 +650,22 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 	                                        $keys_output .= $key;
       	                              }
 	
-      	                              $errors[] = "<li>line " . $rowCount . 
+      	                              $errors[] = "<li>line " . $rowCount .
             	                            ", column " . $importSet[3][$link] .
-                  	                      ",<br> <b>found</b>: " . $cell_value . 
+                  	                      ",<br> <b>found</b>: " . $cell_value .
                         	                ", <b>was expecting</b>: { " . $keys_output . " }</li>";
-                              	} 
+                              	}
 	            		   }
-			               break;                    
+			               break;
 				                            
 	                        case "date":
-                                //echo "date: " . $cell_value . "<br>";                                
+                                //echo "date: " . $cell_value . "<br>";
                                 $date_value = date("Y-m-d", strtotime($cell_value));
                                 if($date_value == "")
-                                { 
-                                    $errors[] = "<li>line " . $rowCount . 
+                                {
+                                    $errors[] = "<li>line " . $rowCount .
                                         ", column " . $importSet[3][$link] .
-                                        ",<br> <b>found</b>: " . $cell_value . 
+                                        ",<br> <b>found</b>: " . $cell_value .
                                         ", <b>was expecting</b>: YYYY-mm-dd</li>";
                                 }
 	                            break;
@@ -687,11 +676,11 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
                                 {
                                     if(!($cell_value == 1 || $cell_value == 2))
                                     {
-	                                    $errors[] = "<li>line " . $rowCount . 
+	                                    $errors[] = "<li>line " . $rowCount .
 	                                        ", column " . $importSet[3][$link] .
-	                                        ",<br> <b>found</b>: " . $cell_value . 
+	                                        ",<br> <b>found</b>: " . $cell_value .
 	                                        ", <b>was expecting</b>: { 1, 2, " . _formulize_TEMP_QYES . ", " . _formulize_TEMP_QNO . " }</li>";
-									}                                            
+									}
                                 }
                                 else
                                 {
@@ -699,12 +688,12 @@ function importCsvValidate(&$importSet, $id_reqs, $regfid, $validateOverride=fal
 
 	                            if(!($yn_value == strtoupper(_formulize_TEMP_QYES) || $yn_value == strtoupper(_formulize_TEMP_QNO))) // changed to use language constants, June 29, 2006
                                     {
-	                                    $errors[] = "<li>line " . $rowCount . 
+	                                    $errors[] = "<li>line " . $rowCount .
 	                                        ", column " . $importSet[3][$link] .
-	                                        ",<br> <b>found</b>: " . $cell_value . 
+	                                        ",<br> <b>found</b>: " . $cell_value .
 	                                        ", <b>was expecting</b>: { 1, 2, " . _formulize_TEMP_QYES . ", " . _formulize_TEMP_QNO . " }</li>";
-									}                                            
-								}                                                                   
+									}
+								}
 	                            break;
 				
 	                    }
@@ -737,8 +726,8 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 	global $xoopsDB, $xoopsUser, $xoopsConfig, $myts;		// $xoopsDB is required by q
     if(!$myts) { $myts =& icms_core_Textsanitizer::getInstance(); }
 
-    echo "<b>** Importing</b><br><br>"; 
-    /*echo "<b>Importing</b><br>" . 
+    echo "<b>** Importing</b><br><br>";
+    /*echo "<b>Importing</b><br>" .
         "<i>from</i> <b>Csv</b>: " . $importSet[0][0] . "<br>" .
         "<i>to</i> <b>Form</b>: <i>name</i>: " . $importSet[2] .
         ", <i>id</i>: " . $importSet[4] . "<br>";*/
@@ -786,7 +775,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
             {
 							if(isset($GLOBALS['formulize_ignoreColumnsOnImport'][$link])) {
 								continue;
-							}							
+							}
                 if($importSet[6][$link] == -1)
                 {
                     if($importSet[3][$link] == _formulize_DE_CALC_CREATOR)
@@ -794,9 +783,9 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
                         $form_uid = getUserId($row[$link]);
                     }
                 }
-		}			
+		}
             
-            //var_dump($row);        
+            //var_dump($row);
 
                     
             // get the current max id_req
@@ -867,10 +856,10 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 							list($all_valid_options, $all_valid_options_ids) = getElementOptions($linkElement[2]['ele_handle'], $linkElement[2]['id_form']);
 	                                if($ele_value[1])
 	                                {
-	                                    // Multiple options                                
-	                                    //echo "Multiple options<br>";                                
+	                                    // Multiple options
+	                                    //echo "Multiple options<br>";
 
-	                                    $element_value = $linkElement[0] . "#*=:*" . 
+	                                    $element_value = $linkElement[0] . "#*=:*" .
 	                                        $linkElement[1] . "#*=:*";
 	                                    
 	                                    $items = explode("\n", $row_value);
@@ -897,7 +886,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 	                                else
 	                                {
 	                                    // Single option
-	                                    //echo "Single option<br>";                                
+	                                    //echo "Single option<br>";
 																					if($optionIndex = array_search($row_value, $all_valid_options)) {
 																						$ele_id = $all_valid_options_ids[$optionIndex];
 																					} else {
@@ -916,7 +905,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 	                            elseif(!strstr($row_value, ",") AND (!is_numeric($row_value) OR $row_value < 10000000))
 	                            {
 	                                // Not-Linked element
-	                                //echo "Not-Linked element<br>";                                
+	                                //echo "Not-Linked element<br>";
 
 	                                $ele_value = unserialize($element["ele_value"]);
 
@@ -964,8 +953,8 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 
 	                                if($ele_value[1])
 	                                {
-                                        // Multiple options                                
-                                        //echo "Multiple options<br>";                                
+                                        // Multiple options
+                                        //echo "Multiple options<br>";
 
 	                                    $element_value = "";
 	                                     $options = $ele_value[2];
@@ -986,12 +975,12 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 	                                        $element_value .= "*=+*:" . $item_value;
 	                                    }
 	                                    
-	                                    $row_value = $element_value;                                        
+	                                    $row_value = $element_value;
 	                                }
 	                                else
 	                                {
                                         // Single option
-                                        //echo "Single option<br>";                                
+                                        //echo "Single option<br>";
 
 							$options = $ele_value[2];
 
@@ -1017,7 +1006,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 	                            break;
 	                        
 	                        case "checkbox":
-                                //echo "checkbox<br>";                                
+                                //echo "checkbox<br>";
                                 
 						$options = unserialize($element["ele_value"]);
 	                                
@@ -1037,9 +1026,9 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 										$foundit=true;
 										break;
 									}
-									if(preg_match('/\{OTHER\|+[0-9]+\}/', $thisoption)) { 
+									if(preg_match('/\{OTHER\|+[0-9]+\}/', $thisoption)) {
 										$hasother = $thisoption;
-									}										
+									}
 								}
              						if($foundit) {
              	                                    $element_value .= "*=+*:" . $item_value;
@@ -1056,7 +1045,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 							}
                                 }
                                 
-                                $row_value = $element_value;                                        
+                                $row_value = $element_value;
 	                            break;
 
 					// radio added June 29, 2006
@@ -1072,9 +1061,9 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 									$foundit = true;
 									break;
 								}
-								if(preg_match('/\{OTHER\|+[0-9]+\}/', $thisoption)) { 
+								if(preg_match('/\{OTHER\|+[0-9]+\}/', $thisoption)) {
 									$hasother = $thisoption;
-								}										
+								}
 							}
 							if(!$foundit AND $hasother) {
 								$other_values[] = "INSERT INTO " . $xoopsDB->prefix("formulize_other") . " (id_req, ele_id, other_text) VALUES (\"$max_id_req\", \"" . $element["ele_id"] . "\", \"" . icms_core_DataFilter::htmlSpecialChars(trim($row_value)) . "\")";
@@ -1088,7 +1077,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 						break;
 
 	                        case "date":
-                                $row_value = date("Y-m-d", strtotime(str_replace("/", "-", $row_value))); 
+                                $row_value = date("Y-m-d", strtotime(str_replace("/", "-", $row_value)));
 	                            break;
 
 	                            
@@ -1099,12 +1088,12 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
                                 	$yn_value = strtoupper($row_value);
 
                                     if($yn_value == "YES")
-										$row_value = 1;                                    
+										$row_value = 1;
                                     else if($yn_value == "NO")
-										$row_value = 2;                                    
-								}                                                                   
+										$row_value = 2;
+								}
 	                            break;
-	                    }                            
+	                    }
 
 									// record the values for inserting as part of this record
 	                    $fieldValues[$element['ele_handle']] = icms_core_DataFilter::htmlSpecialChars($row_value); // prior to 3.0 we did not do the htmlspecialchars conversion if this was a linked selectbox...don't think that's a necessary exception in 3.0 with new data structure
@@ -1156,11 +1145,11 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 							
 							$entryIdFieldText = $newEntryId ? "entry_id, " : "";
 							$newEntryId .= $newEntryId ? ", " : "";
-							$insertElement = "INSERT INTO " . $xoopsDB->prefix("formulize_".$importSet[8])." (".$entryIdFieldText."creation_datetime, mod_datetime, creation_uid, mod_uid".$fields.") VALUES (".$newEntryId."NOW(), NOW(), '" . intval($form_uid) . "', '" . intval($form_proxyid)."'".$values.")"; 
+							$insertElement = "INSERT INTO " . $xoopsDB->prefix("formulize_".$importSet[8])." (".$entryIdFieldText."creation_datetime, mod_datetime, creation_uid, mod_uid".$fields.") VALUES (".$newEntryId."NOW(), NOW(), '" . intval($form_uid) . "', '" . intval($form_proxyid)."'".$values.")";
 
 							if(IMPORT_WRITE)
 							{
-									if(!$result = $xoopsDB->queryF($insertElement)) 
+									if(!$result = $xoopsDB->queryF($insertElement))
 									{
 										
 										static $duplicatesFound = false;
@@ -1179,9 +1168,9 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 									}
 							}
 							else
-							{                        
-									echo "<br>" . $insertElement . "<br>";                        
-							}  
+							{
+									echo "<br>" . $insertElement . "<br>";
+							}
 							
 						}
 						
@@ -1220,7 +1209,7 @@ function getElementID($id_form, $ele_caption, $ele_value)
 		if(!$myts) { $myts =& icms_core_Textsanitizer::getInstance(); }
 	
 	
-	    $sql = "SELECT ele_id FROM " . $xoopsDB->prefix("formulize_form") .  
+	    $sql = "SELECT ele_id FROM " . $xoopsDB->prefix("formulize_form") .
 		" WHERE id_form='" . $id_form . "'" .
 		" AND ele_caption='" . icms::$xoopsDB->escape(formformCaption($ele_caption)) . "'" .
 		" AND ele_value='" . icms::$xoopsDB->escape($myts->htmlSpecialChars($ele_value)) . "'";
@@ -1233,7 +1222,7 @@ function getElementID($id_form, $ele_caption, $ele_value)
 		if(@$item["ele_id"])
 		{
 				$foundResult = $item["ele_id"];
-		}                         
+		}
 	    }
 	    $cachedElementIDs[$id_form][$ele_caption][$ele_value] = $foundResult;
 	}
@@ -1247,7 +1236,7 @@ function getElementID($id_form, $ele_caption, $ele_value)
 // This function returns the saved values in the data table for the element it is passed
 // It also returns a parallel array that contains the entry ids that each value belongs to
 //function getElementOptions($id_form, $ele_caption)
-function getElementOptions($ele_handle, $fid) 
+function getElementOptions($ele_handle, $fid)
 {
 	static $cachedElementOptions = array();
 	if(!isset($cachedElementOptions[$fid][$ele_handle])) {
@@ -1276,7 +1265,7 @@ function getUserID($stringName)
 {
 	global $xoopsDB, $xoopsUser;
 
-    $sql = "SELECT uid FROM " . $xoopsDB->prefix("users") .  
+    $sql = "SELECT uid FROM " . $xoopsDB->prefix("users") .
         " WHERE uname='" . icms::$xoopsDB->escape($stringName) . "'";
 
 	$result = $xoopsDB->query($sql);
@@ -1286,11 +1275,11 @@ function getUserID($stringName)
         if(@$item["uid"])
         {
 			return $item["uid"];
-        }                         
+        }
     }
     else // or, if no username match found, get the first matching full name -- added June 29, 2006
     {
-	    $sql = "SELECT uid FROM " . $xoopsDB->prefix("users") .  
+	    $sql = "SELECT uid FROM " . $xoopsDB->prefix("users") .
         " WHERE name='" . icms::$xoopsDB->escape($stringName) . "'";
 
 	    if($result = $xoopsDB->query($sql))
@@ -1299,7 +1288,7 @@ function getUserID($stringName)
 		        if(@$item["uid"])
 		        {
 				return $item["uid"];
-		        }                         
+		        }
 	    }
     }
 
@@ -1373,7 +1362,7 @@ function importCsvDebug(& $importSet)
 	                $options = $ele_value[2];
 
 	                if(is_array($options))
-	                {                       
+	                {
 	                    $keys_output = "";
 	                    for(reset($options); $key = key($options); next($options))
 	                    {
@@ -1387,27 +1376,27 @@ function importCsvDebug(& $importSet)
 	                    $output .= "{ " . $keys_output . " }";
 	                }
 	                else
-	                {                       
-						if($importSet[5][1][$link]) 
+	                {
+						if($importSet[5][1][$link])
                         {
 							$linkElement = $importSet[5][1][$link];
                             
-                        	$output .= "form: " . $linkElement[0] . 
+                        	$output .= "form: " . $linkElement[0] .
                             	"<br>element: " . $linkElement[1] .
                             	"<br>type: " . $linkElement[2]['ele_type'];
-                        } 
+                        }
                         else
                         {
 	                    	$output .= $options;
                         }
 	                }
-					break;                    
+					break;
 
 	            case "checkbox":
 	                $options = unserialize($element["ele_value"]);
 
 	                if(is_array($options))
-	                {                       
+	                {
 	                    $keys_output = "";
 	                    for(reset($options); $key = key($options); next($options))
 	                    {
@@ -1421,16 +1410,16 @@ function importCsvDebug(& $importSet)
 	                    $output .= "{ " . $keys_output . " }";
 	                }
 	                else
-	                {                       
+	                {
 	                    $output .= $options;
 	                }
-					break;                    
+					break;
 
 	            case "radio":
 	                $options = unserialize($element["ele_value"]);
 
 	                if(is_array($options))
-	                {                       
+	                {
 	                    $keys_output = "";
 	                    for(reset($options); $key = key($options); next($options))
 	                    {
@@ -1444,10 +1433,10 @@ function importCsvDebug(& $importSet)
 	                    $output .= "{ " . $keys_output . " }";
 	                }
 	                else
-	                {                       
+	                {
 	                    $output .= $options;
 	                }
-					break;                    
+					break;
             }
 
 		    $output .= "</td>";

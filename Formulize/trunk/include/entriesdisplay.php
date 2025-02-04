@@ -230,10 +230,6 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 			}
 		}
 		$savename = $_POST['savename'];
-		if(get_magic_quotes_gpc()) {
-			$savename = stripslashes($savename);
-		}
-		
 
 		// flatten quicksearches -- one value in the array for every column in the view
 		$allcols = explode(",", $_POST['oldcols']);
@@ -1779,7 +1775,6 @@ function drawSearches($searches, $cols, $useBoxes, $useLinks, $numberOfButtons, 
 		}
     //formulize_benchmark("drawing one search");
 		$search_text = isset($searches[$cols[$i]]) ? strip_tags(htmlspecialchars($searches[$cols[$i]]), ENT_QUOTES) : "";
-		$search_text = get_magic_quotes_gpc() ? stripslashes($search_text) : $search_text;
 		$boxid = "";
 		$helpText = "";
 		$clear_help_javascript = "";
@@ -1824,7 +1819,6 @@ function drawSearches($searches, $cols, $useBoxes, $useLinks, $numberOfButtons, 
 		if($i == count($cols)-1) {
 			foreach($hiddenQuickSearches as $thisHQS) {
 				$search_text = isset($searches[$thisHQS]) ? htmlspecialchars(strip_tags($searches[$thisHQS]), ENT_QUOTES) : "";
-				$search_text = get_magic_quotes_gpc() ? stripslashes($search_text) : $search_text;
 				$quickSearchBoxes[$thisHQS]['search'] = "<input type=text name='search_$thisHQS' value=\"$search_text\" $clear_help_javascript onchange=\"javascript:window.document.controls.ventry.value = '';\"></input>\n";
         if(is_array($filtersRequired) OR $filtersRequired === true) {
           if($filtersRequired === true OR in_array($thisHQS, $filtersRequired)) {
@@ -4450,13 +4444,6 @@ function formulize_gatherDataSet($settings=array(), $searches, $sort="", $order=
 	}
 	
 	$regeneratePageNumbers = false;
-	// handle magic quotes if necessary
-	if(get_magic_quotes_gpc()) {
-		$_POST['formulize_previous_filter'] = stripslashes($_POST['formulize_previous_filter']);
-		$_POST['formulize_previous_querystring'] = stripslashes($_POST['formulize_previous_querystring']);
-		$_POST['formulize_previous_scope'] = stripslashes($_POST['formulize_previous_scope']);
-	}
-	
 	
 	if($frid) { // if there's a framework, figure out all the forms in the framework and check if any of them had data saved on this pageload
 		$framework_handler = icms_getModuleHandler('frameworks', 'formulize');

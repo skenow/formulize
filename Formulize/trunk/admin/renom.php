@@ -84,7 +84,7 @@ if ($op != 1) {
 	<th colspan="2"><center><font size=4>'.$desc_form.'</font></center></th>';
 
 	echo '<tr><td class="head" ALIGN=center>'._FORM_NOM.'</td>
-	      <td class="odd" align="center">  
+	      <td class="odd" align="center">
 	      <input maxlength="255" size="50" id="title2" name="title2" type="text" value="'.$desc_form.'"></a></td></tr>';
 
 	$submit = new XoopsFormButton('', 'submit', _SUBMIT, 'submit');
@@ -106,7 +106,6 @@ else
 	if (empty($title)) {
 		redirect_header("formindex.php", 2, _MD_ERRORTITLE);
 	}
-	$title2 = get_magic_quotes_gpc() ? stripslashes($title2) : $title2;
 	$title2 = icms::$xoopsDB->escape($title2);
 		
 	$sql = sprintf("UPDATE %s SET desc_form='%s' WHERE id_form='%s'", $xoopsDB->prefix("formulize_id"),$title2, intval($title));

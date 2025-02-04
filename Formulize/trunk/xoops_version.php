@@ -33,14 +33,14 @@ $modversion = array(
 	'name' => _MI_formulize_NAME,
 	'version' => "4.06",
 	'description' => _MI_formulize_DESC,
-	'author' => "Freeform Solutions",                                            
+	'author' => "Freeform Solutions",
 	'credits' => "",
 	'help' => "",
 	'license' => "GPL",
 	'official' => 0,
 	'image' => "images/formulize.gif",
 	'dirname' => "formulize",
-	'status' => "ICMS Compatibility"
+	'status' => "ICMS Compatibility - 2025.02.02"
 );
 
 $modversion['sqlfile']['mysql'] = "sql/mysql.sql";
@@ -99,7 +99,7 @@ foreach($classFiles as $thisFile) {
 }
 
 $modversion['templates'][] = array(
-	'file' => 'formulize_cat.html', 
+	'file' => 'formulize_cat.html',
 	'description' => '');
 $modversion['templates'][] = array(
 	'file' => 'formulize_application.html',
@@ -315,7 +315,7 @@ $modversion['config'][] = array(
 );
 
 // $xoopsModuleConfig['ta_cols']
-$modversion['config'][] = array( 
+$modversion['config'][] = array(
 	'name' => 'ta_cols',
 	'title' => '_MI_formulize_TAREA_COLS',
 	'description' => '',
@@ -324,7 +324,7 @@ $modversion['config'][] = array(
 	'default' => '35',
 );
 
-// $xoopsModuleConfig['delimeter'] 
+// $xoopsModuleConfig['delimeter']
 $modversion['config'][] = array(
 	'name' => 'delimeter',
 	'title' => '_MI_formulize_DELIMETER',

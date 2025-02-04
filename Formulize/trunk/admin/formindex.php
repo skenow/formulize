@@ -2087,7 +2087,6 @@ function patch22convertdata() {
 		if(!$sanres = $xoopsDB->query($sansql)) { exit("Error patching DB for Formulize 2.2. SQL dump:<br>" . $sansql . "<br>".icms::$xoopsDB->error()."<br>Could not collect all data for sanitizing.  Please contact <a href=mailto:formulize@freeformsolutions.ca>Freeform Solutions</a> for assistance."); }
 		while($sanArray = $xoopsDB->fetchArray($sanres)) {
 			$origvalue = $sanArray['ele_value'];
-			if(get_magic_quotes_gpc()) { $sanArray['ele_value'] = stripslashes($sanArray['ele_value']); }
 			$newvalue = icms_core_DataFilter::htmlSpecialChars($sanArray['ele_value']);
 			if($newvalue != $origvalue) {
 				$newsql = "UPDATE " . $xoopsDB->prefix("formulize_form") . " SET ele_value = \"" . icms::$xoopsDB->escape($newvalue) . "\" WHERE ele_id = " . $sanArray['ele_id'];

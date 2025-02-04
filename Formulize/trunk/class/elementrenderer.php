@@ -127,9 +127,6 @@ class formulizeElementRenderer{
 				break;
 
 			case 'ib':
-				if(get_magic_quotes_gpc()) {
-					$ele_value[0] = stripslashes($ele_value[0]);
- 				}
 				if(trim($ele_value[0]) == "") { $ele_value[0] = $ele_caption; }
 				if(strstr($ele_value[0], "\$value=") OR strstr($ele_value[0], "\$value =")) {
 					$form_id = $id_form;
@@ -825,7 +822,6 @@ class formulizeElementRenderer{
 									$disabledOutputText = _formulize_OPT_OTHER.$other;
 								}
 							}else{
-								$o['value'] = get_magic_quotes_gpc() ? stripslashes($o['value']) : $o['value'];
 								$form_ele1->addOption($o['key'], $o['value']);
 								if($o['key'] == $selected) {
 									$disabledOutputText = $o['value'];
@@ -855,7 +851,6 @@ class formulizeElementRenderer{
 									$disabledOutputText = _formulize_OPT_OTHER.$other;
 								}
 							}else{
-								$o['value'] = get_magic_quotes_gpc() ? stripslashes($o['value']) : $o['value'];
 								$t->addOption($o['key'], $o['value']);
 								if($o['key'] == $selected) {
 									$disabledOutputText = $o['value'];

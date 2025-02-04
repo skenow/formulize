@@ -32,7 +32,7 @@
 
 // this file generates the set notifications popup
 
-// delete notifications 
+// delete notifications
 function handleDelete($uid, $fid, $mid) {
 	global $xoopsDB;
 	$delete = 0;
@@ -45,7 +45,7 @@ function handleDelete($uid, $fid, $mid) {
 			if(!$result = $xoopsDB->query($sql)) {
 				exit("Error:  could not remove notification info.  SQL:<br>$sql</br>");
 			}
-			// check if the current user has any items left for a this event on this form, and if not, then unsub from that event 
+			// check if the current user has any items left for a this event on this form, and if not, then unsub from that event
 			$anyleft = q("SELECT * FROM " . $xoopsDB->prefix("formulize_notification_conditions") . " WHERE not_cons_uid=".intval($uid)." AND not_cons_fid = ".intval($fid)." AND not_cons_event=\"".$event[0]['not_cons_event']."\"");
 			if(count($anyleft) == 0) {
 				$notification_handler =& xoops_gethandler('notification');
@@ -101,11 +101,6 @@ $cols = getAllColList($fid, "", $groups); // notifications can only be set on a 
 $canSetNots = $gperm_handler->checkRight("set_notifications_for_others", $fid, $groups, $mid);
 
 // add latest element condition to existing conditions
-if(get_magic_quotes_gpc()) {
-	$_POST['new_term'] = stripslashes($_POST['new_term']);
-	$_POST['template'] = stripslashes($_POST['template']);
-	$_POST['subject'] = stripslashes($_POST['subject']);
-}
 
 if($_POST['new_term']) {
 	$_POST['elements'][] = $_POST['new_element'];
@@ -157,9 +152,9 @@ if($_POST['save']) {
 	unset($_POST);
 }
 
-$deleted = handleDelete($uid, $fid, $mid); // returns 1 if a deletion was made, 0 if not.  
+$deleted = handleDelete($uid, $fid, $mid); // returns 1 if a deletion was made, 0 if not.
 
-// Get all existing notifications 
+// Get all existing notifications
 // $nots will be an array sent back by the q function
 $nots = getCurNots($fid, $canSetNots, $xoopsUser->getVar('uid'));
 
@@ -216,7 +211,7 @@ $themecss = xoops_getcss();
 print "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"$themecss\" />\n";
 
 print "</head>";
-print "<body style=\"background: white; margin-top:20px;\"><center>"; 
+print "<body style=\"background: white; margin-top:20px;\"><center>";
 print "<table width=100%><tr><td width=5%></td><td width=90%>";
 $setnot = new xoopsThemeForm(_formulize_DE_SETNOT, 'setnot', XOOPS_URL."/modules/formulize/include/setnot.php?fid=$fid");
 
@@ -307,7 +302,7 @@ if($_POST['addcon']) {
 		$setnot->addElement(new xoopsFormHidden('ops[]', $_POST['ops'][$i]));
 		$setnot->addElement(new xoopsFormHidden('terms[]', $_POST['terms'][$i]));
 		$conditionlist .= $options[$_POST['elements'][$i]] . " " . $_POST['ops'][$i] . " " . $_POST['terms'][$i] . "<br />";
-	} 
+	}
 }
 
 // setup the operator boxes...
@@ -387,19 +382,19 @@ if(!$noNots) {
 			// figure out the element name
 			if(!$element_handler) { $element_handler = icms_getModuleHandler('elements', 'formulize'); }
 			$elementObject = $element_handler->get($thisnot['not_cons_elementuids']);
-			$text .= $elementObject->getVar('ele_colhead') ? printSmart(trans($elementObject->getVar('ele_colhead'))) : printSmart(trans($elementObject->getVar('ele_caption'))); 
+			$text .= $elementObject->getVar('ele_colhead') ? printSmart(trans($elementObject->getVar('ele_colhead'))) : printSmart(trans($elementObject->getVar('ele_caption')));
 		} elseif($thisnot['not_cons_linkcreator'] > 0) {
 			$text .= _formulize_DE_SETNOT_WHO_LINKCREATOR;
 			// figure out the element name
 			if(!$element_handler) { $element_handler = icms_getModuleHandler('elements', 'formulize'); }
 			$elementObject = $element_handler->get($thisnot['not_cons_linkcreator']);
-			$text .= $elementObject->getVar('ele_colhead') ? printSmart(trans($elementObject->getVar('ele_colhead'))) : printSmart(trans($elementObject->getVar('ele_caption'))); 
+			$text .= $elementObject->getVar('ele_colhead') ? printSmart(trans($elementObject->getVar('ele_colhead'))) : printSmart(trans($elementObject->getVar('ele_caption')));
 		} elseif($thisnot['not_cons_elementemail'] > 0) {
 			$text .= _formulize_DE_SETNOT_WHO_ELEMENTEMAIL;
 			// figure out the element name
 			if(!$element_handler) { $element_handler = icms_getModuleHandler('elements', 'formulize'); }
 			$elementObject = $element_handler->get($thisnot['not_cons_elementemail']);
-			$text .= $elementObject->getVar('ele_colhead') ? printSmart(trans($elementObject->getVar('ele_colhead'))) : printSmart(trans($elementObject->getVar('ele_caption'))); 
+			$text .= $elementObject->getVar('ele_colhead') ? printSmart(trans($elementObject->getVar('ele_colhead'))) : printSmart(trans($elementObject->getVar('ele_caption')));
 		}
 		
 		
@@ -422,7 +417,7 @@ if(!$noNots) {
 		$text .= ".";
 
 		if($thisnot['not_cons_template']) {
-			$text .= "<br />" . _formulize_DE_NOT_TEMPTEXT . $thisnot['not_cons_template'] . "."; 
+			$text .= "<br />" . _formulize_DE_NOT_TEMPTEXT . $thisnot['not_cons_template'] . ".";
 		}
 		if($thisnot['not_cons_subject']) {
 			$text .= "<br />" . _formulize_DE_NOT_SUBJTEXT . "'" . $thisnot['not_cons_subject'] . "'.";
@@ -513,7 +508,7 @@ print "<br>".$thisnot['not_cons_sub_id']."<br>";
 		if(!$result = $xoopsDB->queryF($sql)) {
 			exit("Error:  could not remove unsubscribed notification info.  SQL:<br>$sql</br>");
 		}
-	}	
+	}
 }
 */
 ?>

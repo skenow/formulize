@@ -196,7 +196,7 @@ if( $op != 'addform' && $op != 'modform' && $op != 'renform' && $op != 'delform'
 
 
 	// added August 12 2005 - jpc
-	$gperm_handler = &xoops_gethandler('groupperm');
+	$gperm_handler = &icms::handler('icms_member_groupperm');
 	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 
 
@@ -432,7 +432,7 @@ function cloneFormulize($title, $clonedata) {
     $criteria = new CriteriaCompo();
     $criteria->add(new Criteria('gperm_itemid', $fid), 'AND');
     $criteria->add(new Criteria('gperm_modid', getFormulizeModId()), 'AND');
-    $gperm_handler = xoops_gethandler('groupperm');
+    $gperm_handler = icms::handler('icms_member_groupperm');
     $oldFormPerms = $gperm_handler->getObjects($criteria);
     foreach($oldFormPerms as $thisOldPerm) {
       // do manual inserts, since addRight uses the xoopsDB query method, which won't do updates/inserts on GET requests
@@ -503,7 +503,7 @@ function modform($fid)
 
 function lockform() {
 	
-	$gperm_handler = &xoops_gethandler('groupperm');
+	$gperm_handler = &icms::handler('icms_member_groupperm');
 	global $xoopsUser, $xoopsModule;
 	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 	$module_id = $xoopsModule->getVar('mid');
@@ -521,7 +521,7 @@ function lockform() {
 function delform()
 {
 
-	$gperm_handler = &xoops_gethandler('groupperm');
+	$gperm_handler = &icms::handler('icms_member_groupperm');
 	global $xoopsUser, $xoopsModule;
 	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 	$module_id = $xoopsModule->getVar('mid');
@@ -988,7 +988,7 @@ function newpermform($group_list="", $form_list="")
 function drawformperms($form_list, $formulize_perms, $perm_desc, $group_id="all", $class="even", $same=true, $hidden_once=0) {
 
 	global $xoopsDB, $module_id;
-	$gperm_handler =& xoops_gethandler('groupperm');
+	$gperm_handler =& icms::handler('icms_member_groupperm');
 	$form_handler = icms_getModuleHandler('forms', 'formulize');
 	
 
@@ -1082,7 +1082,7 @@ function updateperms() {
 	global $xoopsDB, $xoopsModule;
 	$formulize_perms = getFormulizePerms();
 	$module_id = $xoopsModule->getVar('mid');
-	$gperm_handler = &xoops_gethandler('groupperm');
+	$gperm_handler = &icms::handler('icms_member_groupperm');
 	$form_handler = icms_getModuleHandler('forms', 'formulize');
 
 	foreach($_POST as $k=>$v) {

@@ -67,7 +67,7 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 	// Set some required variables
 	$mid = getFormulizeModId();
 	list($fid, $frid) = getFormFramework($formframe, $mainform);
-	$gperm_handler =& xoops_gethandler('groupperm');
+	$gperm_handler =& icms::handler('icms_member_groupperm');
 	$member_handler =& xoops_gethandler('member');
 	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 	$uid = $xoopsUser ? $xoopsUser->getVar('uid') : "0";
@@ -1979,7 +1979,7 @@ function getDefaultCols($fid, $frid="") {
 		$check_results = checkForLinks($frid, $fids, $fid, "", "", "", "", "", "", "0");
 		$fids = $check_results['fids'];
 		$sub_fids = $check_results['sub_fids'];
-		$gperm_handler = &xoops_gethandler('groupperm');
+		$gperm_handler = &icms::handler('icms_member_groupperm');
 		$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 		$uid = $xoopsUser ? $xoopsUser->getVar('uid') : "0";
 		$mid = getFormulizeModId();

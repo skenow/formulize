@@ -37,7 +37,7 @@ if(!$xoopsUser) {
   print "Error: you are not logged in";
   return;
 }
-$gperm_handler = xoops_gethandler('groupperm');
+$gperm_handler = icms::handler('icms_member_groupperm');
 include_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
 $groups = $xoopsUser->getGroups();
 $mid = getFormulizeModId();

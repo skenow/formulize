@@ -62,7 +62,7 @@ include_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
 
 // if we're being called from pageworks, or elsewhere, then certain values won't be set so we'll need to check for them in other ways...
 if(!$gperm_handler) {
-	$gperm_handler =& xoops_gethandler('groupperm');
+	$gperm_handler =& icms::handler('icms_member_groupperm');
 }
 if(!isset($mid)) {
 	$mid = getFormulizeModId();

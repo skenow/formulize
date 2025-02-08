@@ -52,7 +52,7 @@ if($aid == 0) {
 	}
 }
 $screen_handler = icms_getModuleHandler('screen', 'formulize');
-$gperm_handler = xoops_gethandler('groupperm');
+$gperm_handler = icms::handler('icms_member_groupperm');
 global $xoopsUser;
 foreach($formObjects as $thisFormObject) {
 	if(!$gperm_handler->checkRight("edit_form", $thisFormObject->getVar('id_form'), $xoopsUser->getGroups(), getFormulizeModId())) {

@@ -955,7 +955,7 @@ function dataExtraction($frame="", $form, $filter, $andor, $scope, $limitStart, 
 					global $xoopsUser;
 					if(is_object($xoopsUser)) { // determine if the user is a webmaster, in order to control whether the e-mail addresses should be shown or not
 					     $is_webmaster = in_array(XOOPS_GROUP_ADMIN, $xoopsUser->getGroups()) ? true : false;
-					     $gperm_handler =& xoops_gethandler('groupperm');
+					     $gperm_handler =& icms::handler('icms_member_groupperm');
 					     $view_private_fields = $gperm_handler->checkRight("view_private_elements", $fid, $xoopsUser->getGroups(), getFormulizeModId());
 					     $this_userid = $xoopsUser->getVar('uid');
 					} else {
@@ -1078,7 +1078,7 @@ function dataExtraction($frame="", $form, $filter, $andor, $scope, $limitStart, 
 				   global $xoopsUser;
 				   if(is_object($xoopsUser)) { // determine if the user is a webmaster, in order to control whether the e-mail addresses should be shown or not
 					$is_webmaster = in_array(XOOPS_GROUP_ADMIN, $xoopsUser->getGroups()) ? true : false;
-					$gperm_handler =& xoops_gethandler('groupperm');
+					$gperm_handler =& icms::handler('icms_member_groupperm');
 					$view_private_fields = $gperm_handler->checkRight("view_private_elements", $fid, $xoopsUser->getGroups(), getFormulizeModId());
 					$this_userid = $xoopsUser->getVar('uid');
 				   } else {

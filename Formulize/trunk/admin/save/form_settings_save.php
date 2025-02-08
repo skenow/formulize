@@ -154,7 +154,7 @@ if($_POST['formulize_admin_key'] == "new") {
     print "Error: could not update form object with default screen ids: ".icms::$xoopsDB->error();
   }
   // add edit permissions for the selected groups
-  $gperm_handler = xoops_gethandler('groupperm');
+  $gperm_handler = icms::handler('icms_member_groupperm');
   foreach($_POST['groups_can_edit'] as $thisGroupId) {
     $gperm_handler->addRight('edit_form', $fid, intval($thisGroupId), getFormulizeModId());
   }

@@ -39,7 +39,7 @@ require_once XOOPS_ROOT_PATH . "/modules/formulize/include/functions.php";
 $groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 $uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
 $mid = getFormulizeModId();
-$gperm_handler = xoops_gethandler('groupperm');
+$gperm_handler = icms::handler('icms_member_groupperm');
 if($gperm_handler->checkRight("edit_form", $fid, $groups, $mid)) {
     $formulize_masterUIOverride = true; // user has requested the master UI by using this URL, and they have edit_form permission, so we will give them the full default UI for the form
 } else {

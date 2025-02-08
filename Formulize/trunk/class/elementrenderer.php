@@ -1068,7 +1068,7 @@ class formulizeElementRenderer{
 				$sql .= $xoopsUser ? $xoopsUser->getVar('uid') : 0;
 				break;
 			case 3:
-				$gperm_handler =& xoops_gethandler('groupperm');
+				$gperm_handler =& icms::handler('icms_member_groupperm');
 				$groupsThatCanView = $gperm_handler->getGroupIds("view_form", $id_form, getFormulizeModId());
 				$groupsToLimitBy = array_intersect($groups, $groupsThatCanView);
 				$sql .= " AND EXISTS(SELECT 1 FROM ".$xoopsDB->prefix("formulize_entry_owner_groups")." AS t5 WHERE t5.groupid IN (".implode(", ",$groupsToLimitBy).") AND t5.fid=$id_form AND t5.entry_id=t4.entry_id) ";
@@ -1238,7 +1238,7 @@ class formulizeElementRenderer{
 			global $xoopsUser;
 			$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 			$member_handler =& xoops_gethandler('member');
-			$gperm_handler =& xoops_gethandler('groupperm');
+			$gperm_handler =& icms::handler('icms_member_groupperm');
 			$mid = getFormulizeModId();
 			$owner_groups =& $member_handler->getGroupsByUser($owner, FALSE); // in this particular case, it's okay to make the owner_groups based on the users's memberships, since we want to present the single entry that belongs to whichever groups the user is a member of...I think.  :-)
 			$singleData = getSingle($screen->getVar('paraentryform'), $owner, $owner_groups, $member_handler, $gperm_handler, $mid);

@@ -356,7 +356,7 @@ function security_check($fid, $entry="", $uid="", $owner="", $groups="", $mid=""
 	}
 
 	if(!$gperm_handler) {
-		$gperm_handler =& xoops_gethandler('groupperm');
+		$gperm_handler =& icms::handler('icms_member_groupperm');
  	}
 
 	if(!$gperm_handler->checkRight("view_form", $fid, $groups, $mid)) {
@@ -722,7 +722,7 @@ function allowedForms() {
 
 	// GET THE FORMS THE USER IS ALLOWED TO VIEW
 	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
-	$gperm_handler = &xoops_gethandler('groupperm');
+	$gperm_handler = &icms::handler('icms_member_groupperm');
 	$allowedForms = $gperm_handler->getItemIds("view_form", $groups, $module_id);
 
 	// EXCLUDE THE USERPROFILE FORM UNLESS THE USER HAS VIEW_GROUPSCOPE OR VIEW_GLOBALSCOPE ON IT
@@ -1429,7 +1429,7 @@ function getMetaData($entry, $member_handler, $fid="", $useOldCode=false) {
 function getAllColList($fid, $frid="", $groups="", $includeBreaks=false) {
 
 	global $xoopsDB, $xoopsUser;
-	$gperm_handler = &xoops_gethandler('groupperm');
+	$gperm_handler = &icms::handler('icms_member_groupperm');
 	$mid = getFormulizeModId();
 
 	// if $groups then build the necessary filter
@@ -2363,7 +2363,7 @@ function findLinkedEntries($startForm, $targetForm, $startEntry, $gperm_handler,
 		$mid = getFormulizeModId();
 	}
 	if(!$gperm_handler) {
-		$gperm_handler = xoops_gethandler('groupperm');
+		$gperm_handler = icms::handler('icms_member_groupperm');
 	}
 	if(!$member_handler) {
 		$member_handler = xoops_gethandler('member');
@@ -2569,7 +2569,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 
 	// 1b. get the complete list of all possible users to notify
 
-	$gperm_handler =& xoops_gethandler('groupperm');
+	$gperm_handler =& icms::handler('icms_member_groupperm');
 	$member_handler =& xoops_gethandler('member');
 
 	// get uids of all users with global scope
@@ -3972,7 +3972,7 @@ function formulize_getCalcs($formframe, $mainform, $savedView, $handle="all", $t
     }
     global $xoopsUser;
     $mid = getFormulizeModId();
-    $gperm_handler =& xoops_gethandler('groupperm');
+    $gperm_handler =& icms::handler('icms_member_groupperm');
     $member_handler =& xoops_gethandler('member');
     $groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
     $uid = $xoopsUser ? $xoopsUser->getVar('uid') : "0";

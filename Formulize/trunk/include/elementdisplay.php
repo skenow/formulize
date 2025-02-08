@@ -82,7 +82,7 @@ function displayElement($formframe="", $ele, $entry="new", $noSave = false, $scr
 	
 	static $cachedViewPrivate = array();
 	static $cachedUpdateOwnEntry = array();
-	$gperm_handler = xoops_gethandler('groupperm');
+	$gperm_handler = icms::handler('icms_member_groupperm');
 	if(!isset($cachedViewPrivate[$element->getVar('id_form')])) {
 		$cachedViewPrivate[$element->getVar('id_form')] = $gperm_handler->checkRight("view_private_elements", $element->getVar('id_form'), $groups, $mid);	
 		$cachedUpdateOwnEntry[$element->getVar('id_form')] = $gperm_handler->checkRight("update_own_entry", $element->getVar('id_form'), $groups, $mid);	

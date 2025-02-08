@@ -70,7 +70,7 @@ if(!$acid AND $_GET['acid']) {
 
 
 
-$gperm_handler = &xoops_gethandler('groupperm');
+$gperm_handler = &icms::handler('icms_member_groupperm');
 $member_handler = &xoops_gethandler('member');
 $groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 $uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;

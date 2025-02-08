@@ -32,7 +32,7 @@
 $application_handler = icms_getModuleHandler('applications', 'formulize');
 $form_handler = icms_getModuleHandler('forms', 'formulize');
 $screen_handler = icms_getModuleHandler('screen','formulize');
-$gperm_handler = xoops_gethandler('groupperm');
+$gperm_handler = icms::handler('icms_member_groupperm');
 $appObjects = $application_handler->getAllApplications();
 $apps = array();
 $foundForms = array();

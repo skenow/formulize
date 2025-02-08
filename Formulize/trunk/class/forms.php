@@ -1003,7 +1003,7 @@ class formulizeFormsHandler {
 		$criteria = new CriteriaCompo();
 		$criteria->add(new Criteria('gperm_itemid', $fid), 'AND');
 		$criteria->add(new Criteria('gperm_modid', getFormulizeModId()), 'AND');
-		$gperm_handler = xoops_gethandler('groupperm');
+		$gperm_handler = icms::handler('icms_member_groupperm');
 		$oldFormPerms = $gperm_handler->getObjects($criteria);
 		foreach ($oldFormPerms as $thisOldPerm) {
 			// do manual inserts, since addRight uses the xoopsDB query method, which won't do updates/inserts on GET requests

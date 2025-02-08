@@ -38,7 +38,7 @@ switch($_GET['op']) {
 
 function deleteForm($fid) {
 
-  $gperm_handler = &xoops_gethandler('groupperm');
+  $gperm_handler = &icms::handler('icms_member_groupperm');
 	global $xoopsUser, $xoopsModule;
   $module_id = $xoopsModule->getVar('mid'); 
 	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);

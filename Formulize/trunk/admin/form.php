@@ -206,7 +206,7 @@ if($_GET['fid'] != "new") {
   }
   
   // get all the permissions for the selected groups for this form
-  $gperm_handler =& xoops_gethandler('groupperm');
+  $gperm_handler =& icms::handler('icms_member_groupperm');
   $formulize_permHandler = new formulizePermHandler($fid);
   $filterSettings = $formObject->getVar('filterSettings');
   $groupperms = array();

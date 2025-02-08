@@ -39,7 +39,7 @@ $application_handler = icms_getModuleHandler('applications','formulize');
 $allApps = $application_handler->getAllApplications();
 
 if($aid == 0) {
-	$appName = _AM_APP_FORMWITHNOAPP; 
+	$appName = _AM_APP_FORMWITHNOAPP;
 } else {
 	$appObject = $application_handler->get($aid);
 	$appName = $appObject->getVar('name');
@@ -69,7 +69,7 @@ if($_GET['fid'] != "new") {
   // $elements array is going to be used to populate accordion sections, so it must contain the following:
   // a 'name' key and a 'content' key for each form that is found
   // Name will be the heading of the section, content is data used in the template for each section
-  $i = 1; 
+  $i = 1;
   foreach($elementObjects as $thisElement) {
     $elementCaption = strip_tags($thisElement->getVar('ele_caption'));
 		$colhead = strip_tags($thisElement->getVar('ele_colhead'));
@@ -111,7 +111,7 @@ if($_GET['fid'] != "new") {
 		if(substr($ele_display, 0, 1) == ",") {
 			$multiGroupDisplay = true;
       $fs_member_handler =& xoops_gethandler('member');
-      $fs_xoops_groups =& $fs_member_handler->getGroups();
+      $fs_xoops_groups = $fs_member_handler->getGroups();
       $displayGroupList = explode(",", trim($ele_display, ","));
       $check_display = '';
       foreach($displayGroupList as $groupList) {
@@ -123,7 +123,7 @@ if($_GET['fid'] != "new") {
 					} else {
 						$check_display .= "???";
 					}
-				}                               
+				}
       }
       $check_display = '<a class=info href="" onclick="return false;" alt="' . $check_display . '" title="' . $check_display . '">' . _AM_FORM_DISPLAY_MULTIPLE . '</a>';
     } else {
@@ -193,7 +193,7 @@ if($_GET['fid'] != "new") {
   $allGroups = $member_handler->getGroups();
   $groups = array();
   if(!isset($selectedGroups)) {
-    $selectedGroups = isset($_POST['groups']) ? $_POST['groups'] : array();  
+    $selectedGroups = isset($_POST['groups']) ? $_POST['groups'] : array();
   }
   $orderGroups = isset($_POST['order']) ? $_POST['order'] : "creation";
   foreach($allGroups as $thisGroup) {
@@ -201,7 +201,7 @@ if($_GET['fid'] != "new") {
     $groups[$thisGroup->getVar('name')]['name'] = $thisGroup->getVar('name');
     $groups[$thisGroup->getVar('name')]['selected'] = in_array($thisGroup->getVar('groupid'), $selectedGroups) ? " selected" : "";
   }
-  if($orderGroups == "alpha") {  
+  if($orderGroups == "alpha") {
   	ksort($groups);
   }
   
@@ -261,7 +261,7 @@ if($_GET['fid'] != "new") {
   $member_handler = xoops_gethandler('member');
   $allGroups = $member_handler->getGroups();
   foreach($allGroups as $thisGroup) {
-	$groupsCanEditOptions[$thisGroup->getVar('groupid')] = $thisGroup->getVar('name'); 	
+	$groupsCanEditOptions[$thisGroup->getVar('groupid')] = $thisGroup->getVar('name');
   }
   
 }

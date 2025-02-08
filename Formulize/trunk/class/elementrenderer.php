@@ -49,7 +49,7 @@ class formulizeElementRenderer{
 			$isDisabled = true; // disabled all elements if we're on the printable view
 		}
 		global $xoopsUser, $xoopsModuleConfig, $separ, $myts;
-		$myts =& icms_core_Textsanitizer::getInstance();
+		$myts = icms_core_Textsanitizer::getInstance();
 		
 		
 		// $form_ele_id contains the ele_id of the current link select box, but we have to remove "ele_" from the front of it.
@@ -674,7 +674,7 @@ class formulizeElementRenderer{
 				if($this->_ele->getVar('ele_delim') != "") {
 					$delimSetting = $this->_ele->getVar('ele_delim');
 				}
-				$delimSetting =& icms_core_DataFilter::undoHtmlSpecialChars($delimSetting);
+				$delimSetting = icms_core_DataFilter::undoHtmlSpecialChars($delimSetting);
 				if($delimSetting == "br") { $delimSetting = "<br />"; }
 				$hiddenOutOfRangeValuesToWrite = array();
 				switch($delimSetting){
@@ -802,7 +802,7 @@ class formulizeElementRenderer{
 				if($this->_ele->getVar('ele_delim') != "") {
 					$delimSetting = $this->_ele->getVar('ele_delim');
 				}
-				$delimSetting =& icms_core_DataFilter::undoHtmlSpecialChars($delimSetting);
+				$delimSetting = icms_core_DataFilter::undoHtmlSpecialChars($delimSetting);
 				if($delimSetting == "br") { $delimSetting = "<br />"; }
 				$hiddenOutOfRangeValuesToWrite = array();
 				switch($delimSetting){

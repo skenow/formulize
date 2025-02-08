@@ -1918,7 +1918,7 @@ function drawHeaders($headers, $cols, $useBoxes=null, $useLinks=null, $numberOfB
 	if(!$checkedHelpLink) {
 		$module_handler =& xoops_gethandler('module');
 		$config_handler =& xoops_gethandler('config');
-		$formulizeModule =& $module_handler->getByDirname("formulize");
+		$formulizeModule = $module_handler->getByDirname("formulize");
 		$formulizeConfig =& $config_handler->getConfigsByCat(0, $formulizeModule->getVar('mid'));
 		$headingHelpLink = $formulizeConfig['heading_help_link'];
 		$checkedHelpLink = true;

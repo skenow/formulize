@@ -50,7 +50,7 @@ function displayElement($formframe="", $ele, $entry="new", $noSave = false, $scr
 		$subformMetaData = explode("_", $entry);
 		$subformEntryIndex = $subformMetaData[1];
 		$subformElementId = $subformMetaData[2];
-	} 
+	}
 	if($entry == "" OR $subformCreateEntry) { $entry = "new"; }
 
 	$element = _formulize_returnElement($ele, $formframe);
@@ -84,8 +84,8 @@ function displayElement($formframe="", $ele, $entry="new", $noSave = false, $scr
 	static $cachedUpdateOwnEntry = array();
 	$gperm_handler = icms::handler('icms_member_groupperm');
 	if(!isset($cachedViewPrivate[$element->getVar('id_form')])) {
-		$cachedViewPrivate[$element->getVar('id_form')] = $gperm_handler->checkRight("view_private_elements", $element->getVar('id_form'), $groups, $mid);	
-		$cachedUpdateOwnEntry[$element->getVar('id_form')] = $gperm_handler->checkRight("update_own_entry", $element->getVar('id_form'), $groups, $mid);	
+		$cachedViewPrivate[$element->getVar('id_form')] = $gperm_handler->checkRight("view_private_elements", $element->getVar('id_form'), $groups, $mid);
+		$cachedUpdateOwnEntry[$element->getVar('id_form')] = $gperm_handler->checkRight("update_own_entry", $element->getVar('id_form'), $groups, $mid);
 	}
 	$view_private_elements = $cachedViewPrivate[$element->getVar('id_form')];
 	$update_own_entry = $cachedUpdateOwnEntry[$element->getVar('id_form')];
@@ -105,13 +105,13 @@ function displayElement($formframe="", $ele, $entry="new", $noSave = false, $scr
 		$display_groups = explode(",", $display);
 		$allowed = array_intersect($groups, $display_groups) ? 1 : 0;
 	} elseif($display == 1) {
-		$allowed = 1;	
+		$allowed = 1;
 	} else {
 		$allowed = 0;
 	}
 
 	if($prevEntry==null) { // preferable to pass in prevEntry!
-		$prevEntry = getEntryValues($entry, "", $groups, $element->getVar('id_form'), "", $mid, $uid, $owner, $groupEntryWithUpdateRights);			
+		$prevEntry = getEntryValues($entry, "", $groups, $element->getVar('id_form'), "", $mid, $uid, $owner, $groupEntryWithUpdateRights);
 	}
 
 	$elementFilterSettings = $element->getVar('ele_filtersettings');
@@ -124,7 +124,7 @@ function displayElement($formframe="", $ele, $entry="new", $noSave = false, $scr
 		if($entry != "new") {
 			if(!isset($cachedEntries[$element->getVar('id_form')][$entry])) {
 				$cachedEntries[$element->getVar('id_form')][$entry] = getData("", $element->getVar('id_form'), $entry);
-			}	
+			}
 			$entryData = $cachedEntries[$element->getVar('id_form')][$entry];
 		}
 		
@@ -204,12 +204,12 @@ function displayElement($formframe="", $ele, $entry="new", $noSave = false, $scr
 		
 		formulize_benchmark("About to render element ".$element->getVar('ele_caption').".");
 		
-	  	$form_ele =& $renderer->constructElement($renderedElementName, $ele_value, $entry, $isDisabled, $screen);
+	  	$form_ele = $renderer->constructElement($renderedElementName, $ele_value, $entry, $isDisabled, $screen);
 
 		formulize_benchmark("Done rendering element.");
 		
 		if(!$renderElement) {
-			return array(0=>$form_ele, 1=>$isDisabled);			
+			return array(0=>$form_ele, 1=>$isDisabled);
 		} else {
 			if($element->getVar('ele_type') == "ib") {
 				print $form_ele[0];
@@ -228,7 +228,7 @@ function displayElement($formframe="", $ele, $entry="new", $noSave = false, $scr
 					if($isDisabled) {
 						return "rendered-disabled";
 					} else {
-						return "rendered";	
+						return "rendered";
 					}
 			}
 		}
@@ -309,7 +309,7 @@ function buildEvaluationCondition($match,$indexes,$filterElements,$filterOps,$fi
 			$compValue = addslashes($compValue);
 		}
 		if($thisOp == "LIKE") {
-			$evaluationCondition .= "strstr('".$compValue."', '".addslashes($filterTerms[$i])."')"; 
+			$evaluationCondition .= "strstr('".$compValue."', '".addslashes($filterTerms[$i])."')";
 		} elseif($thisOp == "NOT LIKE") {
 			$evaluationCondition .= "!strstr('".$compValue."', '".addslashes($filterTerms[$i])."')";
 		} else {
@@ -321,7 +321,7 @@ function buildEvaluationCondition($match,$indexes,$filterElements,$filterOps,$fi
 }
 /* ALTERED - 20100316 - freeform - jeff/julian - stop */
 
-// THIS FUNCTION RETURNS THE CAPTION FOR AN ELEMENT 
+// THIS FUNCTION RETURNS THE CAPTION FOR AN ELEMENT
 // added June 25 2006 -- jwe
 function displayCaption($formframe="", $ele) {
 	$element = _formulize_returnElement($ele, $formframe);
@@ -331,7 +331,7 @@ function displayCaption($formframe="", $ele) {
 	return $element->getVar('ele_caption');
 }
 
-// THIS FUNCTION RETURNS THE description FOR AN ELEMENT 
+// THIS FUNCTION RETURNS THE description FOR AN ELEMENT
 function displayDescription($formframe="", $ele) {
 	$element = _formulize_returnElement($ele, $formframe);
   if(!is_object($element)) {
@@ -343,7 +343,7 @@ function displayDescription($formframe="", $ele) {
 // this function takes an element object, or an element id number or handle (or framework handle with framework id, but that's deprecated)
 function _formulize_returnElement($ele, $formframe="") {
   $element = "";
-	if(is_object($ele)) {	
+	if(is_object($ele)) {
 		if(get_class($ele) == "formulizeformulize" OR is_subclass_of($ele, 'formulizeformulize')) {
 			$element = $ele;
 		} else {

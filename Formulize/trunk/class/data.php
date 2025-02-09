@@ -566,7 +566,7 @@ class formulizeDataHandler {
 		for ($i = 0; $i < count($uids); $i++ ) { // loop through all the users
 			$ownerGroups = array();
 			if ($uids[$i]) { // get the user's group
-				$member_handler = &xoops_gethandler('member');
+				$member_handler = &icms::handler('icms_member');
 				$creationUser = $member_handler->getUser($uids[$i]);
 				if (is_object($creationUser)) {
 					$ownerGroups = $creationUser->getGroups();

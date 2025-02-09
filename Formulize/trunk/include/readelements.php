@@ -452,7 +452,7 @@ function writeUserProfile($data, $uid) {
         }
         echo '</div><br />';
     } else {
-        $member_handler =& xoops_gethandler('member');
+        $member_handler =& icms::handler('icms_member');
         $edituser =& $member_handler->getUser($uid);
         $edituser->setVar('name', $data['name']);
         if ($xoopsConfigUser['allow_chgmail'] == 1) {

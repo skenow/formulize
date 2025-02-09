@@ -68,7 +68,7 @@ function displayEntries($formframe, $mainform="", $loadview="", $loadOnlyView=0,
 	$mid = getFormulizeModId();
 	list($fid, $frid) = getFormFramework($formframe, $mainform);
 	$gperm_handler =& icms::handler('icms_member_groupperm');
-	$member_handler =& xoops_gethandler('member');
+	$member_handler =& icms::handler('icms_member');
 	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 	$uid = $xoopsUser ? $xoopsUser->getVar('uid') : "0";
 
@@ -2660,7 +2660,7 @@ function calcValuePlusText($value, $handle, $col, $calc, $groupingValue) {
     return $value;
   }
   if($handle == "uid" OR $handle=="proxyid" OR $handle == "creation_uid" OR $handle == "mod_uid") {
-    $member_handler = xoops_gethandler('member');
+    $member_handler = icms::handler('icms_member');
     $userObject = $member_handler->getUser(display($entry, $handle));
     $nameToDisplay = $userObject->getVar('name') ? $userObject->getVar('name') : $userObject->getVar('uname');
     return $nameToDisplay;

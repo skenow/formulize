@@ -110,7 +110,7 @@ if($_GET['fid'] != "new") {
     $multiGroupDisplay = false;
 		if(substr($ele_display, 0, 1) == ",") {
 			$multiGroupDisplay = true;
-      $fs_member_handler =& xoops_gethandler('member');
+      $fs_member_handler =& icms::handler('icms_member');
       $fs_xoops_groups = $fs_member_handler->getGroups();
       $displayGroupList = explode(",", trim($ele_display, ","));
       $check_display = '';
@@ -189,7 +189,7 @@ if($_GET['fid'] != "new") {
   }
   
   // get the list of groups
-  $member_handler = xoops_gethandler('member');
+  $member_handler = icms::handler('icms_member');
   $allGroups = $member_handler->getGroups();
   $groups = array();
   if(!isset($selectedGroups)) {
@@ -258,7 +258,7 @@ if($_GET['fid'] != "new") {
 	$formApplications = array(intval($_GET['aid']));
   }
   $groupsCanEditDefaults = $xoopsUser->getGroups();
-  $member_handler = xoops_gethandler('member');
+  $member_handler = icms::handler('icms_member');
   $allGroups = $member_handler->getGroups();
   foreach($allGroups as $thisGroup) {
 	$groupsCanEditOptions[$thisGroup->getVar('groupid')] = $thisGroup->getVar('name');

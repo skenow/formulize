@@ -320,7 +320,7 @@ switch($op){
 		$ele_display->setDescription(_AM_FORM_DISPLAY_EXTRA);
 	
 
-	    $fs_member_handler =& xoops_gethandler('member');
+	    $fs_member_handler =& icms::handler('icms_member');
 	    $fs_xoops_groups =& $fs_member_handler->getGroups();
 
         $ele_display->addOption("all", _AM_FORM_DISPLAY_ALLGROUPS);

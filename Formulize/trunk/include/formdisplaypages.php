@@ -72,7 +72,7 @@ function displayFormPages($formframe, $entry="", $mainform="", $pages, $conditio
 	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 	$uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
 	$gperm_handler =& icms::handler('icms_member_groupperm');
-	$member_handler =& xoops_gethandler('member');
+	$member_handler =& icms::handler('icms_member');
 	$update_own_entry = $gperm_handler->checkRight("update_own_entry", $fid, $groups, $mid);
 	$update_other_entries = $gperm_handler->checkRight("update_other_entries", $fid, $groups, $mid);
 	$single_result = getSingle($fid, $uid, $groups, $member_handler, $gperm_handler, $mid);

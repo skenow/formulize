@@ -94,7 +94,7 @@ function displayElement($formframe="", $ele, $entry="new", $noSave = false, $scr
 	// messed up.  Private should not override the display settings.  And the $entry should be checked against the security check first to determine whether the user should even see this entry in the first place.
 	$display = $element->getVar('ele_display');
 	$private = $element->getVar('ele_private');
-	$member_handler = xoops_gethandler('member');
+	$member_handler = icms::handler('icms_member');
 	$single_result = getSingle($element->getVar('id_form'), $uid, $groups, $member_handler, $gperm_handler, $mid);
 	$groupEntryWithUpdateRights = ($single_result['flag'] == "group" AND $update_own_entry AND $entry == $single_result['entry']) ? true : false;
 

@@ -795,7 +795,7 @@ function importCsvProcess(& $importSet, $id_reqs, $regfid, $validateOverride)
 		} else {
 			$max_id_req = $this_id_req;
 			// get the uid and creation date too
-			$member_handler =& xoops_gethandler('member');
+			$member_handler =& icms::handler('icms_member');
 			$this_metadata = getMetaData($this_id_req, $member_handler, $importSet[4]); // importSet[4] is id_form (fid)
 			$this_uid = $this_metadata['created_by_uid'];
 			$this_creation_date = $this_metadata['created'];

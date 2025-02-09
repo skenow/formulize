@@ -174,7 +174,7 @@ if( $_POST['op'] != 'save' ){
         {
 			$multiGroupDisplay = true;
             
-	        $fs_member_handler =& xoops_gethandler('member');
+	        $fs_member_handler =& icms::handler('icms_member');
 	        $fs_xoops_groups =& $fs_member_handler->getGroups();
 
 	        $displayGroupList = explode(",", $display);

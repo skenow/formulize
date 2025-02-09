@@ -96,7 +96,7 @@ include_once XOOPS_ROOT_PATH.'/modules/formulize/include/functions.php';
   $frid = ((isset($_POST['frid'])) AND is_numeric($_POST['frid'])) ? intval($_POST['frid']) : $frid ;
 
 	$gperm_handler = &icms::handler('icms_member_groupperm');
-	$member_handler =& xoops_gethandler('member');
+	$member_handler =& icms::handler('icms_member');
 	$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
 	$uid = $xoopsUser->getVar('uid');
 	$curscope = $_GET['scope'];

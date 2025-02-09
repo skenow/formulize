@@ -1237,7 +1237,7 @@ class formulizeElementRenderer{
 			// identify the entry belonging to this user's group(s) in the other form.  Currently only group correspondence is supported.
 			global $xoopsUser;
 			$groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
-			$member_handler =& xoops_gethandler('member');
+			$member_handler =& icms::handler('icms_member');
 			$gperm_handler =& icms::handler('icms_member_groupperm');
 			$mid = getFormulizeModId();
 			$owner_groups =& $member_handler->getGroupsByUser($owner, FALSE); // in this particular case, it's okay to make the owner_groups based on the users's memberships, since we want to present the single entry that belongs to whichever groups the user is a member of...I think.  :-)

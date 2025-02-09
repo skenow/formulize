@@ -713,7 +713,7 @@ if($_POST['groupsubmit'] == $submit_value)
 }
 
 
-$fs_member_handler =& xoops_gethandler('member');
+$fs_member_handler =& icms::handler('icms_member');
 $fs_xoops_groups =& $fs_member_handler->getGroups();
 
 $fs_count = count($fs_xoops_groups);
@@ -2225,7 +2225,7 @@ function patch30DataStructure($auto = false) {
 																				// derive the owner groups and write them to the owner groups table
 																				$ownerGroups = array();
 																				if($creation_uid) {
-																					$member_handler =& xoops_gethandler('member');
+																					$member_handler =& icms::handler('icms_member');
 																					$creationUser = $member_handler->getUser($creation_uid);
 																					if(is_object($creationUser)) {
 																						$ownerGroups = $creationUser->getGroups();

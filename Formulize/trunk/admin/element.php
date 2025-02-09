@@ -50,7 +50,7 @@ $names = array();
 $display = array();
 $advanced = array();
 
-$member_handler = xoops_gethandler('member');
+$member_handler = icms::handler('icms_member');
 $allGroups = $member_handler->getGroups();
 $groups = array();
 foreach($allGroups as $thisGroup) {

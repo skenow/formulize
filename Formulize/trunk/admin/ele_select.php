@@ -111,7 +111,7 @@ if(isset($ele_value[2]['{FULLNAMES}']) OR isset($ele_value[2]['{USERNAMES}'])) {
 // scope control for linked selectboxes -- added August 30 2006 by jwe
 $linkscope = new xoopsFormSelect('', 'formlink_scope', $scopelimit, 10, true);
 $linkscope->addOption('all', _AM_ELE_FORMLINK_SCOPE_ALL);
-$fs_member_handler =& xoops_gethandler('member');
+$fs_member_handler =& icms::handler('icms_member');
 $fs_xoops_groups =& $fs_member_handler->getGroups();
 $fs_count = count($fs_xoops_groups);
 for($i = 0; $i < $fs_count; $i++) {

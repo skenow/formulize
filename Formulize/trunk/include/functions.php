@@ -122,7 +122,7 @@ function getFormTitle($fid) {
 // $filter is the specified filters to run on the profile form, if any
 function gatherNames($groups, $nametype, $requireAllGroups=false, $filter=false) {
 	global $xoopsDB;
-	$member_handler =& xoops_gethandler('member');
+	$member_handler =& icms::handler('icms_member');
 	$all_users = array();
   $usersByGroup = array();
 	foreach($groups as $group) {
@@ -1355,7 +1355,7 @@ function prepExport($headers, $cols, $data, $fdchoice, $custdel="", $title, $tem
 function getMetaData($entry, $member_handler, $fid="", $useOldCode=false) {
   
         if(!$member_handler) {
-          $member_handler =& xoops_gethandler('member');
+          $member_handler =& icms::handler('icms_member');
         }
   
   if($useOldCode) {
@@ -2366,7 +2366,7 @@ function findLinkedEntries($startForm, $targetForm, $startEntry, $gperm_handler,
 		$gperm_handler = icms::handler('icms_member_groupperm');
 	}
 	if(!$member_handler) {
-		$member_handler = xoops_gethandler('member');
+		$member_handler = icms::handler('icms_member');
 	}
 
 
@@ -2570,7 +2570,7 @@ function sendNotifications($fid, $event, $entries, $mid="", $groups=array()) {
 	// 1b. get the complete list of all possible users to notify
 
 	$gperm_handler =& icms::handler('icms_member_groupperm');
-	$member_handler =& xoops_gethandler('member');
+	$member_handler =& icms::handler('icms_member');
 
 	// get uids of all users with global scope
 	$groups_global = $gperm_handler->getGroupIds("view_globalscope", $fid, $mid);
@@ -2881,7 +2881,7 @@ function sendNotificationToEmail($email, $event, $tags, $subject, $template) {
 function formulize_getUsersByGroups($groups, $member_handler="") {
 
 	if(!$member_handler) {
-		$member_handler =& xoops_gethandler('member');
+		$member_handler =& icms::handler('icms_member');
 	}
 
 	$users = array();
@@ -3973,7 +3973,7 @@ function formulize_getCalcs($formframe, $mainform, $savedView, $handle="all", $t
     global $xoopsUser;
     $mid = getFormulizeModId();
     $gperm_handler =& icms::handler('icms_member_groupperm');
-    $member_handler =& xoops_gethandler('member');
+    $member_handler =& icms::handler('icms_member');
     $groups = $xoopsUser ? $xoopsUser->getGroups() : array(0=>XOOPS_GROUP_ANONYMOUS);
     $uid = $xoopsUser ? $xoopsUser->getVar('uid') : "0";
     //print_r($_POST['currentview']);

@@ -833,8 +833,8 @@ class formulizeFormsHandler {
 
 			$likeBits = (strstr(strtoupper($filterSettings[1][$i]), "LIKE") and substr($filterSettings[2][$i], 0, 1) != "%" and substr($filterSettings[2][$i], -1) != "%") ? "%" : "";
 			$termToUse = str_replace("{USER}", $uid, $filterSettings[2][$i]);
-			if (preg_replace("[^A-Z{}]", "", $termToUse) === "{TODAY}") {
-				$number = preg_replace("[^0-9+-]", "", $termToUse);
+			if (preg_replace("/[^A-Z{}]/", "", $termToUse) === "{TODAY}") {
+				$number = preg_replace("/[^0-9+-]/", "", $termToUse);
 				$termToUse = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") + $number, date("Y")));
 			}
 			$termToUse = (is_numeric($termToUse) and !strstr(strtoupper($filterSettings[1][$i]), "LIKE")) ? $termToUse : "\"$likeBits" . icms::$xoopsDB->escape($termToUse) . "$likeBits\"";

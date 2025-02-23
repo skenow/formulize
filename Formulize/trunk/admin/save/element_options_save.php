@@ -69,7 +69,7 @@ if($_POST['element_delimit']) {
   }
 }
 if($ele_type == "date" AND $processedValues['elements']['ele_value'][0] != "YYYY-mm-dd" AND $processedValues['elements']['ele_value'][0] != "") {
-	if(preg_replace("[^A-Z{}]","", $processedValues['elements']['ele_value'][0]) === "{TODAY}") {
+	if(preg_replace("/[^A-Z{}]/","", $processedValues['elements']['ele_value'][0]) === "{TODAY}") {
 	  $processedValues['elements']['ele_value'][0] = $processedValues['elements']['ele_value'][0];
 	} else {
 	  $processedValues['elements']['ele_value'][0] = date("Y-m-d", strtotime($processedValues['elements']['ele_value'][0]));

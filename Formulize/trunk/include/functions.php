@@ -1519,8 +1519,8 @@ function writableQuery($items, $mod="") {
 			$items['as_' . $i] = $term;
 		} elseif ($items['as_' . $i] == "{BLANK}" AND $mod != 1) {
 			$items['as_' . $i] = "\" \"";
- 		} elseif (preg_replace("[^A-Z{}]","", $items['as_' . $i]) == "{TODAY}" AND $mod != 1) {
-			$number = preg_replace("[^0-9+-]","", $items['as_' . $i]);
+ 		} elseif (preg_replace("/[^A-Z{}]/","", $items['as_' . $i]) == "{TODAY}" AND $mod != 1) {
+			$number = preg_replace("/[^0-9+-]/","", $items['as_' . $i]);
 			$items['as_' . $i] = date("Y-m-d",mktime(0, 0, 0, date("m") , date("d")+$number, date("Y")));
 //		lines below commented and replaced with the above check by dpicella which accounts for + and - numbers after {TODAY, ie: {TODAY-14}
 //		} elseif ($items['as_' . $i] == "{TODAY}" AND $mod != 1) {
@@ -1665,7 +1665,7 @@ function prepDataForWrite($element, $ele) {
 		switch($ele_type){
 				case 'text':
 					if($ele_value[3]) { // if $ele_value[3] is 1 (default is 0) then treat this as a numerical field
-						$value = preg_replace ('[^0-9.-]+', '', $ele);
+						$value = preg_replace ('/[^0-9.-]+/', '', $ele);
 					} else {
 						$value = $ele;
 					}

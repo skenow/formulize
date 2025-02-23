@@ -54,9 +54,7 @@ if ( file_exists(XOOPS_ROOT_PATH."/modules/formulize/language/".$xoopsConfig['la
 include_once XOOPS_ROOT_PATH . "/modules/formulize/class/forms.php";
 include_once XOOPS_ROOT_PATH . "/modules/formulize/class/frameworks.php";
 
-global $xoopsDB; 
-
-include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
+global $xoopsDB;
 
 $form1 = is_numeric($_GET['form1']) ? $_GET['form1'] : 0;
 $form2 = is_numeric($_GET['form2']) ? $_GET['form2'] : 0;

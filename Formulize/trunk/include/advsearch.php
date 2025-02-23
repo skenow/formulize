@@ -33,8 +33,8 @@
 // This file contains the logic for the advanced search options popup
 
 //stuff that needs to be recorded for sending back to the main controls interface...
-//1. 
-//2. 
+//1.
+//2.
 
 function searchJavascript($items) {
 ?>
@@ -45,7 +45,7 @@ function searchJavascript($items) {
 function sendSearch(formObj) {
 
 <?php
-// process the $items array 
+// process the $items array
 
 $flatItems = implode("/,%^&2", $items);
 print "window.opener.document.controls.asearch.value = '$flatItems';\n";
@@ -76,16 +76,16 @@ function readQueryItems() {
 	// read what was just sent back...
 	if($_POST['addq']) {
 		$columnsProcessed = false;
-		foreach($_POST['column'] AS $selectedColumn) { 
+		foreach($_POST['column'] AS $selectedColumn) {
 			if($columnsProcessed) { // handle AND/OR setting
 				switch($_POST['multi_andor']) {
 					case "1": // AND
-						$items['as_' . $count] = "AND"; 
+						$items['as_' . $count] = "AND";
 						$hidden[] = new xoopsFormHidden('as_' . $count, "AND");
 			      		$count++;
 						break;
 					case "2": // OR
-						$items['as_' . $count] = "OR"; 
+						$items['as_' . $count] = "OR";
 						$hidden[] = new xoopsFormHidden('as_' . $count, "OR");
 			      		$count++;
 						break;
@@ -104,24 +104,24 @@ function readQueryItems() {
 			$columnsProcessed = true;
 		}
 	}
-	if($_POST['openb']) { 
-		$items['as_' . $count] = "("; 
+	if($_POST['openb']) {
+		$items['as_' . $count] = "(";
 		$hidden[] = new xoopsFormHidden('as_' . $count, "(");
 	}
-	if($_POST['closeb']) { 
-		$items['as_' . $count] = ")"; 
+	if($_POST['closeb']) {
+		$items['as_' . $count] = ")";
 		$hidden[] = new xoopsFormHidden('as_' . $count, ")");
 	}
-	if($_POST['and']) { 
-		$items['as_' . $count] = "AND"; 
+	if($_POST['and']) {
+		$items['as_' . $count] = "AND";
 		$hidden[] = new xoopsFormHidden('as_' . $count, "AND");
 	}
-	if($_POST['or']) { 
-		$items['as_' . $count] = "OR"; 
+	if($_POST['or']) {
+		$items['as_' . $count] = "OR";
 		$hidden[] = new xoopsFormHidden('as_' . $count, "OR");
 	}
-	if($_POST['not']) { 
-		$items['as_' . $count] = "NOT"; 
+	if($_POST['not']) {
+		$items['as_' . $count] = "NOT";
 		$hidden[] = new xoopsFormHidden('as_' . $count, "NOT");
 	}
 
@@ -189,13 +189,12 @@ include_once XOOPS_ROOT_PATH.'/modules/formulize/include/functions.php';
 	}
 
 // main body of page goes here...
-include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
 
 $returned = readQueryItems();
 
 $cols = getAllColList($fid, $frid, $groups);
 
-$returned = handleDelete($returned[0], $returned[1]); // returns 1 if a deletion was made, 0 if not.  
+$returned = handleDelete($returned[0], $returned[1]); // returns 1 if a deletion was made, 0 if not.
 $items = $returned[0];
 $hidden = $returned[1];
 
@@ -203,7 +202,7 @@ $hidden = $returned[1];
 foreach($cols as $f=>$vs) {
 	foreach($vs as $row=>$values) {
 		$reqdcol = 'reqdcalc_column_' . $values['ele_id'];
-		if(!in_array($values['ele_id'], $usedvals)) { // exclude duplicates...the array is not uniqued above because we don't want to merge it an unique it since that throws things out of order.  
+		if(!in_array($values['ele_id'], $usedvals)) { // exclude duplicates...the array is not uniqued above because we don't want to merge it an unique it since that throws things out of order.
 			$usedvals[] = $values['ele_id'];
 			if($values['ele_colhead'] != "") {
 				$options[$values['ele_id']] = printSmart(trans($values['ele_colhead']), 60);
@@ -211,7 +210,7 @@ foreach($cols as $f=>$vs) {
 				$options[$values['ele_id']] = printSmart(trans(strip_tags($values['ele_caption'])), 60);
 			}
 		}
-	}		
+	}
 }
 
 
@@ -229,7 +228,7 @@ $themecss = xoops_getcss();
 print "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"$themecss\" />\n";
 
 print "</head>";
-print "<body style=\"background: white; margin-top:20px;\"><center>"; 
+print "<body style=\"background: white; margin-top:20px;\"><center>";
 print "<table style=\"width: 100%;\"><tr><td style=\"width: 5%;\"></td><td style=\"width: 90%;\">";
 $advsearch = new xoopsThemeForm(_formulize_DE_BUILDQUERY, 'buildq', XOOPS_URL."/modules/formulize/include/advsearch.php?fid=$fid&frid=$frid");
 

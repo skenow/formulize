@@ -117,7 +117,6 @@ class formulizeScreenHandler {
 	function editForm($screen, $fid) {
 
 		// provide ui for title, ui for frid, hidden fid, hidden sid
-		include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
 		$form = new XoopsThemeForm(_AM_FORMULIZE_SCREEN_FORM, "editscreenform", "editscreen.php");
 		$form->addElement(new xoopsFormHidden('fid', $fid));
 		$title = is_object($screen) ? $screen->getVar('title') : "";

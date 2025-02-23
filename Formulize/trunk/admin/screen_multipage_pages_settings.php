@@ -32,7 +32,6 @@
 require_once "../../../mainfile.php";
 
 include_once XOOPS_ROOT_PATH."/modules/formulize/include/functions.php";
-include_once XOOPS_ROOT_PATH."/class/xoopsformloader.php";
 
 // setup a smarty object that we can use for templating our own pages
 
@@ -85,7 +84,7 @@ $filterSettingsToSend = count($conditions[$pageIndex] > 0) ? $conditions[$pageIn
     $newFilterSettingsToSend[0] = $filterSettingsToSend['details']['elements'];
     $newFilterSettingsToSend[1] = $filterSettingsToSend['details']['ops'];
     $newFilterSettingsToSend[2] = $filterSettingsToSend['details']['terms'];
-    $filterSettingsToSend = $newFilterSettingsToSend;      
+    $filterSettingsToSend = $newFilterSettingsToSend;
   }
 $pageConditions = formulize_createFilterUI($filterSettingsToSend, "pagefilter_".$pageIndex, $screen->getVar('fid'), "popupform");
 

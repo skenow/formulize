@@ -242,7 +242,7 @@ function setURLCalcs() {
 	}
 //	print_r($_POST);
 
-} 
+}
 
 
 require_once "../../../mainfile.php";
@@ -267,7 +267,7 @@ include_once XOOPS_ROOT_PATH.'/modules/formulize/include/functions.php';
 	}
 	$frid = "";
 	if(!$frid = $_GET['frid']) {
-		$frid = intval($_POST['frid']);	
+		$frid = intval($_POST['frid']);
 	}
 
 	$gperm_handler = &icms::handler('icms_member_groupperm');
@@ -294,7 +294,7 @@ percentage breakdowns
 Need subtotalling/grouping capability, ie: show intermediate totals for the sum of all students in activity logs for each student, or show percentage breakdown of 1-5 ratings of all activities for each volunteer
 --premise is that subtotalling/grouping can be done by any value in another column, or by any metadata for entries.
 
-UI:  semi-wizard based.  pick a column (or pick add calculation column), pick calculation options, including grouping results.  
+UI:  semi-wizard based.  pick a column (or pick add calculation column), pick calculation options, including grouping results.
 
 Note:  calculation columns (difference between order date and ship date for this record, for instance) will be implemented later, if necessary.
 
@@ -305,12 +305,12 @@ setURLCalcs();
 
 $cols = getAllColList($fid, $frid, $groups);
 
-$deleted = handleDelete(); // returns 1 if a deletion was made, 0 if not.  
+$deleted = handleDelete(); // returns 1 if a deletion was made, 0 if not.
 
 foreach($cols as $f=>$vs) {
 	foreach($vs as $row=>$values) {
 		$reqdcol = 'reqdcalc_column_' . $values['ele_id'];
-		if(!in_array($values['ele_id'], $usedvals)) { // exclude duplicates...the array is not uniqued above because we don't want to merge it an unique it since that throws things out of order.  
+		if(!in_array($values['ele_id'], $usedvals)) { // exclude duplicates...the array is not uniqued above because we don't want to merge it an unique it since that throws things out of order.
 			$usedvals[] = $values['ele_id'];
 			if(!$_POST[$reqdcol] AND !in_array($values['ele_id'], $_POST['column'])) { // Also exclude columns that have been used already.
 				if($values['ele_colhead'] != "") {
@@ -326,10 +326,8 @@ foreach($cols as $f=>$vs) {
 				$options2[$values['ele_id']] = "Group by: " . printSmart(trans(strip_tags($values['ele_caption'])));
 			}
 		}
-	}		
+	}
 }
-
-include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
 
 print "<HTML>";
 print "<head>";
@@ -345,7 +343,7 @@ $themecss = xoops_getcss();
 print "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"$themecss\" />\n";
 
 print "</head>";
-print "<body style=\"background: white; margin-top:20px;\"><center>"; 
+print "<body style=\"background: white; margin-top:20px;\"><center>";
 print "<table width=100%><tr><td width=5%></td><td width=90%>";
 $pickcalc = new xoopsThemeForm(_formulize_DE_PICKCALCS, 'pickcalc', XOOPS_URL."/modules/formulize/include/pickcalcs.php?fid=$fid&frid=$frid");
 
@@ -427,7 +425,7 @@ foreach($returned['rc'] as $hidden) {
 			$colname = _formulize_DE_CALC_CREATOR_EMAIL;
 			break;
 		default:
-			$temp_cap = q("SELECT ele_caption FROM " . $xoopsDB->prefix("formulize") . " WHERE ele_id = '" . $hidden['column'] . "'"); 
+			$temp_cap = q("SELECT ele_caption FROM " . $xoopsDB->prefix("formulize") . " WHERE ele_id = '" . $hidden['column'] . "'");
 			$colname = trans($temp_cap[0]['ele_caption']);
 	}
 	$pickcalc->addElement(new xoopsFormButton($colname, "delete_" . $hidden['column'], _formulize_DE_REMOVECALC, 'submit'));
@@ -482,7 +480,7 @@ foreach($returned['rc'] as $hidden) {
 			case "per":
 				$calc_name = _formulize_DE_CALC_PER;
 				break;
-		}		
+		}
 
 		$tray = new xoopsFormElementTray("&nbsp;&nbsp&nbsp;" . $calc_name, "<br>");
 		$tempcalc1 = new xoopsFormSelect("", $tempname, $current_val);

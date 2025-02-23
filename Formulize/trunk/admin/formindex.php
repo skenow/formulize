@@ -649,7 +649,6 @@ function deleteList()
 function drawGroupList($list_id="") {
 
 global $xoopsDB;
-include_once XOOPS_ROOT_PATH."/class/xoopsformloader.php";
 
 $form = new XoopsThemeForm(_formulize_MODFORM_TITLE, "groupform", "formindex.php?op=permsub");
 

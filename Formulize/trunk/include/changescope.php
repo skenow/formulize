@@ -34,7 +34,7 @@
 
 // 1. draw box of available groups
 // 2. send selection back to parent window (after building string to do so, commas at beginning and end and in between group ids)
-// 3. 
+// 3.
 
 function scopeJavascript() {
 ?>
@@ -149,8 +149,6 @@ if($globalscope = $gperm_handler->checkRight("view_globalscope", $fid, $groups, 
 	exit("Error: no advanced scope permission detected.");
 }
 
-include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
-
 print "<HTML>";
 print "<head>";
 print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset="._CHARSET."\" />";
@@ -165,7 +163,7 @@ $themecss = xoops_getcss();
 print "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"$themecss\" />\n";
 
 print "</head>\n";
-print "<body style=\"background: white; margin-top:20px;\"><center>"; 
+print "<body style=\"background: white; margin-top:20px;\"><center>";
 print "<table style=\"width: 100%;\"><tr><td style=\"width: 5%;\"></td><td style=\"width: 90%;\">";
 $advscope = new xoopsThemeForm(_formulize_DE_PICKASCOPE, 'advscope', XOOPS_URL."/modules/formulize/include/advscope.php?fid=$fid&frid=$frid");
 

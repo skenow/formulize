@@ -1874,7 +1874,6 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 		$startText = "";
 		$endText = "";
 	}
-	include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
 	$startDateElement = new XoopsFormTextDateSelect ('', 'formulize_daterange_sta_'.$handle, 15, strtotime($startText));
 	$startDateElement->setExtra("class='formulize_daterange'");
 	$endDateElement = new XoopsFormTextDateSelect ('', 'formulize_daterange_end_'.$handle, 15, strtotime($endText));

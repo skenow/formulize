@@ -43,7 +43,6 @@ global $xoopsConfig;
 
 include_once XOOPS_ROOT_PATH."/modules/formulize/include/functions.php";
 
-include_once XOOPS_ROOT_PATH."/class/xoopsformloader.php";
 include_once XOOPS_ROOT_PATH . "/include/functions.php";
 
 // NEED TO USE OUR OWN VERSION OF THE CLASS, TO GET ELEMENT NAMES IN THE TR TAGS FOR EACH ROW

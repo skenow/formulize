@@ -198,8 +198,6 @@ foreach($cols as $f=>$vs) {
 	}
 }
 
-include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
-
 print "<HTML>";
 print "<head>";
 print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset="._CHARSET."\" />";

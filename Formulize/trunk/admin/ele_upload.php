@@ -32,7 +32,6 @@
 if( !preg_match("/elements.php/", $_SERVER['PHP_SELF']) ){
 	exit("Access Denied");
 }
-include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
 
 $p = !empty($value[1]) ? $value[1] : $xoopsModuleConfig['weight'];
 
@@ -57,7 +56,7 @@ $mime->addOption('mpeg',' mpeg ');
 $mime->addOption('jpg',' jpg ');
 $form->addElement($mime);
 
-$fichier = new XoopsFormFile (_AM_ELE_FICH, $ele_value[0], $ele_value[1]);	
+$fichier = new XoopsFormFile (_AM_ELE_FICH, $ele_value[0], $ele_value[1]);
 $form->addElement ($fichier);
 
 

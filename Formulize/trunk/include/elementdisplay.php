@@ -33,7 +33,6 @@
 
 //THIS FILE HANDLES THE DISPLAY OF INDIVIDUAL FORM ELEMENTS.  FUNCTIONS CAN BE CALLED FROM ANYWHERE (INTENDED FOR PAGEWORKS MODULE)
 
-include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
 include_once XOOPS_ROOT_PATH . "/modules/formulize/include/formdisplay.php";
 include_once XOOPS_ROOT_PATH . "/modules/formulize/class/elementrenderer.php";
 include_once XOOPS_ROOT_PATH.'/modules/formulize/include/functions.php';

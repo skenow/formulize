@@ -201,7 +201,7 @@ define("_FORM_LOCK", "Prevent anyone from editing this form again");
 define("_AM_CONFIRM_LOCK", "If you lockdown this form, then no one, not even you, will be able to make any changes to the form or its elements.  Are you sure you want to lockdown this form?");
 define("_formulize_FORMLOCK", "This form has now been locked.  No further changes to this form will be possible.");
 define("_formulize_FORMLOCK_FAILED", "There was an error and Formulize could not lock this form.");
-define("_FORM_NUM_ENTRIES_ANON_HELP", "<b>About Anonymous Users:</b> Formulize determines entry ownership based on a user's id number, and all Anonymous Users are viewed as \"User Number 0\".  Therefore, \"One entry per user\" does not really work for anonymous users in most cases, since everyone who is not logged in will share the same entry, because they all share the same id number, 0.<br><br>Also, \"More than one entry per user\" will behave differently for Anonymous Users, since all the entries created by anyone who isn't logged in, will all belong to \"user 0\", so everyone who is not logged in, will be treated as the same person.<br><br>Formulize is designed primarily for use in a website with a strict set of usernames and groups of users, but there are ways around these issues, in some cases using the API.  Post to the <a href=\"http://www.freeformsolutions.ca/en/forums\">support forums</a> for more information.");  
+define("_FORM_NUM_ENTRIES_ANON_HELP", "<b>About Anonymous Users:</b> Formulize determines entry ownership based on a user's id number, and all Anonymous Users are viewed as \"User Number 0\".  Therefore, \"One entry per user\" does not really work for anonymous users in most cases, since everyone who is not logged in will share the same entry, because they all share the same id number, 0.<br><br>Also, \"More than one entry per user\" will behave differently for Anonymous Users, since all the entries created by anyone who isn't logged in, will all belong to \"user 0\", so everyone who is not logged in, will be treated as the same person.<br><br>Formulize is designed primarily for use in a website with a strict set of usernames and groups of users, but there are ways around these issues, in some cases using the API.  Post to the <a href=\"http://www.freeformsolutions.ca/en/forums\">support forums</a> for more information.");
 
 define("_AM_FORCE_GROUPSCOPE_HELP", "If view_groupscope is selected, you can pick specific groups it should apply to.  If none are selected, then when a list of entries is shown to a user, groupscope will apply to the groups they are a member of, which also have view_form permission.");
 define("_AM_FORCE_GROUPSCOPE_INTRO", "Use specific groups for groupscope?");
@@ -213,7 +213,6 @@ define("_AM_COPIED","%s copy");
 define("_AM_DBUPDATED","Database Updated Successfully!");
 define("_AM_ELE_CREATE","Create form elements");
 define("_AM_ELE_EDIT","Edit form element: %s");
-define("_AM_FORM","Form : ");
 define("_AM_REQ","Results of the form module : ");
 define("_AM_SEPAR",'{SEPAR}');
 define("_AM_ELE_FORM","Form elements");
@@ -302,7 +301,6 @@ define("_AM_ELE_OPT_CHANGEUSERVALUES", "When saving changes to these options, al
 define("_AM_ELE_SELECTED","Selected");
 define("_AM_ELE_CHECKED","Checked");
 define("_AM_ELE_MULTIPLE","Allow multiple selections");
-define("_AM_ELE_TYPE","Display the break up in");
 define("_AM_ELE_GRAS","Gras");
 define("_AM_ELE_RGE","Red");
 define("_AM_ELE_CTRE","Center");
@@ -312,7 +310,6 @@ define("_AM_ELE_BLEU","Blue");
 define("_AM_ELE_FICH",'File');
 define("_AM_ELE_TAILLEFICH","Max size on the file");
 define("_AM_ELE_PDS","poids");
-define("_AM_ELE_TYPE",'Allowed types');
 define("_AM_ELE_DELIM_CHOICE",'Delimiter between each option');
 define("_MI_formulize_DELIMETER_SPACE","White space");
 define("_MI_formulize_DELIMETER_BR","Line break");
@@ -462,7 +459,6 @@ define("_AM_MENUEDIT", "Edit");
 define("_AM_MENUDEL", "Delete");
 define("_AM_MENUCATLIST", "Categories:");
 define("_AM_CATSHORT", "Category");
-define("_AM_CATGENERAL", "General Forms");
 
 define("_AM_CANCEL", "Cancel");
 

@@ -72,8 +72,6 @@ define("_FORM_DEFAULTADMIN","Groups that have rights to this form:");
 define("_FORM_COLOREVEN","First alternate colour for report writing page (alternate colours override default colours to help distinguish one form from another):");
 define("_FORM_COLORODD","Second alternate colour for report writing page:");
 
-
-define("_FORM_MODIF","Modify the Form's Questions");
 define("_AM_FORM","Form: ");
 define("_FORM_EXPORT","Export in CSV format");
 define("_FORM_ALT_EXPORT","Export");
@@ -92,16 +90,14 @@ define("_FORM_MODFRAME","Create or Modify a Form Framework");
 define("_FORM_FRAME", "Frameworks");
 
 
-// commented the line below since it's a duplicate of a line above --jwe 7/25/04
-//define("_AM_FORM","Form : ");
 define("_AM_FORM_SELECT","Select a form");
 define("_MD_FILEERROR","Error in sending the file");
 define("_AM_FORMUL","Forms");
 
 //added by jwe - 7/28/04
 define("_AM_FORM_TITLE", "Form Access Permissions"); // not used
-define("_AM_FORM_CURPERM", "Current Permission:"); 
-define("_AM_FORM_CURPERMLINKS", "Current Linked Selectbox:"); 
+define("_AM_FORM_CURPERM", "Current Permission:");
+define("_AM_FORM_CURPERMLINKS", "Current Linked Selectbox:");
 define("_AM_FORM_PERMVIEW", "View");
 define("_AM_FORM_PERMADD", "Add/Update");
 define("_AM_FORM_PERMADMIN", "Admin");
@@ -129,7 +125,7 @@ define("_AM_FRAME_AVAILFORMS1", "Form One:");
 define("_AM_FRAME_AVAILFORMS2", "Form Two:");
 define("_AM_FRAME_DELETE", "Delete an Existing Framework:");
 define("_AM_FRAME_SUBFORM_OF", "Make it a subform of:");
-define("_AM_FRAME_NOPARENTS", "No Forms in Framework"); 
+define("_AM_FRAME_NOPARENTS", "No Forms in Framework");
 define("_AM_FRAME_TYPENEWFORMNAME", "Type a short name here");
 define("_AM_FRAME_NEWFORMBUTTON", "Add Forms!");
 define("_AM_FRAME_NOKEY", "none specified!");
@@ -414,7 +410,7 @@ define("_formulize_DE_CALCSUB", "Add Calculation(s) to list");
 define("_formulize_DE_CALC_CALCS", "Calculations to perform on the column(s):");
 define("_formulize_DE_CALCGO", "Perform Requested Calculations");
 define("_formulize_DE_REQDCALCS", "Requested Calculations:");
-define("_formulize_DE_CALCALL", "Include blanks/zeros"); 
+define("_formulize_DE_CALCALL", "Include blanks/zeros");
 define("_formulize_DE_CALCNOBLANKS", "Exclude blanks/zeros");
 define("_formulize_DE_CALCONLYBLANKS", "Include only blanks/zeros");
 define("_formulize_DE_CALCJUSTNOBLANKS", "Exclude blanks");

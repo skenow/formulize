@@ -3,15 +3,14 @@
 * --------------------------------------------------------------------
 *      Italian Translation by Luigi Massetti alias Gigiox
 *                     gigiox66 at libero dot it
-*    http://www.xoopsit.net the XOOPS Official Italian Support Site            
-* -------------------------------------------------------------------- 
+*    http://www.xoopsit.net the XOOPS Official Italian Support Site
+* --------------------------------------------------------------------
 */
 define("_AM_SAVE","Salva");
 define("_AM_COPIED","%s copia");
 define("_AM_DBUPDATED","Archivio aggiornato con successo!");
 define("_AM_ELE_CREATE","Crea elementi form");
 define("_AM_ELE_EDIT","Modifica elementi form: %s");
-define("_AM_FORM","Form : ");
 define("_AM_FORM_REQ","Risultato n� : ");
 define("_AM_REQ","Risultati del modulo form : ");
 define("_AM_SEPAR",'{SEPAR}');
@@ -64,7 +63,6 @@ define("_AM_ELE_BLEU","Blu");
 define("_AM_ELE_FICH",'File');
 define("_AM_ELE_TAILLEFICH","Dimensione massima del file");
 define("_AM_ELE_PDS","punti");
-define("_AM_ELE_TYPE",'Tipi permessi');
 
 define("_AM_ELE_SELECT_NONE","Nessun elemento scelto.");
 define("_AM_ELE_CONFIRM_DELETE","Sei sicuro di volere cancellare questo elemento del form?");

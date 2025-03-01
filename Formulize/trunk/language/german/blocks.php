@@ -1,5 +1,7 @@
 <?php
 // Blocks
 define("_MB_formulizeMENU_TITLE","Formulare");
-define("_AM_CATGENERAL", "Generelle Formulare");
+if(!defined("_AM_CATGENERAL")) {
+	define("_AM_CATGENERAL", "Generelle Formulare");
+}
 ?>

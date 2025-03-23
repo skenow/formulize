@@ -819,7 +819,7 @@ if(!is_numeric($titleOverride) AND $titleOverride != "" AND $titleOverride != "a
 				if(isset($subUICols['single'])) {
 					$form->insertBreak($subUICols['single'], "even");
 				} else {
-					$subLinkUI = new XoopsFormLabel($subUICols['c1'], $subUICols['c2']);
+					$subLinkUI = new icms_form_elements_Label($subUICols['c1'], $subUICols['c2']);
 					$form->addElement($subLinkUI);
 				}
 			}
@@ -958,7 +958,7 @@ function addProfileFields($form, $profileForm) {
 		}
 		$form->addElement($uname_label, $uname_reqd);
 	} else {
-		$uname_label = new XoopsFormLabel(_US_NICKNAME, $thisUser_uname);
+		$uname_label = new icms_form_elements_Label(_US_NICKNAME, $thisUser_uname);
 		$form->addElement($uname_label);
 	}
 	$email_tray = new XoopsFormElementTray(_US_EMAIL, '<br />');
@@ -967,7 +967,7 @@ function addProfileFields($form, $profileForm) {
 		$email_tray->addElement($email_text, 1);
 	}
 	else {
-        $email_text = new XoopsFormLabel('', $thisUser_email);
+        $email_text = new icms_form_elements_Label('', $thisUser_email);
 		$email_tray->addElement($email_text);
 	}
 	$email_cbox_value = $thisUser_viewemail ? 1 : 0;
@@ -1976,7 +1976,7 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 				if(isset($subUICols['single'])) {
 					$form->insertBreak($subUICols['single'], "even");
 				} else {
-					$subLinkUI = new XoopsFormLabel($subUICols['c1'], $subUICols['c2']);
+					$subLinkUI = new icms_form_elements_Label($subUICols['c1'], $subUICols['c2']);
 					$form->addElement($subLinkUI);
 				}
 				unset($subLinkUI);
@@ -1991,8 +1991,8 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 			$headingAtSide = ($ele_value[5] AND $grid_title) ? true : false; // if there is a value for ele_value[5], then the heading should be at the side, otherwise, grid spans form width as it's own chunk of HTML
 			$gridCounter[$grid_start] = $grid_count;
 			$gridContents = displayGrid($fid, $entry, $grid_row_caps, $grid_col_caps, $grid_title, $grid_background, $grid_start, "", "", true, $screen, $headingAtSide);
-			if($headingAtSide) { // grid contents is the two bits for the xoopsformlabel when heading is at side, otherwise, it's just the contents for the break
-				$form->addElement(new XoopsFormLabel($gridContents[0], $gridContents[1]));
+			if($headingAtSide) { // grid contents is the two bits for the icms_form_elements_Label when heading is at side, otherwise, it's just the contents for the break
+				$form->addElement(new icms_form_elements_Label($gridContents[0], $gridContents[1]));
 			} else {
 				$form->insertBreak($gridContents, "head"); // head is the css class of the cell
 			}

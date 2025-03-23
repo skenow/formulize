@@ -37,7 +37,7 @@ $p = !empty($value[1]) ? $value[1] : $xoopsModuleConfig['weight'];
 
 $pds = new XoopsFormElementTray (_AM_ELE_TAILLEFICH, '');
 $pds->addElement (new XoopsFormText ('', 'ele_value[1]', 15, 15, $p));
-$pds->addElement (new XoopsFormLabel ('', ' bits'));
+$pds->addElement (new icms_form_elements_Label ('', ' bits'));
 $form->addElement ($pds);
 
 $tab = array();

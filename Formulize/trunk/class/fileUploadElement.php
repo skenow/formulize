@@ -125,7 +125,7 @@ class formulizeFileUploadElementHandler extends formulizeElementsHandler {
 		static $fileDeleteCode;
 		$introToUploadBox = "";
 		if ($isDisabled) {
-			$formElement = new xoopsFormLabel($caption, $ele_value[3]);
+			$formElement = new icms_form_elements_Label($caption, $ele_value[3]);
 		} else {
 			// create the file upload element, and also a hidden element with the correct markup name. That hidden value will trigger the correct saving logic, and is necessary because file upload elements are excluded from POST.
 			if (!$ele_value[5]) {
@@ -172,7 +172,7 @@ class formulizeFileUploadElementHandler extends formulizeElementsHandler {
 				$introToUploadBox = "<div id='formulize_fileStatus_" . $element->getVar('ele_id') . "_$entry_id'>Upload a file:</div>";
 			}
 			$htmlForUpload = "$introToUploadBox<div><input type='hidden' name='MAX_FILE_SIZE' value='" . ($ele_value[0] * 1048576) . "' /><input type='file' name='fileupload_" . $markupName . "' size=50 id='" . $markupName . "' /><input type='hidden' id='$markupName' name='$markupName' value='$markupName' /></div>";
-			$formElement = new xoopsFormLabel($caption, $htmlForUpload);
+			$formElement = new icms_form_elements_Label($caption, $htmlForUpload);
 		}
 		return $formElement;
 	}

@@ -150,7 +150,7 @@ class formulizeRankOrderListHandler {
     
     $sortableListHTML .= "</div>";
     
-    $list = new xoopsFormLabel('', $sortableListHTML);
+    $list = new icms_form_elements_Label('', $sortableListHTML);
     
     $tray = new xoopsFormElementTray($elementObject->getVar('ele_caption'), '\n');
     $tray->addElement($order);

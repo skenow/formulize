@@ -373,7 +373,7 @@ switch($op){
 		$elementFilterSettings = $element->getVar('ele_filtersettings');
 		$elementFilterSettingsToSend = count($elementFilterSettings) > 0 ? $elementFilterSettings : "";
 		$elementFilterUI = formulize_createFilterUI($elementFilterSettingsToSend, "elementfilter", $id_form, "form_ele");
-		$form->addElement(new XoopsFormLabel(_AM_ELE_ELEMENTCONDITIONS, $elementFilterUI)); //$elementFilterUI->render()));
+		$form->addElement(new icms_form_elements_Label(_AM_ELE_ELEMENTCONDITIONS, $elementFilterUI)); //$elementFilterUI->render()));
 
 		if($ele_type == "radio" OR $ele_type == "text" OR $ele_type == "textarea" OR $ele_type == "yn") {
 			// added by jwe Nov 7 2005, a checkbox to indicate if the element should be included as a hidden element, even when the user does not have permission to view (ie: it is hidden by the display option above)
@@ -570,7 +570,7 @@ function addOption($id1, $id2, $text, $type='check', $checked=null){
 
 function addOptionsTray(){
 	$t = new XoopsFormText('', 'addopt', 3, 2);
-	$l = new XoopsFormLabel('', sprintf(_AM_ELE_ADD_OPT, $t->render()));
+	$l = new icms_form_elements_Label('', sprintf(_AM_ELE_ADD_OPT, $t->render()));
 	$b = new XoopsFormButton('', 'submit', _AM_ELE_ADD_OPT_SUBMIT, 'submit');
 	$r = new XoopsFormElementTray('');
 	$r->addElement($l);

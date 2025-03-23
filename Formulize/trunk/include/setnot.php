@@ -422,7 +422,7 @@ if(!$noNots) {
 		}
 		
 		$delbutton = new xoopsFormButton('', 'delete_'.$thisnot['not_cons_id'], _formulize_DELETE, 'submit');
-		$anot = new xoopsFormLabel($delbutton->render(), $text);
+		$anot = new icms_form_elements_Label($delbutton->render(), $text);
 		$notlist->addElement($anot);
 		unset($anot);
 		unset($delbutton);

@@ -124,7 +124,7 @@ class formulizeDummyElementHandler extends formulizeElementsHandler {
 	function render($ele_value, $caption, $markupName, $isDisabled, $element, $entry_id) {
 		// dummy element is rendered as a textboxes, with the values set by the user in the admin side smushed together as the default value for the textbox
 		if ($isDisabled) {
-			$formElement = new xoopsFormLabel($caption, $ele_value[0] . $ele_value[1]);
+			$formElement = new icms_form_elements_Label($caption, $ele_value[0] . $ele_value[1]);
 		} else {
 			$formElement = new xoopsFormText($caption, $markupName, 50, 50, $ele_value[0] . $ele_value[1]); // caption, markup name, size, maxlength, default value, according to the xoops form class
 		}

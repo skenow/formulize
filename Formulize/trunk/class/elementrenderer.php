@@ -118,10 +118,10 @@ class formulizeElementRenderer{
 		switch ($e){
 			case 'derived':
 				if($entry != "new") {
-					$form_ele = new xoopsFormLabel($this->_ele->getVar('ele_caption'), formulize_numberFormat($ele_value[5], $this->_ele->getVar('ele_handle')));
+					$form_ele = new icms_form_elements_Label($this->_ele->getVar('ele_caption'), formulize_numberFormat($ele_value[5], $this->_ele->getVar('ele_handle')));
 					$form_ele->setDescription(html_entity_decode($ele_desc,ENT_QUOTES));
 				} else {
-					$form_ele = new xoopsFormLabel($this->_ele->getVar('ele_caption'), _formulize_VALUE_WILL_BE_CALCULATED_AFTER_SAVE);
+					$form_ele = new icms_form_elements_Label($this->_ele->getVar('ele_caption'), _formulize_VALUE_WILL_BE_CALCULATED_AFTER_SAVE);
 					$form_ele->setDescription(html_entity_decode($ele_desc,ENT_QUOTES));
 				}
 				break;
@@ -159,7 +159,7 @@ class formulizeElementRenderer{
 					$ele_value[2]	  //	default value
 					);
 				} else {															// nmc 2007.03.24 - added
-					$form_ele = new XoopsFormLabel ($ele_caption, $ele_value[2]);	// nmc 2007.03.24 - added
+					$form_ele = new icms_form_elements_Label ($ele_caption, $ele_value[2]);	// nmc 2007.03.24 - added
 				}
 
 				// if required unique option is set, create validation javascript that will ask the database if the value is unique or not
@@ -206,7 +206,7 @@ class formulizeElementRenderer{
 						$ele_value[2]	  //	cols
 					);
 				} else {															// nmc 2007.03.24 - added
-					$form_ele = new XoopsFormLabel ($ele_caption, str_replace("\n", "<br>", $ele_value[0]));	// nmc 2007.03.24 - added
+					$form_ele = new icms_form_elements_Label ($ele_caption, str_replace("\n", "<br>", $ele_value[0]));	// nmc 2007.03.24 - added
 				}
 			break;
 			case 'areamodif':
@@ -223,7 +223,7 @@ class formulizeElementRenderer{
 					}
 				}
 				$ele_value[0] = $this->formulize_replaceCurlyBracketVariables($ele_value[0], $entry, $id_form);
-				$form_ele = new XoopsFormLabel(
+				$form_ele = new icms_form_elements_Label(
 					$ele_caption,
 					$ele_value[0]
 				);
@@ -416,7 +416,7 @@ class formulizeElementRenderer{
 							$default_value_user = $data_handler_autocomplete->getElementValueInEntry(trim($boxproperties[2], ","), $boxproperties[1]);
 						}
 						$renderedComboBox = $this->formulize_renderQuickSelect($form_ele_id, $cachedSourceValuesAutocompleteFile[$sourceValuesQ], $default_value, $default_value_user, $cachedSourceValuesAutocompleteLength[$sourceValuesQ]);
-						$form_ele = new xoopsFormLabel($ele_caption, $renderedComboBox);
+						$form_ele = new icms_form_elements_Label($ele_caption, $renderedComboBox);
 						$form_ele->setDescription(html_entity_decode($ele_desc,ENT_QUOTES));
 					}
 					
@@ -439,7 +439,7 @@ class formulizeElementRenderer{
 					}
 
 					if($isDisabled) {
-						$form_ele = new XoopsFormLabel($ele_caption, implode(", ", $disabledOutputText) . implode("\n", $disabledHiddenValue));
+						$form_ele = new icms_form_elements_Label($ele_caption, implode(", ", $disabledOutputText) . implode("\n", $disabledHiddenValue));
 						$form_ele->setDescription(html_entity_decode($ele_desc,ENT_QUOTES));
 					} elseif($ele_value[8] == 0) {
 						// this is a hack because the size attribute is private and only has a getSize and not a setSize, setting the size can only be done through the constructor
@@ -615,13 +615,13 @@ class formulizeElementRenderer{
             //print_r($selected); print_r($options);
             $defaultSelected = is_array($selected) ? $selected[0] : $selected;
             $renderedComboBox = $this->formulize_renderQuickSelect($form_ele_id, $cachedOptionsFileName, $defaultSelected, $options[$defaultSelected], $maxLength);
-            $form_ele2 = new xoopsFormLabel($ele_caption, $renderedComboBox);
+            $form_ele2 = new icms_form_elements_Label($ele_caption, $renderedComboBox);
             $renderedElement = $form_ele2->render();
 					} else { // normal element
 						$renderedElement = $form_ele1->render();
 					}
 					
-					$form_ele = new XoopsFormLabel(
+					$form_ele = new icms_form_elements_Label(
 						$ele_caption,
 						"<nobr>$renderedElement</nobr>\n$renderedHoorvs\n$disabledHiddenValues\n"
 					);
@@ -755,7 +755,7 @@ class formulizeElementRenderer{
 					$renderedElement = $form_ele1->render();
 				}
 				
-				$form_ele = new XoopsFormLabel(
+				$form_ele = new icms_form_elements_Label(
 					$ele_caption,
 					"<nobr>$renderedElement</nobr>\n$renderedHoorvs\n$disabledHiddenValues\n"
 				);
@@ -880,7 +880,7 @@ class formulizeElementRenderer{
 				} else {
 					$renderedElement = $form_ele1->render();
 				}
-				$form_ele = new XoopsFormLabel(
+				$form_ele = new icms_form_elements_Label(
 					$ele_caption,
 					"<nobr>$renderedElement</nobr>\n$renderedHoorvs\n$disabledHiddenValue\n"
 				);
@@ -959,7 +959,7 @@ class formulizeElementRenderer{
 			case 'sep':
 				//$ele_value[0] = $myts->displayTarea($ele_value[0]);
 				$ele_value[0] = $myts->xoopsCodeDecode($ele_value[0]);
-				$form_ele = new XoopsFormLabel(
+				$form_ele = new icms_form_elements_Label(
 					$ele_caption,
 					$ele_value[0]
 				);
@@ -1035,7 +1035,7 @@ class formulizeElementRenderer{
 				$elementCue = "";
 			}
 			$form_ele->setExtra(" onchange=\"javascript:formulizechanged=1;\"");
-			$form_ele_new = new xoopsFormLabel($form_ele->getCaption(), $form_ele->render().$previousEntryUIRendered.$elementCue); // reuse caption, put two spaces between element and previous entry UI
+			$form_ele_new = new icms_form_elements_Label($form_ele->getCaption(), $form_ele->render().$previousEntryUIRendered.$elementCue); // reuse caption, put two spaces between element and previous entry UI
 			if($ele_desc != "") {
 				$ele_desc = html_entity_decode($ele_desc,ENT_QUOTES);
 				$ele_desc = icms_core_DataFilter::makeClickable($ele_desc);
@@ -1207,10 +1207,10 @@ class formulizeElementRenderer{
 					$newElement->addElement(new icms_form_elements_Hidden($element->getName()."[]", $value));
 					unset($value);
 				}
-				$newElement->addElement(new xoopsFormLabel('', implode(", ", $hiddenValue)));
+				$newElement->addElement(new icms_form_elements_Label('', implode(", ", $hiddenValue)));
 			} else {
 				$newElement->addElement(new icms_form_elements_Hidden($element->getName(), $hiddenValue));
-				$newElement->addElement(new xoopsFormLabel('', $hiddenValue));
+				$newElement->addElement(new icms_form_elements_Label('', $hiddenValue));
 			}
 			if(substr($element->getName(), 0, 9) != "desubform") { // we should consider not having a cue at all for any disabled elements, but we're not going to pull it out just yet...more investigation of this is necessary
 				$newElement->addElement(new icms_form_elements_Hidden("decue_".trim($element->getName(),"de_"), 1));

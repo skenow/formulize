@@ -512,7 +512,7 @@ function createDataTypeUI($ele_type, $element,$id_form,$ele_encrypt) {
               $defaultTypeSize = '';
       }
       // setup the UI for the options...
-      $dataTypeTray = new XoopsFormElementTray(_AM_FORM_DATATYPE_CONTROLS, '<br>');
+      $dataTypeTray = new icms_form_elements_Tray(_AM_FORM_DATATYPE_CONTROLS, '<br>');
       $dataTypeTray->setDescription(_AM_FORM_DATATYPE_CONTROLS_DESC);
       $textType = new XoopsFormRadio('', 'element_datatype', $defaultType);
       $textDataTypeLabel = (!$element AND ($ele_type == 'text')) ? _AM_FORM_DATATYPE_TEXT_NEWTEXT : _AM_FORM_DATATYPE_TEXT;

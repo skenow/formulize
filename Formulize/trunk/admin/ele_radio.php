@@ -87,7 +87,7 @@ if( !empty($ele_id) ){
 	$form->addElement($rowcount);
 
 // $options[] = addOptionsTray(); // commented by jwe 01/06/05 to allow for the clear defaults button to be added in above the add options tray (see code just below)
-$opt_tray = new XoopsFormElementTray(_AM_ELE_OPT, '<br />');
+$opt_tray = new icms_form_elements_Tray(_AM_ELE_OPT, '<br />');
 $opt_tray->setDescription(_AM_ELE_OPT_DESC2.'<br /><br />'._AM_ELE_OTHER.'<br /><br />'._AM_ELE_OPT_UITEXT);
 
 for( $i=0; $i<count($options); $i++ ){
@@ -117,7 +117,7 @@ if(!$default_custom_text) {
 } else {
 	$default_to_set = 'custom';
 }
-$delim_tray = new XoopsFormElementTray(_AM_ELE_DELIM_CHOICE, '<br />');
+$delim_tray = new icms_form_elements_Tray(_AM_ELE_DELIM_CHOICE, '<br />');
 $delim_choice_br = new xoopsFormRadio('', 'ele_delim', $default_to_set);
 $delim_choice_br->addOption('br', _MI_formulize_DELIMETER_BR);
 $delim_tray->addElement($delim_choice_br);

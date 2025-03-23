@@ -350,7 +350,7 @@ if($pubflag) {
 	$pubgrouplist = new icms_form_elements_Select(_formulize_DE_SAVE_PUBGROUPS, 'pubgrouplist', $lastpubgroups, $size, true);
 	$pubgrouplist->addOptionArray($publishgroups);
 
-	$lockcontrols = new xoopsFormElementTray(_formulize_DE_SAVE_LOCKCONTROLS, "<br>");
+	$lockcontrols = new icms_form_elements_Tray(_formulize_DE_SAVE_LOCKCONTROLS, "<br>");
 	$yes = new xoopsFormRadio('', 'lockcontrols', $currentlock);
 	$yes->addOption("1", _YES);
 	$no = new xoopsFormRadio('', 'lockcontrols', $currentlock);

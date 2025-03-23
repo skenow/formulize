@@ -432,7 +432,7 @@ switch($op){
                                 $defaultTypeSize = '';
                         }
                         // setup the UI for the options...
-                        $dataTypeTray = new XoopsFormElementTray(_AM_FORM_DATATYPE_CONTROLS, '<br>');
+                        $dataTypeTray = new icms_form_elements_Tray(_AM_FORM_DATATYPE_CONTROLS, '<br>');
                         $dataTypeTray->setDescription(_AM_FORM_DATATYPE_CONTROLS_DESC);
                         $textType = new XoopsFormRadio('', 'element_datatype', $defaultType);
                         $textDataTypeLabel = (empty($ele_id) AND ($ele_type == 'text')) ? _AM_FORM_DATATYPE_TEXT_NEWTEXT : _AM_FORM_DATATYPE_TEXT;
@@ -490,7 +490,7 @@ switch($op){
 		$cancelExtra = "onclick='javascript:location.href=\"../admin/index.php?title=$title\"'";
 		$cancelExtra = str_replace(" ", "%20", $cancelExtra);
 		$cancel->setExtra($cancelExtra);
-		$tray = new XoopsFormElementTray('');
+		$tray = new icms_form_elements_Tray('');
 		$tray->addElement($submit);
 		$tray->addElement($cancel);
 		$form->addElement($tray);
@@ -562,7 +562,7 @@ function addOption($id1, $id2, $text, $type='check', $checked=null){
 		}
 		$c->addOption($id2, ' ');
 	}
-	$t = new XoopsFormElementTray('');
+	$t = new icms_form_elements_Tray('');
 	$t->addElement($c);
 	$t->addElement($d);
 	return $t;
@@ -572,7 +572,7 @@ function addOptionsTray(){
 	$t = new XoopsFormText('', 'addopt', 3, 2);
 	$l = new icms_form_elements_Label('', sprintf(_AM_ELE_ADD_OPT, $t->render()));
 	$b = new XoopsFormButton('', 'submit', _AM_ELE_ADD_OPT_SUBMIT, 'submit');
-	$r = new XoopsFormElementTray('');
+	$r = new icms_form_elements_Tray('');
 	$r->addElement($l);
 	$r->addElement($b);
 	return $r;

@@ -84,7 +84,7 @@ class formulizeRankOrderListHandler {
       $rowcount = new icms_form_elements_Hidden("rowcount", $opt_count);
       $form->addElement($rowcount);
     
-    $opt_tray = new XoopsFormElementTray(_AM_ELE_OPT, '<br />');
+    $opt_tray = new icms_form_elements_Tray(_AM_ELE_OPT, '<br />');
     $opt_tray->setDescription(_AM_ELE_OPT_DESC_RANKORDERLISTS.'<br /><br />'._AM_ELE_OPT_UITEXT);
     
     for( $i=0; $i<count($options); $i++ ){
@@ -152,7 +152,7 @@ class formulizeRankOrderListHandler {
     
     $list = new icms_form_elements_Label('', $sortableListHTML);
     
-    $tray = new xoopsFormElementTray($elementObject->getVar('ele_caption'), '\n');
+    $tray = new icms_form_elements_Tray($elementObject->getVar('ele_caption'), '\n');
     $tray->addElement($order);
     $tray->addElement($list);
     return $tray;

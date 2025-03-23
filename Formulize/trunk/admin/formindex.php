@@ -755,7 +755,7 @@ if($xoopsDB->getRowsNum($result) > 0)
 
 $form->addElement($fs_select_lists);
 
-$fs_button_group = new XoopsFormElementTray("");
+$fs_button_group = new icms_form_elements_Tray("");
 
 $fs_button_save_list = new XoopsFormButton("", "save_list", _AM_MULTI_SAVE_LIST, "submit");
 $fs_button_group->addElement($fs_button_save_list);

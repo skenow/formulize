@@ -393,7 +393,7 @@ $pickcalc->addElement($subButton);
 //$pickcalc->addElement(new icms_form_elements_Hidden("frid", $frid));
 //$pickcalc->addElement(new icms_form_elements_Hidden("fid", $fid));
 
-//$doneTray = new xoopsFormElementTray(_formulize_DE_REQDCALCS, "<br>");
+//$doneTray = new icms_form_elements_Tray(_formulize_DE_REQDCALCS, "<br>");
 $doneButton = new xoopsFormButton('', 'done', _formulize_DE_CALCGO, 'button');
 $doneButton->setExtra("onclick=\"javascript:sendCalcs(this.form);return false;\"");
 //$nolistdisplay = new xoopsFormCheckbox('', 'nolistdisplay', $_POST['nolistdisplay']);
@@ -482,7 +482,7 @@ foreach($returned['rc'] as $hidden) {
 				break;
 		}
 
-		$tray = new xoopsFormElementTray("&nbsp;&nbsp&nbsp;" . $calc_name, "<br>");
+		$tray = new icms_form_elements_Tray("&nbsp;&nbsp&nbsp;" . $calc_name, "<br>");
 		$tempcalc1 = new icms_form_elements_Select("", $tempname, $current_val);
 		$tempcalc1->addOption("noblanks", _formulize_DE_CALCNOBLANKS);
 		$tempcalc1->addOption("all", _formulize_DE_CALCALL);

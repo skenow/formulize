@@ -35,7 +35,7 @@ if( !preg_match("/elements.php/", $_SERVER['PHP_SELF']) ){
 
 $p = !empty($value[1]) ? $value[1] : $xoopsModuleConfig['weight'];
 
-$pds = new XoopsFormElementTray (_AM_ELE_TAILLEFICH, '');
+$pds = new icms_form_elements_Tray (_AM_ELE_TAILLEFICH, '');
 $pds->addElement (new XoopsFormText ('', 'ele_value[1]', 15, 15, $p));
 $pds->addElement (new icms_form_elements_Label ('', ' bits'));
 $form->addElement ($pds);

@@ -707,7 +707,7 @@ class formulizeElementRenderer{
 						$form_ele1->setExtra(" onchange=\"javascript:formulizechanged=1;\" jquerytag=\"$form_ele_id\" ");
 					break;
 					default:
-						$form_ele1 = new XoopsFormElementTray($ele_caption, $delimSetting);
+						$form_ele1 = new icms_form_elements_Tray($ele_caption, $delimSetting);
 						$counter = 0; // counter used for javascript that works with 'Other' box
 						while( $o = each($options) ){
 							$o = formulize_swapUIText($o, $this->_ele->getVar('ele_uitext'));
@@ -835,7 +835,7 @@ class formulizeElementRenderer{
 						$form_ele1->setExtra("onchange=\"javascript:formulizechanged=1;\"");
 					break;
 					default:
-						$form_ele1 = new XoopsFormElementTray('', $delimSetting);
+						$form_ele1 = new icms_form_elements_Tray('', $delimSetting);
 						$counter = 0;
 						while( $o = each($options) ){
 							$o = formulize_swapUIText($o, $this->_ele->getVar('ele_uitext'));
@@ -1193,7 +1193,7 @@ class formulizeElementRenderer{
 	
 	function formulize_disableElement($element, $type, $ele_desc) {
 		if($type == "text" OR $type == "textarea" OR $type == "date" OR $type == "colorpick") {
-			$newElement = new xoopsFormElementTray($element->getCaption(), "\n");
+			$newElement = new icms_form_elements_Tray($element->getCaption(), "\n");
 			$newElement->setName($element->getName());
 			switch($type) {
 				case 'date':

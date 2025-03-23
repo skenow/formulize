@@ -84,7 +84,7 @@ if( !empty($ele_id) ){
 $add_opt = addOptionsTray();
 $options[] = $add_opt;
 
-$opt_tray = new XoopsFormElementTray(_AM_ELE_OPT, '<br />');
+$opt_tray = new icms_form_elements_Tray(_AM_ELE_OPT, '<br />');
 $opt_tray->setDescription(_AM_ELE_OPT_DESC._AM_ELE_OPT_DESC1.'<br /><br />'._AM_ELE_OPT_UITEXT);
 for( $i=0; $i<count($options); $i++ ){
 	$opt_tray->addElement($options[$i]);
@@ -118,7 +118,7 @@ for($i = 0; $i < $fs_count; $i++) {
 	$linkscope->addOption($fs_xoops_groups[$i]->getVar('groupid'), $fs_xoops_groups[$i]->getVar('name'));     
 }
 
-$linkscopetray = new xoopsFormElementTray(_AM_ELE_FORMLINK_SCOPE, "<br />");
+$linkscopetray = new icms_form_elements_Tray(_AM_ELE_FORMLINK_SCOPE, "<br />");
 $linkscopetray->setDescription(_AM_ELE_FORMLINK_SCOPE_DESC);
 
 $linkscopedefault = isset($ele_value[4]) ? $ele_value[4] : 0;
@@ -142,7 +142,7 @@ if(!is_array($ele_value[5])) {
 	$scopeFilter = 'con';
 }
 
-$setfor = new xoopsFormElementTray(_AM_ELE_FORMLINK_SCOPEFILTER, "<br />");
+$setfor = new icms_form_elements_Tray(_AM_ELE_FORMLINK_SCOPEFILTER, "<br />");
 $setfor->setDescription(_AM_ELE_FORMLINK_SCOPEFILTER_DESC);
 $setfor_all = new xoopsFormRadio('', 'setfor', $scopeFilter);
 $setfor_all->addOption('all', _AM_ELE_FORMLINK_SCOPEFILTER_ALL);
@@ -197,7 +197,7 @@ for($i=0;$i<count($_POST['elements']);$i++) {
 
 
 // setup the operator boxes...
-$opterm = new xoopsFormElementTray('', "&nbsp;&nbsp;");
+$opterm = new icms_form_elements_Tray('', "&nbsp;&nbsp;");
 $new_element = new icms_form_elements_Select('', 'new_element');
 $new_element->setExtra("onfocus=\"javascript:window.document.form_ele.setfor[1].checked=true\"");
 $new_element->addOptionArray($options);

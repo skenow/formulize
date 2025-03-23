@@ -235,7 +235,7 @@ $advsearch = new icms_form_Theme (_formulize_DE_BUILDQUERY, 'buildq', XOOPS_URL.
 //$returned = addReqdCalcs($pickcalc);
 //$pickcalc = $returned['form'];
 
-$columns_andor = new xoopsFormElementTray('', "<br />");
+$columns_andor = new icms_form_elements_Tray('', "<br />");
 $columns_and = new xoopsFormRadio('', 'multi_andor', '1');
 $columns_and->addOption(1, _formulize_DE_AS_MULTI_AND);
 $columns_andor->addElement($columns_and);
@@ -251,7 +251,7 @@ $columns->addOption("mod_datetime", _formulize_DE_CALC_MODDATE . ' (YYYY-mm-dd)'
 $columns->addOption("creator_email", _formulize_DE_CALC_CREATOR_EMAIL);
 $columns->addOptionArray($options);
 
-$opterm = new xoopsFormElementTray(_formulize_DE_AS_OPTERM, "&nbsp;&nbsp;");
+$opterm = new icms_form_elements_Tray(_formulize_DE_AS_OPTERM, "&nbsp;&nbsp;");
 $op = new icms_form_elements_Select('', 'op');
 $ops['=='] = "=";
 $ops['!='] = "NOT";
@@ -268,7 +268,7 @@ $opterm->addElement($term);
 
 $addButton = new xoopsFormButton('', 'addq', _formulize_DE_AS_ADD, 'submit');
 
-$addOtherTray = new xoopsFormElementTray(_formulize_DE_AS_ADDOTHER, "&nbsp;&nbsp;");
+$addOtherTray = new icms_form_elements_Tray(_formulize_DE_AS_ADDOTHER, "&nbsp;&nbsp;");
 $openBracketButton = new xoopsFormButton('', 'openb', "(", 'submit');
 $closeBracketButton = new xoopsFormButton('', 'closeb', ")", 'submit');
 $andButton = new xoopsFormButton('', 'and', "AND", 'submit');

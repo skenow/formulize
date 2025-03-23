@@ -4171,7 +4171,7 @@ function formulize_createFilterUI($filterSettings, $filterName, $formWithSourceE
 
 function formulize_createFilterUIMatch($newElementName,$formName,$filterName,$options,$newOpName,$newTermName,$conditionlist) {
  // setup the new element, operator, term boxes...
- $new_elementOpTerm = new xoopsFormElementTray('', "&nbsp;&nbsp;");
+ $new_elementOpTerm = new icms_form_elements_Tray('', "&nbsp;&nbsp;");
  $element = new icms_form_elements_Select('', $newElementName);
  $element->addOptionArray($options);
  $op = new icms_form_elements_Select('', $newOpName);

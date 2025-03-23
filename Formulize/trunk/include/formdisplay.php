@@ -961,7 +961,7 @@ function addProfileFields($form, $profileForm) {
 		$uname_label = new icms_form_elements_Label(_US_NICKNAME, $thisUser_uname);
 		$form->addElement($uname_label);
 	}
-	$email_tray = new XoopsFormElementTray(_US_EMAIL, '<br />');
+	$email_tray = new icms_form_elements_Tray(_US_EMAIL, '<br />');
 	if ($profileForm == "new" OR (($xoopsConfigUser['allow_chgmail'] == 1) && ($regcodesConfig['email_as_username'] == 0))) {
       	$email_text = new XoopsFormText('', 'userprofile_email', 30, 255, $thisUser_email);
 		$email_tray->addElement($email_text, 1);
@@ -979,7 +979,7 @@ function addProfileFields($form, $profileForm) {
 		
 	$passlabel = $profileForm == "new" ? _formulize_TYPEPASSTWICE_NEW : _formulize_TYPEPASSTWICE_CHANGE;
 	$passlabel .= $xoopsConfigUser['minpass'] . _formulize_PASSWORD_HELP1;
-	$pwd_tray = new XoopsFormElementTray(_US_PASSWORD.'<br />'.$passlabel);
+	$pwd_tray = new icms_form_elements_Tray(_US_PASSWORD.'<br />'.$passlabel);
 	$pwd_text = new XoopsFormPassword('', 'userprofile_password', 10, 32);
 	$pwd_text2 = new XoopsFormPassword('', 'userprofile_vpass', 10, 32);
 	$pass_required = $profileForm == "new" ? 1 : 0;
@@ -1006,7 +1006,7 @@ function addProfileFields($form, $profileForm) {
       	$notify_mode_select = new icms_form_elements_Select(_NOT_NOTIFYMODE, 'userprofile_notify_mode', $thisUser_notify_mode);
       	$notify_mode_select->addOptionArray(array(XOOPS_NOTIFICATION_MODE_SENDALWAYS=>_NOT_MODE_SENDALWAYS, XOOPS_NOTIFICATION_MODE_SENDONCETHENDELETE=>_NOT_MODE_SENDONCE, XOOPS_NOTIFICATION_MODE_SENDONCETHENWAIT=>_NOT_MODE_SENDONCEPERLOGIN));
       	$form->addElement($notify_mode_select);
-      	$sig_tray = new XoopsFormElementTray(_US_SIGNATURE, '<br />');
+      	$sig_tray = new icms_form_elements_Tray(_US_SIGNATURE, '<br />');
       	include_once XOOPS_ROOT_PATH . '/include/xoopscodes.php';
       	$sig_tarea = new XoopsFormDhtmlTextArea('', 'userprofile_user_sig', $thisUser_user_sig);
       	$sig_tray->addElement($sig_tarea);
@@ -1017,7 +1017,7 @@ function addProfileFields($form, $profileForm) {
       	$form->addElement($sig_tray);
 	} else { // display only on new account creation...
 		if ($xoopsConfigUser['reg_dispdsclmr'] != 0 && $xoopsConfigUser['reg_disclaimer'] != '') {
-			$disc_tray = new XoopsFormElementTray(_US_DISCLAIMER, '<br />');
+			$disc_tray = new icms_form_elements_Tray(_US_DISCLAIMER, '<br />');
 			$disc_text = new XoopsFormTextarea('', 'disclaimer', trans($xoopsConfigUser['reg_disclaimer']), 8);
 			$disc_text->setExtra('readonly="readonly"');
 			$disc_tray->addElement($disc_text);
@@ -1082,9 +1082,9 @@ function addSubmitButton($form, $subButtonText, $go_back="", $currentURL, $butto
 			$printallbutton->setExtra("onclick='javascript:PrintAllPop();'");								// nmc 2007.03.24 - added
 			$rendered_buttons .= "&nbsp;&nbsp;&nbsp;" . $printallbutton->render();							// nmc 2007.03.24 - added
 			}
-		$buttontray = new XoopsFormElementTray($rendered_buttons, "&nbsp;"); // nmc 2007.03.24 - amended [nb: FormElementTray 'caption' is actually either 1 or 2 buttons]
+		$buttontray = new icms_form_elements_Tray($rendered_buttons, "&nbsp;"); // nmc 2007.03.24 - amended [nb: FormElementTray 'caption' is actually either 1 or 2 buttons]
 	} else {
-		$buttontray = new XoopsFormElementTray("", "&nbsp;");
+		$buttontray = new icms_form_elements_Tray("", "&nbsp;");
 	}
 	if($subButtonText == _formulize_SAVE) { // _formulize_SAVE is passed only when the save button is allowed to be drawn
 		if($save_text_temp) { $subButtonText = $save_text_temp; }

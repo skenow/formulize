@@ -200,7 +200,7 @@ function drawPageUI($pageNumber, $pageTitle, $elements, $conditions, $form, $opt
 	} else {
 		$conditionsYesNo = $conditions['pagecons'];
 	}
-	$conditionsTray = new xoopsFormElementTray(_AM_FORMULIZE_SCREEN_CONS_PAGE . ' ' . $visiblePageNumber, '<br />');
+	$conditionsTray = new icms_form_elements_Tray(_AM_FORMULIZE_SCREEN_CONS_PAGE . ' ' . $visiblePageNumber, '<br />');
 	$conditionsTray->setDescription(_AM_FORMULIZE_SCREEN_CONS_HELP);
 	$nocons = new xoopsFormRadio('', 'pagecons' . $pageNumber, $conditionsYesNo);
 	$nocons->addOption('none', _AM_FORMULIZE_SCREEN_CONS_NONE);
@@ -213,7 +213,7 @@ function drawPageUI($pageNumber, $pageTitle, $elements, $conditions, $form, $opt
 		$conditionlist .= $options[$conditions['details']['elements'][$conIndex]] . " " . $conditions['details']['ops'][$conIndex] . " " . $conditions['details']['terms'][$conIndex] . "<br />";
 	}
 	// setup the operator boxes...
-	$opterm = new xoopsFormElementTray('', "&nbsp;&nbsp;");
+	$opterm = new icms_form_elements_Tray('', "&nbsp;&nbsp;");
 	$element = new icms_form_elements_Select('', 'pageelements' . $pageNumber . '[]');
 	$element->setExtra("onfocus=\"javascript:window.document.editscreenform.pagecons" . $pageNumber . "[1].checked=true\"");
 	$element->addOptionArray($options);

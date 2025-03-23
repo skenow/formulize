@@ -218,7 +218,7 @@ if(!isset($_POST['setwhen'])) {
 }
 
 $notblurb = $canSetNots ? _formulize_DE_SETNOT_WHEN : _formulize_DE_SETNOT_TOME_WHEN;
-$setwhen = new xoopsFormElementTray($notblurb, "<br />");
+$setwhen = new icms_form_elements_Tray($notblurb, "<br />");
 $setwhen_created = new xoopsFormRadio('', 'setwhen', $_POST['setwhen']);
 $setwhen_created->addOption('new_entry', _formulize_DE_SETNOT_WHEN_NEW);
 $setwhen_updated = new xoopsFormRadio('', 'setwhen', $_POST['setwhen']);
@@ -236,7 +236,7 @@ if($canSetNots) {
 		$_POST['setwho'] = $xoopsUser->getVar('uid');
 	}
 
-	$setwho = new xoopsFormElementTray(_formulize_DE_SETNOT_WHO, "<br />");
+	$setwho = new icms_form_elements_Tray(_formulize_DE_SETNOT_WHO, "<br />");
 	$setwho_me = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
 	$setwho_me->addOption($uid, _formulize_DE_SETNOT_WHO_ME);
 	
@@ -288,7 +288,7 @@ if(!isset($_POST['setfor'])) {
 	$_POST['setfor'] = 'all';
 }
 
-$setfor = new xoopsFormElementTray(_formulize_DE_SETNOT_FOR, "<br />");
+$setfor = new icms_form_elements_Tray(_formulize_DE_SETNOT_FOR, "<br />");
 $setfor_all = new xoopsFormRadio('', 'setfor', $_POST['setfor']);
 $setfor_all->addOption('all', _formulize_DE_SETNOT_FOR_ALL);
 
@@ -304,7 +304,7 @@ if($_POST['addcon']) {
 }
 
 // setup the operator boxes...
-$opterm = new xoopsFormElementTray('', "&nbsp;&nbsp;");
+$opterm = new icms_form_elements_Tray('', "&nbsp;&nbsp;");
 $element = new icms_form_elements_Select('', 'new_element');
 $element->setExtra("onfocus=\"javascript:window.document.setnot.setfor[1].checked=true\"");
 $element->addOptionArray($options);

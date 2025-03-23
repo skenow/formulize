@@ -84,7 +84,7 @@ if(isset($value[4])) {
 } else {
 	$sepDefault = isset($formulizeConfig['number_sep']) ? $formulizeConfig['number_sep'] : ',';
 }
-$numberOptions = new XoopsFormElementTray(_AM_ELE_DERIVED_NUMBER_OPTS, '<br /><br />');
+$numberOptions = new icms_form_elements_Tray(_AM_ELE_DERIVED_NUMBER_OPTS, '<br /><br />');
 $numberOptions->setDescription(_AM_ELE_NUMBER_OPTS_DESC);
 $decimalOption = new xoopsFormText(_AM_ELE_NUMBER_OPTS_DEC, 'ele_value[1]', 2, 2, $decimalDefault);
 $prefixOption = new XoopsFormText(_AM_ELE_NUMBER_OPTS_PREFIX, 'ele_value[2]', 5, 255, $prefixDefault);

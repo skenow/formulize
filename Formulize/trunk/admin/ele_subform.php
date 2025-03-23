@@ -90,7 +90,7 @@ if($caughtfirst) {
 	}
 	$elementlist->addOptionArray($elements_array);
 	
-	$elelisttray = new xoopsFormElementTray(_AM_ELE_SUBFORM_ELEMENTS, "<br />");
+	$elelisttray = new icms_form_elements_Tray(_AM_ELE_SUBFORM_ELEMENTS, "<br />");
 	$elelisttray->setDescription(_AM_ELE_SUBFORM_ELEMENTS_DESC);
 	$elerefresh = new xoopsFormButton('', 'subformrefresh', _AM_ELE_SUBFORM_REFRESH, 'submit');
 	$elelisttray->addElement($elementlist);

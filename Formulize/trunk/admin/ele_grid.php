@@ -48,7 +48,7 @@ if( !empty($ele_id) ){
 
 // 1. heading
 
-$grid_heading = new XoopsFormElementTray(_AM_ELE_GRID_HEADING, "<br>");
+$grid_heading = new icms_form_elements_Tray(_AM_ELE_GRID_HEADING, "<br>");
 $grid_heading_use_caption = new XoopsFormRadio('', 'ele_value[0]', $ele_value[0]);
 $grid_heading_use_caption->addOption('caption', _AM_ELE_GRID_HEADING_USE_CAPTION);
 $grid_heading_use_form = new XoopsFormRadio('', 'ele_value[0]', $ele_value[0]);
@@ -60,7 +60,7 @@ $grid_heading->addElement($grid_heading_use_form);
 $grid_heading->addElement($grid_heading_none);
 
 // 1a. how to handle heading
-$grid_heading_sideOrTop = new XoopsFormElementTray(_AM_ELE_GRID_HEADING_SIDEORTOP, "<br>");
+$grid_heading_sideOrTop = new icms_form_elements_Tray(_AM_ELE_GRID_HEADING_SIDEORTOP, "<br>");
 $grid_heading_side = new XoopsFormRadio('', 'ele_value[5]', $ele_value[5]);
 $grid_heading_side->addOption('1', _AM_ELE_GRID_HEADING_SIDE);
 $grid_heading_top = new XoopsFormRadio('', 'ele_value[5]', $ele_value[5]);
@@ -81,7 +81,7 @@ $grid_col_captions->setDescription(_AM_ELE_GRID_COL_CAPTIONS_DESC);
 
 // 4. background shading
 
-$grid_background = new XoopsFormElementTray(_AM_ELE_GRID_BACKGROUND, "<br>");
+$grid_background = new icms_form_elements_Tray(_AM_ELE_GRID_BACKGROUND, "<br>");
 $grid_background_hor = new XoopsFormRadio('', 'ele_value[3]', $ele_value[3]);
 $grid_background_hor->addOption('horizontal', _AM_ELE_GRID_BACKGROUND_HOR);
 $grid_background_ver = new XoopsFormRadio('', 'ele_value[3]', $ele_value[3]);

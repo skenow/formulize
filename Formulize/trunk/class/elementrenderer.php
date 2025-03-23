@@ -585,7 +585,7 @@ class formulizeElementRenderer{
 					$renderedHoorvs = "";
 					if(count($hiddenOutOfRangeValuesToWrite) > 0) {
 						foreach($hiddenOutOfRangeValuesToWrite as $hoorKey=>$hoorValue) {
-							$thisHoorv = new xoopsFormHidden('formulize_hoorv_'.$true_ele_id.'_'.$hoorKey, $hoorValue);
+							$thisHoorv = new icms_form_elements_Hidden('formulize_hoorv_'.$true_ele_id.'_'.$hoorKey, $hoorValue);
 							$renderedHoorvs .= $thisHoorv->render() . "\n";
 							unset($thisHoorv);
 						}
@@ -742,7 +742,7 @@ class formulizeElementRenderer{
 
 				if(count($hiddenOutOfRangeValuesToWrite) > 0) {
 					foreach($hiddenOutOfRangeValuesToWrite as $hoorKey=>$hoorValue) {
-						$thisHoorv = new xoopsFormHidden('formulize_hoorv_'.$true_ele_id.'_'.$hoorKey, $hoorValue);
+						$thisHoorv = new icms_form_elements_Hidden('formulize_hoorv_'.$true_ele_id.'_'.$hoorKey, $hoorValue);
 						$renderedHoorvs .= $thisHoorv->render() . "\n";
 						unset($thisHoorv);
 					}
@@ -869,7 +869,7 @@ class formulizeElementRenderer{
 				$renderedHoorvs = "";
 				if(count($hiddenOutOfRangeValuesToWrite) > 0) {
 					foreach($hiddenOutOfRangeValuesToWrite as $hoorKey=>$hoorValue) {
-						$thisHoorv = new xoopsFormHidden('formulize_hoorv_'.$true_ele_id.'_'.$hoorKey, $hoorValue);
+						$thisHoorv = new icms_form_elements_Hidden('formulize_hoorv_'.$true_ele_id.'_'.$hoorKey, $hoorValue);
 						$renderedHoorvs .= $thisHoorv->render() . "\n";
 						unset($thisHoorv);
 					}
@@ -1204,16 +1204,16 @@ class formulizeElementRenderer{
 			}
 			if(is_array($hiddenValue)) { // not sure when/if this would ever happen
 				foreach($hiddenValue as $value) {
-					$newElement->addElement(new xoopsFormHidden($element->getName()."[]", $value));
+					$newElement->addElement(new icms_form_elements_Hidden($element->getName()."[]", $value));
 					unset($value);
 				}
 				$newElement->addElement(new xoopsFormLabel('', implode(", ", $hiddenValue)));
 			} else {
-				$newElement->addElement(new xoopsFormHidden($element->getName(), $hiddenValue));
+				$newElement->addElement(new icms_form_elements_Hidden($element->getName(), $hiddenValue));
 				$newElement->addElement(new xoopsFormLabel('', $hiddenValue));
 			}
 			if(substr($element->getName(), 0, 9) != "desubform") { // we should consider not having a cue at all for any disabled elements, but we're not going to pull it out just yet...more investigation of this is necessary
-				$newElement->addElement(new xoopsFormHidden("decue_".trim($element->getName(),"de_"), 1));
+				$newElement->addElement(new icms_form_elements_Hidden("decue_".trim($element->getName(),"de_"), 1));
 			}
 			$newElement->setDescription(html_entity_decode($ele_desc,ENT_QUOTES));
 			return $newElement;

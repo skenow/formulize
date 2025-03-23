@@ -66,7 +66,7 @@ if( !empty($ele_id) ){
 		$opt_count++;
 	}
 	// these two lines part of the jwe added code
-	$rowcount = new XoopsFormHidden("rowcount", $opt_count);
+	$rowcount = new icms_form_elements_Hidden("rowcount", $opt_count);
 	$form->addElement($rowcount);
 
 

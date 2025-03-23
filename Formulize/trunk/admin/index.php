@@ -212,7 +212,7 @@ if( $_POST['op'] != 'save' ){
         }
 		// added - end - August 25 2005 - jpc
         
-		$hidden_id = new XoopsFormHidden('ele_id[]', $id);
+		$hidden_id = new icms_form_elements_Hidden('ele_id[]', $id);
 		
 
 		echo '<tr>';
@@ -270,7 +270,7 @@ if( $_POST['op'] != 'save' ){
 		</tr>
 	</table>
 	';
-	$hidden_op = new XoopsFormHidden('op', 'save');
+	$hidden_op = new icms_form_elements_Hidden('op', 'save');
 	echo $hidden_op->render();
 	echo '</form>';
 }else{

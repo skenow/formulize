@@ -210,7 +210,7 @@ print "<body style=\"background: white; margin-top:20px;\"><center>";
 print "<table width=100%><tr><td width=5%></td><td width=90%>";
 
 
-$saveform = new xoopsThemeForm(_formulize_DE_SAVEVIEW, 'saveoptions', XOOPS_URL."/modules/formulize/include/save.php?fid=$fid&frid=$frid&lastloaded=$lastloaded&cols=$getcols&currentview=$currentview");
+$saveform = new icms_form_Theme (_formulize_DE_SAVEVIEW, 'saveoptions', XOOPS_URL."/modules/formulize/include/save.php?fid=$fid&frid=$frid&lastloaded=$lastloaded&cols=$getcols&currentview=$currentview");
 
 // need to build the list of available reports that can be saved.
 // available are all their own saved reports, plus all published IF they have can update others turned on.
@@ -363,7 +363,7 @@ if($pubflag) {
 
 }
 
-$viewselection = new xoopsFormHidden("viewselection", "");
+$viewselection = new icms_form_elements_Hidden("viewselection", "");
 $saveform->addElement($viewselection);
 
 

@@ -81,7 +81,7 @@ class formulizeRankOrderListHandler {
         $opt_count++;
       }
       // these two lines part of the jwe added code
-      $rowcount = new XoopsFormHidden("rowcount", $opt_count);
+      $rowcount = new icms_form_elements_Hidden("rowcount", $opt_count);
       $form->addElement($rowcount);
     
     $opt_tray = new XoopsFormElementTray(_AM_ELE_OPT, '<br />');
@@ -111,7 +111,7 @@ class formulizeRankOrderListHandler {
   // this function renders the element
   function render($elementObject, $form_ele_id, $isDisabled) {
     
-    $order = new xoopsFormHidden($form_ele_id, ''); // this element will receive the order of the sortable options upon saving, which is then read by prepDataForWrite
+    $order = new icms_form_elements_Hidden($form_ele_id, ''); // this element will receive the order of the sortable options upon saving, which is then read by prepDataForWrite
 
     if(!isset($GLOBALS['formulize_jQuery_included'])) { // may already be included by formdisplay.php, otherwise we're rendering element at a time and we need to account for this here
       $sortableListHTML = "<script type=\"text/javascript\" src=\"".XOOPS_URL."/modules/formulize/jquery/jquery-1.3.2.min.js\"></script>

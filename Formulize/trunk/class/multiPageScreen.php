@@ -207,9 +207,9 @@ function drawPageUI($pageNumber, $pageTitle, $elements, $conditions, $form, $opt
 
 	$conditionlist = "";
 	foreach ($conditions['details']['elements'] as $conIndex => $elementValue) {
-		$form->addElement(new xoopsFormHidden('pageelements' . $pageNumber . '[]', $elementValue));
-		$form->addElement(new xoopsFormHidden('pageops' . $pageNumber . '[]', $conditions['details']['ops'][$conIndex]));
-		$form->addElement(new xoopsFormHidden('pageterms' . $pageNumber . '[]', $conditions['details']['terms'][$conIndex]));
+		$form->addElement(new icms_form_elements_Hidden('pageelements' . $pageNumber . '[]', $elementValue));
+		$form->addElement(new icms_form_elements_Hidden('pageops' . $pageNumber . '[]', $conditions['details']['ops'][$conIndex]));
+		$form->addElement(new icms_form_elements_Hidden('pageterms' . $pageNumber . '[]', $conditions['details']['terms'][$conIndex]));
 		$conditionlist .= $options[$conditions['details']['elements'][$conIndex]] . " " . $conditions['details']['ops'][$conIndex] . " " . $conditions['details']['terms'][$conIndex] . "<br />";
 	}
 	// setup the operator boxes...

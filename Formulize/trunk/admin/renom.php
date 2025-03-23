@@ -92,7 +92,7 @@ if ($op != 1) {
 		<td class="foot" colspan="7">'.$submit->render().'
 		</tr>
 		</table>';
-	//$renom = new XoopsFormHidden($title2, $title2);
+	//$renom = new icms_form_elements_Hidden($title2, $title2);
 	//$renom->render();
 		
 	echo '</form>';

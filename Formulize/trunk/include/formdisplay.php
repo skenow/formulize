@@ -46,7 +46,7 @@ include_once XOOPS_ROOT_PATH."/modules/formulize/include/functions.php";
 include_once XOOPS_ROOT_PATH . "/include/functions.php";
 
 // NEED TO USE OUR OWN VERSION OF THE CLASS, TO GET ELEMENT NAMES IN THE TR TAGS FOR EACH ROW
-class formulize_themeForm extends XoopsThemeForm {
+class formulize_themeForm extends icms_form_Theme {
 	/**
 	 * Insert an empty row in the table to serve as a seperator.
 	 *
@@ -693,7 +693,7 @@ if(!is_numeric($titleOverride) AND $titleOverride != "" AND $titleOverride != "a
 				$form->setExtra("enctype='multipart/form-data'"); // imp�ratif!
 	
 				if(is_array($settings)) { $form = writeHiddenSettings($settings, $form); }
-				$form->addElement (new XoopsFormHidden ('ventry', $settings['ventry'])); // necessary to trigger the proper reloading of the form page, until Done is called and that form does not have this flag.
+				$form->addElement (new icms_form_elements_Hidden ('ventry', $settings['ventry'])); // necessary to trigger the proper reloading of the form page, until Done is called and that form does not have this flag.
 	
 				// include who the entry belongs to and the date
 				// include acknowledgement that information has been updated if we have just done a submit
@@ -801,12 +801,12 @@ if(!is_numeric($titleOverride) AND $titleOverride != "" AND $titleOverride != "a
 				// DRAW IN THE SPECIAL UI FOR A SUBFORM LINK (ONE TO MANY)
 				if(count($sub_fids) > 0) { // if there are subforms, then draw them in...only once we have a bonafide entry in place already
 					// draw in special params for this form
-			$form->addElement (new XoopsFormHidden ('target_sub', ''));
-			$form->addElement (new XoopsFormHidden ('target_sub_instance', ''));
-			$form->addElement (new XoopsFormHidden ('numsubents', 1));
-			$form->addElement (new XoopsFormHidden ('del_subs', ''));
-			$form->addElement (new XoopsFormHidden ('goto_sub', ''));
-			$form->addElement (new XoopsFormHidden ('goto_sfid', ''));
+			$form->addElement (new icms_form_elements_Hidden ('target_sub', ''));
+			$form->addElement (new icms_form_elements_Hidden ('target_sub_instance', ''));
+			$form->addElement (new icms_form_elements_Hidden ('numsubents', 1));
+			$form->addElement (new icms_form_elements_Hidden ('del_subs', ''));
+			$form->addElement (new icms_form_elements_Hidden ('goto_sub', ''));
+			$form->addElement (new icms_form_elements_Hidden ('goto_sfid', ''));
 			
 			foreach($sub_fids as $sfid) {
 				// only draw in the subform UI if the subform hasn't been drawn in previously, courtesy of a subform element in the form.
@@ -853,12 +853,12 @@ if(!is_numeric($titleOverride) AND $titleOverride != "" AND $titleOverride != "a
 		if(!$formElementsOnly) {
 			
 			// add flag to indicate that the form has been submitted
-			$form->addElement (new XoopsFormHidden ('form_submitted', "1"));
+			$form->addElement (new icms_form_elements_Hidden ('form_submitted', "1"));
 			if($go_back['form']) { // if this is set, then we're doing a subform, so put in a flag to prevent the parent from being drawn again on submission
-				$form->addElement (new XoopsFormHidden ('sub_fid', $fid));
-				$form->addElement (new XoopsFormHidden ('sub_submitted', $entries[$fid][0]));
-				$form->addElement (new XoopsFormHidden ('go_back_form', $go_back['form']));
-				$form->addElement (new XoopsFormHidden ('go_back_entry', $go_back['entry']));
+				$form->addElement (new icms_form_elements_Hidden ('sub_fid', $fid));
+				$form->addElement (new icms_form_elements_Hidden ('sub_submitted', $entries[$fid][0]));
+				$form->addElement (new icms_form_elements_Hidden ('go_back_form', $go_back['form']));
+				$form->addElement (new icms_form_elements_Hidden ('go_back_entry', $go_back['entry']));
 			}
 			
 			// saving message
@@ -942,7 +942,7 @@ function addProfileFields($form, $profileForm) {
 	if($profileForm == "new") {
 		// 'new' should ONLY be coming from the modified register.php file that the registration codes module uses
 		// ie: we are assuming registration codes is installed
-		$form->addElement(new XoopsFormHidden('userprofile_regcode', $GLOBALS['regcode']));
+		$form->addElement(new icms_form_elements_Hidden('userprofile_regcode', $GLOBALS['regcode']));
 		$uname_size = $xoopsConfigUser['maxuname'] < 255 ? $xoopsConfigUser['maxuname'] : 255;
 		$labelhelptext = _formulize_USERNAME_HELP1; // set it to a variable so we can test for its existence; don't want to print this stuff if there's no translation
 		$labeltext = $labelhelptext == "" ? _US_NICKNAME : _US_NICKNAME . _formulize_USERNAME_HELP1 . $xoopsConfigUser['minuname'] . _formulize_USERNAME_HELP2 . $uname_size . _formulize_USERNAME_HELP3;
@@ -953,7 +953,7 @@ function addProfileFields($form, $profileForm) {
 		}
 		else {
 			// Usernames are created based on email address
-			$uname_label = new XoopsFormHidden('userprofile_uname', $thisUser_uname);
+			$uname_label = new icms_form_elements_Hidden('userprofile_uname', $thisUser_uname);
 			$uname_reqd = 0;
 		}
 		$form->addElement($uname_label, $uname_reqd);
@@ -1026,10 +1026,10 @@ function addProfileFields($form, $profileForm) {
 			$disc_tray->addElement($agree_chk);
 			$form->addElement($disc_tray);
 		}
-		$form->addElement(new XoopsFormHidden("op", "newuser"));
+		$form->addElement(new icms_form_elements_Hidden("op", "newuser"));
 	}
 
-	$uid_check = new XoopsFormHidden("userprofile_uid", $thisUser_uid);
+	$uid_check = new icms_form_elements_Hidden("userprofile_uid", $thisUser_uid);
 	$form->addElement($uid_check);
 	$form->insertBreak(_formulize_PERSONALDETAILS, "head");
 
@@ -1719,7 +1719,7 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 						$indexer = 1;
 							foreach($ni->getVar('ele_value') as $k=>$v) {
 								if($v == 1) {
-								$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), $indexer);
+								$hiddenElements[$ni->getVar('ele_id')] = new icms_form_elements_Hidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), $indexer);
 							}
 							$indexer++;
 						}
@@ -1730,7 +1730,7 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 						$indexer = 1;
 							foreach($ni->getVar('ele_value') as $k=>$v) {
 								if($v == 1) {
-								$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id')."[]", $indexer);
+								$hiddenElements[$ni->getVar('ele_id')] = new icms_form_elements_Hidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id')."[]", $indexer);
 							}
 							$indexer++;
 						}
@@ -1740,7 +1740,7 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 						$indexer = 1;
 						foreach($ni->getVar('ele_value') as $k=>$v) {
 							if(strstr($checkBoxOptions, $k)) {
-								$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id')."[]", $indexer);
+								$hiddenElements[$ni->getVar('ele_id')] = new icms_form_elements_Hidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id')."[]", $indexer);
 							}
 							$indexer++;
 						}
@@ -1750,7 +1750,7 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 					if(!$entry) {
 						$ele_value = $ni->getVar('ele_value');
 						$yesNoValue = $ele_value['_YES'] == 1 ? 1 : 2; // check to see if Yes is the value, and if so, set 1, otherwise, set 2.  2 is the value used when No is the selected option in YN radio buttons
-						$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), $yesNoValue);
+						$hiddenElements[$ni->getVar('ele_id')] = new icms_form_elements_Hidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), $yesNoValue);
 					}
 	        break;
 				case "text":
@@ -1758,11 +1758,11 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 						global $myts;
 						if(!$myts){ $myts =& icms_core_Textsanitizer::getInstance(); }
 						$ele_value = $ni->getVar('ele_value');
-						$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), icms_core_DataFilter::htmlSpecialChars(getTextboxDefault($ele_value[2], $ni->getVar('id_form'), $entry)));
+						$hiddenElements[$ni->getVar('ele_id')] = new icms_form_elements_Hidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), icms_core_DataFilter::htmlSpecialChars(getTextboxDefault($ele_value[2], $ni->getVar('id_form'), $entry)));
 					} else {
 						include_once XOOPS_ROOT_PATH . "/modules/class/data.php";
 						$data_handler = new formulizeDataHandler($ni->getVar('id_form'));
-						$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), $data_handler->getElementValueInEntry($entry, $ni));
+						$hiddenElements[$ni->getVar('ele_id')] = new icms_form_elements_Hidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), $data_handler->getElementValueInEntry($entry, $ni));
 					}
 					break;
 				case "textarea":
@@ -1770,11 +1770,11 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 						global $myts;
 						if(!$myts){ $myts =& icms_core_Textsanitizer::getInstance(); }
 						$ele_value = $ni->getVar('ele_value');
-						$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), icms_core_DataFilter::htmlSpecialChars(getTextboxDefault($ele_value[0], $ni->getVar('id_form'), $entry)));
+						$hiddenElements[$ni->getVar('ele_id')] = new icms_form_elements_Hidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), icms_core_DataFilter::htmlSpecialChars(getTextboxDefault($ele_value[0], $ni->getVar('id_form'), $entry)));
 					} else {
 						include_once XOOPS_ROOT_PATH . "/modules/class/data.php";
 						$data_handler = new formulizeDataHandler($ni->getVar('id_form'));
-						$hiddenElements[$ni->getVar('ele_id')] = new xoopsFormHidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), $data_handler->getElementValueInEntry($entry, $ni));
+						$hiddenElements[$ni->getVar('ele_id')] = new icms_form_elements_Hidden('de_'.$fid.'_'.$entryForDEElements.'_'.$ni->getVar('ele_id'), $data_handler->getElementValueInEntry($entry, $ni));
 					}
 					break;
 			}
@@ -2009,22 +2009,22 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 	formulize_benchmark("Done looping elements.");
 
 	foreach($hiddenElements as $element_id=>$thisHiddenElement) {
-		$form->addElement(new xoopsFormHidden("decue_".$fid."_".$entryForDEElements."_".$element_id, 1));
+		$form->addElement(new icms_form_elements_Hidden("decue_".$fid."_".$entryForDEElements."_".$element_id, 1));
 		$form->addElement($thisHiddenElement);
 		unset($thisHiddenElement); // some odd reference thing going on here...$thisHiddenElement is being added by reference or something like that, so that when $thisHiddenElement changes in the next run through, every previous element that was created by adding it is updated to point to the next element.  So if you unset at the end of the loop, it forces each element to be added as you would expect.
 	}
 
-	$form->addElement (new XoopsFormHidden ('counter', $count)); // not used by reading logic?
+	$form->addElement (new icms_form_elements_Hidden ('counter', $count)); // not used by reading logic?
 	if($entry) {
-		$form->addElement (new XoopsFormHidden ('entry'.$fid, $entry));
+		$form->addElement (new icms_form_elements_Hidden ('entry'.$fid, $entry));
 	}
 	if($_POST['parent_form']) { // if we just came back from a parent form, then if they click save, we DO NOT want an override condition, even though we are now technically editing an entry that was previously saved when we went to the subform in the first place.  So the override logic looks for this hidden value as an exception.
-		$form->addElement (new XoopsFormHidden ('back_from_sub', 1));
+		$form->addElement (new icms_form_elements_Hidden ('back_from_sub', 1));
 	}
 	
 	// add a hidden element to carry all the validation javascript that might be associated with elements rendered with elementdisplay.php...only relevant for elements rendered inside subforms or grids...the validation code comes straight from the element, doesn't have a check around it for the conditional table row id, like the custom form classes at the top of the file use, since those elements won't render as hidden and show/hide in the same way
 	if(isset($GLOBALS['formulize_renderedElementsValidationJS'][$GLOBALS['formulize_thisRendering']])) {
-		$formulizeHiddenValidation = new XoopsFormHidden('validation', '');
+		$formulizeHiddenValidation = new icms_form_elements_Hidden('validation', '');
 		foreach($GLOBALS['formulize_renderedElementsValidationJS'][$GLOBALS['formulize_thisRendering']] as $thisValidation) { // grab all the validation code we stored in the elementdisplay.php file and attach it to this element
 			foreach(explode("\n", $thisValidation) as $thisValidationLine) {
 				$formulizeHiddenValidation->customValidationCode[] = $thisValidationLine;
@@ -2039,7 +2039,7 @@ function compileElements($fid, $form, $formulize_mgr, $prevEntry, $entry, $go_ba
 			$GLOBALS['formulize_elementsOnlyForm_validationCode'][] = $validationJS."\n\n";
 		}
 	} elseif(count($GLOBALS['formulize_elementsOnlyForm_validationCode']) > 0) {
-		$elementsonlyvalidation = new XoopsFormHidden('elementsonlyforms', '');
+		$elementsonlyvalidation = new icms_form_elements_Hidden('elementsonlyforms', '');
 		$elementsonlyvalidation->customValidationCode = $GLOBALS['formulize_elementsOnlyForm_validationCode'];
 		$form->addElement($elementsonlyvalidation, 1);
 	}
@@ -2361,43 +2361,43 @@ function writeHiddenSettings($settings, $form) {
 
 	// write hidden fields
 	if($form) { // write as form objects and return form
-		$form->addElement (new XoopsFormHidden ('sort', $sort));
-		$form->addElement (new XoopsFormHidden ('order', $order));
-		$form->addElement (new XoopsFormHidden ('currentview', $currentview));
-		$form->addElement (new XoopsFormHidden ('oldcols', $oldcols));
+		$form->addElement (new icms_form_elements_Hidden ('sort', $sort));
+		$form->addElement (new icms_form_elements_Hidden ('order', $order));
+		$form->addElement (new icms_form_elements_Hidden ('currentview', $currentview));
+		$form->addElement (new icms_form_elements_Hidden ('oldcols', $oldcols));
 		foreach($searches as $key=>$search) {
 			$search_key = "search_" . $key;
 			$search = str_replace("'", "&#39;", $search);
-			$form->addElement (new XoopsFormHidden ($search_key, stripslashes($search)));
+			$form->addElement (new icms_form_elements_Hidden ($search_key, stripslashes($search)));
 		}
-		$form->addElement (new XoopsFormHidden ('calc_cols', $calc_cols));
-		$form->addElement (new XoopsFormHidden ('calc_calcs', $calc_calcs));
-		$form->addElement (new XoopsFormHidden ('calc_blanks', $calc_blanks));
-		$form->addElement (new XoopsFormHidden ('calc_grouping', $calc_grouping));
-		$form->addElement (new XoopsFormHidden ('hlist', $hlist));
-		$form->addElement (new XoopsFormHidden ('hcalc', $hcalc));
-		$form->addElement (new XoopsFormHidden ('lockcontrols', $lockcontrols));
-		$form->addElement (new XoopsFormHidden ('lastloaded', $lastloaded));
+		$form->addElement (new icms_form_elements_Hidden ('calc_cols', $calc_cols));
+		$form->addElement (new icms_form_elements_Hidden ('calc_calcs', $calc_calcs));
+		$form->addElement (new icms_form_elements_Hidden ('calc_blanks', $calc_blanks));
+		$form->addElement (new icms_form_elements_Hidden ('calc_grouping', $calc_grouping));
+		$form->addElement (new icms_form_elements_Hidden ('hlist', $hlist));
+		$form->addElement (new icms_form_elements_Hidden ('hcalc', $hcalc));
+		$form->addElement (new icms_form_elements_Hidden ('lockcontrols', $lockcontrols));
+		$form->addElement (new icms_form_elements_Hidden ('lastloaded', $lastloaded));
 		$asearch = str_replace("'", "&#39;", $asearch);
-		$form->addElement (new XoopsFormHidden ('asearch', stripslashes($asearch)));
-		$form->addElement (new XoopsFormHidden ('calview', $calview));
-		$form->addElement (new XoopsFormHidden ('calfrid', $calfrid));
-		$form->addElement (new XoopsFormHidden ('calfid', $calfid));
+		$form->addElement (new icms_form_elements_Hidden ('asearch', stripslashes($asearch)));
+		$form->addElement (new icms_form_elements_Hidden ('calview', $calview));
+		$form->addElement (new icms_form_elements_Hidden ('calfrid', $calfrid));
+		$form->addElement (new icms_form_elements_Hidden ('calfid', $calfid));
 		foreach($settings['calhidden'] as $chname=>$chvalue) {
-			$form->addElement (new XoopsFormHidden ($chname, $chvalue));
+			$form->addElement (new icms_form_elements_Hidden ($chname, $chvalue));
 		}
-		$form->addElement (new XoopsFormHidden ('formulize_LOEPageStart', $_POST['formulize_LOEPageStart']));
+		$form->addElement (new icms_form_elements_Hidden ('formulize_LOEPageStart', $_POST['formulize_LOEPageStart']));
 		if(isset($settings['formulize_currentPage'])) { // drawing a multipage form...
-			$form->addElement( new XoopsFormHidden ('formulize_currentPage', $settings['formulize_currentPage']));
-			$form->addElement( new XoopsFormHidden ('formulize_prevPage', $settings['formulize_prevPage']));
-			$form->addElement( new XoopsFormHidden ('formulize_doneDest', $settings['formulize_doneDest']));
-			$form->addElement( new XoopsFormHidden ('formulize_buttonText', $settings['formulize_buttonText']));
+			$form->addElement( new icms_form_elements_Hidden ('formulize_currentPage', $settings['formulize_currentPage']));
+			$form->addElement( new icms_form_elements_Hidden ('formulize_prevPage', $settings['formulize_prevPage']));
+			$form->addElement( new icms_form_elements_Hidden ('formulize_doneDest', $settings['formulize_doneDest']));
+			$form->addElement( new icms_form_elements_Hidden ('formulize_buttonText', $settings['formulize_buttonText']));
 		}
 		if($_POST['overridescreen']) {
-			$form->addElement( new XoopsFormHidden ('overridescreen', intval($_POST['overridescreen'])));
+			$form->addElement( new icms_form_elements_Hidden ('overridescreen', intval($_POST['overridescreen'])));
 		}
 		if(strlen($_POST['formulize_lockedColumns'])>0) {
-			$form->addElement( new XoopsFormHidden ('formulize_lockedColumns', $_POST['formulize_lockedColumns']));
+			$form->addElement( new icms_form_elements_Hidden ('formulize_lockedColumns', $_POST['formulize_lockedColumns']));
 		}
 		return $form;
 	} else { // write as HTML

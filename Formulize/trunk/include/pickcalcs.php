@@ -170,10 +170,10 @@ function addReqdCalcs($form) {
 	if($_POST['submitx']) {
 		$numCols = count($_POST['column']);
 		for ($i = 0; $i < $numCols; $i++) {
-			$form->addElement(new xoopsFormHidden('reqdcalc_column_' . $_POST['column'][$i], $_POST['column'][$i]));
+			$form->addElement(new icms_form_elements_Hidden('reqdcalc_column_' . $_POST['column'][$i], $_POST['column'][$i]));
 			// flatten $_POST['calculation'] array
 			$hidden_calcs = implode(",", $_POST['calculations']);
-			$form->addElement(new xoopsFormHidden('reqdcalc_calcs_' . $_POST['column'][$i], $hidden_calcs));
+			$form->addElement(new icms_form_elements_Hidden('reqdcalc_calcs_' . $_POST['column'][$i], $hidden_calcs));
 			$rc[$indexer]['column'] = $_POST['column'][$i];
 			$rc[$indexer]['calcs'] = $hidden_calcs;
 			$indexer++;
@@ -183,9 +183,9 @@ function addReqdCalcs($form) {
 	// get previously requested calcs
 	foreach($_POST as $k=>$v) {
 		if(strstr($k, "reqdcalc_column")) {
-			$form->addElement(new xoopsFormHidden('reqdcalc_column_' . $v, $v));
+			$form->addElement(new icms_form_elements_Hidden('reqdcalc_column_' . $v, $v));
 			$rc[$indexer]['column'] = $v;
-			$form->addElement(new xoopsFormHidden('reqdcalc_calcs_' . $v, $_POST['reqdcalc_calcs_' . $v]));
+			$form->addElement(new icms_form_elements_Hidden('reqdcalc_calcs_' . $v, $_POST['reqdcalc_calcs_' . $v]));
 			$rc[$indexer]['calcs'] = $_POST['reqdcalc_calcs_' . $v];
 		}
 		$indexer++;
@@ -345,7 +345,7 @@ print "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"$theme
 print "</head>";
 print "<body style=\"background: white; margin-top:20px;\"><center>";
 print "<table width=100%><tr><td width=5%></td><td width=90%>";
-$pickcalc = new xoopsThemeForm(_formulize_DE_PICKCALCS, 'pickcalc', XOOPS_URL."/modules/formulize/include/pickcalcs.php?fid=$fid&frid=$frid");
+$pickcalc = new icms_form_Theme (_formulize_DE_PICKCALCS, 'pickcalc', XOOPS_URL."/modules/formulize/include/pickcalcs.php?fid=$fid&frid=$frid");
 
 $returned = addReqdCalcs($pickcalc);
 $pickcalc = $returned['form'];
@@ -390,8 +390,8 @@ $pickcalc->addElement($columns);
 $pickcalc->addElement($calculations);
 $pickcalc->addElement($subButton);
 
-//$pickcalc->addElement(new xoopsFormHidden("frid", $frid));
-//$pickcalc->addElement(new xoopsFormHidden("fid", $fid));
+//$pickcalc->addElement(new icms_form_elements_Hidden("frid", $frid));
+//$pickcalc->addElement(new icms_form_elements_Hidden("fid", $fid));
 
 //$doneTray = new xoopsFormElementTray(_formulize_DE_REQDCALCS, "<br>");
 $doneButton = new xoopsFormButton('', 'done', _formulize_DE_CALCGO, 'button');

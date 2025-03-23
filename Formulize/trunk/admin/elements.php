@@ -176,8 +176,8 @@ switch($op){
         $form_title = sprintf(_AM_ELE_EDIT, $element->getVar('ele_caption'));
       }
 		}
-		$form = new XoopsThemeForm($form_title, 'form_ele', 'elements.php?title='.$title.'&op=edit&ele_id='.$ele_id);
-		$form->addElement(new xoopsFormHidden('clone', intval($clone))); // will be pickedup from GET the first time through and then propogate through POST on subsequent page loads
+		$form = new icms_form_Theme ($form_title, 'form_ele', 'elements.php?title='.$title.'&op=edit&ele_id='.$ele_id);
+		$form->addElement(new icms_form_elements_Hidden('clone', intval($clone))); // will be pickedup from GET the first time through and then propogate through POST on subsequent page loads
 		// if( empty($addopt) ){// no longer need to have two different initialization processes, since we're saving even on refreshes now
 			$nb_fichier = 0;
 			// no longer make cloned captions have the word copy at the end, since we add it when saving if the caption is not unique
@@ -425,8 +425,8 @@ switch($op){
                                 }
                                 //print "defaultType: $defaultType<br>";
                                 //print "defaultTypeSize: $defaultTypeSize<br>";
-                                $form->addElement(new XoopsFormHidden('element_default_datatype', $defaultType));
-                                $form->addElement(new XoopsFormHidden('element_default_datatypesize', $defaultTypeSize));
+                                $form->addElement(new icms_form_elements_Hidden('element_default_datatype', $defaultType));
+                                $form->addElement(new icms_form_elements_Hidden('element_default_datatypesize', $defaultTypeSize));
                         } else {
                                 $defaultType = 'text';
                                 $defaultTypeSize = '';
@@ -478,7 +478,7 @@ switch($op){
 		// then listen for that flag, and if order has not been modified, check again when saving to see if this is in fact the right order number, since multiple clicks on the clone link at the same time will result in multiple windows with the same order number in the box, and we don't want to have to manually alter those orders after saving -- re: OACAS HR survey project, January 22, 2007
 
 		$ele_order->setExtra("onchange='javascript:window.document.form_ele.ele_order_changed.value=1;'");
-		$ele_order_changed = new XoopsFormHidden('ele_order_changed', $editing);
+		$ele_order_changed = new icms_form_elements_Hidden('ele_order_changed', $editing);
 
 		$form->addElement($ele_order);
 		$form->addElement($ele_order_changed);
@@ -495,12 +495,12 @@ switch($op){
 		$tray->addElement($cancel);
 		$form->addElement($tray);
 		
-		$hidden_op = new XoopsFormHidden('op', 'save');
-		$hidden_type = new XoopsFormHidden('ele_type', $ele_type);
+		$hidden_op = new icms_form_elements_Hidden('op', 'save');
+		$hidden_type = new icms_form_elements_Hidden('ele_type', $ele_type);
 		$form->addElement($hidden_op);
 		$form->addElement($hidden_type);
 		if( !empty($ele_id) && !$clone ){
-			$hidden_id = new XoopsFormHidden('ele_id', $ele_id);
+			$hidden_id = new icms_form_elements_Hidden('ele_id', $ele_id);
 			$form->addElement($hidden_id);
 		}
 		$form->display();

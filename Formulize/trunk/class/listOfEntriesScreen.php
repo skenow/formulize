@@ -150,7 +150,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 		print "</script>\n";
 
 		$form = parent::editForm($screen, $fid);
-		$form->addElement(new xoopsFormHidden('type', 'listOfEntries'));
+		$form->addElement(new icms_form_elements_Hidden('type', 'listOfEntries'));
 
 		// from here on in, each part of this screen is rendered inside a different break.
 

@@ -1002,7 +1002,7 @@ class formulizeAdvancedCalculationHandler {
 				if ($elementName == $acid . "_maxAge") {
 					$dateValue = 99;
 				}
-				$form_ele = new XoopsFormHidden($elementName, $dateValue);
+				$form_ele = new icms_form_elements_Hidden($elementName, $dateValue);
 			} else {
 				$form_ele = new XoopsFormTextDateSelect("", $elementName, 15, $dateValue);
 				$form_ele->setExtra(' class="' . $elementUnderlyingField . '" ');
@@ -1087,7 +1087,7 @@ class formulizeAdvancedCalculationHandler {
 			$elementName = $acid . "_" . $fltr_grp["handle"];
 			$value = (isset($_POST[$elementName])) ? $_POST[$elementName] : ((isset($_GET[$elementName])) ? $_GET[$elementName] : "");
 			if ($boxesAsHidden) {
-				$form_ele = new XoopsFormHidden($elementName, $value);
+				$form_ele = new icms_form_elements_Hidden($elementName, $value);
 			} else {
 				$form_ele = new XoopsFormText('', $elementName, 20, 255, $value);
 				$form_ele->setExtra(' class="' . $elementUnderlyingField . '" ');

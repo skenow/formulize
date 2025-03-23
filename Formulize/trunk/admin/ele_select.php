@@ -78,7 +78,7 @@ if( !empty($ele_id) ){
 		$opt_count++;
 	}
 	// these two lines part of the jwe added code
-	$rowcount = new XoopsFormHidden("rowcount", $opt_count);
+	$rowcount = new icms_form_elements_Hidden("rowcount", $opt_count);
 	$form->addElement($rowcount);
 
 $add_opt = addOptionsTray();
@@ -189,9 +189,9 @@ if(!isset($_POST['elements']) AND is_array($ele_value[5])) { // unpack existing 
 // do not need to listen for new elements, ops and terms from the UI since they will already have been saved into the element object
 
 for($i=0;$i<count($_POST['elements']);$i++) {
-		$form->addElement(new xoopsFormHidden('elements[]', $_POST['elements'][$i]));
-		$form->addElement(new xoopsFormHidden('ops[]', $_POST['ops'][$i]));
-		$form->addElement(new xoopsFormHidden('terms[]', $_POST['terms'][$i]));
+		$form->addElement(new icms_form_elements_Hidden('elements[]', $_POST['elements'][$i]));
+		$form->addElement(new icms_form_elements_Hidden('ops[]', $_POST['ops'][$i]));
+		$form->addElement(new icms_form_elements_Hidden('terms[]', $_POST['terms'][$i]));
 		$conditionlist .= $options[$_POST['elements'][$i]] . " " . $_POST['ops'][$i] . " " . $_POST['terms'][$i] . "<br />";
 } 
 

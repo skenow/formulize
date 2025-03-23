@@ -117,13 +117,13 @@ class formulizeScreenHandler {
 	function editForm($screen, $fid) {
 
 		// provide ui for title, ui for frid, hidden fid, hidden sid
-		$form = new XoopsThemeForm(_AM_FORMULIZE_SCREEN_FORM, "editscreenform", "editscreen.php");
-		$form->addElement(new xoopsFormHidden('fid', $fid));
+		$form = new icms_form_Theme (_AM_FORMULIZE_SCREEN_FORM, "editscreenform", "editscreen.php");
+		$form->addElement(new icms_form_elements_Hidden('fid', $fid));
 		$title = is_object($screen) ? $screen->getVar('title') : "";
 		$sid = is_object($screen) ? $screen->getVar('sid') : 0;
 		$frid = is_object($screen) ? $screen->getVar('frid') : 0;
-		$form->addElement(new xoopsFormHidden('sid', $sid));
-		$form->addElement(new xoopsFormHidden('oneditscreen', 1));
+		$form->addElement(new icms_form_elements_Hidden('sid', $sid));
+		$form->addElement(new icms_form_elements_Hidden('oneditscreen', 1));
 		$form->addElement(new xoopsFormText(_AM_FORMULIZE_SCREEN_TITLE, 'title', 30, 255, $title));
 
 		// get the frameworks that this form is involved in

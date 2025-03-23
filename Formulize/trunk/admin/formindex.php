@@ -154,13 +154,13 @@ if( $op != 'addform' && $op != 'modform' && $op != 'renform' && $op != 'delform'
 	<th colspan=2><center>'._FORM_ACT.'</center></th>';
 
 	$renom = new XoopsFormButton('', 'renom', _FORM_RENOM_IMG, 'submit');
-	$hidden_renom = new XoopsFormHidden('op', 'renform');
+	$hidden_renom = new icms_form_elements_Hidden('op', 'renform');
 	$sup = new XoopsFormButton('', 'sup', _FORM_SUP, 'submit');
-	$hidden_sup = new XoopsFormHidden('op', 'delform');
+	$hidden_sup = new icms_form_elements_Hidden('op', 'delform');
 	$mod = new XoopsFormButton('', 'modif', _FORM_MODIF, 'submit');
-	$hidden_mod = new XoopsFormHidden('op', 'modform');
+	$hidden_mod = new icms_form_elements_Hidden('op', 'modform');
 	$show = new XoopsFormButton('', 'show', _FORM_SHOW, 'submit');
-	$hidden_show = new XoopsFormHidden('op', 'showform');
+	$hidden_show = new icms_form_elements_Hidden('op', 'showform');
 	
 	echo '<tr><td class="head" ALIGN=center>'._FORM_CREAT.'</td>
 	      <td class="odd"><A HREF="mailindex.php">
@@ -650,7 +650,7 @@ function drawGroupList($list_id="") {
 
 global $xoopsDB;
 
-$form = new XoopsThemeForm(_formulize_MODFORM_TITLE, "groupform", "formindex.php?op=permsub");
+$form = new icms_form_Theme (_formulize_MODFORM_TITLE, "groupform", "formindex.php?op=permsub");
 
 $list_op = $_POST['list_op'];
 $list_name = $_POST['list_name'];
@@ -765,11 +765,11 @@ $fs_button_group->addElement($fs_button_delete_list);
 
 $form->addElement($fs_button_group);
 
-$list_op_hidden = new XoopsFormHidden("list_op", $list_op);
+$list_op_hidden = new icms_form_elements_Hidden("list_op", $list_op);
 $form->addElement($list_op_hidden);
-$list_name_hidden = new XoopsFormHidden("list_name", $list_name);
+$list_name_hidden = new icms_form_elements_Hidden("list_name", $list_name);
 $form->addElement($list_name_hidden);
-$list_id_hidden = new XoopsFormHidden("list_id", $list_id);
+$list_id_hidden = new icms_form_elements_Hidden("list_id", $list_id);
 $form->addElement($list_id_hidden);
 
 // Form list goes here:

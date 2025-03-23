@@ -98,7 +98,7 @@ print "</head>";
 print "<body style=\"background: white; margin-top:20px;\"><center>";
 print "<table width=100%><tr><td width=5%></td><td width=90%>";
 
-$chooseElementsForm = new xoopsThemeForm(_AM_FRAME_WHICH_ELEMENTS, 'whichElements', XOOPS_URL."/modules/formulize/admin/frameCommonElements.php?form1=$form1&form2=$form2&lid=$lid");
+$chooseElementsForm = new icms_form_Theme (_AM_FRAME_WHICH_ELEMENTS, 'whichElements', XOOPS_URL."/modules/formulize/admin/frameCommonElements.php?form1=$form1&form2=$form2&lid=$lid");
 
 
 $formObj1 = new formulizeForm($form1);

@@ -83,7 +83,7 @@ if( !empty($ele_id) ){
 		$opt_count++;
 	}
 	// these two lines part of the jwe added code
-	$rowcount = new XoopsFormHidden("rowcount", $opt_count);
+	$rowcount = new icms_form_elements_Hidden("rowcount", $opt_count);
 	$form->addElement($rowcount);
 
 // $options[] = addOptionsTray(); // commented by jwe 01/06/05 to allow for the clear defaults button to be added in above the add options tray (see code just below)

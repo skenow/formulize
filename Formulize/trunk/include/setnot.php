@@ -211,7 +211,7 @@ print "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"$theme
 print "</head>";
 print "<body style=\"background: white; margin-top:20px;\"><center>";
 print "<table width=100%><tr><td width=5%></td><td width=90%>";
-$setnot = new xoopsThemeForm(_formulize_DE_SETNOT, 'setnot', XOOPS_URL."/modules/formulize/include/setnot.php?fid=$fid");
+$setnot = new icms_form_Theme (_formulize_DE_SETNOT, 'setnot', XOOPS_URL."/modules/formulize/include/setnot.php?fid=$fid");
 
 if(!isset($_POST['setwhen'])) {
 	$_POST['setwhen'] = 'new_entry';
@@ -296,9 +296,9 @@ $setfor_all->addOption('all', _formulize_DE_SETNOT_FOR_ALL);
 
 if($_POST['addcon']) {
 	for($i=0;$i<count($_POST['elements']);$i++) {
-		$setnot->addElement(new xoopsFormHidden('elements[]', $_POST['elements'][$i]));
-		$setnot->addElement(new xoopsFormHidden('ops[]', $_POST['ops'][$i]));
-		$setnot->addElement(new xoopsFormHidden('terms[]', $_POST['terms'][$i]));
+		$setnot->addElement(new icms_form_elements_Hidden('elements[]', $_POST['elements'][$i]));
+		$setnot->addElement(new icms_form_elements_Hidden('ops[]', $_POST['ops'][$i]));
+		$setnot->addElement(new icms_form_elements_Hidden('terms[]', $_POST['terms'][$i]));
 		$conditionlist .= $options[$_POST['elements'][$i]] . " " . $_POST['ops'][$i] . " " . $_POST['terms'][$i] . "<br />";
 	}
 }
@@ -352,7 +352,7 @@ if(!$noNots) {
 
 	print "<br />\n";
 
-	$notlist = new xoopsThemeForm(_formulize_DE_NOTLIST, 'notlist', XOOPS_URL."/modules/formulize/include/setnot.php?fid=$fid");
+	$notlist = new icms_form_Theme (_formulize_DE_NOTLIST, 'notlist', XOOPS_URL."/modules/formulize/include/setnot.php?fid=$fid");
 	foreach($nots as $thisnot) {
 		$text .= _formulize_DE_NOT_WHENTEXT;
 		switch($thisnot['not_cons_event']) {

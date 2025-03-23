@@ -69,7 +69,7 @@ function readQueryItems() {
 		if(substr($k, 0, 3) == "as_") {
 			$items[$k] = $v;
 			$v = str_replace("'", "&#39;", $v);
-			$hidden[] = new xoopsFormHidden($k, stripslashes($v));
+			$hidden[] = new icms_form_elements_Hidden($k, stripslashes($v));
 		}
 	}
 	$count = count($items);
@@ -81,48 +81,48 @@ function readQueryItems() {
 				switch($_POST['multi_andor']) {
 					case "1": // AND
 						$items['as_' . $count] = "AND";
-						$hidden[] = new xoopsFormHidden('as_' . $count, "AND");
+						$hidden[] = new icms_form_elements_Hidden('as_' . $count, "AND");
 			      		$count++;
 						break;
 					case "2": // OR
 						$items['as_' . $count] = "OR";
-						$hidden[] = new xoopsFormHidden('as_' . $count, "OR");
+						$hidden[] = new icms_form_elements_Hidden('as_' . $count, "OR");
 			      		$count++;
 						break;
 				}
 			}
            		$items['as_' . $count] = "[field]" . $selectedColumn . "[/field]";
-      		$hidden[] = new xoopsFormHidden('as_' . $count, "[field]" . $selectedColumn . "[/field]");
+      		$hidden[] = new icms_form_elements_Hidden('as_' . $count, "[field]" . $selectedColumn . "[/field]");
 			$count++;
 			$items['as_' . $count] = $_POST['op'];
-			$hidden[] = new xoopsFormHidden('as_' . $count, $_POST['op']);
+			$hidden[] = new icms_form_elements_Hidden('as_' . $count, $_POST['op']);
 			$count++;
 			$items['as_' . $count] = $_POST['term'];
 			$thisterm = str_replace("'", "&#39;", $_POST['term']);
-			$hidden[] = new xoopsFormHidden('as_' . $count, stripslashes($thisterm));
+			$hidden[] = new icms_form_elements_Hidden('as_' . $count, stripslashes($thisterm));
 			$count++;
 			$columnsProcessed = true;
 		}
 	}
 	if($_POST['openb']) {
 		$items['as_' . $count] = "(";
-		$hidden[] = new xoopsFormHidden('as_' . $count, "(");
+		$hidden[] = new icms_form_elements_Hidden('as_' . $count, "(");
 	}
 	if($_POST['closeb']) {
 		$items['as_' . $count] = ")";
-		$hidden[] = new xoopsFormHidden('as_' . $count, ")");
+		$hidden[] = new icms_form_elements_Hidden('as_' . $count, ")");
 	}
 	if($_POST['and']) {
 		$items['as_' . $count] = "AND";
-		$hidden[] = new xoopsFormHidden('as_' . $count, "AND");
+		$hidden[] = new icms_form_elements_Hidden('as_' . $count, "AND");
 	}
 	if($_POST['or']) {
 		$items['as_' . $count] = "OR";
-		$hidden[] = new xoopsFormHidden('as_' . $count, "OR");
+		$hidden[] = new icms_form_elements_Hidden('as_' . $count, "OR");
 	}
 	if($_POST['not']) {
 		$items['as_' . $count] = "NOT";
-		$hidden[] = new xoopsFormHidden('as_' . $count, "NOT");
+		$hidden[] = new icms_form_elements_Hidden('as_' . $count, "NOT");
 	}
 
 	$to_return[0] = $items;
@@ -230,7 +230,7 @@ print "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"$theme
 print "</head>";
 print "<body style=\"background: white; margin-top:20px;\"><center>";
 print "<table style=\"width: 100%;\"><tr><td style=\"width: 5%;\"></td><td style=\"width: 90%;\">";
-$advsearch = new xoopsThemeForm(_formulize_DE_BUILDQUERY, 'buildq', XOOPS_URL."/modules/formulize/include/advsearch.php?fid=$fid&frid=$frid");
+$advsearch = new icms_form_Theme (_formulize_DE_BUILDQUERY, 'buildq', XOOPS_URL."/modules/formulize/include/advsearch.php?fid=$fid&frid=$frid");
 
 //$returned = addReqdCalcs($pickcalc);
 //$pickcalc = $returned['form'];

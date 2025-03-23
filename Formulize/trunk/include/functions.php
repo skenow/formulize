@@ -4143,10 +4143,10 @@ function formulize_createFilterUI($filterSettings, $filterName, $formWithSourceE
  foreach(${$oldElementsName} as $x=>$thisOldElementsName) {
    // need to add [$i] to the generation of the hidden values here, so the hidden condition keys equal the flag on the deletion X
    // $x will be the order based on the filter settings that were passed in, might not start at 0.  $i will always start at 0, so this way we'll catch/correct any malformed arrays as people edit/save them
-   $thisHiddenElement = new xoopsFormHidden($oldElementsName."[$i]", strip_tags(htmlspecialchars(${$oldElementsName}[$x])));
-   $thisHiddenOp = new xoopsFormHidden($oldOpsName."[$i]", strip_tags(htmlspecialchars(${$oldOpsName}[$x])));
-   $thisHiddenTerm = new xoopsFormHidden($oldTermsName."[$i]", strip_tags(htmlspecialchars(${$oldTermsName}[$x])));
-   $thisHiddenType = new xoopsFormHidden($oldTypesName."[$i]", strip_tags(htmlspecialchars(${$oldTypesName}[$x])));
+   $thisHiddenElement = new icms_form_elements_Hidden($oldElementsName."[$i]", strip_tags(htmlspecialchars(${$oldElementsName}[$x])));
+   $thisHiddenOp = new icms_form_elements_Hidden($oldOpsName."[$i]", strip_tags(htmlspecialchars(${$oldOpsName}[$x])));
+   $thisHiddenTerm = new icms_form_elements_Hidden($oldTermsName."[$i]", strip_tags(htmlspecialchars(${$oldTermsName}[$x])));
+   $thisHiddenType = new icms_form_elements_Hidden($oldTypesName."[$i]", strip_tags(htmlspecialchars(${$oldTypesName}[$x])));
    if(${$oldTypesName}[$x] == "all") {
         $conditionlist .= $options[${$oldElementsName}[$x]] . " " . ${$oldOpsName}[$x] . " " . ${$oldTermsName}[$x] . "&nbsp;&nbsp;<a class='conditionsdelete' title='Delete' target='".$filterName."_".$i."' href=''>X</a>\n".$thisHiddenElement->render()."\n".$thisHiddenOp->render()."\n".$thisHiddenTerm->render()."\n".$thisHiddenType->render()."\n<br />\n";
    } else {

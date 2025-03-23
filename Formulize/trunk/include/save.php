@@ -230,7 +230,7 @@ if($update_other_reports = $gperm_handler->checkRight("update_other_reports", $f
 
 list($saveoptions, $defaultSave) = makeSaveList($s_reports, $ns_reports, $other_p_reports, $other_np_reports, $lastloaded, $viewselection);
 
-$savelist = new xoopsFormSelect(_formulize_DE_SAVE_USECURRENT, 'savethis', $defaultSave);
+$savelist = new icms_form_elements_Select(_formulize_DE_SAVE_USECURRENT, 'savethis', $defaultSave);
 $savelist->setExtra("onchange=\"javascript:newSaveView(this.form);;\"");
 $savelist->addOptionArray($saveoptions);
 
@@ -347,7 +347,7 @@ if($pubflag) {
 
 	$size = count($publishgroups);
 	if($size > 7) { $size = 7; }
-	$pubgrouplist = new xoopsFormSelect(_formulize_DE_SAVE_PUBGROUPS, 'pubgrouplist', $lastpubgroups, $size, true);
+	$pubgrouplist = new icms_form_elements_Select(_formulize_DE_SAVE_PUBGROUPS, 'pubgrouplist', $lastpubgroups, $size, true);
 	$pubgrouplist->addOptionArray($publishgroups);
 
 	$lockcontrols = new xoopsFormElementTray(_formulize_DE_SAVE_LOCKCONTROLS, "<br>");

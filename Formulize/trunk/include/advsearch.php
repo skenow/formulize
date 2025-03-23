@@ -243,7 +243,7 @@ $columns_or = new xoopsFormRadio('', 'multi_andor', '1');
 $columns_or->addOption(2, _formulize_DE_AS_MULTI_OR);
 $columns_andor->addElement($columns_or);
 
-$columns = new xoopsFormSelect(_formulize_DE_AS_FIELD . "<br /><br />" . $columns_andor->render(), 'column', '', 5, true);
+$columns = new icms_form_elements_Select(_formulize_DE_AS_FIELD . "<br /><br />" . $columns_andor->render(), 'column', '', 5, true);
 $columns->addOption("creation_uid", _formulize_DE_CALC_CREATOR);
 $columns->addOption("mod_uid", _formulize_DE_CALC_MODIFIER);
 $columns->addOption("creation_datetime", _formulize_DE_CALC_CREATEDATE . ' (YYYY-mm-dd)');
@@ -252,7 +252,7 @@ $columns->addOption("creator_email", _formulize_DE_CALC_CREATOR_EMAIL);
 $columns->addOptionArray($options);
 
 $opterm = new xoopsFormElementTray(_formulize_DE_AS_OPTERM, "&nbsp;&nbsp;");
-$op = new xoopsFormSelect('', 'op');
+$op = new icms_form_elements_Select('', 'op');
 $ops['=='] = "=";
 $ops['!='] = "NOT";
 $ops['>'] = ">";

@@ -988,22 +988,22 @@ function addProfileFields($form, $profileForm) {
 	$form->addElement($pwd_tray, $pass_required);
 	$name_text = new XoopsFormText(_US_REALNAME, 'userprofile_name', 30, 60, $thisUser_name);
 	$form->addElement($name_text, 1);
-	$timezone_select = new XoopsFormSelectTimezone(_US_TIMEZONE, 'userprofile_timezone_offset', $thisUser_timezone_offset);
+	$timezone_select = new icms_form_elements_SelectTimezone(_US_TIMEZONE, 'userprofile_timezone_offset', $thisUser_timezone_offset);
 	$form->addElement($timezone_select);
 
 	if($profileForm != "new") {
-      	$umode_select = new XoopsFormSelect(_formulize_CDISPLAYMODE, 'userprofile_umode', $thisUser_umode);
+      	$umode_select = new icms_form_elements_Select(_formulize_CDISPLAYMODE, 'userprofile_umode', $thisUser_umode);
       	$umode_select->addOptionArray(array('nest'=>_NESTED, 'flat'=>_FLAT, 'thread'=>_THREADED));
       	$form->addElement($umode_select);
-      	$uorder_select = new XoopsFormSelect(_formulize_CSORTORDER, 'userprofile_uorder', $thisUser_uorder);
+      	$uorder_select = new icms_form_elements_Select(_formulize_CSORTORDER, 'userprofile_uorder', $thisUser_uorder);
       	$uorder_select->addOptionArray(array(XOOPS_COMMENT_OLD1ST => _OLDESTFIRST, XOOPS_COMMENT_NEW1ST => _NEWESTFIRST));
       	$form->addElement($uorder_select);
       	include_once XOOPS_ROOT_PATH . "/language/" . $xoopsConfig['language'] . '/notification.php';
       	include_once XOOPS_ROOT_PATH . '/include/notification_constants.php';
-      	$notify_method_select = new XoopsFormSelect(_NOT_NOTIFYMETHOD, 'userprofile_notify_method', $thisUser_notify_method);
+      	$notify_method_select = new icms_form_elements_Select(_NOT_NOTIFYMETHOD, 'userprofile_notify_method', $thisUser_notify_method);
       	$notify_method_select->addOptionArray(array(XOOPS_NOTIFICATION_METHOD_DISABLE=>_NOT_METHOD_DISABLE, XOOPS_NOTIFICATION_METHOD_PM=>_NOT_METHOD_PM, XOOPS_NOTIFICATION_METHOD_EMAIL=>_NOT_METHOD_EMAIL));
       	$form->addElement($notify_method_select);
-      	$notify_mode_select = new XoopsFormSelect(_NOT_NOTIFYMODE, 'userprofile_notify_mode', $thisUser_notify_mode);
+      	$notify_mode_select = new icms_form_elements_Select(_NOT_NOTIFYMODE, 'userprofile_notify_mode', $thisUser_notify_mode);
       	$notify_mode_select->addOptionArray(array(XOOPS_NOTIFICATION_MODE_SENDALWAYS=>_NOT_MODE_SENDALWAYS, XOOPS_NOTIFICATION_MODE_SENDONCETHENDELETE=>_NOT_MODE_SENDONCE, XOOPS_NOTIFICATION_MODE_SENDONCETHENWAIT=>_NOT_MODE_SENDONCEPERLOGIN));
       	$form->addElement($notify_mode_select);
       	$sig_tray = new XoopsFormElementTray(_US_SIGNATURE, '<br />');
@@ -1657,10 +1657,10 @@ function addOwnershipList($form, $groups, $member_handler, $gperm_handler, $fid,
 				$entryMeta = $data_handler->getEntryMeta($entry_id);
 				$entryOwner = $entryMeta[2];
 				$entryOwnerName = $punames[array_search($entryOwner,$unique_users)]; // need to look in one array to find the key to lookup in the other array...a legacy from when corresponding arrays were a common data structure in Formulize...multidimensional arrays were not well understood in the beginning
-				$proxylist = new XoopsFormSelect(_AM_SELECT_UPDATE_OWNER, 'updateowner_'.$fid.'_'.$entry_id, 0, 1);
+				$proxylist = new icms_form_elements_Select(_AM_SELECT_UPDATE_OWNER, 'updateowner_'.$fid.'_'.$entry_id, 0, 1);
 				$proxylist->addOption('nochange', _AM_SELECT_UPDATE_NOCHANGE.$entryOwnerName);
 			} else {
-				$proxylist = new XoopsFormSelect(_AM_SELECT_PROXY, 'proxyuser', 0, 5, TRUE); // made multi May 3 05
+				$proxylist = new icms_form_elements_Select(_AM_SELECT_PROXY, 'proxyuser', 0, 5, TRUE); // made multi May 3 05
 				$proxylist->addOption('noproxy', _formulize_PICKAPROXY);
 			}
 			

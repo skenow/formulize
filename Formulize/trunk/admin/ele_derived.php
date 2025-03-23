@@ -56,7 +56,7 @@ foreach($allColList[$id_form] as $thisCol) {
 }
 
 $formulaBox = new XoopsFormTextArea(_AM_ELE_DERIVED_CAP, 'ele_value[0]', $value[0], 5, 35);
-$listOfElements = new XoopsFormSelect("", 'listofelements');
+$listOfElements = new icms_form_elements_Select("", 'listofelements');
 $listOfElements->addOptionArray($options);
 $listOfElements_output = $listOfElements->render() . "\n<br />\n<input type=button name=addele value=\"" . _AM_ELE_DERIVED_ADD . "\" onclick=\"javascript:writeCaptionToBox(this.form.listofelements);\"></input>";
 $formulaBox->setDescription($listOfElements_output . "<br /><br />" . _AM_ELE_DERIVED_DESC);

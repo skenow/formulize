@@ -311,11 +311,11 @@ switch($op){
         {
 	        $displayIsGroupList = true;
 	        $displayGroupList = explode(",", $display);
-			$ele_display = new XoopsFormSelect(_AM_ELE_DISPLAY, 'ele_display', $displayGroupList, 10, true);
+			$ele_display = new icms_form_elements_Select(_AM_ELE_DISPLAY, 'ele_display', $displayGroupList, 10, true);
         }
         else
         {
-			$ele_display = new XoopsFormSelect(_AM_ELE_DISPLAY, 'ele_display', $display, 10, true);
+			$ele_display = new icms_form_elements_Select(_AM_ELE_DISPLAY, 'ele_display', $display, 10, true);
         }
 		$ele_display->setDescription(_AM_FORM_DISPLAY_EXTRA);
 	
@@ -347,11 +347,11 @@ switch($op){
 						{
 							$disabledIsGroupList = true;
 							$disabledGroupList = explode(",", $disabled);
-					$ele_disabled = new XoopsFormSelect(_AM_ELE_DISABLED, 'ele_disabled', $disabledGroupList, 10, true);
+					$ele_disabled = new icms_form_elements_Select(_AM_ELE_DISABLED, 'ele_disabled', $disabledGroupList, 10, true);
 						}
 						else
 						{
-					$ele_disabled = new XoopsFormSelect(_AM_ELE_DISABLED, 'ele_disabled', $disabled, 10, true);
+					$ele_disabled = new icms_form_elements_Select(_AM_ELE_DISABLED, 'ele_disabled', $disabled, 10, true);
 						}
 				$ele_disabled->setDescription(_AM_FORM_DISABLED_EXTRA);
 		

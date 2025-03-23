@@ -70,7 +70,7 @@ foreach($validForms2 as $vf2) {
 
 if(count($validForms) == 0) { $validForms['none'] = _AM_ELE_SUBFORM_NONE; }
 
-$formlist = new xoopsFormSelect(_AM_ELE_SUBFORM_FORM, 'subform', $ele_value[0]);
+$formlist = new icms_form_elements_Select(_AM_ELE_SUBFORM_FORM, 'subform', $ele_value[0]);
 $formlist->setDescription(_AM_ELE_SUBFORM_DESC);
 $formlist->addOptionArray($validForms);
 $form->addElement($formlist);
@@ -80,7 +80,7 @@ if($caughtfirst) {
 	// have a refresh button to synch with the current form
 
 	$ele_defaults = explode(",",$ele_value[1]);
-	$elementlist = new xoopsFormSelect('', 'subformelements', $ele_defaults, 8, true);
+	$elementlist = new icms_form_elements_Select('', 'subformelements', $ele_defaults, 8, true);
 	
 	$formtouse = $ele_value[0] ? $ele_value[0] : $firstform; // use the user's selection, unless there isn't one, then use the first form found
 

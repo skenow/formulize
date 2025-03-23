@@ -1019,7 +1019,7 @@ class formulizeAdvancedCalculationHandler {
 			// 0 is the flag for if multiple selections are allowed
 			$elementName = $acid . "_" . $fltr_grp["handle"];
 			$selectedValue = (isset($_POST[$elementName])) ? $_POST[$elementName] : ((isset($_GET[$elementName])) ? $_GET[$elementName] : "");
-			$form_ele = new XoopsFormSelect("", $elementName, $selectedValue, 1, 0);
+			$form_ele = new icms_form_elements_Select("", $elementName, $selectedValue, 1, 0);
 
 			// 1. first item in the list should be "Choose an option..." with a value of "" (ie: empty)
 			// 2. support for "pipe" syntax that is valid elsewhere in Formulize when admins are specifying options for selectboxes.

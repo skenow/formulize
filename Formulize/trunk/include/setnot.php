@@ -247,28 +247,28 @@ if($canSetNots) {
 	$setwho_creator = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
 	$setwho_creator->addOption('creator', _formulize_DE_SETNOT_WHO_CREATOR);
 	
-	$setwho_elementlist = new xoopsFormSelect('', 'ele_id', $_POST['ele_id'], 1);
+	$setwho_elementlist = new icms_form_elements_Select('', 'ele_id', $_POST['ele_id'], 1);
 	$setwho_elementlist->setExtra("onfocus=\"javascript:window.document.setnot.setwho[3].checked=true\"");
 	$setwho_elementlist->addOptionArray($element_options);
 	$elementlist = $setwho_elementlist->render();
 	$setwho_elementuids = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
 	$setwho_elementuids->addOption('elementuids', _formulize_DE_SETNOT_WHO_ELEMENTUIDS.$elementlist);
 	
-	$setwho_linkcreatorlist = new xoopsFormSelect('', 'lc_ele_id', $_POST['lc_ele_id'], 1);
+	$setwho_linkcreatorlist = new icms_form_elements_Select('', 'lc_ele_id', $_POST['lc_ele_id'], 1);
 	$setwho_linkcreatorlist->setExtra("onfocus=\"javascript:window.document.setnot.setwho[4].checked=true\"");
 	$setwho_linkcreatorlist->addOptionArray($linkcreator_options);
 	$linkcreatorlist = $setwho_linkcreatorlist->render();
 	$setwho_linkcreator = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
 	$setwho_linkcreator->addOption('linkcreator', _formulize_DE_SETNOT_WHO_LINKCREATOR."<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$linkcreatorlist);
 	
-	$setwho_elementemaillist = new xoopsFormSelect('', 'email_ele_id', $_POST['email_ele_id'], 1);
+	$setwho_elementemaillist = new icms_form_elements_Select('', 'email_ele_id', $_POST['email_ele_id'], 1);
 	$setwho_elementemaillist->setExtra("onfocus=\"javascript:window.document.setnot.setwho[5].checked=true\"");
 	$setwho_elementemaillist->addOptionArray($elementemail_options);
 	$elementemaillist = $setwho_elementemaillist->render();
 	$setwho_elementemail = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
 	$setwho_elementemail->addOption('elementemail', _formulize_DE_SETNOT_WHO_ELEMENTEMAIL.$elementemaillist);
 	
-	$setwho_grouplist = new xoopsFormSelect('', 'gid', $_POST['gid'], 1);
+	$setwho_grouplist = new icms_form_elements_Select('', 'gid', $_POST['gid'], 1);
 	$setwho_grouplist->setExtra("onfocus=\"javascript:window.document.setnot.setwho[6].checked=true\"");
 	$setwho_grouplist->addOptionArray($group_options);
 	$grouplist = $setwho_grouplist->render();
@@ -305,10 +305,10 @@ if($_POST['addcon']) {
 
 // setup the operator boxes...
 $opterm = new xoopsFormElementTray('', "&nbsp;&nbsp;");
-$element = new xoopsFormSelect('', 'new_element');
+$element = new icms_form_elements_Select('', 'new_element');
 $element->setExtra("onfocus=\"javascript:window.document.setnot.setfor[1].checked=true\"");
 $element->addOptionArray($options);
-$op = new xoopsFormSelect('', 'new_op');
+$op = new icms_form_elements_Select('', 'new_op');
 $ops['='] = "=";
 $ops['NOT'] = "NOT";
 $ops['>'] = ">";

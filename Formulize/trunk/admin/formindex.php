@@ -669,7 +669,7 @@ else
 // Permissions
 $fs_form_group_perms = new XoopsSimpleForm("", "fs_grouppermsform", "javascript:;");
 
-$fs_select_groups = new XoopsFormSelect(_AM_MULTI_PERMISSIONS, 'fs_groups', null, 10, true);
+$fs_select_groups = new icms_form_elements_Select(_AM_MULTI_PERMISSIONS, 'fs_groups', null, 10, true);
 
 if($list_op == 'select')
 {
@@ -736,7 +736,7 @@ $fs_select_groups_order->addOptionArray(array('0' => _AM_MULTI_CREATION_ORDER, '
 $form->addElement($fs_select_groups_order);
 
 // Lists
-$fs_select_lists = new XoopsFormSelect(_AM_MULTI_GROUP_LISTS, 'fs_grouplistnames');
+$fs_select_lists = new icms_form_elements_Select(_AM_MULTI_GROUP_LISTS, 'fs_grouplistnames');
 $fs_select_lists->addOption('0', _AM_MULTI_GROUP_LISTS_NOSELECT);
 
 if(isset($list_id))
@@ -774,7 +774,7 @@ $form->addElement($list_id_hidden);
 
 // Form list goes here:
 
-	$form_list = new XoopsFormSelect(_formulize_FORM_LIST, 'fs_forms', null, 10, true);
+	$form_list = new icms_form_elements_Select(_formulize_FORM_LIST, 'fs_forms', null, 10, true);
 	$sql="SELECT id_form,desc_form FROM ".$xoopsDB->prefix("formulize_id") . " ORDER BY desc_form";
 	$res = icms::$xoopsDB->queryF( $sql );
 	if ( $res ) {

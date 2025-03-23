@@ -110,9 +110,9 @@ $form2Elements = generateElementList($formObj2);
 $form1Default = getDefault($lid, 1);
 $form2Default = getDefault($lid, 2);
 
-$form1Choice = new xoopsFormSelect(_AM_FRAME_SELECT_COMMON . "'" . $formObj1->getVar('title') . "'", 'form1choice', $form1Default, 1, false);
+$form1Choice = new icms_form_elements_Select(_AM_FRAME_SELECT_COMMON . "'" . $formObj1->getVar('title') . "'", 'form1choice', $form1Default, 1, false);
 $form1Choice->addOptionArray($form1Elements);
-$form2Choice = new xoopsFormSelect(_AM_FRAME_SELECT_COMMON . "'" . $formObj2->getVar('title') . "'", 'form2choice', $form2Default, 1, false);
+$form2Choice = new icms_form_elements_Select(_AM_FRAME_SELECT_COMMON . "'" . $formObj2->getVar('title') . "'", 'form2choice', $form2Default, 1, false);
 $form2Choice->addOptionArray($form2Elements);
 
 $chooseElementsForm->addElement($form1Choice);

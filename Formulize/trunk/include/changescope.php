@@ -169,7 +169,7 @@ $advscope = new icms_form_Theme (_formulize_DE_PICKASCOPE, 'advscope', XOOPS_URL
 
 $gcount = count($availgroups);
 $size = ($gcount<10) ? $gcount : 10 ;
-$grouplist = new xoopsFormSelect(_formulize_DE_AVAILGROUPS, 'newscope', $curgroups, $size, true);
+$grouplist = new icms_form_elements_Select(_formulize_DE_AVAILGROUPS, 'newscope', $curgroups, $size, true);
 $grouplist->addOptionArray($availgroups);
 
 $doneButton = new xoopsFormButton('', 'done', _formulize_DE_USETHISSCOPE, 'button');

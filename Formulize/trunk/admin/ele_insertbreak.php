@@ -37,7 +37,7 @@ if( !preg_match("/elements.php/", $_SERVER['PHP_SELF']) ){
 }
 $ibcontent = new XoopsFormTextArea(_AM_ELE_INSERTBREAK, 'ele_value[0]', stripslashes($value[0]), 5, 35);
 $ibcontent->setDescription(_AM_ELE_IB_DESC);
-$ibclass = new XoopsFormSelect(_AM_ELE_IB_CLASS, 'ele_value[1]', $value[1], 1, false);
+$ibclass = new icms_form_elements_Select(_AM_ELE_IB_CLASS, 'ele_value[1]', $value[1], 1, false);
 $ibclass->addOption("head", "head");
 $form->addElement($ibcontent);
 $form->addElement($ibclass);

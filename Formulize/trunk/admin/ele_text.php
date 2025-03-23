@@ -46,7 +46,7 @@ $default->setExtra('wrap=off');
 $default->setDescription(_AM_ELE_TEXT_DESC . _AM_ELE_TEXT_DESC2);
 
 // added - start - August 22 2005 - jpc
-$valueType = new XoopsFormSelect(_AM_ELE_TYPE, 'ele_value[3]', $value[3], 1, false);
+$valueType = new icms_form_elements_Select(_AM_ELE_TYPE, 'ele_value[3]', $value[3], 1, false);
 $valueType->addOption(0, _AM_ELE_TYPE_STRING);
 $valueType->addOption(1, _AM_ELE_TYPE_NUMBER);
 $valueType->setDescription(_AM_ELE_TYPE_DESC);

@@ -357,7 +357,7 @@ if($xoopsUser) {
 	}
 }
 
-$columns = new xoopsFormSelect(_formulize_DE_CALC_COL, 'column', "", 10, true);
+$columns = new icms_form_elements_Select(_formulize_DE_CALC_COL, 'column', "", 10, true);
 if(!in_array("creation_uid", $_POST['column']) AND !$_POST['reqdcalc_column_uid']) {
 	$columns->addOption("creation_uid", _formulize_DE_CALC_CREATOR);
 }
@@ -381,7 +381,7 @@ $calcs['min'] = _formulize_DE_CALC_MIN;
 $calcs['max'] = _formulize_DE_CALC_MAX;
 $calcs['count'] = _formulize_DE_CALC_COUNT;
 $calcs['per'] = _formulize_DE_CALC_PER;
-$calculations = new xoopsFormSelect(_formulize_DE_CALC_CALCS, 'calculations', '', count($calcs), true);
+$calculations = new icms_form_elements_Select(_formulize_DE_CALC_CALCS, 'calculations', '', count($calcs), true);
 $calculations->addOptionArray($calcs);
 
 $subButton = new xoopsFormButton('', 'submitx', _formulize_DE_CALCSUB, 'submit');
@@ -483,7 +483,7 @@ foreach($returned['rc'] as $hidden) {
 		}
 
 		$tray = new xoopsFormElementTray("&nbsp;&nbsp&nbsp;" . $calc_name, "<br>");
-		$tempcalc1 = new xoopsFormSelect("", $tempname, $current_val);
+		$tempcalc1 = new icms_form_elements_Select("", $tempname, $current_val);
 		$tempcalc1->addOption("noblanks", _formulize_DE_CALCNOBLANKS);
 		$tempcalc1->addOption("all", _formulize_DE_CALCALL);
 		$tempcalc1->addOption("onlyblanks", _formulize_DE_CALCONLYBLANKS);
@@ -507,7 +507,7 @@ foreach($returned['rc'] as $hidden) {
 		}
 		
 		// grouping option
-		$grouping = new xoopsFormSelect(_formulize_DE_CALC_GTEXT, 'grouping_' . $calc . "_" . $hidden['column'], $groupingDefaults1);
+		$grouping = new icms_form_elements_Select(_formulize_DE_CALC_GTEXT, 'grouping_' . $calc . "_" . $hidden['column'], $groupingDefaults1);
 		$grouping->addOption("none", _formulize_DE_NOGROUPING);
 		$grouping->addOption("creation_uid", _formulize_DE_GROUPBYCREATOR);
 		$grouping->addOption("mod_uid", _formulize_DE_GROUPBYMODIFIER);
@@ -517,7 +517,7 @@ foreach($returned['rc'] as $hidden) {
 		$grouping->addOptionArray($options2);
 
 		// grouping option
-		$grouping2 = new xoopsFormSelect(_formulize_DE_CALC_GTEXT2, 'grouping2_' . $calc . "_" . $hidden['column'], $groupingDefaults2);
+		$grouping2 = new icms_form_elements_Select(_formulize_DE_CALC_GTEXT2, 'grouping2_' . $calc . "_" . $hidden['column'], $groupingDefaults2);
 		$grouping2->addOption("none", _formulize_DE_NOGROUPING);
 		$grouping2->addOption("creation_uid", _formulize_DE_GROUPBYCREATOR);
 		$grouping2->addOption("mod_uid", _formulize_DE_GROUPBYMODIFIER);

@@ -133,7 +133,7 @@ class formulizeScreenHandler {
 		foreach ($frameworks as $thisFramework) {
 			$options[$thisFramework->getVar('frid')] = $thisFramework->getVar('name');
 		}
-		$frameworkChoice = new xoopsFormSelect(_AM_FORMULIZE_SELECT_FRAMEWORK, 'frid', $frid, 1, false);
+		$frameworkChoice = new icms_form_elements_Select(_AM_FORMULIZE_SELECT_FRAMEWORK, 'frid', $frid, 1, false);
 		$frameworkChoice->setExtra("onchange='javascript:frameworkChange(window.document.editscreenform.frid)'"); // set a javascript event for this element in case parts of some screen forms change depending on the framework selected
 		$frameworkChoice->addOptionArray($options);
 		$form->addElement($frameworkChoice);

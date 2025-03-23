@@ -189,7 +189,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 		$limitViewOptions += $defaultViewOptions;
 		unset($limitViewOptions['blank']);
 
-		$defaultview = new xoopsFormSelect(_AM_FORMULIZE_SCREEN_LOE_DEFAULTVIEW, 'defaultview', $screen->getVar('defaultview'), 1, false);
+		$defaultview = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_LOE_DEFAULTVIEW, 'defaultview', $screen->getVar('defaultview'), 1, false);
 		$defaultview->setDescription(_AM_FORMULIZE_SCREEN_LOE_DESC_DEFAULTVIEW);
 		$defaultview->addOptionArray($defaultViewOptions);
 		$configTable = addElementLOE($defaultview, $configTable);
@@ -200,7 +200,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 		$configTable = addElementLOE($usecurrentviewlist, $configTable);
 
 		$limitviewsDefault = $screen->getVar('sid') ? $screen->getVar('limitviews') : 'allviews';
-		$limitviews = new xoopsFormSelect(_AM_FORMULIZE_SCREEN_LOE_LIMITVIEWS, 'limitviews', $limitviewsDefault, 8, true);
+		$limitviews = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_LOE_LIMITVIEWS, 'limitviews', $limitviewsDefault, 8, true);
 		$limitviews->setDescription(_AM_FORMULIZE_SCREEN_LOE_DESC_LIMITVIEWS);
 		$limitviews->addOptionArray($limitViewOptions);
 		$configTable = addElementLOE($limitviews, $configTable);
@@ -238,7 +238,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 				$viewentryscreenOptions["p" . $pageworksArray['page_id']] = _AM_FORMULIZE_SCREEN_LOE_VIEWENTRYPAGEWORKS . " -- " . printSmart(trans($pageworksName), 85);
 			}
 		}
-		$viewentryscreen = new xoopsFormSelect(_AM_FORMULIZE_SCREEN_LOE_VIEWENTRYSCREEN, 'viewentryscreen', $viewentryscreenDefault, 1, false); // dropdown
+		$viewentryscreen = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_LOE_VIEWENTRYSCREEN, 'viewentryscreen', $viewentryscreenDefault, 1, false); // dropdown
 		$viewentryscreen->addOptionArray($viewentryscreenOptions);
 		$configTable = addElementLOE($viewentryscreen, $configTable);
 
@@ -318,12 +318,12 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 			}
 		}
 
-		$hiddencolumns = new xoopsFormSelect(_AM_FORMULIZE_SCREEN_LOE_HIDDENCOLUMNS, 'hiddencolumns', $screen->getVar('hiddencolumns'), 10, true);
+		$hiddencolumns = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_LOE_HIDDENCOLUMNS, 'hiddencolumns', $screen->getVar('hiddencolumns'), 10, true);
 		$hiddencolumns->addOptionArray($elementOptions);
 		$hiddencolumns->setDescription(_AM_FORMULIZE_SCREEN_LOE_DESC_HIDDENCOLUMNS);
 		$configTable = addElementLOE($hiddencolumns, $configTable);
 
-		$decolumns = new xoopsFormSelect(_AM_FORMULIZE_SCREEN_LOE_DECOLUMNS, 'decolumns', $screen->getVar('decolumns'), 10, true);
+		$decolumns = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_LOE_DECOLUMNS, 'decolumns', $screen->getVar('decolumns'), 10, true);
 		$decolumns->addOptionArray($elementOptions);
 		$decolumns->setDescription(_AM_FORMULIZE_SCREEN_LOE_DESC_DECOLUMNS);
 		$configTable = addElementLOE($decolumns, $configTable);
@@ -645,7 +645,7 @@ function addCustomButton($caid, $thisCustomAction, $allFids, $allFidObjs, $eleme
 	$caAppearInline = new xoopsFormRadioYN(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_INLINE, 'appearinline_' . $caid, $appearInlineDefault);
 	$caAppearInline->setDescription(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_INLINE_DESC);
 	$caTable = addElementLOE($caAppearInline, $caTable);
-	$caApplyTo = new xoopsFormSelect(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_APPLYTO, 'applyto_' . $caid, $applyToDefault);
+	$caApplyTo = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_APPLYTO, 'applyto_' . $caid, $applyToDefault);
 	// pay attention to allFids and if there is more than one form, then we include the option to have this apply to a new entry in the other forms (one option for each of the others)
 	$applyToOptions = array('inline' => _AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_APPLYTO_INLINE,
 		'selected' => _AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_APPLYTO_SELECTED,
@@ -724,7 +724,7 @@ function addCustomButtonEffect($caid, $effectid, $thisCustomAction, $allFids, $e
 		$effectTable .= "\n<td class=\"even\">" . $html->render() . "</td>";
 	} else {
 
-		$element = new xoopsFormSelect(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ELEMENT, 'element_' . $caid . '_' . $effectid, $elementDefault);
+		$element = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ELEMENT, 'element_' . $caid . '_' . $effectid, $elementDefault);
 		// if this is supposed to create a new entry in another form, then figure out which form was chosen and set that as the fid key to use to generate the right options
 		// check for new per selected first, since that contains new_
 		if (isset($_POST['applyto_' . $caid]) and substr($_POST['applyto_' . $caid], 0, 17) == "new_per_selected_") {
@@ -740,7 +740,7 @@ function addCustomButtonEffect($caid, $effectid, $thisCustomAction, $allFids, $e
 		}
 		$element->addOptionArray($elementOptions[$thisEffectFid]);
 		$effectTable = addElementLOE($element, $effectTable);
-		$action = new xoopsFormSelect(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION, 'action_' . $caid . '_' . $effectid, $actionDefault);
+		$action = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION, 'action_' . $caid . '_' . $effectid, $actionDefault);
 		$action->addOptionArray(array('replace' => _AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION_REPLACE, 'remove' => _AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION_REMOVE, 'append' => _AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION_APPEND));
 		$effectTable = addElementLOE($action, $effectTable);
 		$value = new xoopsFormTextArea(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_VALUE, 'value_' . $caid . '_' . $effectid, $valueDefault, 5, 30);

@@ -286,7 +286,7 @@ if($_GET['sid'] != "new" && $settings['type'] == 'listOfEntries') {
 if($_GET['sid'] != "new" && $settings['type'] == 'multiPage') {
   // parallel entry options for showing previous entries in another form (or entries of some other defined type, but previous entries are what this was made for)
   // Previous entries are meant to be in another form.  To begin with, that form must have the same captions as this form does, but later on there will be some broader capabilities to specify the parallel elements.
-  $fe_paraentryform = new xoopsFormSelect(_AM_FORMULIZE_SCREEN_PARAENTRYFORM, 'paraentryform', $screen->getVar('paraentryform'), 1, false);
+  $fe_paraentryform = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_PARAENTRYFORM, 'paraentryform', $screen->getVar('paraentryform'), 1, false);
   $formHandler =& icms_getModuleHandler('forms');
   $allFormObjects = $formHandler->getAllForms();
   $allFormOptions = array();

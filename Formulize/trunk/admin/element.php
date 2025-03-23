@@ -262,7 +262,7 @@ if($ele_type=='text') {
       $derivedOptions[trans(strip_tags($thisCol['ele_caption']))] = printSmart(trans(strip_tags($thisCol['ele_caption'])));
     }
   }
-  $listOfElements = new XoopsFormSelect("", 'listofelementsoptions');
+  $listOfElements = new icms_form_elements_Select("", 'listofelementsoptions');
   $listOfElements->addOptionArray($derivedOptions);
   $options['listofelementsoptions'] = $listOfElements->render();
 

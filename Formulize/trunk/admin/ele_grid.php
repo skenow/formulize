@@ -102,7 +102,7 @@ foreach($grid_elements as $this_element) {
 	$grid_start_options[$this_element->getVar('ele_id')] = $this_element->getVar('ele_colhead') ? printSmart(trans($this_element->getVar('ele_colhead'))) : printSmart(trans($this_element->getVar('ele_caption')));
 }
 
-$grid_start = new XoopsFormSelect(_AM_ELE_GRID_START, 'ele_value[4]', $ele_value[4], 1, false); // 1 and false are size and multiple
+$grid_start = new icms_form_elements_Select(_AM_ELE_GRID_START, 'ele_value[4]', $ele_value[4], 1, false); // 1 and false are size and multiple
 $grid_start->addOptionArray($grid_start_options);
 $grid_start->setDescription(_AM_ELE_GRID_START_DESC);
 

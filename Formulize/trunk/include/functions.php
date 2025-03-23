@@ -2104,7 +2104,7 @@ function createFieldList($val, $textbox=false, $limitToForm=false, $name="", $fi
 	}
 
 	// make the select box and add all the options... -- jwe 7/29/04
-	$formlink = new XoopsFormSelect($am_ele_formlink, $name, '' , 1, false);
+	$formlink = new icms_form_elements_Select($am_ele_formlink, $name, '' , 1, false);
 	$formlink->addOption("none", $am_formlink_none);
 	for($i=0;$i<$captionlistindex;$i++)
 	{
@@ -4172,9 +4172,9 @@ function formulize_createFilterUI($filterSettings, $filterName, $formWithSourceE
 function formulize_createFilterUIMatch($newElementName,$formName,$filterName,$options,$newOpName,$newTermName,$conditionlist) {
  // setup the new element, operator, term boxes...
  $new_elementOpTerm = new xoopsFormElementTray('', "&nbsp;&nbsp;");
- $element = new xoopsFormSelect('', $newElementName);
+ $element = new icms_form_elements_Select('', $newElementName);
  $element->addOptionArray($options);
- $op = new xoopsFormSelect('', $newOpName);
+ $op = new icms_form_elements_Select('', $newOpName);
  $ops['='] = "=";
  $ops['NOT'] = "NOT";
  $ops['>'] = ">";

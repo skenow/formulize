@@ -353,7 +353,7 @@ class formulizeElementRenderer{
 						} else {
 							$defaultSelected = "";
 						}
-						$form_ele = new XoopsFormSelect($ele_caption, $form_ele_id, $defaultSelected, $ele_value[0], $ele_value[1]);
+						$form_ele = new icms_form_elements_Select($ele_caption, $form_ele_id, $defaultSelected, $ele_value[0], $ele_value[1]);
 						$form_ele->setExtra("onchange=\"javascript:formulizechanged=1;\" jquerytag='$form_ele_id'");
 						if($ele_value[0] == 1) { // add the initial default entry, singular or plural based on whether the box is one line or not.
 							$form_ele->addOption("none", _AM_FORMLINK_PICK);
@@ -550,7 +550,7 @@ class formulizeElementRenderer{
 					$size = $ele_value[0];
 					$final_size = ( $count < $size ) ? $count : $size;
 	
-					$form_ele1 = new XoopsFormSelect(
+					$form_ele1 = new icms_form_elements_Select(
 						$ele_caption,
 						$form_ele_id,
 						$selected,
@@ -1315,7 +1315,7 @@ class formulizeElementRenderer{
 			}
 		}
 		if(!$prevOptionsExist) { return ""; }
-		$prevUI = new xoopsFormSelect('', 'prev_'.$element_id, '123qweasdzxc', 1, false); // 123qweasdzxc is meant to be a unique value that will never be selected, since we don't ever want a previous selection showing by default
+		$prevUI = new icms_form_elements_Select('', 'prev_'.$element_id, '123qweasdzxc', 1, false); // 123qweasdzxc is meant to be a unique value that will never be selected, since we don't ever want a previous selection showing by default
 		$prevUI->addOption('', _AM_FORMULIZE_PREVIOUS_OPTION);
 		$prevUI->addOptionArray($previousOptions);
 		$prevUI->setExtra($javascript);

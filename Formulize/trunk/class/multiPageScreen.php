@@ -190,7 +190,7 @@ function drawPageUI($pageNumber, $pageTitle, $elements, $conditions, $form, $opt
 	$form->addElement($pageTitleBox, true);
 
 	// elements
-	$elementSelection = new xoopsFormSelect(_AM_FORMULIZE_SCREEN_A_PAGE . ' ' . $visiblePageNumber . '<br><br><input type=submit name=delete' . $pageNumber . ' value="' . _AM_FORMULIZE_DELETE_THIS_PAGE . '" onclick="javascript:return confirmDeletePage(\'' . $pageNumber . '\');">', 'page' . $pageNumber, $elements, 10, true);
+	$elementSelection = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_A_PAGE . ' ' . $visiblePageNumber . '<br><br><input type=submit name=delete' . $pageNumber . ' value="' . _AM_FORMULIZE_DELETE_THIS_PAGE . '" onclick="javascript:return confirmDeletePage(\'' . $pageNumber . '\');">', 'page' . $pageNumber, $elements, 10, true);
 	$elementSelection->addOptionArray($options);
 	$form->addElement($elementSelection);
 
@@ -214,10 +214,10 @@ function drawPageUI($pageNumber, $pageTitle, $elements, $conditions, $form, $opt
 	}
 	// setup the operator boxes...
 	$opterm = new xoopsFormElementTray('', "&nbsp;&nbsp;");
-	$element = new xoopsFormSelect('', 'pageelements' . $pageNumber . '[]');
+	$element = new icms_form_elements_Select('', 'pageelements' . $pageNumber . '[]');
 	$element->setExtra("onfocus=\"javascript:window.document.editscreenform.pagecons" . $pageNumber . "[1].checked=true\"");
 	$element->addOptionArray($options);
-	$op = new xoopsFormSelect('', 'pageops' . $pageNumber . '[]');
+	$op = new icms_form_elements_Select('', 'pageops' . $pageNumber . '[]');
 	$op->addOptionArray($ops);
 	$op->setExtra("onfocus=\"javascript:window.document.editscreenform.pagecons" . $pageNumber . "[1].checked=true\"");
 	$term = new xoopsFormText('', 'pageterms' . $pageNumber . '[]', 10, 255);

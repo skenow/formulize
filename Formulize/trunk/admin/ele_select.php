@@ -109,7 +109,7 @@ if(isset($ele_value[2]['{FULLNAMES}']) OR isset($ele_value[2]['{USERNAMES}'])) {
 }	
 
 // scope control for linked selectboxes -- added August 30 2006 by jwe
-$linkscope = new xoopsFormSelect('', 'formlink_scope', $scopelimit, 10, true);
+$linkscope = new icms_form_elements_Select('', 'formlink_scope', $scopelimit, 10, true);
 $linkscope->addOption('all', _AM_ELE_FORMLINK_SCOPE_ALL);
 $fs_member_handler =& icms::handler('icms_member');
 $fs_xoops_groups =& $fs_member_handler->getGroups();
@@ -198,10 +198,10 @@ for($i=0;$i<count($_POST['elements']);$i++) {
 
 // setup the operator boxes...
 $opterm = new xoopsFormElementTray('', "&nbsp;&nbsp;");
-$new_element = new xoopsFormSelect('', 'new_element');
+$new_element = new icms_form_elements_Select('', 'new_element');
 $new_element->setExtra("onfocus=\"javascript:window.document.form_ele.setfor[1].checked=true\"");
 $new_element->addOptionArray($options);
-$op = new xoopsFormSelect('', 'new_op');
+$op = new icms_form_elements_Select('', 'new_op');
 $ops['='] = "=";
 $ops['NOT'] = "NOT";
 $ops['>'] = ">";

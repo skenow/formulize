@@ -41,7 +41,7 @@ $size = !empty($value[0]) ? intval($value[0]) : $xoopsModuleConfig['t_width'];
 $max = !empty($value[1]) ? intval($value[1]) : $xoopsModuleConfig['t_max'];
 $size = new XoopsFormText(_AM_ELE_SIZE, 'ele_value[0]', 3, 3, $size);
 $max = new XoopsFormText(_AM_ELE_MAX_LENGTH, 'ele_value[1]', 3, 3, $max);
-$default = new XoopsFormTextarea(_AM_ELE_DEFAULT, 'ele_value[2]', stripslashes($value[2]), 5, 35);
+$default = new icms_form_elements_Textarea(_AM_ELE_DEFAULT, 'ele_value[2]', stripslashes($value[2]), 5, 35);
 $default->setExtra('wrap=off');
 $default->setDescription(_AM_ELE_TEXT_DESC . _AM_ELE_TEXT_DESC2);
 

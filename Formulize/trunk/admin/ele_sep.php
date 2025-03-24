@@ -44,7 +44,7 @@ $type = new icms_form_elements_Checkbox (_AM_ELE_TYPE, 'option', null);
 $type->addOption ('centre', ' '._AM_ELE_CTRE.'<br />');
 $type->addOption ('soulign�', ' '._AM_ELE_SOUL.'<br />');
 $type->addOption ('italique', ' '._AM_ELE_ITALIQ.'<br />');
-$default = new XoopsFormTextArea(_AM_ELE_DEFAULT, 'ele_value[0]', $value[0], 5, 35);
+$default = new icms_form_elements_Textarea(_AM_ELE_DEFAULT, 'ele_value[0]', $value[0], 5, 35);
 
 $tab = array ("Noir"=>"#000000", "Marron"=>"#97694F", "Bleu"=>"#7093DB", "Rouge"=>"#e00000", "Vert"=>"#4A766E", "Rose"=>"#9F5F9F", "Jaune"=>"#ffff00", "Blanc"=>"#ffffff");
 $couleur = new icms_form_elements_Select (_AM_ELE_CLR, 'couleur', null, 5, false);

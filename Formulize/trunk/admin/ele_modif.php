@@ -33,7 +33,7 @@
 if( !preg_match("/elements.php/", $_SERVER['PHP_SELF']) ){
 	exit("Access Denied");
 }
-$default = new XoopsFormTextArea(_AM_ELE_LEFTRIGHT_TEXT, 'ele_value[0]', $value[0], 5, 35);
+$default = new icms_form_elements_Textarea(_AM_ELE_LEFTRIGHT_TEXT, 'ele_value[0]', $value[0], 5, 35);
 $default->setDescription(_AM_ELE_LEFTRIGHT_DESC);
 $form->addElement($default);
 

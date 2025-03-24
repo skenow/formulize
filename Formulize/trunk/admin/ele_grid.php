@@ -71,12 +71,12 @@ $grid_heading_sideOrTop->addElement($grid_heading_top);
 
 // 2. row captions
 
-$grid_row_captions = new XoopsFormTextArea(_AM_ELE_GRID_ROW_CAPTIONS, 'ele_value[1]', $ele_value[1]);
+$grid_row_captions = new icms_form_elements_Textarea(_AM_ELE_GRID_ROW_CAPTIONS, 'ele_value[1]', $ele_value[1]);
 $grid_row_captions->setDescription(_AM_ELE_GRID_ROW_CAPTIONS_DESC);
 
 // 3. col captions
 
-$grid_col_captions = new XoopsFormTextArea(_AM_ELE_GRID_COL_CAPTIONS, 'ele_value[2]', $ele_value[2]);
+$grid_col_captions = new icms_form_elements_Textarea(_AM_ELE_GRID_COL_CAPTIONS, 'ele_value[2]', $ele_value[2]);
 $grid_col_captions->setDescription(_AM_ELE_GRID_COL_CAPTIONS_DESC);
 
 // 4. background shading

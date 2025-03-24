@@ -216,7 +216,7 @@ switch($op){
 		
 			// descriptive text added June 6 2006 -- jwe
 			if($ele_type != "ib") {
-				$ele_desc = new XoopsFormTextArea(_AM_ELE_DESC, 'ele_desc', $ele_desc_default, 5, 35);
+				$ele_desc = new icms_form_elements_Textarea(_AM_ELE_DESC, 'ele_desc', $ele_desc_default, 5, 35);
 				$ele_desc->setDescription(_AM_ELE_DESC_HELP);
 				$form->addElement($ele_desc);
 			}

@@ -462,12 +462,12 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 		$templateTable .= "<tr><td class=\"head\" colspan=2><p><b>" . _AM_FORMULIZE_SCREEN_LOE_TEMPLATEINTRO2 . "</b></p></td></tr>\n";
 
 		$toptemplateDefault = $screen->getVar('sid') ? $screen->getVar('toptemplate') : "";
-		$toptemplate = new xoopsFormTextArea(_AM_FORMULIZE_SCREEN_LOE_TOPTEMPLATE, 'toptemplate', $screen->getVar('toptemplate'), 20, 65);
+		$toptemplate = new icms_form_elements_Textarea(_AM_FORMULIZE_SCREEN_LOE_TOPTEMPLATE, 'toptemplate', $screen->getVar('toptemplate'), 20, 65);
 		$toptemplate->setDescription(_AM_FORMULIZE_SCREEN_LOE_DESC_TOPTEMPLATE);
 		$templateTable = addElementLOE($toptemplate, $templateTable);
 
 		$listtemplateDefault = $screen->getVar('sid') ? $screen->getVar('listtemplate') : "";
-		$listtemplate = new xoopsFormTextArea(_AM_FORMULIZE_SCREEN_LOE_LISTTEMPLATE, 'listtemplate', $screen->getVar('listtemplate'), 20, 65);
+		$listtemplate = new icms_form_elements_Textarea(_AM_FORMULIZE_SCREEN_LOE_LISTTEMPLATE, 'listtemplate', $screen->getVar('listtemplate'), 20, 65);
 		$elementList = "<br /><br />";
 		$elementList .= $selectedFramework ? _AM_FORMULIZE_SCREEN_LOE_LISTTEMPLATE_HELPINTRO_FRAMEWORK : _AM_FORMULIZE_SCREEN_LOE_LISTTEMPLATE_HELPINTRO_FORM;
 		$elementList .= "<br /><br /><div class=scrollbox style=\"height: 250px; width: 400px; overflow: scroll;\">\n";
@@ -485,7 +485,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 		$templateTable = addElementLOE($listtemplate, $templateTable);
 
 		$bottomtemplateDefault = $screen->getVar('sid') ? $screen->getVar('bottomtemplate') : "";
-		$bottomtemplate = new xoopsFormTextArea(_AM_FORMULIZE_SCREEN_LOE_BOTTOMTEMPLATE, 'bottomtemplate', $screen->getVar('bottomtemplate'), 20, 65);
+		$bottomtemplate = new icms_form_elements_Textarea(_AM_FORMULIZE_SCREEN_LOE_BOTTOMTEMPLATE, 'bottomtemplate', $screen->getVar('bottomtemplate'), 20, 65);
 		$templateTable = addElementLOE($bottomtemplate, $templateTable);
 
 		$templateTable .= "</table>\n";
@@ -714,12 +714,12 @@ function addCustomButtonEffect($caid, $effectid, $thisCustomAction, $allFids, $e
 
 	if ((isset($_POST['applyto_' . $caid]) and $_POST['applyto_' . $caid] == 'custom_code') or $applyToDefault == 'custom_code') {
 
-		$code = new xoopsFormTextArea('', 'code_' . $caid . '_' . $effectid, $codeDefault, 13, 60);
+		$code = new icms_form_elements_Textarea('', 'code_' . $caid . '_' . $effectid, $codeDefault, 13, 60);
 		$code->setExtra("wrap=off");
 		$effectTable .= "\n<td class=\"even\">" . $code->render() . "</td>";
 	} elseif ((isset($_POST['applyto_' . $caid]) and $_POST['applyto_' . $caid] == 'custom_html') or $applyToDefault == 'custom_html') {
 
-		$html = new xoopsFormTextArea('', 'html_' . $caid . '_' . $effectid, $htmlDefault, 13, 60);
+		$html = new icms_form_elements_Textarea('', 'html_' . $caid . '_' . $effectid, $htmlDefault, 13, 60);
 		$html->setExtra("wrap=off");
 		$effectTable .= "\n<td class=\"even\">" . $html->render() . "</td>";
 	} else {
@@ -743,7 +743,7 @@ function addCustomButtonEffect($caid, $effectid, $thisCustomAction, $allFids, $e
 		$action = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION, 'action_' . $caid . '_' . $effectid, $actionDefault);
 		$action->addOptionArray(array('replace' => _AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION_REPLACE, 'remove' => _AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION_REMOVE, 'append' => _AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_ACTION_APPEND));
 		$effectTable = addElementLOE($action, $effectTable);
-		$value = new xoopsFormTextArea(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_VALUE, 'value_' . $caid . '_' . $effectid, $valueDefault, 5, 30);
+		$value = new icms_form_elements_Textarea(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_EFFECT_VALUE, 'value_' . $caid . '_' . $effectid, $valueDefault, 5, 30);
 		$effectTable = addElementLOE($value, $effectTable);
 	}
 

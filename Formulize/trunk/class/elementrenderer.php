@@ -198,7 +198,7 @@ class formulizeElementRenderer{
 //        $ele_value[0] = $myts->displayTarea($ele_value[0]); // commented by jwe 12/14/04 so that info displayed for viewing in a form box does not contain HTML formatting
 				$ele_value[0] = getTextboxDefault($ele_value[0], $id_form, $entry);
 				if (!strstr(getCurrentURL(),"printview.php")) { 				// nmc 2007.03.24 - added
-					$form_ele = new XoopsFormTextArea(
+					$form_ele = new icms_form_elements_Textarea(
 						$ele_caption,
 						$form_ele_id,
 						$ele_value[0],	//	default value

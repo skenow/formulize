@@ -1018,7 +1018,7 @@ function addProfileFields($form, $profileForm) {
 	} else { // display only on new account creation...
 		if ($xoopsConfigUser['reg_dispdsclmr'] != 0 && $xoopsConfigUser['reg_disclaimer'] != '') {
 			$disc_tray = new icms_form_elements_Tray(_US_DISCLAIMER, '<br />');
-			$disc_text = new XoopsFormTextarea('', 'disclaimer', trans($xoopsConfigUser['reg_disclaimer']), 8);
+			$disc_text = new icms_form_elements_Textarea('', 'disclaimer', trans($xoopsConfigUser['reg_disclaimer']), 8);
 			$disc_text->setExtra('readonly="readonly"');
 			$disc_tray->addElement($disc_text);
 			$agree_chk = new icms_form_elements_Checkbox('', 'userprofile_agree_disc', $agree_disc);

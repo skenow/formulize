@@ -971,7 +971,7 @@ function addProfileFields($form, $profileForm) {
 		$email_tray->addElement($email_text);
 	}
 	$email_cbox_value = $thisUser_viewemail ? 1 : 0;
-	$email_cbox = new XoopsFormCheckBox('', 'userprofile_user_viewemail', $email_cbox_value);
+	$email_cbox = new icms_form_elements_Checkbox('', 'userprofile_user_viewemail', $email_cbox_value);
 	$email_cbox->addOption(1, _US_ALLOWVIEWEMAIL);
 	$email_tray->addElement($email_cbox);
 	$form->addElement($email_tray, 1);
@@ -1011,7 +1011,7 @@ function addProfileFields($form, $profileForm) {
       	$sig_tarea = new XoopsFormDhtmlTextArea('', 'userprofile_user_sig', $thisUser_user_sig);
       	$sig_tray->addElement($sig_tarea);
       	$sig_cbox_value = $thisUser_attachsig ? 1 : 0;
-      	$sig_cbox = new XoopsFormCheckBox('', 'userprofile_attachsig', $sig_cbox_value);
+      	$sig_cbox = new icms_form_elements_Checkbox('', 'userprofile_attachsig', $sig_cbox_value);
       	$sig_cbox->addOption(1, _US_SHOWSIG);
       	$sig_tray->addElement($sig_cbox);
       	$form->addElement($sig_tray);
@@ -1021,7 +1021,7 @@ function addProfileFields($form, $profileForm) {
 			$disc_text = new XoopsFormTextarea('', 'disclaimer', trans($xoopsConfigUser['reg_disclaimer']), 8);
 			$disc_text->setExtra('readonly="readonly"');
 			$disc_tray->addElement($disc_text);
-			$agree_chk = new XoopsFormCheckBox('', 'userprofile_agree_disc', $agree_disc);
+			$agree_chk = new icms_form_elements_Checkbox('', 'userprofile_agree_disc', $agree_disc);
 			$agree_chk->addOption(1, "<span style=\"font-size: 14pt;\">" . _US_IAGREE . "</span>");
 			$disc_tray->addElement($agree_chk);
 			$form->addElement($disc_tray);

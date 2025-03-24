@@ -47,7 +47,7 @@ foreach ($value[2] as $t => $k) {
 	}
 }
 
-$mime = new XoopsFormCheckBox (_AM_ELE_TYPEMIME, 'ele_value[2]', $tab);
+$mime = new icms_form_elements_Checkbox (_AM_ELE_TYPEMIME, 'ele_value[2]', $tab);
 $mime->addOption('pdf',' pdf ');
 $mime->addOption('doc',' doc ');
 $mime->addOption('txt',' txt ');

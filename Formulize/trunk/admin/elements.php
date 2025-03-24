@@ -291,14 +291,14 @@ switch($op){
 				break;
 		}
 		if( $req ){
-			$ele_req = new XoopsFormCheckBox(_AM_ELE_REQ, 'ele_req', $element->getVar('ele_req'));
+			$ele_req = new icms_form_elements_Checkbox(_AM_ELE_REQ, 'ele_req', $element->getVar('ele_req'));
 			$ele_req->addOption(1, ' ');
       $form->addElement($ele_req);
 		}
 
 		// replaced - start - August 18 2005 - jpc
 		/*$display = !empty($ele_id) ? $element->getVar('ele_display') : 1;
-		$ele_display = new XoopsFormCheckBox(_AM_ELE_DISPLAY, 'ele_display', $display);
+		$ele_display = new icms_form_elements_Checkbox(_AM_ELE_DISPLAY, 'ele_display', $display);
 		$ele_display->addOption(1, ' ');
 		$form->addElement($ele_display);*/
 
@@ -378,7 +378,7 @@ switch($op){
 		if($ele_type == "radio" OR $ele_type == "text" OR $ele_type == "textarea" OR $ele_type == "yn") {
 			// added by jwe Nov 7 2005, a checkbox to indicate if the element should be included as a hidden element, even when the user does not have permission to view (ie: it is hidden by the display option above)
 			$fhide = !empty($ele_id) ? $element->getVar('ele_forcehidden') : 0;
-			$forcehidden = new XoopsFormCheckBox(_AM_FORM_FORCEHIDDEN, "fhide", $fhide);
+			$forcehidden = new icms_form_elements_Checkbox(_AM_FORM_FORCEHIDDEN, "fhide", $fhide);
 			$forcehidden->addOption(1, ' ');
 			$forcehidden->setDescription(_AM_FORM_FORCEHIDDEN_DESC);
 			$form->addElement($forcehidden);
@@ -386,14 +386,14 @@ switch($op){
 		if($ele_type != "subform" AND $ele_type != "grid" AND $ele_type != "ib" AND $ele_type != "areamodif") {
 			// added private option July 15 2006, jwe
 			$priv = !empty($ele_id) ? $element->getVar('ele_private') : 0;
-			$private = new XoopsFormCheckBox(_AM_FORM_PRIVATE, "private", $priv);
+			$private = new icms_form_elements_Checkbox(_AM_FORM_PRIVATE, "private", $priv);
 			$private->addOption(1, ' ');
 			$private->setDescription(_AM_FORM_PRIVATE_DESC);
 			$form->addElement($private);
 		}
 		// add encrypted checkbox -- July 15 2009
 		$encryptState = !empty($ele_id) ? $element->getVar('ele_encrypt') : 0;
-		$encrypt = new XoopsFormCheckBox(_AM_FORM_ENCRYPT, "encrypt", $encryptState);
+		$encrypt = new icms_form_elements_Checkbox(_AM_FORM_ENCRYPT, "encrypt", $encryptState);
 		$encrypt->addOption(1, ' ');
 		$encrypt->setDescription(_AM_FORM_ENCRYPT_DESC);
 		$form->addElement($encrypt);
@@ -551,7 +551,7 @@ icms_cp_footer();
 function addOption($id1, $id2, $text, $type='check', $checked=null){
 	$d = new XoopsFormText('', $id1, 40, 255, $text);
 	if( $type == 'check' ){
-		$c = new XoopsFormCheckBox('', $id2, $checked);
+		$c = new icms_form_elements_Checkbox('', $id2, $checked);
 		$c->addOption(1, ' ');
 	}
 	else{

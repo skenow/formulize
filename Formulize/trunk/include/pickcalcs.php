@@ -396,7 +396,7 @@ $pickcalc->addElement($subButton);
 //$doneTray = new icms_form_elements_Tray(_formulize_DE_REQDCALCS, "<br>");
 $doneButton = new xoopsFormButton('', 'done', _formulize_DE_CALCGO, 'button');
 $doneButton->setExtra("onclick=\"javascript:sendCalcs(this.form);return false;\"");
-//$nolistdisplay = new xoopsFormCheckbox('', 'nolistdisplay', $_POST['nolistdisplay']);
+//$nolistdisplay = new icms_form_elements_Checkbox('', 'nolistdisplay', $_POST['nolistdisplay']);
 //$nolistdisplay->addOption("1", _formulize_DE_CALC_LISTDISPLAY);
 //$doneTray->addElement($doneButton);
 //$doneTray->addElement($nolistdisplay);

@@ -40,7 +40,7 @@ $rows = !empty($value[0]) ? $value[1] : $xoopsModuleConfig['ta_rows'];
 $cols = !empty($value[0]) ? $value[2] : $xoopsModuleConfig['ta_cols'];
 $rows = new XoopsFormText (_AM_ELE_ROWS, 'ele_value[1]', 3, 3, $rows);
 $cols = new XoopsFormText (_AM_ELE_COLS, 'ele_value[2]', 3, 3, $cols);
-$type = new XoopsFormCheckBox (_AM_ELE_TYPE, 'option', null);
+$type = new icms_form_elements_Checkbox (_AM_ELE_TYPE, 'option', null);
 $type->addOption ('centre', ' '._AM_ELE_CTRE.'<br />');
 $type->addOption ('soulign�', ' '._AM_ELE_SOUL.'<br />');
 $type->addOption ('italique', ' '._AM_ELE_ITALIQ.'<br />');

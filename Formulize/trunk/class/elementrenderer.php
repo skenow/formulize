@@ -679,7 +679,7 @@ class formulizeElementRenderer{
 				$hiddenOutOfRangeValuesToWrite = array();
 				switch($delimSetting){
 					case 'space':
-						$form_ele1 = new XoopsFormCheckBox(
+						$form_ele1 = new icms_form_elements_Checkbox(
 							$ele_caption,
 							$form_ele_id,
 							$selected
@@ -711,7 +711,7 @@ class formulizeElementRenderer{
 						$counter = 0; // counter used for javascript that works with 'Other' box
 						while( $o = each($options) ){
 							$o = formulize_swapUIText($o, $this->_ele->getVar('ele_uitext'));
-							$t = new XoopsFormCheckBox(
+							$t = new icms_form_elements_Checkbox(
 								'',
 								$form_ele_id.'[]',
 								$selected

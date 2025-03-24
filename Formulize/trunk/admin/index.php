@@ -156,10 +156,10 @@ if( $_POST['op'] != 'save' ){
 	foreach( $elements as $i ){
 		$id = $i->getVar('ele_id');
 		$req = $i->getVar('ele_req');
-		$check_req = new XoopsFormCheckBox('', 'ele_req['.$id.']', $req);
+		$check_req = new icms_form_elements_Checkbox('', 'ele_req['.$id.']', $req);
 		$check_req->addOption(1, ' ');
 		$priv = $i->getVar('ele_private');
-		$check_priv = new XoopsFormCheckBox('', 'ele_private['.$id.']', $priv);
+		$check_priv = new icms_form_elements_Checkbox('', 'ele_private['.$id.']', $priv);
 		$check_priv->addOption(1, ' ');
 		//if( $ele_type == 'checkbox' || $ele_type == 'radio' || $ele_type == 'yn' || $ele_type == 'select' || $ele_type == 'date' || $ele_type== 'areamodif' || $ele_type == 'upload' || $ele_type == 'areamodif' || $ele_type == 'sep'){
 			$check_req->setExtra('disabled="disabled"'); 
@@ -205,7 +205,7 @@ if( $_POST['op'] != 'save' ){
         {
 		// added - end - August 25 2005 - jpc
 
-		$check_display = new XoopsFormCheckBox('', 'ele_display['.$id.']', $display);
+		$check_display = new icms_form_elements_Checkbox('', 'ele_display['.$id.']', $display);
 		$check_display->addOption(1, ' ');
 
 		// added - start - August 25 2005 - jpc

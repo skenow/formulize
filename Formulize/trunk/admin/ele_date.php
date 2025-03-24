@@ -38,7 +38,7 @@ if($value[0] != "YYYY-MM-DD" AND $value[0] != "") {
 } else {
 	$date_value = "";
 }
-$date = new XoopsFormTextDateSelect (_AM_ELE_DATE, 'ele_value',  $size = 15, $date_value);
+$date = new icms_form_elements_Date (_AM_ELE_DATE, 'ele_value',  $size = 15, $date_value);
 $form->addElement($date);
 
 ?>

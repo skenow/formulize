@@ -1874,9 +1874,9 @@ function formulize_buildDateRangeFilter($handle, $search_text) {
 		$startText = "";
 		$endText = "";
 	}
-	$startDateElement = new XoopsFormTextDateSelect ('', 'formulize_daterange_sta_'.$handle, 15, strtotime($startText));
+	$startDateElement = new icms_form_elements_Date ('', 'formulize_daterange_sta_'.$handle, 15, strtotime($startText));
 	$startDateElement->setExtra("class='formulize_daterange'");
-	$endDateElement = new XoopsFormTextDateSelect ('', 'formulize_daterange_end_'.$handle, 15, strtotime($endText));
+	$endDateElement = new icms_form_elements_Date ('', 'formulize_daterange_end_'.$handle, 15, strtotime($endText));
 	$endDateElement->setExtra("class='formulize_daterange' target='$handle'");
 	static $js;
 	if($js) { // only need to include this code once!

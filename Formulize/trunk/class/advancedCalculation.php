@@ -1004,7 +1004,7 @@ class formulizeAdvancedCalculationHandler {
 				}
 				$form_ele = new icms_form_elements_Hidden($elementName, $dateValue);
 			} else {
-				$form_ele = new XoopsFormTextDateSelect("", $elementName, 15, $dateValue);
+				$form_ele = new icms_form_elements_Date("", $elementName, 15, $dateValue);
 				$form_ele->setExtra(' class="' . $elementUnderlyingField . '" ');
 			}
 			$selected = date("Y-m-d", $dateValue);

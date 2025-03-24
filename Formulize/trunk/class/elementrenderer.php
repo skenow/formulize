@@ -923,7 +923,7 @@ class formulizeElementRenderer{
 				if($ele_value[0] == "" OR $ele_value[0] == "YYYY-mm-dd") // if there's no value (ie: it's blank) ... OR it's the default value because someone submitted a date field without actually specifying a date, that last part added by jwe 10/23/04
 				{
 						//print "Bad date";
-					$form_ele = new XoopsFormTextDateSelect (
+					$form_ele = new icms_form_elements_Date (
 						$ele_caption,
 						$form_ele_id,
 						15,
@@ -939,7 +939,7 @@ class formulizeElementRenderer{
 					} else {
 						$timestampToUse = strtotime($ele_value[0]);
 					}
-					$form_ele = new XoopsFormTextDateSelect (
+					$form_ele = new icms_form_elements_Date (
 						$ele_caption,
 						$form_ele_id,
 						15,

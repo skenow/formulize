@@ -492,7 +492,7 @@ foreach($returned['rc'] as $hidden) {
 		$tempcalc1->addOption("custom", _formulize_DE_CALCCUSTOM);
 		$tempcalc1->setExtra("onchange='javascript:setCalcCustom(\"".$calc.$hidden['column']."\");'");
 		
-		$tempcalcCustom = new xoopsFormText("", $tempname."_custom", 12, 255, $current_val_custom);
+		$tempcalcCustom = new icms_form_elements_Text("", $tempname."_custom", 12, 255, $current_val_custom);
 		$tempcalcCustom->setExtra("onclick='javascript:window.document.pickcalc.elements[\"".$calc.$hidden['column']."\"].options[5].selected = true;window.document.pickcalc.elements[\"".$calc.$hidden['column']."\"].value=\"custom\"'");
 		$tempcalclabel = new icms_form_elements_Label("", _formulize_DE_CALC_BTEXT . " ". $tempcalc1->render(). " ".$tempcalcCustom->render());
 		

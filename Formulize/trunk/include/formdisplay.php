@@ -948,7 +948,7 @@ function addProfileFields($form, $profileForm) {
 		$labeltext = $labelhelptext == "" ? _US_NICKNAME : _US_NICKNAME . _formulize_USERNAME_HELP1 . $xoopsConfigUser['minuname'] . _formulize_USERNAME_HELP2 . $uname_size . _formulize_USERNAME_HELP3;
 		if ($regcodesConfig['email_as_username'] == 0)	{
 			// Allow User names to be created
-			$uname_label = new XoopsFormText($labeltext, 'userprofile_uname', $uname_size, $uname_size, $thisUser_uname);
+			$uname_label = new icms_form_elements_Text($labeltext, 'userprofile_uname', $uname_size, $uname_size, $thisUser_uname);
 			$uname_reqd = 1;
 		}
 		else {
@@ -963,7 +963,7 @@ function addProfileFields($form, $profileForm) {
 	}
 	$email_tray = new icms_form_elements_Tray(_US_EMAIL, '<br />');
 	if ($profileForm == "new" OR (($xoopsConfigUser['allow_chgmail'] == 1) && ($regcodesConfig['email_as_username'] == 0))) {
-      	$email_text = new XoopsFormText('', 'userprofile_email', 30, 255, $thisUser_email);
+      	$email_text = new icms_form_elements_Text('', 'userprofile_email', 30, 255, $thisUser_email);
 		$email_tray->addElement($email_text, 1);
 	}
 	else {
@@ -986,7 +986,7 @@ function addProfileFields($form, $profileForm) {
 	$pwd_tray->addElement($pwd_text, $pass_required);
 	$pwd_tray->addElement($pwd_text2, $pass_required);
 	$form->addElement($pwd_tray, $pass_required);
-	$name_text = new XoopsFormText(_US_REALNAME, 'userprofile_name', 30, 60, $thisUser_name);
+	$name_text = new icms_form_elements_Text(_US_REALNAME, 'userprofile_name', 30, 60, $thisUser_name);
 	$form->addElement($name_text, 1);
 	$timezone_select = new icms_form_elements_SelectTimezone(_US_TIMEZONE, 'userprofile_timezone_offset', $thisUser_timezone_offset);
 	$form->addElement($timezone_select);

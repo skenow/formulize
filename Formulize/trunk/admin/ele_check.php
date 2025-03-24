@@ -99,7 +99,7 @@ $delim_tray->addElement($delim_choice_br);
 $delim_choice_space = new xoopsFormRadio('', 'ele_delim', $default_to_set);
 $delim_choice_space->addOption('space', _MI_formulize_DELIMETER_SPACE);
 $delim_tray->addElement($delim_choice_space);
-$delim_choice_custom_box = new xoopsFormText('', 'ele_delim_custom', 25, 255, $default_custom_text);
+$delim_choice_custom_box = new icms_form_elements_Text('', 'ele_delim_custom', 25, 255, $default_custom_text);
 $delim_choice_custom_box->setExtra("onfocus=\"javascript:this.form.ele_delim[2].checked = true;\"");
 $delim_choice_custom = new xoopsFormRadio('', 'ele_delim', $default_to_set);
 $delim_choice_custom->addOption('custom', _MI_formulize_DELIMETER_CUSTOM. ": " . $delim_choice_custom_box->render());

@@ -37,8 +37,8 @@ if( !preg_match("/elements.php/", $_SERVER['PHP_SELF']) ){
 }
 $rows = !empty($value[1]) ? $value[1] : $xoopsModuleConfig['ta_rows'];
 $cols = !empty($value[2]) ? $value[2] : $xoopsModuleConfig['ta_cols'];
-$rows = new XoopsFormText(_AM_ELE_ROWS, 'ele_value[1]', 3, 3, $rows);
-$cols = new XoopsFormText(_AM_ELE_COLS, 'ele_value[2]', 3, 3, $cols);
+$rows = new icms_form_elements_Text(_AM_ELE_ROWS, 'ele_value[1]', 3, 3, $rows);
+$cols = new icms_form_elements_Text(_AM_ELE_COLS, 'ele_value[2]', 3, 3, $cols);
 $default = new icms_form_elements_Textarea(_AM_ELE_DEFAULT, 'ele_value[0]', stripslashes($value[0]), 5, 35);
 $default->setExtra('wrap=off');
 $default->setDescription(_AM_ELE_TEXT_DESC);

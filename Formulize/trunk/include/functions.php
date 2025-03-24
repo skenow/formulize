@@ -4184,7 +4184,7 @@ function formulize_createFilterUIMatch($newElementName,$formName,$filterName,$op
  $ops['LIKE'] = "LIKE";
  $ops['NOT LIKE'] = "NOT LIKE";
  $op->addOptionArray($ops);
- $term = new xoopsFormText('', $newTermName, 10, 255);
+ $term = new icms_form_elements_Text('', $newTermName, 10, 255);
  $term->setExtra(" class=\"condition_term\" ");
  $new_elementOpTerm->addElement($element);
  $new_elementOpTerm->addElement($op);

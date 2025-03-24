@@ -126,7 +126,7 @@ class formulizeDummyElementHandler extends formulizeElementsHandler {
 		if ($isDisabled) {
 			$formElement = new icms_form_elements_Label($caption, $ele_value[0] . $ele_value[1]);
 		} else {
-			$formElement = new xoopsFormText($caption, $markupName, 50, 50, $ele_value[0] . $ele_value[1]); // caption, markup name, size, maxlength, default value, according to the xoops form class
+			$formElement = new icms_form_elements_Text($caption, $markupName, 50, 50, $ele_value[0] . $ele_value[1]); // caption, markup name, size, maxlength, default value, according to the xoops form class
 		}
 		return $formElement;
 	}

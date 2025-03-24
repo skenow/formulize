@@ -86,10 +86,10 @@ if(isset($value[4])) {
 }
 $numberOptions = new icms_form_elements_Tray(_AM_ELE_DERIVED_NUMBER_OPTS, '<br /><br />');
 $numberOptions->setDescription(_AM_ELE_NUMBER_OPTS_DESC);
-$decimalOption = new xoopsFormText(_AM_ELE_NUMBER_OPTS_DEC, 'ele_value[1]', 2, 2, $decimalDefault);
-$prefixOption = new XoopsFormText(_AM_ELE_NUMBER_OPTS_PREFIX, 'ele_value[2]', 5, 255, $prefixDefault);
-$decsepOption = new XoopsFormText(_AM_ELE_NUMBER_OPTS_DECSEP, 'ele_value[3]', 5, 255, $decsepDefault);
-$sepOption = new XoopsFormText(_AM_ELE_NUMBER_OPTS_SEP, 'ele_value[4]', 5, 255, $sepDefault);
+$decimalOption = new icms_form_elements_Text(_AM_ELE_NUMBER_OPTS_DEC, 'ele_value[1]', 2, 2, $decimalDefault);
+$prefixOption = new icms_form_elements_Text(_AM_ELE_NUMBER_OPTS_PREFIX, 'ele_value[2]', 5, 255, $prefixDefault);
+$decsepOption = new icms_form_elements_Text(_AM_ELE_NUMBER_OPTS_DECSEP, 'ele_value[3]', 5, 255, $decsepDefault);
+$sepOption = new icms_form_elements_Text(_AM_ELE_NUMBER_OPTS_SEP, 'ele_value[4]', 5, 255, $sepDefault);
 $numberOptions->addElement($decimalOption);
 $numberOptions->addElement($prefixOption);
 $numberOptions->addElement($decsepOption);

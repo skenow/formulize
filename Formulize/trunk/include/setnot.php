@@ -319,7 +319,7 @@ $ops['LIKE'] = "LIKE";
 $ops['NOT LIKE'] = "NOT LIKE";
 $op->addOptionArray($ops);
 $op->setExtra("onfocus=\"javascript:window.document.setnot.setfor[1].checked=true\"");
-$term = new xoopsFormText('', 'new_term', 10, 255);
+$term = new icms_form_elements_Text('', 'new_term', 10, 255);
 $term->setExtra("onfocus=\"javascript:window.document.setnot.setfor[1].checked=true\"");
 $opterm->addElement($element);
 $opterm->addElement($op);
@@ -337,10 +337,10 @@ $setfor->addElement($setfor_con);
 $setnot->addElement($setfor);
 
 if($canSetNots) {
-	$setnot_cust_template = new xoopsFormText(_formulize_DE_SETNOT_TEMP, 'template', 50, 255, $_POST['template']);
+	$setnot_cust_template = new icms_form_elements_Text(_formulize_DE_SETNOT_TEMP, 'template', 50, 255, $_POST['template']);
 	$setnot_cust_template->setDescription(_formulize_DE_SETNOT_TEMP_DESC);
 	$setnot->addElement($setnot_cust_template);
-	$setnot->addElement(new xoopsFormText(_formulize_DE_SETNOT_SUBJ, 'subject', 50, 255, $_POST['subject']));
+	$setnot->addElement(new icms_form_elements_Text(_formulize_DE_SETNOT_SUBJ, 'subject', 50, 255, $_POST['subject']));
 }
 
 $setnot->addElement(new xoopsFormButton('', 'save', _formulize_DE_SETNOT_SAVE, 'submit'));

@@ -101,7 +101,7 @@ if($caughtfirst) {
 
 // number of blank spaces to show by default -- added sept 8 2007
 $blankdefault = isset($ele_value[2]) ? intval($ele_value[2]) : 1;
-$numblanks = new xoopsFormText(_AM_ELE_SUBFORM_BLANKS, 'subformblanks', 2, 2, $blankdefault);
+$numblanks = new icms_form_elements_Text(_AM_ELE_SUBFORM_BLANKS, 'subformblanks', 2, 2, $blankdefault);
 $form->addElement($numblanks);
 
 // show View buttons added Dec 2 2009

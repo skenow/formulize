@@ -124,7 +124,7 @@ class formulizeScreenHandler {
 		$frid = is_object($screen) ? $screen->getVar('frid') : 0;
 		$form->addElement(new icms_form_elements_Hidden('sid', $sid));
 		$form->addElement(new icms_form_elements_Hidden('oneditscreen', 1));
-		$form->addElement(new xoopsFormText(_AM_FORMULIZE_SCREEN_TITLE, 'title', 30, 255, $title));
+		$form->addElement(new icms_form_elements_Text(_AM_FORMULIZE_SCREEN_TITLE, 'title', 30, 255, $title));
 
 		// get the frameworks that this form is involved in
 		$framework_handler = &icms_getModuleHandler('frameworks', 'formulize');

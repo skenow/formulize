@@ -165,7 +165,7 @@ if( $_POST['op'] != 'save' ){
 			$check_req->setExtra('disabled="disabled"'); 
 		//}
 		$order = $i->getVar('ele_order');
-		$text_order = new XoopsFormText('', 'ele_order['.$id.']', 4, 4, $order); // switched to 3 wide, jwe 01/06/05 -- switched to 4 wide, September 4 2006
+		$text_order = new icms_form_elements_Text('', 'ele_order['.$id.']', 4, 4, $order); // switched to 3 wide, jwe 01/06/05 -- switched to 4 wide, September 4 2006
 		$display = $i->getVar('ele_display');
 
 		// added - start - August 25 2005 - jpc

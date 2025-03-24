@@ -262,7 +262,7 @@ $ops['<='] = "<=";
 $ops['LIKE'] = "LIKE";
 $ops['NOT LIKE'] = "NOT LIKE";
 $op->addOptionArray($ops);
-$term = new xoopsFormText('', 'term', 20, 255);
+$term = new icms_form_elements_Text('', 'term', 20, 255);
 $opterm->addElement($op);
 $opterm->addElement($term);
 

@@ -151,7 +151,7 @@ class formulizeElementRenderer{
 
 				if (!strstr(getCurrentURL(),"printview.php")) { 				// nmc 2007.03.24 - added
 					
-					$form_ele = new XoopsFormText(
+					$form_ele = new icms_form_elements_Text(
 					$ele_caption,
 					$form_ele_id,
 					$ele_value[0],	//	box width
@@ -1105,7 +1105,7 @@ class formulizeElementRenderer{
 		}
 		$s = explode('|', preg_replace('/[\{\}]/', '', $s));
 		$len = !empty($s[1]) ? $s[1] : $xoopsModuleConfig['t_width'];
-		$box = new XoopsFormText('', 'other[ele_'.$ele_id.']', $len, 255, $other_text);
+		$box = new icms_form_elements_Text('', 'other[ele_'.$ele_id.']', $len, 255, $other_text);
 		if($checkbox) {
 			$box->setExtra("onchange=\"javascript:formulizechanged=1;\" onfocus=\"javascript:this.form.elements['" . $id . "[]'][$counter].checked = true;\"");
 		} else {

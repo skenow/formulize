@@ -184,8 +184,8 @@ switch($op){
 			// $ele_caption = $clone ? sprintf(_AM_COPIED, $element->getVar('ele_caption', 'f')) : $element->getVar('ele_caption', 'f');
 			$ele_caption = $element->getVar('ele_caption', 'f');
 			if ($ele_type=='sep' && substr(0, 7, $ele_caption)=='{SEPAR}') {
-				$ele_caption = new XoopsFormText(_AM_ELE_CAPTION, 'ele_caption', 50, 4096, '{SEPAR}'.$ele_caption); }
-			else { $ele_caption = new XoopsFormText(_AM_ELE_CAPTION, 'ele_caption', 50, 4096, $ele_caption); }
+				$ele_caption = new icms_form_elements_Text(_AM_ELE_CAPTION, 'ele_caption', 50, 4096, '{SEPAR}'.$ele_caption); }
+			else { $ele_caption = new icms_form_elements_Text(_AM_ELE_CAPTION, 'ele_caption', 50, 4096, $ele_caption); }
       $value = $element->getVar('ele_value');
       $ele_colhead_default = $element->getVar('ele_colhead', 'f');
 			$ele_desc_default = $element->getVar('ele_desc', 'f');
@@ -204,13 +204,13 @@ switch($op){
 
 		if($ele_type != "subform" AND $ele_type != "grid" AND $ele_type != "ib" AND $ele_type != "areamodif") {
 			// column heading added June 25 2006 -- jwe
-			$ele_colhead = new XoopsFormText(_AM_ELE_COLHEAD, 'ele_colhead', 50, 255, $ele_colhead_default);
+			$ele_colhead = new icms_form_elements_Text(_AM_ELE_COLHEAD, 'ele_colhead', 50, 255, $ele_colhead_default);
 			$ele_colhead->setDescription(_AM_ELE_COLHEAD_HELP);
 			$form->addElement($ele_colhead);
 		
 			// handle added April 19 2008 as part of new db structure
 			$ele_handle_default = $clone ? "" : $ele_handle_default;
-			$ele_handle = new XoopsFormText(_AM_ELE_HANDLE, 'ele_handle', 50, 50, $ele_handle_default);
+			$ele_handle = new icms_form_elements_Text(_AM_ELE_HANDLE, 'ele_handle', 50, 50, $ele_handle_default);
 			$ele_handle->setDescription(_AM_ELE_HANDLE_HELP);
 			$form->addElement($ele_handle);
 		
@@ -441,17 +441,17 @@ switch($op){
                         $intType->addOption('int', _AM_FORM_DATATYPE_INT);
                         $decimalType = new XoopsFormRadio('', 'element_datatype', $defaultType);
                         $decimalTypeSizeDefault = ($defaultTypeSize AND $defaultType == "decimal") ? $defaultTypeSize : 2;
-                        $decimalTypeSize = new XoopsFormText('', 'element_datatype_decimalsize', 2, 2, $decimalTypeSizeDefault);
+                        $decimalTypeSize = new icms_form_elements_Text('', 'element_datatype_decimalsize', 2, 2, $decimalTypeSizeDefault);
 												$decimalTypeSize->setExtra(" style=\"width: 2em;\" "); // style to force width necessary to compensate for silly forced 60% textbox widths in ICMS admin side
                         $decimalType->addOption('decimal', _AM_FORM_DATATYPE_DECIMAL1.$decimalTypeSize->render()._AM_FORM_DATATYPE_DECIMAL2);
                         $varcharType = new XoopsFormRadio('', 'element_datatype', $defaultType);
                         $varcharTypeSizeDefault = ($defaultTypeSize AND $defaultType == 'varchar') ? $defaultTypeSize : 255;
-                        $varcharTypeSize = new XoopsFormText('', 'element_datatype_varcharsize', 3, 3, $varcharTypeSizeDefault);
+                        $varcharTypeSize = new icms_form_elements_Text('', 'element_datatype_varcharsize', 3, 3, $varcharTypeSizeDefault);
 												$varcharTypeSize->setExtra(" style=\"width: 3em;\" ");
                         $varcharType->addOption('varchar', _AM_FORM_DATATYPE_VARCHAR1.$varcharTypeSize->render()._AM_FORM_DATATYPE_VARCHAR2);
                         $charType = new XoopsFormRadio('', 'element_datatype', $defaultType);
                         $charTypeSizeDefault = ($defaultTypeSize AND $defaultType == 'char') ? $defaultTypeSize : 255;
-                        $charTypeSize = new XoopsFormText('', 'element_datatype_charsize', 3, 3, $charTypeSizeDefault);
+                        $charTypeSize = new icms_form_elements_Text('', 'element_datatype_charsize', 3, 3, $charTypeSizeDefault);
 												$charTypeSize->setExtra(" style=\"width: 3em;\" ");
                         $charType->addOption('char', _AM_FORM_DATATYPE_CHAR1.$charTypeSize->render()._AM_FORM_DATATYPE_CHAR2);
                         if($defaultType != "text" AND $defaultType != "int" AND $defaultType != "decimal" AND $defaultType != "varchar" AND $defaultType != "char") {
@@ -472,7 +472,7 @@ switch($op){
 		
 		$order = !empty($ele_id) ? $element->getVar('ele_order') : $highorder;
 		$order = $clone ? $highorder : $order;
-		$ele_order = new XoopsFormText(_AM_ELE_ORDER, 'ele_order', 4, 4, $order);
+		$ele_order = new icms_form_elements_Text(_AM_ELE_ORDER, 'ele_order', 4, 4, $order);
 
 		// need to add hidden element to indicate if the order has been modified (detectable by javascript)
 		// then listen for that flag, and if order has not been modified, check again when saving to see if this is in fact the right order number, since multiple clicks on the clone link at the same time will result in multiple windows with the same order number in the box, and we don't want to have to manually alter those orders after saving -- re: OACAS HR survey project, January 22, 2007
@@ -549,7 +549,7 @@ icms_cp_footer();
 
 
 function addOption($id1, $id2, $text, $type='check', $checked=null){
-	$d = new XoopsFormText('', $id1, 40, 255, $text);
+	$d = new icms_form_elements_Text('', $id1, 40, 255, $text);
 	if( $type == 'check' ){
 		$c = new icms_form_elements_Checkbox('', $id2, $checked);
 		$c->addOption(1, ' ');
@@ -569,7 +569,7 @@ function addOption($id1, $id2, $text, $type='check', $checked=null){
 }
 
 function addOptionsTray(){
-	$t = new XoopsFormText('', 'addopt', 3, 2);
+	$t = new icms_form_elements_Text('', 'addopt', 3, 2);
 	$l = new icms_form_elements_Label('', sprintf(_AM_ELE_ADD_OPT, $t->render()));
 	$b = new XoopsFormButton('', 'submit', _AM_ELE_ADD_OPT_SUBMIT, 'submit');
 	$r = new icms_form_elements_Tray('');

@@ -41,7 +41,7 @@ if( !preg_match("/elements.php/", $_SERVER['PHP_SELF']) ){
 
 $ele_value = $value; // value is set in the admin/elements.php file already, based on ele_value from the element object -- aug 25, 2007
 $ele_size = !empty($ele_value[0]) ? $ele_value[0] : 1;
-$size = new XoopsFormText(_AM_ELE_SIZE, 'ele_value[0]', 3, 2, $ele_size);
+$size = new icms_form_elements_Text(_AM_ELE_SIZE, 'ele_value[0]', 3, 2, $ele_size);
 $allow_multi = empty($ele_value[1]) ? 0 : 1;
 $multiple = new XoopsFormRadioYN(_AM_ELE_MULTIPLE, 'ele_value[1]', $allow_multi);
 
@@ -212,7 +212,7 @@ $ops['LIKE'] = "LIKE";
 $ops['NOT LIKE'] = "NOT LIKE";
 $op->addOptionArray($ops);
 $op->setExtra("onfocus=\"javascript:window.document.form_ele.setfor[1].checked=true\"");
-$term = new xoopsFormText('', 'new_term', 10, 255);
+$term = new icms_form_elements_Text('', 'new_term', 10, 255);
 $term->setExtra("onfocus=\"javascript:window.document.form_ele.setfor[1].checked=true\"");
 $opterm->addElement($new_element);
 $opterm->addElement($op);

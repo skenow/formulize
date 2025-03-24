@@ -1089,7 +1089,7 @@ class formulizeAdvancedCalculationHandler {
 			if ($boxesAsHidden) {
 				$form_ele = new icms_form_elements_Hidden($elementName, $value);
 			} else {
-				$form_ele = new XoopsFormText('', $elementName, 20, 255, $value);
+				$form_ele = new icms_form_elements_Text('', $elementName, 20, 255, $value);
 				$form_ele->setExtra(' class="' . $elementUnderlyingField . '" ');
 			}
 			$selected = $value;

@@ -186,7 +186,7 @@ function drawPageUI($pageNumber, $pageTitle, $elements, $conditions, $form, $opt
 	$visiblePageNumber = $pageNumber + 1;
 
 	// page title
-	$pageTitleBox = new xoopsFormText(_AM_FORMULIZE_SCREEN_PAGETITLE . ' ' . $visiblePageNumber, 'pagetitle_' . $pageNumber, 50, 255, $pageTitle);
+	$pageTitleBox = new icms_form_elements_Text(_AM_FORMULIZE_SCREEN_PAGETITLE . ' ' . $visiblePageNumber, 'pagetitle_' . $pageNumber, 50, 255, $pageTitle);
 	$form->addElement($pageTitleBox, true);
 
 	// elements
@@ -220,7 +220,7 @@ function drawPageUI($pageNumber, $pageTitle, $elements, $conditions, $form, $opt
 	$op = new icms_form_elements_Select('', 'pageops' . $pageNumber . '[]');
 	$op->addOptionArray($ops);
 	$op->setExtra("onfocus=\"javascript:window.document.editscreenform.pagecons" . $pageNumber . "[1].checked=true\"");
-	$term = new xoopsFormText('', 'pageterms' . $pageNumber . '[]', 10, 255);
+	$term = new icms_form_elements_Text('', 'pageterms' . $pageNumber . '[]', 10, 255);
 	$term->setExtra("onfocus=\"javascript:window.document.editscreenform.pagecons" . $pageNumber . "[1].checked=true\"");
 	$opterm->addElement($element);
 	$opterm->addElement($op);

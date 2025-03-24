@@ -39,8 +39,8 @@ if( !preg_match("/elements.php/", $_SERVER['PHP_SELF']) ){
 
 $size = !empty($value[0]) ? intval($value[0]) : $xoopsModuleConfig['t_width'];
 $max = !empty($value[1]) ? intval($value[1]) : $xoopsModuleConfig['t_max'];
-$size = new XoopsFormText(_AM_ELE_SIZE, 'ele_value[0]', 3, 3, $size);
-$max = new XoopsFormText(_AM_ELE_MAX_LENGTH, 'ele_value[1]', 3, 3, $max);
+$size = new icms_form_elements_Text(_AM_ELE_SIZE, 'ele_value[0]', 3, 3, $size);
+$max = new icms_form_elements_Text(_AM_ELE_MAX_LENGTH, 'ele_value[1]', 3, 3, $max);
 $default = new icms_form_elements_Textarea(_AM_ELE_DEFAULT, 'ele_value[2]', stripslashes($value[2]), 5, 35);
 $default->setExtra('wrap=off');
 $default->setDescription(_AM_ELE_TEXT_DESC . _AM_ELE_TEXT_DESC2);
@@ -81,10 +81,10 @@ if(isset($value[8])) {
 }
 $numberOptions = new icms_form_elements_Tray(_AM_ELE_NUMBER_OPTS, '<br /><br />');
 $numberOptions->setDescription(_AM_ELE_NUMBER_OPTS_DESC);
-$decimalOption = new xoopsFormText(_AM_ELE_NUMBER_OPTS_DEC, 'ele_value[5]', 2, 2, $decimalDefault);
-$prefixOption = new XoopsFormText(_AM_ELE_NUMBER_OPTS_PREFIX, 'ele_value[6]', 5, 255, $prefixDefault);
-$decsepOption = new XoopsFormText(_AM_ELE_NUMBER_OPTS_DECSEP, 'ele_value[7]', 5, 255, $decsepDefault);
-$sepOption = new XoopsFormText(_AM_ELE_NUMBER_OPTS_SEP, 'ele_value[8]', 5, 255, $sepDefault);
+$decimalOption = new icms_form_elements_Text(_AM_ELE_NUMBER_OPTS_DEC, 'ele_value[5]', 2, 2, $decimalDefault);
+$prefixOption = new icms_form_elements_Text(_AM_ELE_NUMBER_OPTS_PREFIX, 'ele_value[6]', 5, 255, $prefixDefault);
+$decsepOption = new icms_form_elements_Text(_AM_ELE_NUMBER_OPTS_DECSEP, 'ele_value[7]', 5, 255, $decsepDefault);
+$sepOption = new icms_form_elements_Text(_AM_ELE_NUMBER_OPTS_SEP, 'ele_value[8]', 5, 255, $sepDefault);
 $numberOptions->addElement($decimalOption);
 $numberOptions->addElement($prefixOption);
 $numberOptions->addElement($decsepOption);

@@ -58,7 +58,7 @@ class formulizeRankOrderListHandler {
       for( $i=0; $i<count($keys); $i++ ){
         $r = $value[$keys[$i]] ? $opt_count : null;
         $v = $myts->makeTboxData4PreviewInForm($keys[$i]);
-        $options[] = new xoopsFormText('', 'ele_value['.$opt_count.']', 40, 255, $v); // function in the admin/elements.php file
+        $options[] = new icms_form_elements_Text('', 'ele_value['.$opt_count.']', 40, 255, $v); // function in the admin/elements.php file
         $opt_count++;
       }
     }
@@ -68,7 +68,7 @@ class formulizeRankOrderListHandler {
       // This code added by jwe 01/05/05
       if($opt_count < $_POST['rowcount']) {
         for($i=$opt_count;$i<$_POST['rowcount'];$i++) {
-          $options[] = new xoopsFormText('', 'ele_value['.$i.']', 40, 255, '');
+          $options[] = new icms_form_elements_Text('', 'ele_value['.$i.']', 40, 255, '');
         }
         $opt_count = $_POST['rowcount']; // make the opt_count equal to the number of rows, since we've now brought the number back up to where it should be.
       }
@@ -77,7 +77,7 @@ class formulizeRankOrderListHandler {
         $addopt = 2;
       }
       for( $i=0; $i<$addopt; $i++ ){
-        $options[] = new xoopsFormText('', 'ele_value['.$opt_count.']', 40, 255, '');
+        $options[] = new icms_form_elements_Text('', 'ele_value['.$opt_count.']', 40, 255, '');
         $opt_count++;
       }
       // these two lines part of the jwe added code

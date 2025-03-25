@@ -787,7 +787,7 @@ $form->addElement($list_id_hidden);
 
 
 // same perms for all groups option added Aug 1 2006 -- jwe
-$sameForAllGroups = new XoopsFormRadioYN(_formulize_SAME_PERMS, 'sameperms', 0);
+$sameForAllGroups = new icms_form_elements_Radioyn(_formulize_SAME_PERMS, 'sameperms', 0);
 $form->addElement($sameForAllGroups);
 
 $submit_button = new XoopsFormButton("", "groupsubmit", _formulize_SHOW_PERMS, "submit");

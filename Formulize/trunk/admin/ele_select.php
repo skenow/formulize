@@ -43,7 +43,7 @@ $ele_value = $value; // value is set in the admin/elements.php file already, bas
 $ele_size = !empty($ele_value[0]) ? $ele_value[0] : 1;
 $size = new icms_form_elements_Text(_AM_ELE_SIZE, 'ele_value[0]', 3, 2, $ele_size);
 $allow_multi = empty($ele_value[1]) ? 0 : 1;
-$multiple = new XoopsFormRadioYN(_AM_ELE_MULTIPLE, 'ele_value[1]', $allow_multi);
+$multiple = new icms_form_elements_Radioyn(_AM_ELE_MULTIPLE, 'ele_value[1]', $allow_multi);
 
 // handling of scope limit defaults -- August 30 2006
 $scopelimit = (isset($ele_value[3]) AND $ele_value[3] != 'all') ? explode(",", $ele_value[3]) : array(0=>'all');

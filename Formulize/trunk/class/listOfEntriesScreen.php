@@ -206,12 +206,12 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 		$configTable = addElementLOE($limitviews, $configTable);
 
 		$useworkingmsgDefault = $screen->getVar('sid') ? $screen->getVar('useworkingmsg') : 1;
-		$useworkingmsg = new xoopsFormRadioYN(_AM_FORMULIZE_SCREEN_LOE_USEWORKING, 'useworkingmsg', $useworkingmsgDefault);
+		$useworkingmsg = new icms_form_elements_Radioyn(_AM_FORMULIZE_SCREEN_LOE_USEWORKING, 'useworkingmsg', $useworkingmsgDefault);
 		$useworkingmsg->setDescription(_AM_FORMULIZE_SCREEN_LOE_DESC_USEWORKING);
 		$configTable = addElementLOE($useworkingmsg, $configTable);
 
 		$usescrollboxDefault = $screen->getVar('sid') ? $screen->getVar('usescrollbox') : 1;
-		$usescrollbox = new xoopsFormRadioYN(_AM_FORMULIZE_SCREEN_LOE_USESCROLLBOX, 'usescrollbox', $usescrollboxDefault);
+		$usescrollbox = new icms_form_elements_Radioyn(_AM_FORMULIZE_SCREEN_LOE_USESCROLLBOX, 'usescrollbox', $usescrollboxDefault);
 		$configTable = addElementLOE($usescrollbox, $configTable);
 
 		$entriesperpageDefault = $screen->getVar('sid') ? $screen->getVar('entriesperpage') : 10;
@@ -245,7 +245,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 		$configTable .= "<tr><td class=\"head\" colspan=2><p><b>" . _AM_FORMULIZE_SCREEN_LOE_CONFIG_SECTION2 . "</b></p></td></tr>\n";
 
 		$useheadingsDefault = $screen->getVar('sid') ? $screen->getVar('useheadings') : 1;
-		$useheadings = new xoopsFormRadioYN(_AM_FORMULIZE_SCREEN_LOE_USEHEADINGS, 'useheadings', $useheadingsDefault);
+		$useheadings = new icms_form_elements_Radioyn(_AM_FORMULIZE_SCREEN_LOE_USEHEADINGS, 'useheadings', $useheadingsDefault);
 		$useheadings->setDescription(_AM_FORMULIZE_SCREEN_LOE_DESC_USEHEADINGS);
 		$configTable = addElementLOE($useheadings, $configTable);
 
@@ -260,7 +260,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 		$configTable = addElementLOE($usesearchcalcmsgs, $configTable);
 
 		$usesearchDefault = $screen->getVar('sid') ? $screen->getVar('usesearch') : 1;
-		$usesearch = new xoopsFormRadioYN(_AM_FORMULIZE_SCREEN_LOE_USESEARCH, 'usesearch', $usesearchDefault);
+		$usesearch = new icms_form_elements_Radioyn(_AM_FORMULIZE_SCREEN_LOE_USESEARCH, 'usesearch', $usesearchDefault);
 		$usesearch->setDescription(_AM_FORMULIZE_SCREEN_LOE_DESC_USESEARCH);
 		$configTable = addElementLOE($usesearch, $configTable);
 
@@ -281,7 +281,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 		$configTable = addElementLOE($usecheckboxes, $configTable);
 
 		$useviewentrylinksDefault = $screen->getVar('sid') ? $screen->getVar('useviewentrylinks') : 1;
-		$useviewentrylinks = new xoopsFormRadioYN(_AM_FORMULIZE_SCREEN_LOE_USEVIEWENTRYLINKS, 'useviewentrylinks', $useviewentrylinksDefault);
+		$useviewentrylinks = new icms_form_elements_Radioyn(_AM_FORMULIZE_SCREEN_LOE_USEVIEWENTRYLINKS, 'useviewentrylinks', $useviewentrylinksDefault);
 		$configTable = addElementLOE($useviewentrylinks, $configTable);
 
 		// set options for all elements in entire framework
@@ -642,7 +642,7 @@ function addCustomButton($caid, $thisCustomAction, $allFids, $allFidObjs, $eleme
 	$caTable = addElementLOE($caText, $caTable);
 	$caMessageText = new icms_form_elements_Text(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_MESSAGETEXT, 'messagetext_' . $caid, 20, 255, $messageTextDefault);
 	$caTable = addElementLOE($caMessageText, $caTable);
-	$caAppearInline = new xoopsFormRadioYN(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_INLINE, 'appearinline_' . $caid, $appearInlineDefault);
+	$caAppearInline = new icms_form_elements_Radioyn(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_INLINE, 'appearinline_' . $caid, $appearInlineDefault);
 	$caAppearInline->setDescription(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_INLINE_DESC);
 	$caTable = addElementLOE($caAppearInline, $caTable);
 	$caApplyTo = new icms_form_elements_Select(_AM_FORMULIZE_SCREEN_LOE_CUSTOMBUTTON_APPLYTO, 'applyto_' . $caid, $applyToDefault);

@@ -140,7 +140,7 @@ class formulizeScreenHandler {
 
 		// show the security token question -- added Jan 25 2008 -- jwe
 		$useTokenDefault = $screen->getVar('sid') ? $screen->getVar('useToken') : 1;
-		$securityQuestion = new xoopsFormRadioYN(_AM_FORMULIZE_SCREEN_SECURITY, 'useToken', $useTokenDefault);
+		$securityQuestion = new icms_form_elements_Radioyn(_AM_FORMULIZE_SCREEN_SECURITY, 'useToken', $useTokenDefault);
 		$securityQuestion->setDescription(_AM_FORMULIZE_SCREEN_SECURITY_DESC);
 		$form->addElement($securityQuestion);
 		return $form;

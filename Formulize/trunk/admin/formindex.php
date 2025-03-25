@@ -731,7 +731,7 @@ if($fs_permsorder == 1)
 
 $form->addElement($fs_select_groups);
 
-$fs_select_groups_order = new XoopsFormRadio("", 'fs_permsorder', $fs_permsorder);
+$fs_select_groups_order = new icms_form_elements_Radio("", 'fs_permsorder', $fs_permsorder);
 $fs_select_groups_order->addOptionArray(array('0' => _AM_MULTI_CREATION_ORDER, '1' => _AM_MULTI_ALPHABETICAL_ORDER));
 $form->addElement($fs_select_groups_order);
 

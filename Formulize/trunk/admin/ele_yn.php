@@ -61,11 +61,11 @@ if( !empty($ele_id) ){
 }
 if($selected)
 {
-	$options = new XoopsFormRadio(_AM_ELE_DEFAULT, 'ele_value', $selected);
+	$options = new icms_form_elements_Radio(_AM_ELE_DEFAULT, 'ele_value', $selected);
 }
 else
 {
-	$options = new XoopsFormRadio(_AM_ELE_DEFAULT, 'ele_value');
+	$options = new icms_form_elements_Radio(_AM_ELE_DEFAULT, 'ele_value');
 }	
 $options->addOption('_YES', _YES);
 $options->addOption('_NO', _NO);

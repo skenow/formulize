@@ -106,7 +106,7 @@ $form->addElement($numblanks);
 
 // show View buttons added Dec 2 2009
 $showViewButtonsDefault = isset($ele_value[3]) ? intval($ele_value[3]) : 1;
-$showViewButtons = new xoopsFormRadio(_AM_ELE_SUBFORM_VIEW, 'showviewbuttons', $showViewButtonsDefault);
+$showViewButtons = new icms_form_elements_Radio(_AM_ELE_SUBFORM_VIEW, 'showviewbuttons', $showViewButtonsDefault);
 $showViewButtons->setDescription(_AM_ELE_SUBFORM_VIEW_DESC);
 $showViewButtons->addOption(1, _YES);
 $showViewButtons->addOption(0, _NO);

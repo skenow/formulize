@@ -219,11 +219,11 @@ if(!isset($_POST['setwhen'])) {
 
 $notblurb = $canSetNots ? _formulize_DE_SETNOT_WHEN : _formulize_DE_SETNOT_TOME_WHEN;
 $setwhen = new icms_form_elements_Tray($notblurb, "<br />");
-$setwhen_created = new xoopsFormRadio('', 'setwhen', $_POST['setwhen']);
+$setwhen_created = new icms_form_elements_Radio('', 'setwhen', $_POST['setwhen']);
 $setwhen_created->addOption('new_entry', _formulize_DE_SETNOT_WHEN_NEW);
-$setwhen_updated = new xoopsFormRadio('', 'setwhen', $_POST['setwhen']);
+$setwhen_updated = new icms_form_elements_Radio('', 'setwhen', $_POST['setwhen']);
 $setwhen_updated->addOption('update_entry', _formulize_DE_SETNOT_WHEN_UPDATE);
-$setwhen_deleted = new xoopsFormRadio('', 'setwhen', $_POST['setwhen']);
+$setwhen_deleted = new icms_form_elements_Radio('', 'setwhen', $_POST['setwhen']);
 $setwhen_deleted->addOption('delete_entry', _formulize_DE_SETNOT_WHEN_DELETE);
 $setwhen->addElement($setwhen_created);
 $setwhen->addElement($setwhen_updated);
@@ -237,42 +237,42 @@ if($canSetNots) {
 	}
 
 	$setwho = new icms_form_elements_Tray(_formulize_DE_SETNOT_WHO, "<br />");
-	$setwho_me = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
+	$setwho_me = new icms_form_elements_Radio('', 'setwho', $_POST['setwho']);
 	$setwho_me->addOption($uid, _formulize_DE_SETNOT_WHO_ME);
 	
-	$setwho_curuser = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
+	$setwho_curuser = new icms_form_elements_Radio('', 'setwho', $_POST['setwho']);
 	$setwho_curuser->addOption('curuser', _formulize_DE_SETNOT_WHO_CURUSER);
 	
 	// creator and users identified in an element, these options added Feb 7 2008 by jwe
-	$setwho_creator = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
+	$setwho_creator = new icms_form_elements_Radio('', 'setwho', $_POST['setwho']);
 	$setwho_creator->addOption('creator', _formulize_DE_SETNOT_WHO_CREATOR);
 	
 	$setwho_elementlist = new icms_form_elements_Select('', 'ele_id', $_POST['ele_id'], 1);
 	$setwho_elementlist->setExtra("onfocus=\"javascript:window.document.setnot.setwho[3].checked=true\"");
 	$setwho_elementlist->addOptionArray($element_options);
 	$elementlist = $setwho_elementlist->render();
-	$setwho_elementuids = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
+	$setwho_elementuids = new icms_form_elements_Radio('', 'setwho', $_POST['setwho']);
 	$setwho_elementuids->addOption('elementuids', _formulize_DE_SETNOT_WHO_ELEMENTUIDS.$elementlist);
 	
 	$setwho_linkcreatorlist = new icms_form_elements_Select('', 'lc_ele_id', $_POST['lc_ele_id'], 1);
 	$setwho_linkcreatorlist->setExtra("onfocus=\"javascript:window.document.setnot.setwho[4].checked=true\"");
 	$setwho_linkcreatorlist->addOptionArray($linkcreator_options);
 	$linkcreatorlist = $setwho_linkcreatorlist->render();
-	$setwho_linkcreator = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
+	$setwho_linkcreator = new icms_form_elements_Radio('', 'setwho', $_POST['setwho']);
 	$setwho_linkcreator->addOption('linkcreator', _formulize_DE_SETNOT_WHO_LINKCREATOR."<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$linkcreatorlist);
 	
 	$setwho_elementemaillist = new icms_form_elements_Select('', 'email_ele_id', $_POST['email_ele_id'], 1);
 	$setwho_elementemaillist->setExtra("onfocus=\"javascript:window.document.setnot.setwho[5].checked=true\"");
 	$setwho_elementemaillist->addOptionArray($elementemail_options);
 	$elementemaillist = $setwho_elementemaillist->render();
-	$setwho_elementemail = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
+	$setwho_elementemail = new icms_form_elements_Radio('', 'setwho', $_POST['setwho']);
 	$setwho_elementemail->addOption('elementemail', _formulize_DE_SETNOT_WHO_ELEMENTEMAIL.$elementemaillist);
 	
 	$setwho_grouplist = new icms_form_elements_Select('', 'gid', $_POST['gid'], 1);
 	$setwho_grouplist->setExtra("onfocus=\"javascript:window.document.setnot.setwho[6].checked=true\"");
 	$setwho_grouplist->addOptionArray($group_options);
 	$grouplist = $setwho_grouplist->render();
-	$setwho_group = new xoopsFormRadio('', 'setwho', $_POST['setwho']);
+	$setwho_group = new icms_form_elements_Radio('', 'setwho', $_POST['setwho']);
 	$setwho_group->addOption('groupid', _formulize_DE_SETNOT_WHO_GROUP.$grouplist);
 	$setwho->addElement($setwho_me);
 	$setwho->addElement($setwho_curuser);
@@ -289,7 +289,7 @@ if(!isset($_POST['setfor'])) {
 }
 
 $setfor = new icms_form_elements_Tray(_formulize_DE_SETNOT_FOR, "<br />");
-$setfor_all = new xoopsFormRadio('', 'setfor', $_POST['setfor']);
+$setfor_all = new icms_form_elements_Radio('', 'setfor', $_POST['setfor']);
 $setfor_all->addOption('all', _formulize_DE_SETNOT_FOR_ALL);
 
 // process existing conditions...
@@ -330,7 +330,7 @@ $addcon->setExtra("onfocus=\"javascript:window.document.setnot.setfor[1].checked
 
 $conditionui = "<br />$conditionlist" . $opterm->render() . "<br />" . $addcon->render();
 
-$setfor_con = new xoopsFormRadio('' , 'setfor', $_POST['setfor']);
+$setfor_con = new icms_form_elements_Radio('' , 'setfor', $_POST['setfor']);
 $setfor_con->addOption('con', _formulize_DE_SETNOT_FOR_CON.$conditionui);
 $setfor->addElement($setfor_all);
 $setfor->addElement($setfor_con);

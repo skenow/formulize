@@ -255,7 +255,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 		$configTable = addElementLOE($repeatheaders, $configTable);
 
 		$usesearchcalcmsgsDefault = $screen->getVar('sid') ? $screen->getVar('usesearchcalcmsgs') : 1;
-		$usesearchcalcmsgs = new xoopsFormRadio(_AM_FORMULIZE_SCREEN_LOE_USESEARCHCALCMSGS, 'usesearchcalcmsgs', $usesearchcalcmsgsDefault);
+		$usesearchcalcmsgs = new icms_form_elements_Radio(_AM_FORMULIZE_SCREEN_LOE_USESEARCHCALCMSGS, 'usesearchcalcmsgs', $usesearchcalcmsgsDefault);
 		$usesearchcalcmsgs->addOptionArray(array(0 => _AM_FORMULIZE_SCREEN_LOE_USCM_NEITHER, 1 => _AM_FORMULIZE_SCREEN_LOE_USCM_BOTH, 2 => _AM_FORMULIZE_SCREEN_LOE_USCM_SEARCH, 3 => _AM_FORMULIZE_SCREEN_LOE_USCM_CALC));
 		$configTable = addElementLOE($usesearchcalcmsgs, $configTable);
 
@@ -275,7 +275,7 @@ class formulizeListOfEntriesScreenHandler extends formulizeScreenHandler {
 		$configTable = addElementLOE($textwidth, $configTable);
 
 		$usecheckboxesDefault = $screen->getVar('sid') ? $screen->getVar('usecheckboxes') : 0;
-		$usecheckboxes = new xoopsFormRadio(_AM_FORMULIZE_SCREEN_LOE_USECHECKBOXES, 'usecheckboxes', $usecheckboxesDefault);
+		$usecheckboxes = new icms_form_elements_Radio(_AM_FORMULIZE_SCREEN_LOE_USECHECKBOXES, 'usecheckboxes', $usecheckboxesDefault);
 		$usecheckboxes->addOptionArray(array(0 => _AM_FORMULIZE_SCREEN_LOE_UCHDEFAULT, 1 => _AM_FORMULIZE_SCREEN_LOE_UCHALL, 2 => _AM_FORMULIZE_SCREEN_LOE_UCHNONE));
 		$usecheckboxes->setDescription(_AM_FORMULIZE_SCREEN_LOE_DESC_USECHECKBOXES);
 		$configTable = addElementLOE($usecheckboxes, $configTable);

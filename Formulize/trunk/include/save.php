@@ -235,7 +235,7 @@ $savelist->setExtra("onchange=\"javascript:newSaveView(this.form);;\"");
 $savelist->addOptionArray($saveoptions);
 
 
-$scope = new xoopsFormRadio(_formulize_DE_SAVE_SCOPE, 'scope', $_GET['currentview']);
+$scope = new icms_form_elements_Radio(_formulize_DE_SAVE_SCOPE, 'scope', $_GET['currentview']);
 
 if($publish_reports OR $publish_globalscope) {
 	$s1 = _formulize_DE_SAVE_SCOPE1;
@@ -351,9 +351,9 @@ if($pubflag) {
 	$pubgrouplist->addOptionArray($publishgroups);
 
 	$lockcontrols = new icms_form_elements_Tray(_formulize_DE_SAVE_LOCKCONTROLS, "<br>");
-	$yes = new xoopsFormRadio('', 'lockcontrols', $currentlock);
+	$yes = new icms_form_elements_Radio('', 'lockcontrols', $currentlock);
 	$yes->addOption("1", _YES);
-	$no = new xoopsFormRadio('', 'lockcontrols', $currentlock);
+	$no = new icms_form_elements_Radio('', 'lockcontrols', $currentlock);
 	$no->addOption("0", _NO);
 	$lockcontrols->addElement($yes);
 	$lockcontrols->addElement($no);

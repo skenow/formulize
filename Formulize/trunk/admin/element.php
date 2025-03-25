@@ -514,28 +514,28 @@ function createDataTypeUI($ele_type, $element,$id_form,$ele_encrypt) {
       // setup the UI for the options...
       $dataTypeTray = new icms_form_elements_Tray(_AM_FORM_DATATYPE_CONTROLS, '<br>');
       $dataTypeTray->setDescription(_AM_FORM_DATATYPE_CONTROLS_DESC);
-      $textType = new XoopsFormRadio('', 'element_datatype', $defaultType);
+      $textType = new icms_form_elements_Radio('', 'element_datatype', $defaultType);
       $textDataTypeLabel = (!$element AND ($ele_type == 'text')) ? _AM_FORM_DATATYPE_TEXT_NEWTEXT : _AM_FORM_DATATYPE_TEXT;
       $textType->addOption('text', $textDataTypeLabel);
-      $intType = new XoopsFormRadio('', 'element_datatype', $defaultType);
+      $intType = new icms_form_elements_Radio('', 'element_datatype', $defaultType);
       $intType->addOption('int', _AM_FORM_DATATYPE_INT);
-      $decimalType = new XoopsFormRadio('', 'element_datatype', $defaultType);
+      $decimalType = new icms_form_elements_Radio('', 'element_datatype', $defaultType);
       $decimalTypeSizeDefault = ($defaultTypeSize AND $defaultType == "decimal") ? $defaultTypeSize : 2;
       $decimalTypeSize = new icms_form_elements_Text('', 'element_datatype_decimalsize', 2, 2, $decimalTypeSizeDefault);
       $decimalTypeSize->setExtra(" style=\"width: 2em;\" "); // style to force width necessary to compensate for silly forced 60% textbox widths in ICMS admin side
       $decimalType->addOption('decimal', _AM_FORM_DATATYPE_DECIMAL1.$decimalTypeSize->render()._AM_FORM_DATATYPE_DECIMAL2);
-      $varcharType = new XoopsFormRadio('', 'element_datatype', $defaultType);
+      $varcharType = new icms_form_elements_Radio('', 'element_datatype', $defaultType);
       $varcharTypeSizeDefault = ($defaultTypeSize AND $defaultType == 'varchar') ? $defaultTypeSize : 255;
       $varcharTypeSize = new icms_form_elements_Text('', 'element_datatype_varcharsize', 3, 3, $varcharTypeSizeDefault);
       $varcharTypeSize->setExtra(" style=\"width: 3em;\" ");
       $varcharType->addOption('varchar', _AM_FORM_DATATYPE_VARCHAR1.$varcharTypeSize->render()._AM_FORM_DATATYPE_VARCHAR2);
-      $charType = new XoopsFormRadio('', 'element_datatype', $defaultType);
+      $charType = new icms_form_elements_Radio('', 'element_datatype', $defaultType);
       $charTypeSizeDefault = ($defaultTypeSize AND $defaultType == 'char') ? $defaultTypeSize : 255;
       $charTypeSize = new icms_form_elements_Text('', 'element_datatype_charsize', 3, 3, $charTypeSizeDefault);
       $charTypeSize->setExtra(" style=\"width: 3em;\" ");
       $charType->addOption('char', _AM_FORM_DATATYPE_CHAR1.$charTypeSize->render()._AM_FORM_DATATYPE_CHAR2);
       if($defaultType != "text" AND $defaultType != "int" AND $defaultType != "decimal" AND $defaultType != "varchar" AND $defaultType != "char") {
-              $otherType = new XoopsFormRadio('', 'element_datatype', $defaultType);
+              $otherType = new icms_form_elements_Radio('', 'element_datatype', $defaultType);
               $otherType->addOption($defaultType, _AM_FORM_DATATYPE_OTHER.$defaultType);
               $dataTypeTray->addElement($otherType);
       }

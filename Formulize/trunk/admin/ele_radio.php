@@ -118,15 +118,15 @@ if(!$default_custom_text) {
 	$default_to_set = 'custom';
 }
 $delim_tray = new icms_form_elements_Tray(_AM_ELE_DELIM_CHOICE, '<br />');
-$delim_choice_br = new xoopsFormRadio('', 'ele_delim', $default_to_set);
+$delim_choice_br = new icms_form_elements_Radio('', 'ele_delim', $default_to_set);
 $delim_choice_br->addOption('br', _MI_formulize_DELIMETER_BR);
 $delim_tray->addElement($delim_choice_br);
-$delim_choice_space = new xoopsFormRadio('', 'ele_delim', $default_to_set);
+$delim_choice_space = new icms_form_elements_Radio('', 'ele_delim', $default_to_set);
 $delim_choice_space->addOption('space', _MI_formulize_DELIMETER_SPACE);
 $delim_tray->addElement($delim_choice_space);
 $delim_choice_custom_box = new icms_form_elements_Text('', 'ele_delim_custom', 25, 255, $default_custom_text);
 $delim_choice_custom_box->setExtra("onfocus=\"javascript:this.form.ele_delim[2].checked = true;\"");
-$delim_choice_custom = new xoopsFormRadio('', 'ele_delim', $default_to_set);
+$delim_choice_custom = new icms_form_elements_Radio('', 'ele_delim', $default_to_set);
 $delim_choice_custom->addOption('custom', _MI_formulize_DELIMETER_CUSTOM. ": " . $delim_choice_custom_box->render());
 $delim_tray->addElement($delim_choice_custom);
 

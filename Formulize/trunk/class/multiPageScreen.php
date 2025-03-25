@@ -202,7 +202,7 @@ function drawPageUI($pageNumber, $pageTitle, $elements, $conditions, $form, $opt
 	}
 	$conditionsTray = new icms_form_elements_Tray(_AM_FORMULIZE_SCREEN_CONS_PAGE . ' ' . $visiblePageNumber, '<br />');
 	$conditionsTray->setDescription(_AM_FORMULIZE_SCREEN_CONS_HELP);
-	$nocons = new xoopsFormRadio('', 'pagecons' . $pageNumber, $conditionsYesNo);
+	$nocons = new icms_form_elements_Radio('', 'pagecons' . $pageNumber, $conditionsYesNo);
 	$nocons->addOption('none', _AM_FORMULIZE_SCREEN_CONS_NONE);
 
 	$conditionlist = "";
@@ -230,7 +230,7 @@ function drawPageUI($pageNumber, $pageTitle, $elements, $conditions, $form, $opt
 
 	$conditionui = "<br />$conditionlist<nobr>" . $opterm->render() . "</nobr><br />" . $addcon->render();
 
-	$yescons = new xoopsFormRadio('', 'pagecons' . $pageNumber, $conditionsYesNo);
+	$yescons = new icms_form_elements_Radio('', 'pagecons' . $pageNumber, $conditionsYesNo);
 	$yescons->addOption('yes', _AM_FORMULIZE_SCREEN_CONS_YES . $conditionui);
 	$conditionsTray->addElement($nocons);
 	$conditionsTray->addElement($yescons);

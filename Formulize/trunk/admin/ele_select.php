@@ -122,12 +122,12 @@ $linkscopetray = new icms_form_elements_Tray(_AM_ELE_FORMLINK_SCOPE, "<br />");
 $linkscopetray->setDescription(_AM_ELE_FORMLINK_SCOPE_DESC);
 
 $linkscopedefault = isset($ele_value[4]) ? $ele_value[4] : 0;
-$linkscopelimit = new xoopsFormRadio('', 'linkscopelimit', $linkscopedefault);
+$linkscopelimit = new icms_form_elements_Radio('', 'linkscopelimit', $linkscopedefault);
 $linkscopelimit->addOption(0, _AM_ELE_FORMLINK_SCOPELIMIT_NO);
 $linkscopelimit->addOption(1, _AM_ELE_FORMLINK_SCOPELIMIT_YES);
 
 $anyalldefault = isset($ele_value[6]) ? $ele_value[6] : 0;
-$linkscopeanyall = new xoopsFormRadio('', 'linkscopeanyall', $anyalldefault);
+$linkscopeanyall = new icms_form_elements_Radio('', 'linkscopeanyall', $anyalldefault);
 $linkscopeanyall->addOption(0, _AM_ELE_FORMLINK_ANYALL_ANY);
 $linkscopeanyall->addOption(1, _AM_ELE_FORMLINK_ANYALL_ALL);
 
@@ -144,7 +144,7 @@ if(!is_array($ele_value[5])) {
 
 $setfor = new icms_form_elements_Tray(_AM_ELE_FORMLINK_SCOPEFILTER, "<br />");
 $setfor->setDescription(_AM_ELE_FORMLINK_SCOPEFILTER_DESC);
-$setfor_all = new xoopsFormRadio('', 'setfor', $scopeFilter);
+$setfor_all = new icms_form_elements_Radio('', 'setfor', $scopeFilter);
 $setfor_all->addOption('all', _AM_ELE_FORMLINK_SCOPEFILTER_ALL);
 
 // setup the options array for use in the condition UI
@@ -223,7 +223,7 @@ $addcon->setExtra("onfocus=\"javascript:window.document.form_ele.setfor[1].check
 
 $conditionui = "<br />$conditionlist" . $opterm->render() . "<br />" . $addcon->render() . "<br /><br />" . _AM_ELE_FORMLINK_SCOPEFILTER_REFRESHHINT;
 
-$setfor_con = new xoopsFormRadio('' , 'setfor', $scopeFilter);
+$setfor_con = new icms_form_elements_Radio('' , 'setfor', $scopeFilter);
 $setfor_con->addOption('con', _AM_ELE_FORMLINK_SCOPEFILTER_CON.$conditionui);
 $setfor->addElement($setfor_all);
 $setfor->addElement($setfor_con);

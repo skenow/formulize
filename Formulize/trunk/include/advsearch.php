@@ -236,10 +236,10 @@ $advsearch = new icms_form_Theme (_formulize_DE_BUILDQUERY, 'buildq', XOOPS_URL.
 //$pickcalc = $returned['form'];
 
 $columns_andor = new icms_form_elements_Tray('', "<br />");
-$columns_and = new xoopsFormRadio('', 'multi_andor', '1');
+$columns_and = new icms_form_elements_Radio('', 'multi_andor', '1');
 $columns_and->addOption(1, _formulize_DE_AS_MULTI_AND);
 $columns_andor->addElement($columns_and);
-$columns_or = new xoopsFormRadio('', 'multi_andor', '1');
+$columns_or = new icms_form_elements_Radio('', 'multi_andor', '1');
 $columns_or->addOption(2, _formulize_DE_AS_MULTI_OR);
 $columns_andor->addElement($columns_or);
 
